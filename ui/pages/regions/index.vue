@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import RegionLink from "~/components/helpers/RegionLink.vue";
+import RegionsMap from "~/components/regions/RegionsMap.vue";
 import {tr} from "~/lib/translate";
 
 const {locale} = useI18n();
@@ -17,13 +18,34 @@ const sortedRegions = computed(() => regions.sort((a, b) => {
 	const bn = tr(b.name, locale.value) || "";
 	return an.localeCompare(bn);
 }));
+
+const view = ref<"table" | "map">("table");
 </script>
 
 <template>
 	<div>
 		<h1 class="mb-3">Regions</h1>
 
-		<table class="standard-table">
+		<div class="mb-3 flex gap-2">
+			<button
+				type="button"
+				class="px-3 py-1 rounded border"
+				:class="view === 'table' ? 'bg-black text-white' : 'bg-white'"
+				@click="view = 'table'">
+				Table
+			</button>
+			<button
+				type="button"
+				class="px-3 py-1 rounded border"
+				:class="view === 'map' ? 'bg-black text-white' : 'bg-white'"
+				@click="view = 'map'">
+				Map
+			</button>
+		</div>
+
+		<table
+			v-if="view === 'table'"
+			class="standard-table">
 			<thead>
 				<tr>
 					<th>Region</th>
@@ -39,5 +61,7 @@ const sortedRegions = computed(() => regions.sort((a, b) => {
 				</tr>
 			</tbody>
 		</table>
+
+		<RegionsMap v-else />
 	</div>
 </template>

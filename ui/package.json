@@ -17,9 +17,13 @@
     "@nuxt/scripts": "0.13.4",
     "@nuxt/test-utils": "3.23.0",
     "@nuxt/types": "2.18.1",
+    "@nuxtjs/google-adsense": "3.0.3",
     "@nuxtjs/i18n": "9.5.6",
     "@nuxtjs/tailwindcss": "6.14.0",
     "@openapitools/openapi-generator-cli": "2.41.0",
+    "@types/d3-scale": "4.0.9",
+    "@types/d3-selection": "3.0.12",
+    "@types/d3-zoom": "3.0.9",
     "@types/luxon": "3.7.5",
     "@types/node": "22.20.1",
     "@typescript-eslint/eslint-plugin": "8.70.0",
@@ -30,14 +34,16 @@
     "nuxt": "3.21.11",
     "typescript": "5.9.3",
     "vitest": "3.2.7",
-    "vue-tsc": "3.3.11",
-    "@nuxtjs/google-adsense": "3.0.3"
+    "vue-tsc": "3.3.11"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.3.1",
     "@fortawesome/free-brands-svg-icons": "7.3.1",
     "@fortawesome/free-regular-svg-icons": "7.3.1",
     "@fortawesome/free-solid-svg-icons": "7.3.1",
-    "@fortawesome/vue-fontawesome": "3.3.3"
+    "@fortawesome/vue-fontawesome": "3.3.3",
+    "d3-scale": "4.0.2",
+    "d3-selection": "3.0.0",
+    "d3-zoom": "3.0.0"
   }
 }
