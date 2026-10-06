@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import {scaleLinear} from "d3-scale";
-import {select} from "d3-selection";
-import {zoom, zoomIdentity, type D3ZoomEvent} from "d3-zoom";
 import mapRegionsData from "~/assets/data/map-regions.json";
 import InternalLink from "~/components/helpers/InternalLink.vue";
 
@@ -95,39 +93,13 @@ const positionedRegions: PositionedRegion[] = regions.map((region) => {
 });
 
 separateBoxes(positionedRegions);
-
-const viewportRef = ref<HTMLElement | null>(null);
-const transform = ref(zoomIdentity);
-
-onMounted(() => {
-	if (!viewportRef.value) {
-		return;
-	}
-
-	const zoomBehavior = zoom<HTMLElement, unknown>()
-		.scaleExtent([0.2, 8])
-		.on("zoom", (event: D3ZoomEvent<HTMLElement, unknown>) => {
-			transform.value = event.transform;
-		});
-
-	select(viewportRef.value).call(zoomBehavior);
-});
-
-const innerStyle = computed(() => ({
-	width: `${CONTAINER_WIDTH}px`,
-	height: `${containerHeight}px`,
-	transform: `translate(${transform.value.x}px, ${transform.value.y}px) scale(${transform.value.k})`,
-	transformOrigin: "0 0"
-}));
 </script>
 
 <template>
-	<div
-		ref="viewportRef"
-		class="regions-map-viewport">
+	<div class="regions-map-viewport">
 		<div
 			class="regions-map-inner"
-			:style="innerStyle">
+			:style="{width: `${CONTAINER_WIDTH}px`, height: `${containerHeight}px`}">
 			<svg
 				class="regions-map-leaders"
 				:width="CONTAINER_WIDTH"
@@ -166,10 +138,8 @@ const innerStyle = computed(() => ({
 .regions-map-viewport {
 	position: relative;
 	width: 100%;
-	height: 80vh;
-	overflow: hidden;
+	overflow: auto;
 	border: 1px solid #ccc;
-	touch-action: none;
 }
 
 .regions-map-inner {
