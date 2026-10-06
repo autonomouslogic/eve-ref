@@ -85,7 +85,7 @@ public class SyncStaticData implements Command {
 		newFile |= syncFile(latest, ArchivePathFactories.SDE_V2_JSONL, "jsonl");
 		newFile |= syncFile(latest, ArchivePathFactories.SDE_V2_YAML, "yaml");
 		if (newFile) {
-			discordNotifier.notifyDiscord(String.format("New SDE released: %s", latest.getBuildNumber()));
+			discordNotifier.notifyDiscord(String.format("SDE released: %s", latest.getBuildNumber()));
 		}
 		syncSchema();
 	}

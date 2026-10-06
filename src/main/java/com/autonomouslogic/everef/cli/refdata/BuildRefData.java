@@ -516,7 +516,10 @@ public class BuildRefData implements Command {
 
 	private Completable notifyDiscord() {
 		return Completable.fromAction(() -> {
-			discordNotifier.notifyDiscord("New reference data uploaded");
+			discordNotifier.notifyDiscord(String.format(
+					"Reference data uploaded - SDE: %s, Hoboleaks: %s)",
+					currentRefDataMeta.getSde().getVersion(),
+					currentRefDataMeta.getHoboleaks().getVersion()));
 		});
 	}
 }
