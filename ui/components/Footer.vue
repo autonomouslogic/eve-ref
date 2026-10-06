@@ -39,7 +39,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 				<ul>
 					<li><InternalLink :to="DISCORD_URL"><span><font-awesome-icon icon="fa-brands fa-discord" /></span> Discord</InternalLink></li>
 					<li><ExternalLink :url="GITHUB_URL"><span><font-awesome-icon icon="fa-brands fa-github" /></span> Github</ExternalLink></li>
-					<li><ExternalLink :url="YOUTUBE_URL"><span><font-awesome-icon icon="fa-brands fa-youtube" /></span> YouTube</ExternalLink></li>
+					<!--					<li><ExternalLink :url="YOUTUBE_URL"><span><font-awesome-icon icon="fa-brands fa-youtube" /></span> YouTube</ExternalLink></li>-->
 				</ul>
 			</div>
 			<div>
