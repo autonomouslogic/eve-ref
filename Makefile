@@ -138,3 +138,6 @@ import-industry-resources: generate-database
 
 verify-ref-data-models: generate-database
 	./gradlew verifyRefDataModels --stacktrace
+
+generate-map-data: generate-database
+	./gradlew generateMapData --stacktrace

@@ -7,14 +7,12 @@ import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.GenerateMapData.MapRegion;
 import com.autonomouslogic.everef.refdata.Coordinate;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
-import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
@@ -30,23 +28,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
-@SetEnvironmentVariable(key = "STATIC_PATH", value = "s3://static/")
 public class GenerateMapDataTest {
 	@Inject
 	protected GenerateMapData generateMapData;
-
-	@Inject
-	@Named("static")
-	protected S3AsyncClient s3Client;
-
-	@Inject
-	protected MockS3Adapter mockS3Adapter;
 
 	@Inject
 	protected MockScrapeBuilder mockScrapeBuilder;
@@ -71,6 +60,8 @@ public class GenerateMapDataTest {
 		server.start(TEST_PORT);
 
 		refDataFile = mockScrapeBuilder.createTestRefdata();
+
+		new File(GenerateMapData.MAP_REGIONS_FILE).delete();
 	}
 
 	@AfterEach
@@ -130,11 +121,9 @@ public class GenerateMapDataTest {
 
 	@SneakyThrows
 	private void assertMapRegionsFile(List<MapRegion> expected) {
+		var file = new File(GenerateMapData.MAP_REGIONS_FILE);
 		var actual = jsonMapper.readValue(
-				mockS3Adapter
-						.getTestObject("static", GenerateMapData.MAP_REGIONS_FILE, s3Client)
-						.orElseThrow(() -> new RuntimeException("Missing map regions file")),
-				jsonMapper.getTypeFactory().constructCollectionType(List.class, MapRegion.class));
+				file, jsonMapper.getTypeFactory().constructCollectionType(List.class, MapRegion.class));
 		assertEquals(expected, actual);
 	}
 

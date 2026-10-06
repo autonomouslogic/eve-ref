@@ -54,6 +54,28 @@ jobs:
         run: |
           ./scripts/run-make-and-check-changes.sh import-industry-resources "$DEV_NOTICES_DISCORD_WEBHOOK_URL" "fix: Imported industry resources"
 
+  map-data:
+    name: Map Data
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25.0.4+101.0.LTS
+          cache: gradle
+
+      - name: Check
+        run: |
+          ./scripts/run-make-and-check-changes.sh generate-map-data "$DEV_NOTICES_DISCORD_WEBHOOK_URL" "fix(ui): Updated map data"
+
   verify-ref-data-models:
     name: Verify Reference Data Models
     timeout-minutes: 30
@@ -74,7 +96,7 @@ jobs:
 
   healthcheck:
     name: Healthcheck
-    needs: [test-resources, industry-resources, verify-ref-data-models]
+    needs: [test-resources, industry-resources, map-data, verify-ref-data-models]
     runs-on: ubuntu-latest
     steps:
       - name: Healthcheck
