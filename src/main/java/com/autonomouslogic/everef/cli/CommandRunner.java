@@ -80,6 +80,9 @@ public class CommandRunner {
 	protected Provider<FetchDonations> fetchDonationsProvider;
 
 	@Inject
+	protected Provider<GenerateMapData> generateMapDataProvider;
+
+	@Inject
 	protected Provider<GenerateKeyPair> generateKeyPairProvider;
 
 	@Inject
@@ -205,6 +208,8 @@ public class CommandRunner {
 				return buildSearchProvider.get();
 			case "fetch-donations":
 				return fetchDonationsProvider.get();
+			case "generate-map-data":
+				return generateMapDataProvider.get();
 			case "generate-key-pair":
 				return generateKeyPairProvider.get();
 			case "sync-static-data":
