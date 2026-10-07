@@ -1,5 +1,21 @@
 EVE Ref Changelog
 
+## [2.82.1](https://github.com/autonomouslogic/eve-ref/compare/2.82.0...2.82.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* Better logging for SDE and reference data uploads ([7e176f4](https://github.com/autonomouslogic/eve-ref/commit/7e176f43d3a4c7bd972029968a72b5fabfc4c9c1))
+* **deps:** update flyway monorepo to v13.9.0 ([#1128](https://github.com/autonomouslogic/eve-ref/issues/1128)) ([98a740a](https://github.com/autonomouslogic/eve-ref/commit/98a740abadc9ef966fad919a7723d381dffdb0f5))
+* Publish ref data Discord notification ([c528c9e](https://github.com/autonomouslogic/eve-ref/commit/c528c9e6f3aaaf4a212c6c96ead0a972842b8776))
+* ScrapeHoboleaks Discord notification ([cc218c6](https://github.com/autonomouslogic/eve-ref/commit/cc218c6f045526cf254bb8d8ee472e7fd5839ca4))
+* **ui:** Removed YouTube link for now ([b2ebd9f](https://github.com/autonomouslogic/eve-ref/commit/b2ebd9f278443a4f9be8ca3946995516e18081dc))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v13.9.0 ([#1127](https://github.com/autonomouslogic/eve-ref/issues/1127)) ([0a0bd76](https://github.com/autonomouslogic/eve-ref/commit/0a0bd76125dfc72cea34e285ebed64e68b9400eb))
+
 ## [2.82.0](https://github.com/autonomouslogic/eve-ref/compare/2.81.0...2.82.0) (2026-10-05)
 
 
