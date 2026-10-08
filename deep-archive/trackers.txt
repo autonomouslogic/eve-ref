@@ -1,0 +1,12 @@
+# Trackers added to EVE Ref Deep Archive torrents. One tracker per line; each line is its own tier (PLAN 2.4
+# "Trackers"). UDP and HTTP(S) only. Lines starting with # are comments.
+#
+# The long-lived core: the trackers that stayed on ngosang/trackerslist for three years running (checked
+# 2026-10-08).
+udp://tracker.opentrackr.org:1337/announce
+udp://open.stealth.si:80/announce
+udp://tracker.torrent.eu.org:451/announce
+udp://open.demonii.com:1337/announce
+udp://exodus.desync.com:6969/announce
+udp://explodie.org:6969/announce
+udp://tracker-udp.gbitt.info:80/announce

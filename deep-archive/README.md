@@ -1,4 +1,4 @@
-# torrents/ — EVE Ref Deep Archive
+# deep-archive/ — EVE Ref Deep Archive
 
 Tooling and operator documentation for the **EVE Ref Deep Archive**: old data.everef.net data moved into yearly
 torrents.
@@ -37,14 +37,15 @@ User-facing documentation (what the torrents are, why, how to use them, when the
 ## Layout (planned)
 
 ```
-torrents/
+deep-archive/
   README.md  RUNBOOK.md  PLAN.md  LOG.md
   superseded.txt          # replaced torrents, created when first needed
-  run.sh                  # Docker wrapper: torrents/run.sh <script> --dir <dir> [args]
+  run.sh                  # Docker wrapper: deep-archive/run.sh <script> --dir <dir> [args]
   Dockerfile              # rclone, torrent creator, qBittorrent tooling, Python
   torrents.env.example    # copy to torrents.env (not committed)
   README-template.txt     # source for <ID>-README.txt inside each torrent
-  scripts/                # check-env, find, start-year, load, check-load, make-torrent, ...
+  trackers.txt            # trackers added to every torrent, one per tier
+  scripts/                # find.py, create_torrent.py (drafts); later check-env, start-year, load, make-torrent, ...
 ```
 
 `--dir` is required on every script. It's the working directory and the directory torrents are seeded from. See

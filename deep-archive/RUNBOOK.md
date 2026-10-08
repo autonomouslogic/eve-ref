@@ -24,8 +24,8 @@ output, and only move on when the check passes.
 - `Y` = the year being archived, e.g. `2025`. Years in this runbook are examples.
 - `<ID>` = the torrent ID. Normally `everef-deep-archive-Y`. Splits, supplements and replacements have a suffix
   (PLAN 2.3). Scripts take the ID where this runbook writes `<ID>`; for a normal year that's `everef-deep-archive-Y`.
-- Run every script through the wrapper: `torrents/run.sh <script> --dir <dir> [args]`. It runs inside the Docker
-  image with `torrents/torrents.env` loaded, and mounts `<dir>` at the same path, so paths are identical on the host,
+- Run every script through the wrapper: `deep-archive/run.sh <script> --dir <dir> [args]`. It runs inside the Docker
+  image with `deep-archive/torrents.env` loaded, and mounts `<dir>` at the same path, so paths are identical on the host,
   in the scripts, and in qBittorrent.
 - **`--dir` is the working directory, and it is the directory torrents are seeded from.** Every script takes it
   (required, no default). Set it once per session:
@@ -44,17 +44,29 @@ output, and only move on when the check passes.
     everef-deep-archive-2025.torrent
     everef-deep-archive-2025.txt           # file list, published on the data site
     everef-deep-archive-2025.work/         # never part of the torrent
-      files.jsonl                     #   the frozen selection
+      find/                           #   output of the find step (B1)
+      files.jsonl                     #   the frozen selection (D1)
       manifest.json                   #   selection + sha256
       backup-plan.json  everef-deep-archive-2025-backup-index.tsv
       backup/                         #   one bundle at a time, while backing up
       CHECKLIST.md  deleted.jsonl
       checks/*.ok  logs/*.log
-    find-<date>/                      # output of the find step
     RUN-<date>.md                     # years chosen for this run
   ```
 - Only `<ID>/` is torrent content. Everything else sits **beside** it, never inside, so the content folder stays
   exactly what the torrent describes.
+
+### Requirements (draft scripts)
+
+Until `run.sh` and the Docker image exist, the draft scripts (`scripts/find.py`, `scripts/create_torrent.py`) run
+directly on the host. They need **Python 3** and the **libtorrent** Python bindings (`find.py` only needs Python 3):
+```
+sudo apt-get install python3 python3-libtorrent
+```
+libtorrent must be **2.x**: 1.x can't make v2 or hybrid torrents. Check the installed version:
+```
+python3 -c "import libtorrent; print(libtorrent.__version__)"
+```
 
 ---
 
@@ -64,7 +76,7 @@ Tick all of these before starting. If any is not true, stop.
 
 - [ ] **A1.** These code changes are **deployed in production** (PLAN 2.17, 2.18):
   - `SyncFuzzworkOrdersets` ID cutoff;
-  - `SyncMer` cutoff, with `ARCHIVE_MIN_AGE_YEARS` set to the same value as in `torrents.env`;
+  - `SyncMer` guard (fails if the site has no MER files);
   - `DataCrawler` failing on a missing index.
 - [ ] **A2.** One-time docs are **live on docs.everef.net** (PLAN 4.2):
   - the Deep Archive page exists;
@@ -73,45 +85,65 @@ Tick all of these before starting. If any is not true, stop.
   - no docs page links to files in a year that this run will archive.
 - [ ] **A3.** The Glacier backup bucket exists and `torrents.env` has its credentials (PLAN 2.11).
 - [ ] **A4.** The seeder host has enough free disk for this run, plus room for one backup bundle (~50 GB). You'll
-      confirm the actual size in B1, but rough guide: the first run is most of the 5.7 TB.
+      confirm the actual sizes in B1, but rough guide: the first run is most of the 5.7 TB.
 - [ ] **A5.** `$DIR` is on redundant storage (e.g. a ZFS mirror or RAID), and it was scrubbed or checked recently.
-- [ ] **A6.** `torrents/run.sh check-env --dir "$DIR"` prints `OK`. It checks the env file, credentials (read-only
-      calls) for B2 and the backup bucket, the qBittorrent API, disk space, tool versions and the cutoff. Note the
-      cutoff it prints, e.g. "archiving years ≤ 2025". It must be `current year − 2`. It also prints when the last
-      torrent was published, for information. Runs should be at most once a year, but nothing enforces it.
+- [ ] **A6.** `deep-archive/run.sh check-env --dir "$DIR"` prints `OK`. It checks the env file, credentials (read-only
+      calls) for B2 and the backup bucket, the qBittorrent API, disk space, tool versions. It also prints when the
+      last torrent was published, for information. Runs should be at most once a year, but nothing enforces it.
 
 ---
 
 ## Part B — Select (once per run)
 
-The selection comes first. Everything later is checked against it.
+The selection comes first. Everything later is checked against it. Pick Y, normally the newest year the policy allows
+(current year − 2). One run makes one torrent with everything up to and including Y that isn't archived yet.
 
-**B1. Find candidates**
+**B1. Find the files up to Y**
 ```
-torrents/run.sh find --dir "$DIR"
+deep-archive/run.sh find --dir "$DIR" --year Y
 ```
-- Read-only. Walks the site's `index.json` files, and downloads every published `<ID>.txt` file list.
-- Writes `$DIR/find-<date>/files-Y.jsonl` per candidate year (path, size, last-modified, URL) and a summary.
-- Prints one row per candidate year, with:
-  - file count;
-  - total size;
-  - **estimated `.torrent` size**;
-  - newest last-modified;
-  - a per-dataset breakdown;
-  - flags.
-- Lists what was skipped: excluded datasets (`market-history`, `killmails`), files already in a published torrent,
-  and unrecognised layouts (e.g. `fuzzwork/ordersets/backfills/`).
+**Draft (current version):** `run.sh` doesn't exist yet, and `find` only reads a **local copy** of the site (an
+rclone mirror or backup) instead of the public `index.json` files. Run it directly with Python 3:
+```
+deep-archive/scripts/find.py --dir "$DIR" --year Y --source /path/to/local/copy/of/data.everef.net
+```
+The local copy must keep the site's layout and timestamps (rclone does). Optional: `--recent-days N` for the "recently
+modified" flag (default 365). While running it logs each stage to stderr (published lists, frozen selections, each
+top-level directory, scan progress every `--progress-seconds` seconds, default 10, `0` to turn it off, writing
+results); the report goes to stdout.
+
+- Doesn't check Y against the archive policy: only choose years ≤ current year − 2.
+- Selects Y **and every year before it** (PLAN 2.1, 2.2): files with a year in the path, by that year; files without
+  one, by modification time. Except files already in a published torrent or in another frozen selection in `$DIR`.
+- `--limit N` (debug only): stops the scan after N selected files. The selection is incomplete and flagged as such;
+  never freeze it (`start-year` must refuse a selection whose `summary.json` has `limit` set).
+- Read-only on the source. Walks the site's `index.json` files (draft: the local copy), and reads every published
+  `<ID>.txt` file list (draft: from `deep-archive/` in the local copy).
+- Creates the year's folders in `$DIR`:
+  - `$DIR/<ID>/`: the torrent content folder, empty if new. `find` never writes into it; `load` fills it.
+  - `$DIR/<ID>.work/find/`, replaced on every run: `files.jsonl` (path, size, last-modified, URL, `selected_by`),
+    `report.txt` (what it prints), `summary.json` and `find.log` (flagged files, symlinks).
+- Prints for the year:
+  - file count and total size, and the oldest and newest last-modified;
+  - **estimated `.torrent` size**, bdecode tokens and piece count;
+  - a per-dataset breakdown, with "(by mtime)" for directories selected by modification time;
+  - flags;
+  - what was skipped: excluded datasets (`market-history`, `killmails`), files already in a published torrent, and
+    root-level files modified in the year (never selected).
 
 **B2. Review the output.** Check each of these:
-- [ ] Every candidate year is ≤ the cutoff from A6.
 - [ ] No `market-history/` or `killmails/` files anywhere in the breakdown.
-- [ ] Flagged years (recently modified files) have been looked at. Leave them out of this run if in doubt.
-- [ ] The "unrecognised layout" list has been read and nothing important is missing from it.
-- [ ] File count and estimated `.torrent` size per year are acceptable (PLAN 2.1 size risk). If not, stop and
-      decide on a split before continuing.
-- [ ] Total size fits on the seeder disk (A4).
+- [ ] Flags (recently modified files, dates that don't match the year folder, empty files) have been looked at. Leave
+      the year out of this run if in doubt.
+- [ ] Every "(by mtime)" entry (files with no year in the path, selected by modification time, PLAN 2.2) has been
+      checked: it's archive data, not a current file that just hasn't changed. Anything that must stay goes into
+      `TORRENT_EXCLUDE`; then re-run B1.
+- [ ] File count and estimated `.torrent` size are acceptable (PLAN 2.1 size risk). If not, stop and decide on a
+      split before continuing.
+- [ ] The total size of all chosen years fits on the seeder disk (A4).
 
 Write the chosen years into `$DIR/RUN-<date>.md`.
+
 
 ---
 
@@ -124,19 +156,21 @@ and total size. Note the date in `RUN-<date>.md`.
 
 ## Part D — Per year: prepare, publish, seed
 
-Repeat D1–D8 for **each** year, then Part E for that year. Don't start Part F until every year is through Part E.
+Do D1–D8, then Part E, for the torrent (normally one per run; if the selection was split, for each part). Don't
+start Part F until every torrent in the run is through Part E.
 
 **D1. Start year**
 ```
-torrents/run.sh start-year --dir "$DIR" Y
+deep-archive/run.sh start-year --dir "$DIR" Y
 ```
-Needs B1's output. Creates `$DIR/<ID>.work/`, **freezes** the year's file list from B1 into `files.jsonl`, and creates
-`CHECKLIST.md`. Open the checklist and tick off each step as you go.
+Needs B1's output for the year. **Freezes** `<ID>.work/find/files.jsonl` into `<ID>.work/files.jsonl`, and creates
+`CHECKLIST.md`. Re-running `find` after this doesn't change the frozen selection. Open the checklist and tick off
+each step as you go.
 
 **D2. Load**
 ```
-torrents/run.sh load --dir "$DIR" <ID>
-torrents/run.sh check-load --dir "$DIR" <ID>
+deep-archive/run.sh load --dir "$DIR" <ID>
+deep-archive/run.sh check-load --dir "$DIR" <ID>
 ```
 `load` runs `rclone copy --files-from` with the frozen list, into `$DIR/<ID>/`. It copies exactly the selected files,
 nothing else.
@@ -153,8 +187,8 @@ it is safe.
 
 **D3. Make checksums, README, torrent and file list**
 ```
-torrents/run.sh make-torrent --dir "$DIR" <ID>
-torrents/run.sh check-torrent --dir "$DIR" <ID>
+deep-archive/run.sh make-torrent --dir "$DIR" <ID>
+deep-archive/run.sh check-torrent --dir "$DIR" <ID>
 ```
 `make-torrent`, in order:
 1. Writes `<ID>.sha256` (from the manifest, `sha256sum` format) and `<ID>-README.txt` (from the template, including
@@ -185,8 +219,8 @@ Also look through these yourself:
 
 **D4. Seed**
 ```
-torrents/run.sh seed --dir "$DIR" <ID>
-torrents/run.sh check-seed --dir "$DIR" <ID>
+deep-archive/run.sh seed --dir "$DIR" <ID>
+deep-archive/run.sh check-seed --dir "$DIR" <ID>
 ```
 `seed` adds the torrent with save path `$DIR`, so qBittorrent finds the content in `$DIR/<ID>/`.
 
@@ -196,9 +230,21 @@ torrents/run.sh check-seed --dir "$DIR" <ID>
 - [ ] State: seeding.
 - [ ] Tracker status: working on at least one tracker.
 
+**D4b. Check the trackers from outside (manual)**
+
+Upload `$DIR/<ID>.torrent` to [torrenteditor.com](http://torrenteditor.com/). It queries the trackers in the file
+and reports the seeders and leechers each one knows about.
+- [ ] At least one tracker reports **1 seeder or more** (the seeder from D4).
+- [ ] Note which trackers answered and which didn't in `CHECKLIST.md`.
+
+This is a manual check with no receipt. It shows what the trackers have recorded, which is our seeder's announce.
+It doesn't prove the seeder accepts incoming connections: D5 and a download from another network cover that.
+Give the trackers a few minutes after D4 before checking. Very large `.torrent` files may be too big for the site
+to accept; if so, note it and rely on D4 and D5.
+
 **D5. Test download**
 ```
-torrents/run.sh test-download --dir "$DIR" <ID>
+deep-archive/run.sh test-download --dir "$DIR" <ID>
 ```
 Starts a throwaway client with an empty disk, using only the magnet link. It downloads the `.sha256`, the README and a
 random sample of data files spread across datasets through the torrent, then runs
@@ -213,8 +259,8 @@ on another network as well, and note the result in `CHECKLIST.md`.
 
 **D6. Upload torrent and file list**
 ```
-torrents/run.sh upload-torrent --dir "$DIR" <ID>
-torrents/run.sh check-upload --dir "$DIR" <ID>
+deep-archive/run.sh upload-torrent --dir "$DIR" <ID>
+deep-archive/run.sh check-upload --dir "$DIR" <ID>
 ```
 `upload-torrent` shows the target paths and asks for confirmation. It refuses to overwrite existing files. It
 uploads:
@@ -230,10 +276,10 @@ The checksums and README are **not** uploaded; they're inside the torrent.
 
 **D7. Feed**
 ```
-torrents/run.sh build-feed --dir "$DIR"
-torrents/run.sh check-feed --dir "$DIR" <ID>
+deep-archive/run.sh build-feed --dir "$DIR"
+deep-archive/run.sh check-feed --dir "$DIR" <ID>
 ```
-`build-feed` rebuilds `torrents.json` and `feed.xml` from all torrents on the bucket (and `torrents/superseded.txt`).
+`build-feed` rebuilds `torrents.json` and `feed.xml` from all torrents on the bucket (and `deep-archive/superseded.txt`).
 It shows a diff (items added or removed) and asks for confirmation. **Expect exactly one addition: `<ID>`.** If it
 shows anything else, stop.
 
@@ -247,7 +293,7 @@ On the first run, also add `feed.xml` to a qBittorrent RSS reader and confirm th
 
 **D8. Docs site review**
 ```
-torrents/run.sh check-docs --dir "$DIR" <ID>
+deep-archive/run.sh check-docs --dir "$DIR" <ID>
 ```
 The docs page is rule-based (PLAN 4.2), so normally nothing needs editing. Read the live page at
 `docs.everef.net/datasets/deep-archive.html` and confirm:
@@ -263,8 +309,8 @@ If the rules changed (e.g. new exclusions), update the page, merge it, and confi
 
 **E1. Prepare the backup**
 ```
-torrents/run.sh prepare-backup --dir "$DIR" <ID>
-torrents/run.sh check-backup-plan --dir "$DIR" <ID>
+deep-archive/run.sh prepare-backup --dir "$DIR" <ID>
+deep-archive/run.sh check-backup-plan --dir "$DIR" <ID>
 ```
 `prepare-backup` plans the ZIP bundles (`<ID>-part-NNN.zip`, about 50 GB each) from the manifest, and writes
 `backup-plan.json` and `<ID>-backup-index.tsv`.
@@ -276,8 +322,8 @@ torrents/run.sh check-backup-plan --dir "$DIR" <ID>
 
 **E2. Back up to Glacier Deep Archive**
 ```
-torrents/run.sh backup --dir "$DIR" <ID>
-torrents/run.sh check-backup --dir "$DIR" <ID>
+deep-archive/run.sh backup --dir "$DIR" <ID>
+deep-archive/run.sh check-backup --dir "$DIR" <ID>
 ```
 `backup` shows the target prefix, bundle count and bytes, and asks for confirmation. Then, one bundle at a time, it
 builds the bundle in `<ID>.work/backup/`, records its SHA-256, uploads it with storage class `DEEP_ARCHIVE`, and
@@ -305,15 +351,16 @@ others can go ahead.
 
 **F1. Pre-delete check** (per year)
 ```
-torrents/run.sh check-before-delete --dir "$DIR" <ID>
+deep-archive/run.sh check-before-delete --dir "$DIR" <ID>
 ```
 This **re-checks everything from scratch** and doesn't trust old receipts:
 - [ ] All earlier receipts are present: load, torrent, seed, test-download, upload, feed, docs, backup plan, backup.
 - [ ] Docs check: the Deep Archive page on docs.everef.net is live.
 - [ ] Backup check: `check-backup` passes again.
 - [ ] **Bucket matches the selection** (data files only; the `.sha256` and README were never on the bucket): every
-      file still exists with the same **size and last-modified**, and **no extra files** exist under any of the
-      year's dataset paths. Any difference stops this year (see "If data changed" below).
+      file still exists with the same **size and last-modified** (`index.json`: existence only), and **no extra
+      files** exist under any of the year's dataset paths (for files selected by modification time, only the files
+      themselves are checked). Any difference stops this year (see "If data changed" below).
 - [ ] Seeder still at 100% and seeding.
 - [ ] Prints the delete set: file count, total bytes, per-dataset breakdown, and the index files that will be
       removed.
@@ -324,19 +371,19 @@ fails on those.
 
 **F3. Delete** (per year)
 ```
-torrents/run.sh delete --dir "$DIR" <ID>              # dry run: prints what would be deleted
-torrents/run.sh delete --dir "$DIR" <ID> --execute    # asks you to type the ID to confirm
+deep-archive/run.sh delete --dir "$DIR" <ID>              # dry run: prints what would be deleted
+deep-archive/run.sh delete --dir "$DIR" <ID> --execute    # asks you to type the ID to confirm
 ```
 - The dry run must show exactly the counts from F1.
-- `--execute` hides each file on B2 (a soft delete) and removes `index.html`/`index.json` from the emptied
-  directories. It logs every key and version ID to `deleted.jsonl`.
+- `--execute` hides each file on B2 (a soft delete), including the year's `index.json` files, and removes
+  `index.html` from the emptied directories. It logs every key and version ID to `deleted.jsonl`.
 
 **F4. Check delete** (per year)
 ```
-torrents/run.sh check-delete --dir "$DIR" <ID>
+deep-archive/run.sh check-delete --dir "$DIR" <ID>
 ```
 - [ ] Every selected file is gone from the bucket listing.
-- [ ] No `index.html`/`index.json` is left in the emptied directories.
+- [ ] No `index.html` or `index.json` is left in the emptied directories.
 - [ ] Nothing else changed: the bucket object count went down by exactly the delete set.
 
 **F5. Full DataIndex**
@@ -346,11 +393,11 @@ docker run --rm --env-file <production env> <eve-ref image> data-index
 Leave `DATA_INDEX_PREFIX` unset so it's a full run. It takes a while.
 
 **F6. Resume crawling jobs** paused in F2. Check the next `sync-fuzzwork-ordersets` run succeeds and uploads nothing
-older than the cutoff.
+below its ID cutoff.
 
 **F7. Check site** (per year)
 ```
-torrents/run.sh check-site --dir "$DIR" <ID>
+deep-archive/run.sh check-site --dir "$DIR" <ID>
 ```
 Cloudflare is **not** purged. Deleted files can stay in its cache for up to 30 days (PLAN 2.16). So `check-site`
 checks many URLs: a random sample of deleted files across datasets and months, plus every year directory's
@@ -364,7 +411,7 @@ checks many URLs: a random sample of deleted files across datasets and months, p
 ## Part G — Finish (once per run)
 
 **G1. Record**
-- Add one line per torrent to `torrents/LOG.md`: ID, files, bytes, v1/v2 info-hashes, published date, backup date,
+- Add one line per torrent to `deep-archive/LOG.md`: ID, files, bytes, v1/v2 info-hashes, published date, backup date,
   deleted date.
 - Commit it.
 - Keep `$DIR/<ID>.work/` (selection, manifest, checklist, receipts, logs) in place, next to the content.
@@ -377,7 +424,7 @@ checks many URLs: a random sample of deleted files across datasets and months, p
 
 `$DIR` is the primary EVE Ref copy of archived years, so check it regularly (e.g. monthly):
 ```
-torrents/run.sh check-seed --dir "$DIR" <ID> --recheck   # per torrent: forces a full qBittorrent recheck
+deep-archive/run.sh check-seed --dir "$DIR" <ID> --recheck   # per torrent: forces a full qBittorrent recheck
 ```
 - [ ] Every torrent is at 100% with 0 bytes downloaded, and seeding.
 - [ ] The filesystem scrub (ZFS/RAID) is clean.
@@ -389,13 +436,13 @@ restore the affected bundles from the Glacier backup (`<ID>-backup-index.tsv` sa
 
 - **Within the B2 hide-to-delete window** (currently 2 days):
   ```
-  torrents/run.sh undelete --dir "$DIR" <ID>            # dry run
-  torrents/run.sh undelete --dir "$DIR" <ID> --execute  # removes hide markers using deleted.jsonl
+  deep-archive/run.sh undelete --dir "$DIR" <ID>            # dry run
+  deep-archive/run.sh undelete --dir "$DIR" <ID> --execute  # removes hide markers using deleted.jsonl
   ```
 - **After it:** re-upload the selection from `$DIR/<ID>/` (or from a Glacier restore):
   ```
-  torrents/run.sh reupload --dir "$DIR" <ID>            # dry run
-  torrents/run.sh reupload --dir "$DIR" <ID> --execute
+  deep-archive/run.sh reupload --dir "$DIR" <ID>            # dry run
+  deep-archive/run.sh reupload --dir "$DIR" <ID> --execute
   ```
 
 Then run a full DataIndex (F5) and check that the files are served again. The torrent and docs can stay as they are.
@@ -411,7 +458,7 @@ Then run a full DataIndex (F5) and check that the files are served again. The to
 | Script | Writes to | Requires |
 |---|---|---|
 | `check-env` | — | — |
-| `find` | `$DIR/find-<date>/` | — |
+| `find --year Y` | `$DIR/<ID>/` (empty), `$DIR/<ID>.work/find/` | — |
 | `start-year Y` | `$DIR/<ID>.work/` (frozen `files.jsonl`) | `find` output |
 | `load` / `check-load` | `$DIR/<ID>/` / receipt + `manifest.json` | start-year / — |
 | `make-torrent` / `check-torrent` | `.sha256` + README in content, `.torrent`, `.txt` / receipt | load |
