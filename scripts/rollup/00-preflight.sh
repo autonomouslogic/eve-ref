@@ -6,7 +6,7 @@ set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
 echo "## 🔵 Tools"
-for tool in rclone tar xz bzip2 jq sha256sum sha1sum curl find sort flock; do
+for tool in rclone tar xz bzip2 jq sha256sum sha1sum curl wget find sort flock; do
 	if ! command -v "$tool" >/dev/null 2>&1; then
 		echo "🔴 Missing required tool: $tool" >&2
 		exit 1

@@ -1,6 +1,6 @@
 # Yearly history rollup: implementation plan
 
-Status: `00-preflight.sh` through `04-archive.sh` are written; `05-upload.sh` through `07-complete.sh` are
+Status: `00-preflight.sh` through `05-upload.sh` are written; `06-delete.sh` and `07-complete.sh` are
 still planned. This file holds implementation notes for review; the operator runbook lives in
 [README.md](README.md). **Keep README.md's status line and procedure table up to date whenever a script is
 added or changed** — it must never drift from what's actually implemented.
@@ -231,7 +231,7 @@ Before anything else, `common.sh` also:
 
 - `rollup.env` loaded, required variables set.
 - Tools present: `rclone` (version printed), GNU `tar`, `xz`, `bzip2`, `jq`, `sha256sum`, `sha1sum`, `curl`,
-  `find`, `sort`, `flock`.
+  `wget`, `find`, `sort`, `flock`.
 - `rclone lsf $REMOTE/<archive>/history/` works and contains `<year>/`. It also contains `<year+1>/`,
   confirming the year is actually finished (scraping has moved on), beyond the current-UTC-year check in
   `common.sh`. `<archive>-<year>.tar.xz` exists neither in that listing nor at the public URL (HTTP 404).
@@ -314,7 +314,8 @@ Before anything else, `common.sh` also:
   - `curl -I` on the public URL: 200, `content-length`, `last-modified` at `<year>-12-31 23:59:59 GMT`,
     `x-amz-meta-src_last_modified_millis`, and `cache-control: public, max-age=31536000, immutable`. The
     `etag` is not checked;
-  - download into `verify/public/` and compare the sha256 with `archive.sha256`.
+  - `wget` into `verify/public/`: compare the sha256 with `archive.sha256`, and the downloaded file's mtime
+    (set by `wget` from `Last-Modified`) with `<year>-12-31T23:59:59Z`.
 
 ### 06-delete
 
