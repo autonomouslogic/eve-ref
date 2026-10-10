@@ -109,12 +109,53 @@ rollup, and grep `src/main` for consumers of its factory constant.
 - the current UTC year or later. Finished years never change, which is the basis for skipping a re-list before
   delete.
 
+## Configuration: `scripts/rollup/local.env`
+
+All configuration lives in `scripts/rollup/local.env`. The repo-root `.gitignore` rule `local.env` already
+ignores it (checked with `git check-ignore`). A committed `scripts/rollup/local.env.sample` documents it.
+`common.sh` loads it with `set -a; . "$DIR/local.env"; set +a`. It aborts if the file is missing or any required
+variable is empty.
+
+rclone is configured **only from environment variables** (rclone's `RCLONE_CONFIG_<REMOTE>_<OPTION>`
+convention), so no `rclone.conf` is involved. `common.sh` also exports `RCLONE_CONFIG=/dev/null`, which makes
+rclone use an in-memory config. Remotes in the operator's own `rclone.conf` can then never be picked up by
+mistake.
+
+`local.env.sample`:
+
+```bash
+# Copy to local.env (gitignored) and fill in. Sourced by bash, so ${...} references work.
+
+# B2 application key for bucket data-everef-net-425eb511
+B2_KEY_ID=
+B2_APPLICATION_KEY=
+ROLLUP_BUCKET=data-everef-net-425eb511
+
+# rclone remote "everef": native b2 backend. Never enable hard_delete.
+RCLONE_CONFIG_EVEREF_TYPE=b2
+RCLONE_CONFIG_EVEREF_ACCOUNT=${B2_KEY_ID}
+RCLONE_CONFIG_EVEREF_KEY=${B2_APPLICATION_KEY}
+RCLONE_CONFIG_EVEREF_HARD_DELETE=false
+
+# data-index (80-index.sh runs ./gradlew dataIndex), via B2's S3-compatible API
+DATA_PATH=s3://${ROLLUP_BUCKET}/
+DATA_S3_ENDPOINT_URL=https://s3.us-east-005.backblazeb2.com
+DATA_AWS_ACCESS_KEY_ID=${B2_KEY_ID}
+DATA_AWS_SECRET_ACCESS_KEY=${B2_APPLICATION_KEY}
+```
+
+`common.sh` derives `REMOTE="everef:${ROLLUP_BUCKET}"`. It hard-codes the scratch root
+(`/tmp/everef-rollup`) and the public base URL (`https://data.everef.net`).
+
+Note: Gradle's `dataIndex` task (`build.gradle`) layers the **repo-root** `local.env` on top of the inherited
+environment, so any key set there (currently `DATA_PATH`, `DATA_S3_ENDPOINT_URL`, `DATA_AWS_PROFILE`) takes
+precedence for that key. That is harmless as long as both files point at the same bucket. `80-index.sh`
+prints the effective `DATA_PATH` before running.
+
 ## rclone / B2
 
-- The operator installs and configures rclone. Development testing is done by the operator too.
-- **One rclone remote, native `b2` backend**, with `hard_delete` at its default (`false`). It is hard-coded in
-  `common.sh` as `REMOTE=everef-data:data-everef-net-425eb511` (name to be confirmed; bucket from
-  `local.env`).
+- The operator installs rclone. Development and end-to-end testing are done by the operator, on production
+  data.
 - Delete with `rclone delete` (it hides files). Undo is the bucket lifecycle window. Never use `rclone purge`,
   `rclone cleanup`, `backend cleanup-hidden` or `--b2-hard-delete`: on b2 these remove old versions too.
 - Use `--fast-list` on listings to keep Class C transactions down.
@@ -154,27 +195,31 @@ themselves, as described in each step.
 
 ## Scripts
 
-Planned files in `scripts/rollup/`. Each is `bash` with `set -euo pipefail` and `export TZ=UTC LC_ALL=C`, takes
-`<archive> <year>`, validates both (`^[a-z0-9-]+$` plus the scope list, `^20[0-9]{2}$` plus earlier than the
-current UTC year), and tees its output to `log/`.
+Planned files in `scripts/rollup/`. Each is `bash` with `set -euo pipefail` and `export TZ=UTC LC_ALL=C`. Each
+sources `common.sh`, which loads `local.env`. Each takes `<archive> <year>`, validates both (`^[a-z0-9-]+$` plus
+the scope list, `^20[0-9]{2}$` plus earlier than the current UTC year), and tees its output to `log/`.
 
-| Script            | Remote       | What it does                                                              |
-|-------------------|--------------|---------------------------------------------------------------------------|
-| `common.sh`       | n/a          | Constants (`REMOTE`, `SCRATCH`, public URL), arg checks, markers, helpers |
-| `10-preflight.sh` | read         | Tools, remote access, year dir present, archive absent, free space in `/tmp` |
+| Script               | Remote       | What it does                                                           |
+|----------------------|--------------|------------------------------------------------------------------------|
+| `local.env.sample`   | n/a          | Template for the gitignored `local.env`                                |
+| `common.sh`          | n/a          | Loads `local.env`, constants (`REMOTE`, `SCRATCH`, public URL), arg checks, markers, helpers |
+| `10-preflight.sh`    | read         | Config, tools, Java build, remote access, year dir present, archive absent, free space in `/tmp` |
 | `20-list.sh`      | read         | `listing.json` plus anomaly report                                         |
 | `30-download.sh`  | read         | `rclone copy` and `rclone check`, then verify against `listing.json`      |
 | `40-prepare.sh`   | none         | Build `stage/`, decompress, hash-verify against the originals             |
 | `50-archive.sh`   | none         | Build tar.xz, verify headers, order and contents, set mtime               |
 | `60-upload.sh`    | write        | Upload, verify via B2 and the public URL                                  |
 | `70-delete.sh`    | **delete**   | Dry-run preview, typed confirmation, `rclone delete`, verify empty        |
-| `80-index.sh`     | read         | After `data-index` has run: verify `history/index.json`, no orphan index files |
-| `90-complete.sh`  | read         | Final checks, print README log row, write `COMPLETE`                      |
+| `80-index.sh`     | write (index) | Run `data-index` via Gradle for `<archive>/history`, then verify the index and that there are no orphan index files |
+| `90-complete.sh`  | read         | Final checks, print summary, write `COMPLETE`                             |
 
 ### 10-preflight
 
+- `local.env` loaded, required variables set, `RCLONE_CONFIG_EVEREF_HARD_DELETE` is `false`.
 - Tools present: `rclone` (version printed), GNU `tar`, `xz`, `bzip2`, `jq`, `sha256sum`, `sha1sum`,
   `md5sum`, `curl`, `find`, `sort`.
+- Java build works: `make generate-database` and then `./gradlew classes` from the repo root. A broken build
+  is caught here, not in `80-index` after the delete.
 - `rclone lsf $REMOTE/<archive>/history/` works and contains `<year>/`. `<archive>-<year>.tar.xz` exists
   neither in that listing nor at the public URL (HTTP 404).
 - `rclone size` of the year dir. Free space on `/tmp` must be at least 2x that size plus an estimate of the
@@ -257,8 +302,11 @@ current UTC year), and tees its output to `log/`.
 
 ### 80-index
 
-- Prerequisite, done outside the script: `data-index` has run, either the scheduled run or a manual one with
-  `DATA_INDEX_PREFIX=<archive>/history`. Today `make docker-data-index` cannot pass a prefix.
+- From the repo root, run `DATA_INDEX_PREFIX=<archive>/history ./gradlew dataIndex`, with `local.env`
+  exported. The `dataIndex` task already exists in `build.gradle`. A prefix run is recursive, so it re-indexes
+  `<archive>/history/` and every remaining year below it.
+- Abort if Gradle exits non-zero. A failed index run does not need an undo: the scheduled `data-index` would
+  repair it, and the step can be rerun because no marker was written.
 - Verify:
   - `https://data.everef.net/<archive>/history/index.json` lists `<archive>-<year>.tar.xz` with the right
     size and `last_modified`, and no `<year>` directory;
@@ -269,7 +317,7 @@ current UTC year), and tees its output to `log/`.
 ### 90-complete
 
 - Recheck that the remote archive's SHA-1 equals `archive.sha1` and that the year dir is empty.
-- Print a row for the README rollup log: date, archive, year, data file count, archive size, sha256.
+- Print a summary: archive, year, data file count, archive size, sha256.
 - Write `COMPLETE`. Leave the scratch dir for the operator to clear.
 
 ## Development testing (operator)
@@ -283,23 +331,19 @@ Things to confirm before the first real run:
    `last-modified` and the index show `<year>-12-31T23:59:59Z`.
 3. `rclone lsjson --hash` returns SHA-1 for history files uploaded by the Java app through the S3 API.
 4. `rclone delete` produces hide markers (`x-amz-delete-marker: true` on the old URLs).
-5. End to end on a small, throwaway input before 2023 incursions. One option: make `REMOTE` and the public
-   base URL overridable for testing and point them at a test prefix (e.g. `rollup-test/`) holding a
-   server-side copy of a few days.
+5. The env-only remote works with `RCLONE_CONFIG=/dev/null`: `rclone lsf everef:<bucket>/incursions/history/`
+   lists, and `rclone listremotes` shows only `everef:`.
+6. `DATA_INDEX_PREFIX` set in the shell reaches the `dataIndex` JavaExec. The Gradle daemon should pick up the
+   client's environment; if not, use `--no-daemon`. The run only touches `<archive>/history/` (short runtime,
+   and other datasets' `index.json` are unchanged).
+
+End-to-end testing happens on production data, starting with `incursions 2023`.
 
 ## Undo
 
 - Before `70-delete`: only the archive was added, and deleting it restores the old state.
 - After `70-delete`: restore the hidden versions within the bucket lifecycle window (B2 web UI, or rclone with
   `--b2-version-at` set before the delete). Nothing is kept locally after completion.
-
-## Open questions
-
-1. rclone remote name to hard-code (placeholder `everef-data`).
-2. Should `80-index` trigger `data-index` itself, or keep relying on the scheduled run or a manual one?
-3. Test approach for item 5 above: a test prefix in the live bucket (briefly visible on the site), or a
-   separate bucket?
-4. Keep the README rollup log table?
 
 ## Follow-ups (outside the scripts)
 

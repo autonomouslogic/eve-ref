@@ -32,10 +32,17 @@ unsorted). It stays as is.
 
 ## Setup
 
-- rclone with a native **`b2`** remote for bucket `data-everef-net-425eb511`, with `hard_delete` left at
-  `false`. The scripts use the remote name hard-coded in `common.sh`.
-- Never run `rclone purge`, `rclone cleanup`, `rclone backend cleanup-hidden` or anything with `--b2-hard-delete`
-  against this bucket. Deletes must stay soft, so the bucket lifecycle rules provide the undo window.
+1. Install rclone.
+2. `cp scripts/rollup/local.env.sample scripts/rollup/local.env` and fill in the B2 key. `local.env` is
+   gitignored. Every script reads its configuration from this file and nowhere else:
+   - the rclone remote `everef` (native `b2` backend, `hard_delete=false`), defined purely through
+     `RCLONE_CONFIG_EVEREF_*` variables. Your own `rclone.conf` is ignored;
+   - the `DATA_*` settings that `data-index` needs. Gradle's `dataIndex` task also layers the repo-root
+     `local.env` on top, so keep both pointing at the same bucket.
+3. Java build prerequisites for `./gradlew` (see the repo-root `AGENTS.md`). Preflight checks the build.
+
+Never run `rclone purge`, `rclone cleanup`, `rclone backend cleanup-hidden` or anything with `--b2-hard-delete`
+against this bucket. Deletes must stay soft, so the bucket lifecycle rules provide the undo window.
 
 ## Procedure
 
@@ -62,14 +69,8 @@ If a step fails partway, remove its partial output and rerun it. Download and de
 | 5    | `50-archive.sh`   | no                   | Sorted, owner-free headers. Extracted copy hash-verifies      |
 | 6    | `60-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
 | 7    | `70-delete.sh`    | **hides year dir**   | Dry-run count equals listing. Typed `<archive>-<year>` confirmation |
-| 8    | run `data-index`, then `80-index.sh` | rewrites indexes | `history/index.json` shows the archive and no year. No orphan index files |
-| 9    | `90-complete.sh`  | no                   | Paste the printed row into the log below. `COMPLETE` written  |
+| 8    | `80-index.sh`     | rewrites indexes     | Runs `./gradlew dataIndex` for `<archive>/history`. `history/index.json` shows the archive and no year. No orphan index files |
+| 9    | `90-complete.sh`  | no                   | Summary printed. `COMPLETE` written                           |
 
 Steps 1-6 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (6).
 Step 7 is the only destructive step. It is a soft delete, which can be undone within the bucket lifecycle window.
-
-## Rollup log
-
-| Date       | Archive      | Year | Data files | Archive size | SHA-256 of archive                                                 | Notes |
-|------------|--------------|------|------------|--------------|--------------------------------------------------------------------|-------|
-| 2026-10-09 | `incursions` | 2022 | 4,394      | 205,308 B    | `f376eb4e7eb3c8d4f4f2fe234f594f108b9451e9dc238163d677c643d6c78580` | Manual, pre-format (see above). 2022-12-16 to 2022-12-31 |
