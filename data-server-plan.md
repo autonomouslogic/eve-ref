@@ -1,7 +1,7 @@
 # Plan: `data-server` command — streaming proxy for data.everef.net
 
 ## Context
-data.everef.net is served today by a Cloudflare Worker in front of the B2 bucket `data-everef-net-425eb511`, using the B2
+data.everef.net is served today by a Cloudflare Worker in front of the B2 bucket `<bucket>`, using the B2
 S3-compatible endpoint (`x-amz-meta-*` headers in responses, `dir/` serves `dir/index.html`, Range and ETag work, missing
 keys return a plain-text `Not found` 404). The Worker is too expensive, so it is being replaced by our own server: a
 Java re-implementation of the Worker, with improvements. The data stays on B2, read the same way the Worker reads it.
@@ -25,7 +25,7 @@ Requirements and decisions:
 The server reads the same endpoint the Worker reads: B2's S3-compatible endpoint, path-style, with plain anonymous HTTP
 GET/HEAD (the bucket is public). It does **not** use the S3 SDK, request signing or any S3 API operation other than
 fetching an object.
-- **Object:** `GET|HEAD https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/<key>`
+- **Object:** `GET|HEAD https://s3.us-east-005.backblazeb2.com/<bucket>/<key>`
 - **Pinned version:** the same URL plus `?versionId=<x-amz-version-id>`
 
 Why this endpoint and not B2's native download API (`/file/<bucket>/<key>`): the native API sends no `ETag`, renames
@@ -85,7 +85,7 @@ Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2
      - percent-encoding is invalid (`%zz`, a truncated `%4`) or the decoded bytes are not valid UTF-8;
      - the final key exceeds 1024 bytes in UTF-8 (B2's file-name limit).
    - Names that merely contain dots, like `file..txt`, are fine.
-   - Why: the upstream base is a *path-style* S3 URL (`https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/`).
+   - Why: the upstream base is a *path-style* S3 URL (`https://s3.us-east-005.backblazeb2.com/<bucket>/`).
      `/../other-bucket/x` would resolve to `https://s3…/other-bucket/x`, letting anyone fetch any public B2 bucket in that
      region through data.everef.net. That is an open proxy under our domain, usable for malware hosting and bandwidth
      abuse.
@@ -249,7 +249,7 @@ write-stall timeout (step 12a) is only the backstop for dead streams.
 ### Wiring and config
 - `cli/CommandRunner.java`: inject `Provider<DataServer>` and add `case "data-server"`.
 - `config/Configs.java`:
-  - `DATA_SERVER_ORIGIN_URL` (URI, required, e.g. `https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/`,
+  - `DATA_SERVER_ORIGIN_URL` (URI, required, e.g. `https://s3.us-east-005.backblazeb2.com/<bucket>/`,
     the same URL the Worker uses). Validate at startup that it has no query and ends with `/`.
   - `DATA_SERVER_MAX_CONCURRENCY` (int, default 10000)
   - `DATA_SERVER_WRITE_STALL_TIMEOUT` (Duration, default `PT120S`)
@@ -380,7 +380,7 @@ Every path-safety and key-encoding case from `DataServerTest`, asserting the res
 - Then stop all readers and assert the stall watchdog cleans every stream up (no tracked streams, upstream pool idle).
 
 ## Worker parity
-Current behavior comes from the Cloudflare Worker that proxies to `https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/`.
+Current behavior comes from the Cloudflare Worker that proxies to `https://s3.us-east-005.backblazeb2.com/<bucket>/`.
 Kept as-is:
 - Same upstream endpoint, so `ETag` values and `x-amz-meta-*` headers are unchanged.
 - GET and HEAD only; anything else returns 405 (now also with `Allow: GET, HEAD`).
@@ -411,7 +411,7 @@ Intentional differences:
 1. `make generate-database`, then `./gradlew test --tests "*.dataserver.*"` and the slow large-stream task.
 2. Run locally:
    ```
-   DATA_SERVER_ORIGIN_URL=https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/ HTTP_PORT=8081 bin/eve-ref data-server
+   DATA_SERVER_ORIGIN_URL=https://s3.us-east-005.backblazeb2.com/<bucket>/ HTTP_PORT=8081 bin/eve-ref data-server
    ```
    Then:
    - `curl -I localhost:8081/ccp/sde/schema-changelog.yaml` returns the same `ETag`, `Last-Modified` and
