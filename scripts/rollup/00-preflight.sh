@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 1: config, tools, remote access, year dir present, archive absent.
-# Free space is checked in 10-list.sh, off the listing it already has to fetch there.
+# Free space is checked in 01-list.sh, off the listing it already has to fetch there.
 # Usage: ./00-preflight.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"

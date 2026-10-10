@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 3: download the remote year dir, verify against listing.json.
-# Usage: ./20-download.sh <archive> <year>
+# Usage: ./02-download.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
@@ -8,7 +8,7 @@ DOWNLOAD_DIR="$SCRATCH/download/$YEAR_PATH"
 
 echo "## 🔵 Download"
 mkdir -p "$DOWNLOAD_DIR"
-rclone copy --progress --bwlimit 10M --fast-list --transfers=8 --checkers=2 --max-backlog 1000000 \
+rclone copy -v --bwlimit 20M --fast-list --transfers=8 --checkers=2 --max-backlog 1000000 \
   "$REMOTE/$YEAR_PATH" "$DOWNLOAD_DIR"
 echo "rclone copy done"
 

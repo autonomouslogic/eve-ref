@@ -7,7 +7,7 @@ set -euo pipefail
 ROLLUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STEP="$(basename "$0" .sh)"
 
-STEP_ORDER=(00-preflight 10-list 20-download 30-prepare 40-archive 50-upload 60-delete 70-complete)
+STEP_ORDER=(00-preflight 01-list 02-download 03-prepare 04-archive 05-upload 06-delete 07-complete)
 
 ROLLUP_SCOPE=(
 	incursions

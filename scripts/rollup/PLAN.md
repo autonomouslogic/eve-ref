@@ -169,8 +169,8 @@ It hard-codes the public base URL (`https://data.everef.net`) and the lock file 
 
 ```
 $ROLLUP_SCRATCH_ROOT/<archive>-<year>/
-  00-preflight.done ... 60-delete.done  completion markers (UTC timestamp + key facts, e.g. counts, sha256)
-  COMPLETE                              written last, by 70-complete.sh
+  00-preflight.done ... 06-delete.done  completion markers (UTC timestamp + key facts, e.g. counts, sha256)
+  COMPLETE                              written last, by 07-complete.sh
   listing.json                          rclone lsjson -R --hash --files-only of the remote year dir
   download/<archive>/history/<year>/    untouched rclone copy (.bz2, index.html, index.json)
   stage/<archive>/history/<year>/       working copy: no index.html, bz2 decompressed (tar root = stage/)
@@ -196,7 +196,7 @@ Marker rules, enforced by `common.sh` at the start of every step:
 
 A step that fails partway leaves no marker. Steps that produce local output (`stage/`, the archive,
 `verify/`) refuse to start if that output already exists, so the operator removes the partial output by hand
-before retrying. `20-download` is the exception: `rclone copy` resumes. Remote steps handle partial runs
+before retrying. `02-download` is the exception: `rclone copy` resumes. Remote steps handle partial runs
 themselves, as described in each step.
 
 ## Scripts
@@ -218,13 +218,13 @@ Before anything else, `common.sh` also:
 | `rollup.env.sample`  | n/a          | Template for the gitignored `rollup.env`                               |
 | `common.sh`          | n/a          | Loads `rollup.env`, lock, tool environment, constants (`REMOTE`, `SCRATCH`, public URL), arg checks, markers, helpers |
 | `00-preflight.sh`    | read         | Config, tools, remote access, year dir present, archive absent        |
-| `10-list.sh`         | read         | `listing.json`, anomaly report, free space in the scratch root        |
-| `20-download.sh`     | read         | `rclone copy` and `rclone check`, then verify against `listing.json`   |
-| `30-prepare.sh`      | none         | Build `stage/`, decompress, hash-verify against the originals          |
-| `40-archive.sh`      | none         | Build tar.xz, verify headers, order and contents, set mtime            |
-| `50-upload.sh`       | write        | Upload, verify via B2 and the public URL                               |
-| `60-delete.sh`       | **delete**   | Dry-run preview, typed confirmation, `rclone delete`, verify empty     |
-| `70-complete.sh`     | read         | Final checks, print summary, write `COMPLETE`                          |
+| `01-list.sh`         | read         | `listing.json`, anomaly report, free space in the scratch root        |
+| `02-download.sh`     | read         | `rclone copy` and `rclone check`, then verify against `listing.json`   |
+| `03-prepare.sh`      | none         | Build `stage/`, decompress, hash-verify against the originals          |
+| `04-archive.sh`      | none         | Build tar.xz, verify headers, order and contents, set mtime            |
+| `05-upload.sh`       | write        | Upload, verify via B2 and the public URL                               |
+| `06-delete.sh`       | **delete**   | Dry-run preview, typed confirmation, `rclone delete`, verify empty     |
+| `07-complete.sh`     | read         | Final checks, print summary, write `COMPLETE`                          |
 
 ### 00-preflight
 
@@ -235,7 +235,7 @@ Before anything else, `common.sh` also:
   confirming the year is actually finished (scraping has moved on), beyond the current-UTC-year check in
   `common.sh`. `<archive>-<year>.tar.xz` exists neither in that listing nor at the public URL (HTTP 404).
 
-### 10-list
+### 01-list
 
 - `rclone lsjson -R --hash --files-only --fast-list $REMOTE/<archive>/history/<year>` writes `listing.json`.
   This is the one recursive listing of the year dir; later steps and the free space check below reuse its
@@ -252,7 +252,7 @@ Before anything else, `common.sh` also:
   filesystem holding `ROLLUP_SCRATCH_ROOT` must be at least 2x the year's total bytes plus 2x that estimate.
   That covers the download, the stage, the archive and its public copy.
 
-### 20-download
+### 02-download
 
 - `rclone copy --fast-list $REMOTE/<archive>/history/<year> download/<archive>/history/<year>`. rclone
   verifies SHA-1 on each transfer.
@@ -262,7 +262,7 @@ Before anything else, `common.sh` also:
   - local mtimes equal the `ModTime` values in `listing.json` to the second;
   - `bzip2 -t` passes on every `.bz2`.
 
-### 30-prepare
+### 03-prepare
 
 - `cp -a download/<archive>/history/<year> stage/<archive>/history/<year>`.
 - Delete `index.html` files. The count must equal the `index.html` count in `listing.json`.
@@ -276,7 +276,7 @@ Before anything else, `common.sh` also:
   - mtimes match `listing.json`;
   - `jq empty` passes on every file (valid JSON).
 
-### 40-archive
+### 04-archive
 
 - Build with the tar command above. It writes to a temp name and renames on success.
 - `touch -d "<year>-12-31T23:59:59Z"` on the archive.
@@ -297,7 +297,7 @@ Before anything else, `common.sh` also:
     `archive-contents.sha256` must equal `expected.sha256` exactly (the tar is already in sorted order).
 - Write `archive.sha256` and `archive.sha1`.
 
-### 50-upload
+### 05-upload
 
 - If the remote object already exists with the same SHA-1 (an earlier partial run), skip the upload and go
   straight to verification. If it exists with a different hash, abort.
@@ -316,7 +316,7 @@ Before anything else, `common.sh` also:
     `etag` is not checked;
   - download into `verify/public/` and compare the sha256 with `archive.sha256`.
 
-### 60-delete
+### 06-delete
 
 - The path is built from the validated args and must match `^[a-z0-9-]+/history/20[0-9]{2}$`. It is never a
   bare `history` dir.
@@ -331,7 +331,7 @@ Before anything else, `common.sh` also:
   - a few old public URLs return 404;
   - the archive is still present with an unchanged SHA-1.
 
-### 70-complete
+### 07-complete
 
 - Recheck that the remote archive's SHA-1 equals `archive.sha1`.
 - Recheck that `rclone lsf -R $REMOTE/<archive>/history/<year>` is still empty. A scheduled `data-index` run
@@ -361,8 +361,8 @@ End-to-end testing happens on production data, starting with `incursions 2023`.
 
 ## Undo
 
-- Before `60-delete`: only the archive was added, and deleting it restores the old state.
-- After `60-delete`: the hidden versions stay restorable for 2 days (bucket lifecycle). There is no restore
+- Before `06-delete`: only the archive was added, and deleting it restores the old state.
+- After `06-delete`: the hidden versions stay restorable for 2 days (bucket lifecycle). There is no restore
   tooling; it gets built if it is ever needed. Until the scratch dir is cleared, `download/` also holds a full
   local copy of the original files.
 

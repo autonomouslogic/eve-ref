@@ -46,7 +46,7 @@ against this bucket. Deletes must stay soft, so the bucket lifecycle rules provi
 
 ## Procedure
 
-All scripts take `<archive> <year>`, e.g. `./10-list.sh incursions 2023`. Run the steps in order and **read
+All scripts take `<archive> <year>`, e.g. `./01-list.sh incursions 2023`. Run the steps in order and **read
 each summary before continuing**.
 
 Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs
@@ -58,13 +58,13 @@ If a step fails partway, remove its partial output and rerun it. Download and de
 | Step | Script            | Changes remote?      | Check before moving on                                        |
 |------|-------------------|----------------------|---------------------------------------------------------------|
 | 1    | `00-preflight.sh` | no                   | Tools OK, archive not already on the remote                   |
-| 2    | `10-list.sh`      | no                   | File counts, days covered, gaps, no anomalies, enough space in the scratch root |
-| 3    | `20-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
-| 4    | `30-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
-| 5    | `40-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
-| 6    | `50-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers including `Cache-Control`, public download sha256 |
-| 7    | `60-delete.sh`    | **hides year dir**   | Dry-run count equals listing. Typed `<archive>-<year>` confirmation |
-| 8    | `70-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
+| 2    | `01-list.sh`      | no                   | File counts, days covered, gaps, no anomalies, enough space in the scratch root |
+| 3    | `02-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
+| 4    | `03-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
+| 5    | `04-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
+| 6    | `05-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers including `Cache-Control`, public download sha256 |
+| 7    | `06-delete.sh`    | **hides year dir**   | Dry-run count equals listing. Typed `<archive>-<year>` confirmation |
+| 8    | `07-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
 
 Steps 1-6 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (6).
 Step 7 is the only destructive step. It is a soft delete, which can be undone within the 2-day bucket lifecycle
