@@ -349,6 +349,26 @@ def rclone(*args):
     return result.stdout
 
 
+def rclone_run(*args):
+    """
+    Runs rclone for a long transfer, printing its output (progress, retries, errors) as it comes. Fails with its last
+    output line if it exits with an error.
+    """
+    try:
+        process = subprocess.Popen(["rclone", *args], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    except FileNotFoundError:
+        fail("rclone is not installed")
+    last = None
+    for line in process.stdout:
+        line = line.rstrip("\n")
+        if line.strip():
+            print(f"rclone: {line}", flush=True)
+            last = line
+    process.wait()
+    if process.returncode != 0:
+        fail(f"rclone {args[0]} failed: {last or f'exit code {process.returncode}'}")
+
+
 def lsjson(path, recursive=False):
     """
     Yields (path, size, mtime) for every file under an rclone path, streaming rclone lsjson's output (one entry per

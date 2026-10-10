@@ -4,7 +4,7 @@ Moves old data.everef.net data into torrents. One workflow makes one torrent: th
 much as the size limits allow, named after the last modification date it covers (`everef-deep-archive-YYYY-MM-DD`).
 It's then seeded, published, backed up, and deleted from the site.
 
-Status: **draft**. Implemented: `00-preflight`, `01-find`. Every other step is designed but not written yet.
+Status: **draft**. Implemented: `00-preflight`, `01-find`, `02-load`. Every other step is designed but not written yet.
 Design and reasoning: [`PLAN.md`](PLAN.md).
 
 ## Requirements
@@ -69,7 +69,10 @@ Post the start announcement (PLAN 2.13) with the torrent ID, cutoff date and siz
 ```
 ./02-load.py
 ```
-Downloads exactly the selected files into `$SEED_DIR/<ID>/`. Resumable.
+Downloads exactly the selected files into `$SEED_DIR/<ID>/` with rclone, keeping their modification times, then
+checks every one is there with the selected size and modification time, and nothing else is. Resumable: if it fails
+or is interrupted, run it again and it downloads only what's missing or different. Aborts before downloading if the
+folder holds files that aren't selected, or if `$SEED_DIR` lacks room.
 
 ### 03: Check load
 ```

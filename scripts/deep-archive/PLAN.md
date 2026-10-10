@@ -13,8 +13,8 @@ Status: **draft for review**. Revised 2026-10-10:
 - The operator process is in [`README.md`](README.md); the separate runbook is gone.
 
 Related work in progress (as of 2026-10-10):
-- `./00-preflight.py` and `./01-find.py`: **drafts** of the first two steps, with `lib/workflow.py`
-  (settings, size limits, completion files). Run directly with Python 3 and rclone (no `run.sh`/Docker image yet).
+- `./00-preflight.py`, `./01-find.py` and `./02-load.py`: **drafts** of the first three steps, with `lib/workflow.py`
+  (settings, size limits, completion files) and `lib/torrent_size.py` (the `.torrent` estimate). Run directly with Python 3 and rclone (no `run.sh`/Docker image yet).
 - Tests written first, for changes not yet made. They fail against the current code, as intended:
   - `DataCrawlerTest.shouldFailOnMissingDirectoryIndex`: `DataCrawler` must fail when a directory index is missing
     (2.17);
