@@ -7,8 +7,8 @@ into a single archive:
 <archive>/history/<year>/...   ->   <archive>/history/<archive>-<year>.tar.xz
 ```
 
-> **Status:** `00-preflight.sh` through `05-upload.sh` are written. `06-delete.sh` and `07-complete.sh`
-> are still planned. Design notes are in [PLAN.md](PLAN.md).
+> **Status:** `00-preflight.sh` through `06-delete.sh` are written. `07-complete.sh` is still planned.
+> Design notes are in [PLAN.md](PLAN.md).
 
 ## Archive format (2023 onward)
 
