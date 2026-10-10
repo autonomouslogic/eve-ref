@@ -1,6 +1,6 @@
 # Yearly history rollup: implementation plan
 
-Status: `00-preflight.sh` through `03-prepare.sh` are written; `04-archive.sh` through `07-complete.sh` are
+Status: `00-preflight.sh` through `04-archive.sh` are written; `05-upload.sh` through `07-complete.sh` are
 still planned. This file holds implementation notes for review; the operator runbook lives in
 [README.md](README.md). **Keep README.md's status line and procedure table up to date whenever a script is
 added or changed** — it must never drift from what's actually implemented.

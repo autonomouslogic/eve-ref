@@ -7,7 +7,7 @@ into a single archive:
 <archive>/history/<year>/...   ->   <archive>/history/<archive>-<year>.tar.xz
 ```
 
-> **Status:** `00-preflight.sh` through `03-prepare.sh` are written. `04-archive.sh` through `07-complete.sh`
+> **Status:** `00-preflight.sh` through `04-archive.sh` are written. `05-upload.sh` through `07-complete.sh`
 > are still planned. Design notes are in [PLAN.md](PLAN.md).
 
 ## Archive format (2023 onward)
