@@ -24,9 +24,7 @@ if [[ "$EXISTING_JSON" != "null" ]]; then
 	echo "Remote already has $ARCHIVE_NAME with matching SHA-1, skipping upload"
 else
 	echo "## 🔵 Uploading"
-	rclone copyto --immutable \
-		--header-upload "Cache-Control: public, max-age=31536000, immutable" \
-		"$ARCHIVE_PATH" "$REMOTE_ARCHIVE_PATH"
+	rclone copyto --immutable "$ARCHIVE_PATH" "$REMOTE_ARCHIVE_PATH"
 	echo "Uploaded $ARCHIVE_PATH to $REMOTE_ARCHIVE_PATH"
 fi
 
@@ -56,25 +54,32 @@ fi
 echo "Remote object OK: size $REMOTE_SIZE, SHA-1 $REMOTE_SHA1, ModTime $REMOTE_MODTIME"
 
 echo "## 🔵 Checking the public URL"
-HEADERS="$(curl -sI "$PUBLIC_ARCHIVE_URL")"
-STATUS_LINE="$(head -n1 <<<"$HEADERS" | tr -d '\r')"
+# The public URL can take a few seconds to become servable right after an upload, so retry.
+STATUS_LINE=""
+for attempt in 1 2 3 4 5 6; do
+	HEADERS="$(curl -sI --max-time 30 "$PUBLIC_ARCHIVE_URL" || true)"
+	STATUS_LINE="$(head -n1 <<<"$HEADERS" | tr -d '\r')"
+	if [[ "$STATUS_LINE" == *" 200"* ]]; then
+		break
+	fi
+	echo "Public URL not ready yet (attempt $attempt): ${STATUS_LINE:-<no response>}"
+	sleep 5
+done
 if [[ "$STATUS_LINE" != *" 200"* ]]; then
-	echo "🔴 Expected HTTP 200 for $PUBLIC_ARCHIVE_URL, got: $STATUS_LINE" >&2
+	echo "🔴 Expected HTTP 200 for $PUBLIC_ARCHIVE_URL, got: ${STATUS_LINE:-<no response>}" >&2
 	exit 1
 fi
 
 header_value() {
-	grep -i "^$1:" <<<"$HEADERS" | tail -n1 | cut -d: -f2- | tr -d '\r' | sed 's/^ *//'
+	grep -i "^$1:" <<<"$HEADERS" | tail -n1 | cut -d: -f2- | tr -d '\r' | sed 's/^ *//' || true
 }
 
 CONTENT_LENGTH="$(header_value 'content-length')"
 LAST_MODIFIED="$(header_value 'last-modified')"
-CACHE_CONTROL="$(header_value 'cache-control')"
 SRC_LAST_MODIFIED_MILLIS="$(header_value 'x-amz-meta-src_last_modified_millis')"
 
 EXPECTED_LAST_MODIFIED="$(date -u -d "$EXPECTED_MODTIME" +'%a, %d %b %Y %H:%M:%S GMT')"
 EXPECTED_MILLIS="$(($(date -u -d "$EXPECTED_MODTIME" +%s) * 1000))"
-EXPECTED_CACHE_CONTROL="public, max-age=31536000, immutable"
 
 if [[ "$CONTENT_LENGTH" != "$LOCAL_BYTES" ]]; then
 	echo "🔴 content-length $CONTENT_LENGTH does not match local size $LOCAL_BYTES" >&2
@@ -84,20 +89,19 @@ if [[ "$LAST_MODIFIED" != "$EXPECTED_LAST_MODIFIED" ]]; then
 	echo "🔴 last-modified '$LAST_MODIFIED' does not equal '$EXPECTED_LAST_MODIFIED'" >&2
 	exit 1
 fi
-if [[ "$CACHE_CONTROL" != "$EXPECTED_CACHE_CONTROL" ]]; then
-	echo "🔴 cache-control '$CACHE_CONTROL' does not equal '$EXPECTED_CACHE_CONTROL'" >&2
-	exit 1
-fi
 if [[ "$SRC_LAST_MODIFIED_MILLIS" != "$EXPECTED_MILLIS" ]]; then
 	echo "🔴 x-amz-meta-src_last_modified_millis '$SRC_LAST_MODIFIED_MILLIS' does not equal '$EXPECTED_MILLIS'" >&2
 	exit 1
 fi
-echo "Public headers OK: 200, content-length $CONTENT_LENGTH, last-modified '$LAST_MODIFIED', cache-control '$CACHE_CONTROL'"
+echo "Public headers OK: 200, content-length $CONTENT_LENGTH, last-modified '$LAST_MODIFIED'"
 
 echo "## 🔵 Downloading the public copy"
 mkdir -p "$SCRATCH/verify/public"
 VERIFY_PATH="$SCRATCH/verify/public/$ARCHIVE_NAME"
-wget -q -O "$VERIFY_PATH" "$PUBLIC_ARCHIVE_URL"
+if ! wget -nv -O "$VERIFY_PATH" "$PUBLIC_ARCHIVE_URL"; then
+	echo "🔴 wget failed to download $PUBLIC_ARCHIVE_URL" >&2
+	exit 1
+fi
 
 PUBLIC_SHA256="$(sha256sum "$VERIFY_PATH" | cut -d' ' -f1)"
 if [[ "$PUBLIC_SHA256" != "$LOCAL_SHA256" ]]; then

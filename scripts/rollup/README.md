@@ -20,8 +20,8 @@ into a single archive:
   kept, because they hold what `data-index` worked out about each file. Their entries still name the original
   `.json.bz2` files. `index.html` files are dropped.
 - Compressed with `tar -J` defaults (xz preset `-6`).
-- The archive's own mtime is `<year>-12-31T23:59:59Z`. It is served with
-  `Cache-Control: public, max-age=31536000, immutable`.
+- The archive's own mtime is `<year>-12-31T23:59:59Z`. No `Cache-Control` header is set (see "Known gaps"
+  below).
 
 `incursions-2022.tar.xz` was made by hand before this format existed (no `history/` in its paths, owner names,
 unsorted). It stays as is.
@@ -62,7 +62,7 @@ If a step fails partway, remove its partial output and rerun it. Download and de
 | 3    | `02-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
 | 4    | `03-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
 | 5    | `04-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
-| 6    | `05-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers including `Cache-Control`, public download sha256 |
+| 6    | `05-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
 | 7    | `06-delete.sh`    | **hides year dir**   | Dry-run count equals listing. Typed `<archive>-<year>` confirmation |
 | 8    | `07-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
 
@@ -84,3 +84,12 @@ Each step writes `<step>.done` in the scratch dir when all of its checks pass. A
 - any earlier marker is missing;
 - its own marker already exists;
 - `COMPLETE` exists.
+
+## Known gaps
+
+- **No `Cache-Control` header on the archive.** `05-upload.sh` uploads with plain `rclone copyto --immutable`,
+  no `--header-upload`. Confirmed on the first real run (`incursions 2023`): rclone's native `b2:` backend
+  doesn't forward `--header-upload` values to B2 at all (its `Update()` builds a fixed header set and ignores
+  it), so the archive's public response has no `Cache-Control`. Fixing this would mean either switching the
+  rclone remote to B2's S3-compatible endpoint (where `--header-upload` is known to work) or setting a
+  bucket-level default Cache-Control policy in B2 directly; neither is done here yet.

@@ -35,8 +35,8 @@ then writes its marker.
 - Compression is whatever `tar -J` does by default (xz default preset `-6`). `common.sh` clears `XZ_OPT` and
   `XZ_DEFAULTS`, so the operator's shell can't change it.
 - Archive object mtime: `<year>-12-31T23:59:59Z`.
-- Archive object `Cache-Control`: `public, max-age=31536000, immutable` (365 days). Finished years never get a
-  new archive.
+- No `Cache-Control` is set (see README, "Known gaps": rclone's native `b2:` backend doesn't honor
+  `--header-upload`, so this isn't currently achievable from the script).
 - No checksum file is published. Checksums exist only in the scratch dir, for verification.
 
 Tar command, checked locally with GNU tar 1.35 and xz 5.4.5:
@@ -305,15 +305,15 @@ Before anything else, `common.sh` also:
 
   ```bash
   rclone copyto --immutable \
-  	--header-upload "Cache-Control: public, max-age=31536000, immutable" \
   	"<archive>-<year>.tar.xz" "$REMOTE/<archive>/history/<archive>-<year>.tar.xz"
   ```
 
+  No `Cache-Control` header is set (see README, "Known gaps").
+
 - Verify:
   - `rclone lsjson --hash`: size, SHA-1 equal to `archive.sha1`, ModTime `<year>-12-31T23:59:59Z`;
-  - `curl -I` on the public URL: 200, `content-length`, `last-modified` at `<year>-12-31 23:59:59 GMT`,
-    `x-amz-meta-src_last_modified_millis`, and `cache-control: public, max-age=31536000, immutable`. The
-    `etag` is not checked;
+  - `curl -I` on the public URL: 200, `content-length`, `last-modified` at `<year>-12-31 23:59:59 GMT`, and
+    `x-amz-meta-src_last_modified_millis`. The `etag` is not checked;
   - `wget` into `verify/public/`: compare the sha256 with `archive.sha256`, and the downloaded file's mtime
     (set by `wget` from `Last-Modified`) with `<year>-12-31T23:59:59Z`.
 
@@ -351,12 +351,13 @@ Things to confirm before the first real run:
    `index.json` `last_modified`.
 2. `rclone copyto` of the archive sets `src_last_modified_millis` from the local mtime, so the public
    `last-modified` and the index show `<year>-12-31T23:59:59Z`.
-3. `rclone copyto --header-upload "Cache-Control: ..."` sets the header on the b2 backend, so the public
-   response carries it.
-4. `rclone lsjson --hash` returns SHA-1 for history files uploaded by the Java app through the S3 API.
-5. `rclone delete` produces hide markers (`x-amz-delete-marker: true` on the old URLs).
-6. The env-only remote works with `RCLONE_CONFIG=/dev/null`: `rclone lsf everef:<bucket>/incursions/history/`
+3. `rclone lsjson --hash` returns SHA-1 for history files uploaded by the Java app through the S3 API.
+4. `rclone delete` produces hide markers (`x-amz-delete-marker: true` on the old URLs).
+5. The env-only remote works with `RCLONE_CONFIG=/dev/null`: `rclone lsf everef:<bucket>/incursions/history/`
    lists, and `rclone listremotes` shows only `everef:`.
+
+Confirmed false by the first real run (`incursions 2023`): `rclone copyto --header-upload "Cache-Control: ..."`
+does **not** set the header on the native `b2:` backend — see README, "Known gaps".
 
 End-to-end testing happens on production data, starting with `incursions 2023`.
 
