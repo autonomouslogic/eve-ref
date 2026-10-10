@@ -17,9 +17,11 @@ into a single archive:
 - Regular files only, sorted by path. Headers carry only the name and mtime. Owner is `0/0` with no user or
   group names, and mode is a fixed `0644`.
 - Data files are decompressed (no `.bz2`). Each file's mtime is its original upload time. `index.json` files are
-  kept and `index.html` files dropped.
+  kept, because they hold what `data-index` worked out about each file. Their entries still name the original
+  `.json.bz2` files. `index.html` files are dropped.
 - Compressed with `tar -J` defaults (xz preset `-6`).
-- The archive's own mtime is `<year>-12-31T23:59:59Z`.
+- The archive's own mtime is `<year>-12-31T23:59:59Z`. It is served with
+  `Cache-Control: public, max-age=31536000, immutable`.
 
 `incursions-2022.tar.xz` was made by hand before this format existed (no `history/` in its paths, owner names,
 unsorted). It stays as is.
@@ -33,24 +35,25 @@ unsorted). It stays as is.
 ## Setup
 
 1. Install rclone.
-2. `cp scripts/rollup/local.env.sample scripts/rollup/local.env` and fill in the B2 key. `local.env` is
-   gitignored. Every script reads its configuration from this file and nowhere else:
+2. `cp scripts/rollup/rollup.env.sample scripts/rollup/rollup.env` and fill in the B2 key. `rollup.env` is
+   gitignored by `scripts/rollup/.gitignore`. Every script reads its configuration from this file and nowhere else:
    - the rclone remote `everef` (native `b2` backend, `hard_delete=false`), defined purely through
      `RCLONE_CONFIG_EVEREF_*` variables. Your own `rclone.conf` is ignored;
-   - the `DATA_*` settings that `data-index` needs. Gradle's `dataIndex` task also layers the repo-root
-     `local.env` on top, so keep both pointing at the same bucket.
-3. Java build prerequisites for `./gradlew` (see the repo-root `AGENTS.md`). Preflight checks the build.
+   - `ROLLUP_SCRATCH_ROOT`, the scratch root. For big datasets, point it at a disk, not a tmpfs.
 
 Never run `rclone purge`, `rclone cleanup`, `rclone backend cleanup-hidden` or anything with `--b2-hard-delete`
-against this bucket. Deletes must stay soft, so the bucket lifecycle rules provide the undo window.
+against this bucket. Deletes must stay soft, so the bucket lifecycle rules provide the 2-day undo window.
 
 ## Procedure
 
 All scripts take `<archive> <year>`, e.g. `./20-list.sh incursions 2023`. Run the steps in order and **read
 each summary before continuing**.
 
-Scratch dir: `/tmp/everef-rollup/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs
-and the completion markers. The scripts never clear it; remove it yourself once the rollup is `COMPLETE`.
+Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs
+and the completion markers. The scripts never clear it. Remove it yourself once the rollup is `COMPLETE` and the
+2-day undo window has passed: until then, `download/` is the only local copy of the original files.
+
+Only one step runs at a time: each step locks `/tmp/everef-rollup.lock` and aborts if another step holds it.
 
 Markers: each step writes `<step>.done` in the scratch dir when all of its checks pass. A step refuses to run if:
 
@@ -62,15 +65,18 @@ If a step fails partway, remove its partial output and rerun it. Download and de
 
 | Step | Script            | Changes remote?      | Check before moving on                                        |
 |------|-------------------|----------------------|---------------------------------------------------------------|
-| 1    | `10-preflight.sh` | no                   | Tools OK, archive not already on the remote, enough space in `/tmp` |
+| 1    | `10-preflight.sh` | no                   | Tools OK, archive not already on the remote, enough space in the scratch root |
 | 2    | `20-list.sh`      | no                   | File counts, days covered, gaps. No anomalies                 |
 | 3    | `30-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
 | 4    | `40-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
-| 5    | `50-archive.sh`   | no                   | Sorted, owner-free headers. Extracted copy hash-verifies      |
-| 6    | `60-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
+| 5    | `50-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
+| 6    | `60-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers including `Cache-Control`, public download sha256 |
 | 7    | `70-delete.sh`    | **hides year dir**   | Dry-run count equals listing. Typed `<archive>-<year>` confirmation |
-| 8    | `80-index.sh`     | rewrites indexes     | Runs `./gradlew dataIndex` for `<archive>/history`. `history/index.json` shows the archive and no year. No orphan index files |
-| 9    | `90-complete.sh`  | no                   | Summary printed. `COMPLETE` written                           |
+| 8    | `80-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
 
 Steps 1-6 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (6).
-Step 7 is the only destructive step. It is a soft delete, which can be undone within the bucket lifecycle window.
+Step 7 is the only destructive step. It is a soft delete, which can be undone within the 2-day bucket lifecycle
+window.
+
+The scripts don't touch index pages. `<archive>/history/index.json` picks up the archive at the dataset's next
+scrape, or at the next scheduled `data-index` run for datasets that no longer scrape.

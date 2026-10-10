@@ -27,9 +27,14 @@ then writes its marker.
 - **Only name and mtime carry information**. Every other header field is constant: uid/gid `0`, empty user and
   group names (`--numeric-owner`), mode `0644`. Each file's mtime is its original upload time on the data site,
   as rclone reports it.
-- `.bz2` is stripped from every data file. `index.json` files are **kept**, `index.html` files removed.
-- Compression is whatever `tar -J` does by default (xz default preset `-6`). No `XZ_OPT`.
+- `.bz2` is stripped from every data file. `index.html` files are removed. `index.json` files are **kept**,
+  because they hold what `data-index` worked out about each file (size, etag, `last_modified`, `type`,
+  `file_time`). Their entries still name the original `.json.bz2` files, which is fine.
+- Compression is whatever `tar -J` does by default (xz default preset `-6`). `common.sh` clears `XZ_OPT` and
+  `XZ_DEFAULTS`, so the operator's shell can't change it.
 - Archive object mtime: `<year>-12-31T23:59:59Z`.
+- Archive object `Cache-Control`: `public, max-age=31536000, immutable` (365 days). Finished years never get a
+  new archive.
 - No checksum file is published. Checksums exist only in the scratch dir, for verification.
 
 Tar command, checked locally with GNU tar 1.35 and xz 5.4.5:
@@ -83,13 +88,21 @@ Useful facts it confirmed:
 - After the delete, `https://data.everef.net/incursions/history/2022/` returns 404 with
   `x-amz-delete-marker: true`. The rclone delete only hides files, and the bucket lifecycle rules give the undo
   window.
+- `incursions/history/index.json` picked up the archive and dropped `2022/` without a manual `data-index` run.
+
+## Index pages
+
+The scripts never run `data-index`. `<archive>/history/index.{html,json}` is refreshed by the dataset's own
+scrape (every upload re-indexes its parent dirs non-recursively, through `DataIndexHelper`) and by the scheduled
+`data-index` run. The scheduled run also rewrites the index files inside finished years. That doesn't matter
+here: the year's index files are deleted along with its data files.
 
 ## Scale
 
 - `incursions/history/2023`: 288 files a day (5-minute cadence), so about 105k data files plus about 732 index
   files. One sampled day is about 109 KB of bz2, so roughly 40 MB of bz2 for the year.
-- `skinr-listings` files are about 200-250 KB of bz2 each. Decompressed data for a year can be several GB, and
-  `/tmp` may be a tmpfs (RAM), so preflight checks free space.
+- `skinr-listings` files are about 200-250 KB of bz2 each. Decompressed data for a year can be several GB, so
+  `ROLLUP_SCRATCH_ROOT` should be on disk rather than a tmpfs (RAM) for those, and preflight checks free space.
 
 ## Scope: which datasets
 
@@ -106,14 +119,14 @@ rollup, and grep `src/main` for consumers of its factory constant.
 - `killmails`, `public-contracts`, `esi-scrape`, `hoboleaks-sde`, `reference-data`: already archives, or
   have different layouts;
 - `fuzzwork/ordersets`, `ccp/*`;
-- the current UTC year or later. Finished years never change, which is the basis for skipping a re-list before
-  delete.
+- the current UTC year or later. The data files of finished years never change, which is the basis for
+  skipping a re-list before delete. Only their index files get rewritten (see "Index pages").
 
-## Configuration: `scripts/rollup/local.env`
+## Configuration: `scripts/rollup/rollup.env`
 
-All configuration lives in `scripts/rollup/local.env`. The repo-root `.gitignore` rule `local.env` already
-ignores it (checked with `git check-ignore`). A committed `scripts/rollup/local.env.sample` documents it.
-`common.sh` loads it with `set -a; . "$DIR/local.env"; set +a`. It aborts if the file is missing or any required
+All configuration lives in `scripts/rollup/rollup.env`. `scripts/rollup/.gitignore` ignores it (checked with
+`git check-ignore`). A committed `scripts/rollup/rollup.env.sample` documents it.
+`common.sh` loads it with `set -a; . "$DIR/rollup.env"; set +a`. It aborts if the file is missing or any required
 variable is empty.
 
 rclone is configured **only from environment variables** (rclone's `RCLONE_CONFIG_<REMOTE>_<OPTION>`
@@ -121,10 +134,10 @@ convention), so no `rclone.conf` is involved. `common.sh` also exports `RCLONE_C
 rclone use an in-memory config. Remotes in the operator's own `rclone.conf` can then never be picked up by
 mistake.
 
-`local.env.sample`:
+`rollup.env.sample`:
 
 ```bash
-# Copy to local.env (gitignored) and fill in. Sourced by bash, so ${...} references work.
+# Copy to rollup.env (gitignored) and fill in. Sourced by bash, so ${...} references work.
 
 # B2 application key for bucket data-everef-net-425eb511
 B2_KEY_ID=
@@ -137,49 +150,46 @@ RCLONE_CONFIG_EVEREF_ACCOUNT=${B2_KEY_ID}
 RCLONE_CONFIG_EVEREF_KEY=${B2_APPLICATION_KEY}
 RCLONE_CONFIG_EVEREF_HARD_DELETE=false
 
-# data-index (80-index.sh runs ./gradlew dataIndex), via B2's S3-compatible API
-DATA_PATH=s3://${ROLLUP_BUCKET}/
-DATA_S3_ENDPOINT_URL=https://s3.us-east-005.backblazeb2.com
-DATA_AWS_ACCESS_KEY_ID=${B2_KEY_ID}
-DATA_AWS_SECRET_ACCESS_KEY=${B2_APPLICATION_KEY}
+# Scratch root. Each rollup gets <root>/<archive>-<year>/. Holds the download, the decompressed stage and the
+# archive, so use a disk-backed path (not a tmpfs) for big datasets.
+ROLLUP_SCRATCH_ROOT=/tmp/everef-rollup
 ```
 
-`common.sh` derives `REMOTE="everef:${ROLLUP_BUCKET}"`. It hard-codes the scratch root
-(`/tmp/everef-rollup`) and the public base URL (`https://data.everef.net`).
-
-Note: Gradle's `dataIndex` task (`build.gradle`) layers the **repo-root** `local.env` on top of the inherited
-environment, so any key set there (currently `DATA_PATH`, `DATA_S3_ENDPOINT_URL`, `DATA_AWS_PROFILE`) takes
-precedence for that key. That is harmless as long as both files point at the same bucket. `80-index.sh`
-prints the effective `DATA_PATH` before running.
+`common.sh` derives `REMOTE="everef:${ROLLUP_BUCKET}"` and `SCRATCH="${ROLLUP_SCRATCH_ROOT}/<archive>-<year>"`.
+It hard-codes the public base URL (`https://data.everef.net`) and the lock file (`/tmp/everef-rollup.lock`).
 
 ## rclone / B2
 
 - The operator installs rclone. Development and end-to-end testing are done by the operator, on production
   data.
-- Delete with `rclone delete` (it hides files). Undo is the bucket lifecycle window. Never use `rclone purge`,
-  `rclone cleanup`, `backend cleanup-hidden` or `--b2-hard-delete`: on b2 these remove old versions too.
+- Delete with `rclone delete` (it hides files). Undo is the bucket lifecycle window: hidden versions are kept
+  for **2 days**. Never use `rclone purge`, `rclone cleanup`, `backend cleanup-hidden` or `--b2-hard-delete`: on
+  b2 these remove old versions too.
 - Use `--fast-list` on listings to keep Class C transactions down.
 
 ## Scratch directory and markers
 
-Hard-coded: `SCRATCH=/tmp/everef-rollup/<archive>-<year>`. The scripts never delete this dir. The operator
-clears it.
+`SCRATCH=$ROLLUP_SCRATCH_ROOT/<archive>-<year>`. The scripts never delete this dir. The operator clears it.
 
 ```
-/tmp/everef-rollup/<archive>-<year>/
-  10-preflight.done ... 80-index.done   completion markers (UTC timestamp + key facts, e.g. counts, sha256)
-  COMPLETE                              written last, by 90-complete.sh
+$ROLLUP_SCRATCH_ROOT/<archive>-<year>/
+  10-preflight.done ... 70-delete.done  completion markers (UTC timestamp + key facts, e.g. counts, sha256)
+  COMPLETE                              written last, by 80-complete.sh
   listing.json                          rclone lsjson -R --hash --files-only of the remote year dir
   download/<archive>/history/<year>/    untouched rclone copy (.bz2, index.html, index.json)
   stage/<archive>/history/<year>/       working copy: no index.html, bz2 decompressed (tar root = stage/)
   expected.sha256                       sha256 of each staged file, computed from download/ (bzcat for .bz2)
   stage.sha256                          sha256 of each file in stage/
   <archive>-<year>.tar.xz
-  archive.sha256 / archive.sha1 / archive.md5
-  verify/built/                         extraction of the built archive
+  archive-contents.sha256               sha256 of each archive entry, streamed out of the archive
+  archive.sha256 / archive.sha1
   verify/public/                        archive downloaded back from the public URL
   log/<step>-<UTC timestamp>.log        tee of each run
 ```
+
+All `.sha256` lists use the `sha256sum` output format, with paths relative to `stage/` (that is,
+`<archive>/history/<year>/...`, the same as the tar entry names), in `LC_ALL=C` sorted order. Two lists match
+when the files are byte-identical.
 
 Marker rules, enforced by `common.sh` at the start of every step:
 
@@ -195,36 +205,41 @@ themselves, as described in each step.
 
 ## Scripts
 
-Planned files in `scripts/rollup/`. Each is `bash` with `set -euo pipefail` and `export TZ=UTC LC_ALL=C`. Each
-sources `common.sh`, which loads `local.env`. Each takes `<archive> <year>`, validates both (`^[a-z0-9-]+$` plus
-the scope list, `^20[0-9]{2}$` plus earlier than the current UTC year), and tees its output to `log/`.
+Planned files in `scripts/rollup/`. Each is `bash` with `set -euo pipefail`. Each sources `common.sh`, which
+loads `rollup.env`. Each takes `<archive> <year>`, validates both (`^[a-z0-9-]+$` plus the scope list,
+`^20[0-9]{2}$` plus earlier than the current UTC year), and tees its output to `log/`.
+
+Before anything else, `common.sh` also:
+
+- takes an exclusive lock with `flock -n` on `/tmp/everef-rollup.lock`, held for the whole run. Only one
+  rollup step runs at a time on the machine, and a second one aborts at once;
+- pins the environment the tools read: `export TZ=UTC LC_ALL=C`, and `TAR_OPTIONS`, `XZ_OPT`, `XZ_DEFAULTS`,
+  `BZIP` and `BZIP2` exported as empty. The operator's shell can't change how `tar`, `xz` or `bzip2` behave.
 
 | Script               | Remote       | What it does                                                           |
 |----------------------|--------------|------------------------------------------------------------------------|
-| `local.env.sample`   | n/a          | Template for the gitignored `local.env`                                |
-| `common.sh`          | n/a          | Loads `local.env`, constants (`REMOTE`, `SCRATCH`, public URL), arg checks, markers, helpers |
-| `10-preflight.sh`    | read         | Config, tools, Java build, remote access, year dir present, archive absent, free space in `/tmp` |
-| `20-list.sh`      | read         | `listing.json` plus anomaly report                                         |
-| `30-download.sh`  | read         | `rclone copy` and `rclone check`, then verify against `listing.json`      |
-| `40-prepare.sh`   | none         | Build `stage/`, decompress, hash-verify against the originals             |
-| `50-archive.sh`   | none         | Build tar.xz, verify headers, order and contents, set mtime               |
-| `60-upload.sh`    | write        | Upload, verify via B2 and the public URL                                  |
-| `70-delete.sh`    | **delete**   | Dry-run preview, typed confirmation, `rclone delete`, verify empty        |
-| `80-index.sh`     | write (index) | Run `data-index` via Gradle for `<archive>/history`, then verify the index and that there are no orphan index files |
-| `90-complete.sh`  | read         | Final checks, print summary, write `COMPLETE`                             |
+| `.gitignore`         | n/a          | Ignores `rollup.env`                                                   |
+| `rollup.env.sample`  | n/a          | Template for the gitignored `rollup.env`                               |
+| `common.sh`          | n/a          | Loads `rollup.env`, lock, tool environment, constants (`REMOTE`, `SCRATCH`, public URL), arg checks, markers, helpers |
+| `10-preflight.sh`    | read         | Config, tools, remote access, year dir present, archive absent, free space in the scratch root |
+| `20-list.sh`         | read         | `listing.json` plus anomaly report                                     |
+| `30-download.sh`     | read         | `rclone copy` and `rclone check`, then verify against `listing.json`   |
+| `40-prepare.sh`      | none         | Build `stage/`, decompress, hash-verify against the originals          |
+| `50-archive.sh`      | none         | Build tar.xz, verify headers, order and contents, set mtime            |
+| `60-upload.sh`       | write        | Upload, verify via B2 and the public URL                               |
+| `70-delete.sh`       | **delete**   | Dry-run preview, typed confirmation, `rclone delete`, verify empty     |
+| `80-complete.sh`     | read         | Final checks, print summary, write `COMPLETE`                          |
 
 ### 10-preflight
 
-- `local.env` loaded, required variables set, `RCLONE_CONFIG_EVEREF_HARD_DELETE` is `false`.
-- Tools present: `rclone` (version printed), GNU `tar`, `xz`, `bzip2`, `jq`, `sha256sum`, `sha1sum`,
-  `md5sum`, `curl`, `find`, `sort`.
-- Java build works: `make generate-database` and then `./gradlew classes` from the repo root. A broken build
-  is caught here, not in `80-index` after the delete.
+- `rollup.env` loaded, required variables set, `RCLONE_CONFIG_EVEREF_HARD_DELETE` is `false`.
+- Tools present: `rclone` (version printed), GNU `tar`, `xz`, `bzip2`, `jq`, `sha256sum`, `sha1sum`, `curl`,
+  `find`, `sort`, `flock`.
 - `rclone lsf $REMOTE/<archive>/history/` works and contains `<year>/`. `<archive>-<year>.tar.xz` exists
   neither in that listing nor at the public URL (HTTP 404).
-- `rclone size` of the year dir. Free space on `/tmp` must be at least 2x that size plus an estimate of the
-  decompressed size (from a sampled file's bz2 ratio) times 3, to cover stage, tar and verification
-  extraction.
+- `rclone size` of the year dir. Free space on the filesystem holding `ROLLUP_SCRATCH_ROOT` must be at least 2x
+  that size plus 2x an estimate of the decompressed size (from a sampled file's bz2 ratio). That covers the
+  download, the stage, the archive and its public copy.
 
 ### 20-list
 
@@ -267,22 +282,38 @@ the scope list, `^20[0-9]{2}$` plus earlier than the current UTC year), and tees
 - `touch -d "<year>-12-31T23:59:59Z"` on the archive.
 - Verify:
   - `xz -t`;
-  - `tar -tv --numeric-owner --full-time` shows only regular files, all `0/0` and `-rw-r--r--`, in
-    `LC_ALL=C` sorted order, with names, sizes and mtimes equal to `stage/` (no extra, none missing);
-  - no uname or gname in the raw headers (`xz -dc | strings` has no user or host names);
-  - `tar --compare -C stage` reports no differences;
-  - extract into empty `verify/built/`, then `sha256sum -c expected.sha256` passes.
-- Write `archive.sha256`, `archive.sha1` and `archive.md5`.
+  - `tar -tv --full-time` shows only regular files, all `0/0` and `-rw-r--r--`, in `LC_ALL=C` sorted order, with
+    names, sizes and mtimes equal to `stage/` (no extra, none missing). It runs **without** `--numeric-owner`:
+    GNU tar then prints the user and group names when a header has them, so `0/0` proves they are empty
+    (checked locally);
+  - the archive's contents hash-match the originals, streamed without extracting to disk (checked locally):
+
+    ```bash
+    tar -xJf "$ARCHIVE" \
+    	--to-command='printf "%s  %s\n" "$(sha256sum | cut -d" " -f1)" "$TAR_FILENAME"' \
+    	> archive-contents.sha256
+    ```
+
+    `archive-contents.sha256` must equal `expected.sha256` exactly (the tar is already in sorted order).
+- Write `archive.sha256` and `archive.sha1`.
 
 ### 60-upload
 
 - If the remote object already exists with the same SHA-1 (an earlier partial run), skip the upload and go
   straight to verification. If it exists with a different hash, abort.
-- `rclone copyto --immutable <archive>-<year>.tar.xz $REMOTE/<archive>/history/<archive>-<year>.tar.xz`.
+- Upload:
+
+  ```bash
+  rclone copyto --immutable \
+  	--header-upload "Cache-Control: public, max-age=31536000, immutable" \
+  	"<archive>-<year>.tar.xz" "$REMOTE/<archive>/history/<archive>-<year>.tar.xz"
+  ```
+
 - Verify:
   - `rclone lsjson --hash`: size, SHA-1 equal to `archive.sha1`, ModTime `<year>-12-31T23:59:59Z`;
   - `curl -I` on the public URL: 200, `content-length`, `last-modified` at `<year>-12-31 23:59:59 GMT`,
-    `x-amz-meta-src_last_modified_millis`, and `etag` equal to `archive.md5` (single-part uploads only);
+    `x-amz-meta-src_last_modified_millis`, and `cache-control: public, max-age=31536000, immutable`. The
+    `etag` is not checked;
   - download into `verify/public/` and compare the sha256 with `archive.sha256`.
 
 ### 70-delete
@@ -290,8 +321,8 @@ the scope list, `^20[0-9]{2}$` plus earlier than the current UTC year), and tees
 - The path is built from the validated args and must match `^[a-z0-9-]+/history/20[0-9]{2}$`. It is never a
   bare `history` dir.
 - `rclone delete --dry-run --fast-list` on `$REMOTE/<archive>/history/<year>`: show the count, which must
-  equal the `listing.json` count. This is a sanity check on the path, not a change check, because finished years
-  don't change.
+  equal the `listing.json` count. This is a sanity check on the path, not a change check, because the data
+  files of finished years don't change.
 - The operator types `<archive>-<year>` to confirm.
 - `rclone delete --fast-list --max-delete <listing count> $REMOTE/<archive>/history/<year>`. Safe to rerun if
   it fails partway.
@@ -300,25 +331,15 @@ the scope list, `^20[0-9]{2}$` plus earlier than the current UTC year), and tees
   - a few old public URLs return 404;
   - the archive is still present with an unchanged SHA-1.
 
-### 80-index
+### 80-complete
 
-- From the repo root, run `DATA_INDEX_PREFIX=<archive>/history ./gradlew dataIndex`, with `local.env`
-  exported. The `dataIndex` task already exists in `build.gradle`. A prefix run is recursive, so it re-indexes
-  `<archive>/history/` and every remaining year below it.
-- Abort if Gradle exits non-zero. A failed index run does not need an undo: the scheduled `data-index` would
-  repair it, and the step can be rerun because no marker was written.
-- Verify:
-  - `https://data.everef.net/<archive>/history/index.json` lists `<archive>-<year>.tar.xz` with the right
-    size and `last_modified`, and no `<year>` directory;
-  - `rclone lsf -R $REMOTE/<archive>/history/<year>` is still empty. A `data-index` run that listed the
-    bucket before the delete could have re-uploaded `<year>/index.{html,json}` afterwards. If any appear, the
-    script lists them and stops. The operator deletes them and reruns.
-
-### 90-complete
-
-- Recheck that the remote archive's SHA-1 equals `archive.sha1` and that the year dir is empty.
+- Recheck that the remote archive's SHA-1 equals `archive.sha1`.
+- Recheck that `rclone lsf -R $REMOTE/<archive>/history/<year>` is still empty. A scheduled `data-index` run
+  that listed the bucket before the delete could have re-uploaded `<year>/index.{html,json}` afterwards. If any
+  appear, the script lists them and stops. The operator deletes them and reruns.
 - Print a summary: archive, year, data file count, archive size, sha256.
-- Write `COMPLETE`. Leave the scratch dir for the operator to clear.
+- Write `COMPLETE`. Leave the scratch dir for the operator to clear once the 2-day lifecycle window has passed:
+  until then, `download/` is the only local copy of the original files.
 
 ## Development testing (operator)
 
@@ -329,21 +350,21 @@ Things to confirm before the first real run:
    `index.json` `last_modified`.
 2. `rclone copyto` of the archive sets `src_last_modified_millis` from the local mtime, so the public
    `last-modified` and the index show `<year>-12-31T23:59:59Z`.
-3. `rclone lsjson --hash` returns SHA-1 for history files uploaded by the Java app through the S3 API.
-4. `rclone delete` produces hide markers (`x-amz-delete-marker: true` on the old URLs).
-5. The env-only remote works with `RCLONE_CONFIG=/dev/null`: `rclone lsf everef:<bucket>/incursions/history/`
+3. `rclone copyto --header-upload "Cache-Control: ..."` sets the header on the b2 backend, so the public
+   response carries it.
+4. `rclone lsjson --hash` returns SHA-1 for history files uploaded by the Java app through the S3 API.
+5. `rclone delete` produces hide markers (`x-amz-delete-marker: true` on the old URLs).
+6. The env-only remote works with `RCLONE_CONFIG=/dev/null`: `rclone lsf everef:<bucket>/incursions/history/`
    lists, and `rclone listremotes` shows only `everef:`.
-6. `DATA_INDEX_PREFIX` set in the shell reaches the `dataIndex` JavaExec. The Gradle daemon should pick up the
-   client's environment; if not, use `--no-daemon`. The run only touches `<archive>/history/` (short runtime,
-   and other datasets' `index.json` are unchanged).
 
 End-to-end testing happens on production data, starting with `incursions 2023`.
 
 ## Undo
 
 - Before `70-delete`: only the archive was added, and deleting it restores the old state.
-- After `70-delete`: restore the hidden versions within the bucket lifecycle window (B2 web UI, or rclone with
-  `--b2-version-at` set before the delete). Nothing is kept locally after completion.
+- After `70-delete`: the hidden versions stay restorable for 2 days (bucket lifecycle). There is no restore
+  tooling; it gets built if it is ever needed. Until the scratch dir is cleared, `download/` also holds a full
+  local copy of the original files.
 
 ## Follow-ups (outside the scripts)
 
