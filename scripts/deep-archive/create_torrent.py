@@ -6,7 +6,10 @@ EXPERIMENT (PLAN 2.1, 2.4, Appendix B).
 
     create_torrent.py --source <dir> [--output <file.torrent>] [--fake-hashes]
 
-The torrent's name is the basename of <dir>, normally the torrent ID. The .torrent goes beside <dir> by default.
+The torrent's name is the basename of <dir>, normally the torrent ID. The .torrent goes in SCRATCH_DIR by default
+(environment or torrents.env, see lib/workflow.py), or beside <dir> if SCRATCH_DIR isn't set.
+
+Pieces are PIECE_SIZE (lib/workflow.py), the size find's limits are worked out for.
 
 Trackers always come from deep-archive/trackers.txt: one per line, each in its own tier.
 
@@ -19,7 +22,6 @@ the same size as a real one, in minutes instead of hours. The result is useless 
 
 import argparse
 import datetime
-import logging
 import math
 import os
 import re
@@ -29,7 +31,10 @@ import time
 
 import libtorrent as lt
 
-TRACKERS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "trackers.txt")
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
+from workflow import PIECE_SIZE, fail, load_env, ok, section  # noqa: E402
+
+TRACKERS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "trackers.txt")
 TRACKER_SCHEMES = ("udp://", "http://", "https://")
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 DATASET_SUFFIXES = {"history", "backfills"}
@@ -46,7 +51,6 @@ KIB = 1024
 MIB = 1024 * KIB
 GIB = 1024 * MIB
 
-log = logging.getLogger("create_torrent")
 
 
 def main():
@@ -54,9 +58,6 @@ def main():
     # KeyboardInterrupt, so let Ctrl+C kill the process directly.
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     args = parse_args()
-    logging.basicConfig(
-        stream=sys.stderr, level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
-    )
     started = time.monotonic()
 
     source = os.path.realpath(args.source)
@@ -64,21 +65,32 @@ def main():
         fail(f"--source does not exist: {source}")
     name = os.path.basename(source)
     parent = os.path.dirname(source)
-    output = os.path.realpath(args.output) if args.output else os.path.join(parent, f"{name}.torrent")
+    load_env()
+    output_dir = os.environ.get("SCRATCH_DIR") or parent
+    output = os.path.realpath(args.output) if args.output else os.path.join(output_dir, f"{name}.torrent")
     if output.startswith(source + os.sep):
         fail("--output must not be inside --source")
 
+    print(f"# 🚀 create_torrent: {name}")
+    print(f"libtorrent {lt.__version__}")
+    print(f"Source: {source}")
+    print(f"Output: {output}")
+
+    section("Trackers")
     trackers = load_trackers(TRACKERS_FILE)
 
-    log.info(f"libtorrent {lt.__version__}, source {source}, output {output}")
+    section("Files")
     fs, files, total, years, datasets = add_files(source, name)
     if not files:
-        fail("no files to add")
+        fail("No files to add")
     comment = render_comment(name, years, datasets)
-    log.info(f"Comment:\n{comment}")
 
-    # No piece size given: libtorrent picks one from the total size.
-    ct = lt.create_torrent(fs)
+    section("Comment")
+    print(comment)
+
+    section("Torrent")
+
+    ct = lt.create_torrent(fs, PIECE_SIZE)
     piece_size = ct.piece_length()
     for tier, tracker in enumerate(trackers):
         ct.add_tracker(tracker, tier)
@@ -86,13 +98,13 @@ def main():
     ct.set_creator(CREATOR)
     num_pieces = ct.num_pieces()
     if args.fake_hashes:
-        log.info(f"Setting fake hashes for {fmt_count(num_pieces)} pieces")
+        print(f"Setting fake hashes for {fmt_count(num_pieces)} pieces")
         set_fake_hashes(ct, piece_size)
     else:
-        log.info(f"Hashing {fmt_count(num_pieces)} pieces ({fmt_bytes(total)})")
+        print(f"Hashing {fmt_count(num_pieces)} pieces ({fmt_bytes(total)})")
         lt.set_piece_hashes(ct, parent)
 
-    log.info("Generating .torrent")
+    print("Generating .torrent")
     data = lt.bencode(ct.generate())
     tmp = output + ".tmp"
     with open(tmp, "wb") as f:
@@ -100,6 +112,7 @@ def main():
     os.rename(tmp, output)
 
     loads, error = try_load(output)
+    section("Summary")
     print(f"Torrent:   {output}")
     print(f"Files:     {fmt_count(files)} ({fmt_bytes(total)})")
     print(f"Pieces:    {fmt_count(num_pieces)} of {fmt_bytes(piece_size)}")
@@ -108,26 +121,22 @@ def main():
     print(f"Per file:  {len(data) / files:.0f} bytes")
     print(f"Loads with libtorrent default limits: {'yes' if loads else f'NO ({error})'}")
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
+    ok(f"Created {os.path.basename(output)}")
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Make a hybrid v1+v2 .torrent for a directory, to measure its size.")
     parser.add_argument("--source", required=True, help="directory to make the torrent from")
-    parser.add_argument("--output", help="the .torrent to write, default <source>.torrent beside the source")
+    parser.add_argument("--output", help="the .torrent to write, default <name>.torrent in SCRATCH_DIR")
     parser.add_argument("--fake-hashes", action="store_true", help="don't read the data; size measurement only")
     return parser.parse_args()
-
-
-def fail(reason):
-    print(f"FAILED: {reason}")
-    sys.exit(1)
 
 
 def load_trackers(path):
     """One tracker URL per line; blank lines and # comments are ignored."""
     path = os.path.realpath(path)
     if not os.path.isfile(path):
-        fail(f"tracker list does not exist: {path}")
+        fail(f"Tracker list not found: {path}")
     trackers = []
     with open(path, encoding="utf-8") as f:
         for line in f:
@@ -135,19 +144,19 @@ def load_trackers(path):
             if not line or line.startswith("#"):
                 continue
             if not line.startswith(TRACKER_SCHEMES):
-                fail(f"not a UDP or HTTP(S) tracker in {path}: {line}")
+                fail(f"Not a UDP or HTTP(S) tracker in {path}: {line}")
             if line in trackers:
-                fail(f"duplicate tracker in {path}: {line}")
+                fail(f"Duplicate tracker in {path}: {line}")
             trackers.append(line)
     if not trackers:
-        fail(f"no trackers in {path}")
-    log.info(f"Loaded {len(trackers)} trackers from {path}")
+        fail(f"No trackers in {path}")
+    print(f"{len(trackers)} trackers from {path}")
     return trackers
 
 
 def add_files(source, name):
     """
-    Walks the source in sorted order and adds every file, logging each one. Symlinks are skipped.
+    Walks the source in sorted order and adds every file, printing each one. Symlinks are skipped.
     Also collects the years and datasets for the comment.
     """
     fs = lt.file_storage()
@@ -169,8 +178,8 @@ def add_files(source, name):
             files += 1
             total += stat.st_size
             classify(path, stat.st_mtime, years, datasets)
-            log.info(f"Added {path} ({fmt_bytes(stat.st_size)})")
-    log.info(f"Added {fmt_count(files)} files ({fmt_bytes(total)})")
+            print(f"Added {path} ({fmt_bytes(stat.st_size)})")
+    print(f"Added {fmt_count(files)} files ({fmt_bytes(total)})")
     return fs, files, total, years, datasets
 
 
