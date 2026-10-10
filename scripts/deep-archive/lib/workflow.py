@@ -17,8 +17,9 @@ anything the environment doesn't set:
     SEED_DIR     torrent content, one folder per torrent ID, kept for seeding (qBittorrent save path)
     RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
                  the B2 key for the "everef" rclone remote; the rest of the remote is fixed here (RCLONE_FIXED)
+    DATA_BUCKET  the data site's bucket on B2; its root is the site root (data_remote)
 
-The scripts reach the storage only through rclone (DATA_REMOTE), never through the AWS CLI or an S3 library.
+The scripts reach the storage only through rclone (data_remote), never through the AWS CLI or an S3 library.
 """
 
 import datetime
@@ -40,8 +41,8 @@ RCLONE_FIXED = {
     "RCLONE_CONFIG_EVEREF_HARD_DELETE": "false",
 }
 
-# The data site's root: the data.everef.net bucket on B2.
-DATA_REMOTE = "everef:data-everef-net-425eb511"
+# The rclone remote for the data site's bucket; the bucket itself is the DATA_BUCKET setting.
+REMOTE_NAME = "everef"
 
 # Datasets never archived (PLAN 2.2): paths from the site root. market-history and killmails work as databases, with
 # past files modified in place, which a torrent can't follow.
@@ -271,6 +272,14 @@ class Workflow:
         if done is None:
             fail(f"{step_name('find')} hasn't completed: no torrent ID yet")
         return done["torrent_id"]
+
+
+def data_remote():
+    """The rclone path of the data site's root: the "everef" remote and DATA_BUCKET. Call after load_env."""
+    bucket = os.environ.get("DATA_BUCKET", "").strip().rstrip("/")
+    if not bucket:
+        fail("DATA_BUCKET is not set (environment or torrents.env)")
+    return f"{REMOTE_NAME}:{bucket}"
 
 
 def join(base, path):

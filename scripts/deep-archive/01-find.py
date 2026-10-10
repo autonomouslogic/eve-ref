@@ -4,8 +4,8 @@ find: step 2 of the EVE Ref Deep Archive workflow. Selects the files for the tor
 data.everef.net that aren't archived yet, by modification date, up to the last date that keeps the torrent as big as
 the size limits allow.
 
-DRAFT. Lists the data site's bucket on B2 with rclone (DATA_REMOTE in lib/workflow.py). Read-only: it only lists files
-and reads published file lists.
+DRAFT. Lists the data site's bucket on B2 with rclone (DATA_BUCKET, see lib/workflow.py). Read-only: it only lists
+files and reads published file lists.
 
     01-find.py
 
@@ -41,7 +41,7 @@ Skipped:
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR
-    RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY   the B2 key (lib/workflow.py)
+    DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY   the bucket and B2 key (lib/workflow.py)
 
 Needs rclone.
 """
@@ -63,7 +63,6 @@ from workflow import (  # noqa: E402
     GIB,
     KIB,
     DATA_BASE_URL,
-    DATA_REMOTE,
     MAX_BYTES,
     MAX_FILES,
     MIB,
@@ -72,6 +71,7 @@ from workflow import (  # noqa: E402
     TIB,
     TORRENT_EXCLUDE,
     Workflow,
+    data_remote,
     fail,
     join,
     lsjson,
@@ -125,23 +125,23 @@ def main():
     workflow = Workflow()
     workflow.begin(STEP)
     excludes = TORRENT_EXCLUDE
-    data_remote = DATA_REMOTE
+    remote = data_remote()
     today = datetime.datetime.now(datetime.timezone.utc).date()
     newest_allowed = years_before(today, MIN_AGE_YEARS)
 
     section("Settings")
-    print(f"Source: {data_remote}")
+    print(f"Source: {remote}")
     print(f"Seed dir: {workflow.seed_dir}")
     print(f"Excluded datasets: {', '.join(excludes) or '(none)'}")
     print(f"Limits: {fmt_count(MAX_FILES)} files, {fmt_bytes(MAX_BYTES)}, nothing modified after {newest_allowed}")
 
     section("Listing")
-    listing = list_remote(data_remote, args.progress_seconds)
+    listing = list_remote(remote, args.progress_seconds)
     if not any(o.path == INDEX_JSON for o in listing):
-        fail(f"No {INDEX_JSON} at the root of {data_remote}")
+        fail(f"No {INDEX_JSON} at the root of {remote}")
 
     section("Published file lists")
-    taken = load_published_lists(data_remote, listing)
+    taken = load_published_lists(remote, listing)
 
     section("Selection")
     scan = classify_all(listing, excludes, taken)
@@ -156,7 +156,7 @@ def main():
     if os.path.exists(content_dir):
         fail(f"{content_dir} already exists: a torrent with this ID was started before")
 
-    summary = build_summary(listing, scan, cut, selected, torrent_id, data_remote, excludes, taken, newest_allowed)
+    summary = build_summary(listing, scan, cut, selected, torrent_id, remote, excludes, taken, newest_allowed)
     report = render_report(summary)
     section("Report")
     print(report, end="")

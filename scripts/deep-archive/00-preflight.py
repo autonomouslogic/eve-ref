@@ -11,8 +11,8 @@ SCRATCH_DIR/00-preflight.done, which 01-find needs. It can't run twice in the sa
 directory must be empty.
 
 Checks:
-- the settings are there: SCRATCH_DIR, SEED_DIR, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY (environment
-  or torrents.env, see lib/workflow.py);
+- the settings are there: SCRATCH_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
+  (environment or torrents.env, see lib/workflow.py);
 - SCRATCH_DIR and SEED_DIR exist (created, with their parents, if missing) and are writable;
 - SCRATCH_DIR is empty (log/ aside): one workflow per scratch directory;
 - SEED_DIR has room for the largest possible torrent (MAX_BYTES);
@@ -30,9 +30,9 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
-    DATA_REMOTE,
     MAX_BYTES,
     Workflow,
+    data_remote,
     error,
     fail,
     is_inside,
@@ -180,25 +180,27 @@ def check_tools(checks):
 
 
 def check_remote(checks):
-    key_settings = ("RCLONE_CONFIG_EVEREF_ACCOUNT", "RCLONE_CONFIG_EVEREF_KEY")
-    missing = [name for name in key_settings if not os.environ.get(name)]
+    settings = ("DATA_BUCKET", "RCLONE_CONFIG_EVEREF_ACCOUNT", "RCLONE_CONFIG_EVEREF_KEY")
+    missing = [name for name in settings if not os.environ.get(name, "").strip()]
     if missing:
-        checks.fail(f"{' and '.join(missing)} not set (environment or torrents.env)")
+        checks.fail(f"{', '.join(missing)} not set (environment or torrents.env)")
         return
+    remote = data_remote()
+    print(f"Bucket: {remote}")
     print(f"B2 key: {os.environ['RCLONE_CONFIG_EVEREF_ACCOUNT']}")
 
-    out, error_line = run_rclone("lsjson", "--no-mimetype", join(DATA_REMOTE, "index.json"))
+    out, error_line = run_rclone("lsjson", "--no-mimetype", join(remote, "index.json"))
     entries = json.loads(out) if out else []
     if error_line or not entries:
-        checks.fail(f"Can't read {join(DATA_REMOTE, 'index.json')}: {error_line or 'not found'}")
+        checks.fail(f"Can't read {join(remote, 'index.json')}: {error_line or 'not found'}")
         return
-    print(f"Site root: {DATA_REMOTE}, index.json modified {entries[0]['ModTime'][:19]}")
+    print(f"Site root: index.json modified {entries[0]['ModTime'][:19]}")
 
-    out, error_line = run_rclone("lsjson", "--files-only", "--no-mimetype", join(DATA_REMOTE, DEEP_ARCHIVE_DIR))
+    out, error_line = run_rclone("lsjson", "--files-only", "--no-mimetype", join(remote, DEEP_ARCHIVE_DIR))
     if error_line and "directory not found" in error_line:
         print(f"{DEEP_ARCHIVE_DIR}/ doesn't exist yet: no published torrents")
     elif error_line:
-        checks.fail(f"Can't list {join(DATA_REMOTE, DEEP_ARCHIVE_DIR)}: {error_line}")
+        checks.fail(f"Can't list {join(remote, DEEP_ARCHIVE_DIR)}: {error_line}")
     else:
         torrents = sorted(e["Path"] for e in json.loads(out) if e["Path"].endswith(".torrent"))
         if torrents:

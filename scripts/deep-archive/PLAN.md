@@ -577,8 +577,9 @@ moving on. The scripts support the human; they don't replace their judgement.
 - **One script, one step, numbered in order:** `./00-preflight.py`, `./01-find.py`, …
   (`STEPS` in `lib/workflow.py`). Scripts never call the next step. There is no "run everything" script.
 - **Settings in `torrents.env`** (`torrents.env.example`), read for anything the environment doesn't set:
-  `SCRATCH_DIR`, `SEED_DIR` and the B2 key (`RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY`). Everything
-  else (bucket, rclone settings, size limits, `TORRENT_EXCLUDE`, `DATA_BASE_URL`) is fixed in `lib/workflow.py`. No
+  `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET` and the B2 key (`RCLONE_CONFIG_EVEREF_ACCOUNT`,
+  `RCLONE_CONFIG_EVEREF_KEY`). Everything else (rclone settings, size limits, `TORRENT_EXCLUDE`, `DATA_BASE_URL`) is
+  fixed in `lib/workflow.py`. No
   `--dir` or ID arguments.
 - **One workflow per scratch directory.** `$SCRATCH_DIR` holds the work files of the current workflow and must be
   empty when it starts (`00-preflight` checks). The operator deletes it by hand once the workflow is complete.
@@ -860,7 +861,8 @@ Revised 2026-10-10. The scripts reach storage **only through rclone**, with **on
 - Only the secrets come from `torrents.env`: `RCLONE_CONFIG_EVEREF_ACCOUNT` and `RCLONE_CONFIG_EVEREF_KEY`. The rest
   is fixed in `lib/workflow.py` and overrides the environment: type `b2`, and `hard_delete=false`, which must never be
   true: deletes stay soft, so the bucket's lifecycle rules provide the undo window (2.14).
-- The bucket is fixed too: `DATA_REMOTE = everef:data-everef-net-425eb511`, the site root.
+- The bucket is a setting, `DATA_BUCKET` in `torrents.env` (like `ROLLUP_BUCKET` in the roll-up scripts). The site
+  root is `everef:$DATA_BUCKET`.
 
 One key means every step could write and delete. The safeguards are the steps themselves: only `11-upload-torrent`,
 `13-build-feed` and `21-delete` write, only to explicit paths (or `deep-archive/`), after showing what they'll do and

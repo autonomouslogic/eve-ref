@@ -20,8 +20,8 @@ Design and reasoning: [`PLAN.md`](PLAN.md).
 
 ## Setup
 
-Copy `torrents.env.example` to `torrents.env` and fill in `SCRATCH_DIR`, `SEED_DIR`, `RCLONE_CONFIG_EVEREF_ACCOUNT`
-and `RCLONE_CONFIG_EVEREF_KEY` (Appendix B).
+Copy `torrents.env.example` to `torrents.env` and fill in `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET`,
+`RCLONE_CONFIG_EVEREF_ACCOUNT` and `RCLONE_CONFIG_EVEREF_KEY` (Appendix B).
 
 ## Procedure
 
@@ -289,10 +289,11 @@ scripts read it for anything not already set in the environment.
 |---|---|
 | `SCRATCH_DIR` | Work files for the current workflow. Empty when a workflow starts; deleted by hand at the end. |
 | `SEED_DIR` | Torrent content, one folder per torrent, kept for seeding. qBittorrent's save path. |
+| `DATA_BUCKET` | The data site's bucket on B2. Its root is the site root. |
 | `RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY` | The B2 key for the `everef` rclone remote. |
 
-Everything else is fixed in `lib/workflow.py`: the bucket (`DATA_REMOTE`), the size limits, the excluded datasets
-(`TORRENT_EXCLUDE`), the site URL (`DATA_BASE_URL`), and the rclone settings. As in the roll-up scripts, rclone is
+Everything else is fixed in `lib/workflow.py`: the size limits, the excluded datasets (`TORRENT_EXCLUDE`), the site
+URL (`DATA_BASE_URL`), and the rclone settings. As in the roll-up scripts, rclone is
 configured only from `RCLONE_CONFIG_*` variables (`RCLONE_CONFIG=/dev/null`, so your own `rclone.conf` is never
 used), with type `b2` and `hard_delete=false`, so deletes stay soft and the bucket's lifecycle rules give an undo
 window. All storage access goes through rclone, never the AWS CLI or an S3 library.
