@@ -18,6 +18,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -41,8 +42,14 @@ public class DataProxyHandler implements Handler {
 	private static final int COPY_BUFFER_SIZE = 16 * 1024;
 	private static final int MAX_ERROR_BODY_BYTES = 4096;
 	private static final Pattern B2_CODE_PATTERN = Pattern.compile("<Code>([^<]*)</Code>");
-	private static final DateTimeFormatter HTTP_DATE_FORMAT =
-			DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneOffset.UTC);
+	/**
+	 * IMF-fixdate (RFC 9110 §5.6.7). Not {@link DateTimeFormatter#RFC_1123_DATE_TIME}, which omits the leading zero on
+	 * single-digit days.
+	 */
+	private static final DateTimeFormatter HTTP_DATE_FORMAT = DateTimeFormatter.ofPattern(
+					"EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US)
+			.withZone(ZoneOffset.UTC);
+
 	private static final List<String> PASSTHROUGH_HEADERS = List.of(
 			"Content-Type", "Cache-Control", "Content-Encoding", "Content-Disposition", "Content-Language", "Expires");
 
@@ -68,7 +75,12 @@ public class DataProxyHandler implements Handler {
 	@Override
 	public void handle(ServerRequest req, ServerResponse res) throws Exception {
 		var method = req.prologue().method().text();
-		var access = new AccessLog(method, req.path().rawPath());
+		var access = new AccessLog(
+				method,
+				req.path().rawPath(),
+				clientIp(req),
+				req.headers().first(HeaderNames.USER_AGENT).orElse(null),
+				req.headers().first(HeaderNames.REFERER).orElse(null));
 		try {
 			handle(req, res, method, access);
 		} finally {
@@ -99,7 +111,29 @@ public class DataProxyHandler implements Handler {
 			access.outcome = "ok";
 			return;
 		}
-		proxy(req, res, method, keyOpt.get(), access);
+		try {
+			proxy(req, res, method, keyOpt.get(), access);
+		} catch (UpstreamRequestException e) {
+			// Every upstream call happens before any response bytes are written, so a 502 can still be sent.
+			captureSentry(req, res, "Upstream request failed", e.url, null, null, e.getCause());
+			sendPlain(res, method, Status.create(502, "Bad Gateway"), "Bad gateway\n");
+			access.outcome = "ok";
+		}
+	}
+
+	private static String clientIp(ServerRequest req) {
+		var cfConnectingIp = req.headers().first(HeaderNames.create("CF-Connecting-IP"));
+		if (cfConnectingIp.isPresent() && !cfConnectingIp.get().isBlank()) {
+			return cfConnectingIp.get().trim();
+		}
+		var forwardedFor = req.headers().first(HeaderNames.X_FORWARDED_FOR);
+		if (forwardedFor.isPresent()) {
+			var first = forwardedFor.get().split(",", 2)[0].trim();
+			if (!first.isEmpty()) {
+				return first;
+			}
+		}
+		return req.remotePeer().host();
 	}
 
 	private void proxy(ServerRequest req, ServerResponse res, String method, String key, AccessLog access)
@@ -111,8 +145,8 @@ public class DataProxyHandler implements Handler {
 
 		if (method.equals("HEAD")) {
 			access.upstreamCalls = "HEAD";
-			try (var head = upstreamCall("HEAD", buildUrl(key, null))) {
-				if (!head.isSuccessful()) {
+			try (var head = upstreamCall("HEAD", buildUrl(key, null), access)) {
+				if (head.code() != 200) {
 					mapAndSendUpstreamError(req, res, method, head, false, access);
 					return;
 				}
@@ -128,7 +162,7 @@ public class DataProxyHandler implements Handler {
 					sendHeadSuccess(res, head, lastModified, contentLength, access);
 					return;
 				}
-				var result = evaluatePreconditions(req, method, etag, lastModified);
+				var result = evaluatePreconditions(req, method, etag, lastModified, access);
 				if (result == PreconditionResult.PRECONDITION_FAILED) {
 					send412(res, access);
 					return;
@@ -145,8 +179,8 @@ public class DataProxyHandler implements Handler {
 		// GET
 		if (!hasPreconditions) {
 			access.upstreamCalls = "GET";
-			try (var get = upstreamCall("GET", buildUrl(key, null))) {
-				if (!get.isSuccessful()) {
+			try (var get = upstreamCall("GET", buildUrl(key, null), access)) {
+				if (get.code() != 200) {
 					mapAndSendUpstreamError(req, res, method, get, false, access);
 					return;
 				}
@@ -169,8 +203,8 @@ public class DataProxyHandler implements Handler {
 	private void getWithPreconditions(
 			ServerRequest req, ServerResponse res, String method, String key, AccessLog access, int attempt)
 			throws IOException {
-		try (var head = upstreamCall("HEAD", buildUrl(key, null))) {
-			if (!head.isSuccessful()) {
+		try (var head = upstreamCall("HEAD", buildUrl(key, null), access)) {
+			if (head.code() != 200) {
 				mapAndSendUpstreamError(req, res, method, head, false, access);
 				return;
 			}
@@ -181,7 +215,7 @@ public class DataProxyHandler implements Handler {
 				return;
 			}
 			var lastModified = resolveLastModified(head);
-			var result = evaluatePreconditions(req, method, headEtag, lastModified);
+			var result = evaluatePreconditions(req, method, headEtag, lastModified, access);
 			if (result == PreconditionResult.PRECONDITION_FAILED) {
 				send412(res, access);
 				return;
@@ -190,7 +224,7 @@ public class DataProxyHandler implements Handler {
 				send304(res, head, access);
 				return;
 			}
-			try (var get = upstreamCall("GET", buildUrl(key, versionId))) {
+			try (var get = upstreamCall("GET", buildUrl(key, versionId), access)) {
 				if (get.code() == 400 || get.code() == 404) {
 					if (attempt == 0) {
 						getWithPreconditions(req, res, method, key, access, attempt + 1);
@@ -202,7 +236,7 @@ public class DataProxyHandler implements Handler {
 					access.outcome = "ok";
 					return;
 				}
-				if (!get.isSuccessful()) {
+				if (get.code() != 200) {
 					mapAndSendUpstreamError(req, res, method, get, true, access);
 					return;
 				}
@@ -230,8 +264,8 @@ public class DataProxyHandler implements Handler {
 	}
 
 	private PreconditionResult evaluatePreconditions(
-			ServerRequest req, String method, String currentEtag, Instant lastModified) {
-		return Preconditions.evaluate(
+			ServerRequest req, String method, String currentEtag, Instant lastModified, AccessLog access) {
+		var result = Preconditions.evaluate(
 				method,
 				rawHeaderLines(req, HeaderNames.IF_MATCH),
 				rawHeaderLines(req, HeaderNames.IF_UNMODIFIED_SINCE),
@@ -239,6 +273,12 @@ public class DataProxyHandler implements Handler {
 				rawHeaderLines(req, HeaderNames.IF_MODIFIED_SINCE),
 				currentEtag,
 				lastModified);
+		access.precondition = switch (result) {
+			case PROCEED -> "proceed";
+			case NOT_MODIFIED -> "304";
+			case PRECONDITION_FAILED -> "412";
+		};
+		return result;
 	}
 
 	private List<String> rawHeaderLines(ServerRequest req, io.helidon.http.HeaderName name) {
@@ -248,14 +288,23 @@ public class DataProxyHandler implements Handler {
 		return req.headers().get(name).allValues();
 	}
 
-	private Response upstreamCall(String method, HttpUrl url) throws IOException {
+	private Response upstreamCall(String method, HttpUrl url, AccessLog access) throws UpstreamRequestException {
 		var builder = new Request.Builder().url(url).header("Accept-Encoding", "identity");
 		if (method.equals("HEAD")) {
 			builder.head();
 		} else {
 			builder.get();
 		}
-		return client.newCall(builder.build()).execute();
+		Response response;
+		try {
+			response = client.newCall(builder.build()).execute();
+		} catch (IOException e) {
+			throw new UpstreamRequestException(url, e);
+		}
+		if (response.code() == 200) {
+			access.upstreamContentLength = response.header("Content-Length");
+		}
+		return response;
 	}
 
 	private HttpUrl buildUrl(String key, String versionId) {
@@ -334,8 +383,11 @@ public class DataProxyHandler implements Handler {
 				try {
 					n = in.read(buffer);
 				} catch (IOException e) {
-					access.outcome = "upstream_aborted";
 					access.bytesSent = bytesSent;
+					if (watchdog.isStalled(watchdogId)) {
+						throw clientWriteFailed(access, watchdogId, e);
+					}
+					access.outcome = "upstream_aborted";
 					captureSentry(
 							req,
 							res,
@@ -348,16 +400,13 @@ public class DataProxyHandler implements Handler {
 				if (n == -1) {
 					break;
 				}
+				// Helidon reports socket write failures as ServerConnectionException (a CloseConnectionException),
+				// not IOException.
 				try {
 					out.write(buffer, 0, n);
-				} catch (IOException e) {
+				} catch (IOException | CloseConnectionException e) {
 					access.bytesSent = bytesSent;
-					if (Thread.interrupted()) {
-						access.outcome = "stalled";
-					} else {
-						access.outcome = "aborted";
-					}
-					throw new CloseConnectionException("client write failed", e);
+					throw clientWriteFailed(access, watchdogId, e);
 				}
 				bytesSent += n;
 				watchdog.progress(watchdogId);
@@ -374,12 +423,31 @@ public class DataProxyHandler implements Handler {
 						null);
 				throw new CloseConnectionException("upstream EOF before declared Content-Length");
 			}
-			out.flush();
-			out.close();
+			try {
+				out.close();
+			} catch (IOException | CloseConnectionException e) {
+				throw clientWriteFailed(access, watchdogId, e);
+			}
 			access.outcome = "ok";
 		} finally {
 			watchdog.unregister(watchdogId);
 		}
+	}
+
+	/**
+	 * Classifies a failed client write as a stall cut off by the watchdog or a client abort. Neither goes to Sentry.
+	 */
+	private CloseConnectionException clientWriteFailed(AccessLog access, long watchdogId, Exception cause) {
+		if (watchdog.isStalled(watchdogId)) {
+			access.outcome = "stalled";
+			// Clear the watchdog's interrupt so it can't leak into anything else this thread does.
+			Thread.interrupted();
+			log.debug("Client stalled, stream cut off: {}", access.path);
+		} else {
+			access.outcome = "aborted";
+			log.debug("Client aborted: {}", access.path);
+		}
+		return new CloseConnectionException("client write failed", cause);
 	}
 
 	private void send304(ServerResponse res, Response head, AccessLog access) {
@@ -549,7 +617,18 @@ public class DataProxyHandler implements Handler {
 			HttpUrl upstreamUrl,
 			Integer upstreamStatus,
 			String b2Code) {
-		log.warn("{}: upstream={} status={} b2Code={}", message, upstreamUrl, upstreamStatus, b2Code);
+		captureSentry(req, res, message, upstreamUrl, upstreamStatus, b2Code, null);
+	}
+
+	private void captureSentry(
+			ServerRequest req,
+			ServerResponse res,
+			String message,
+			HttpUrl upstreamUrl,
+			Integer upstreamStatus,
+			String b2Code,
+			Throwable cause) {
+		log.warn("{}: upstream={} status={} b2Code={}", message, upstreamUrl, upstreamStatus, b2Code, cause);
 		Sentry.captureMessage(message, SentryLevel.ERROR, scope -> {
 			SentryUtil.configureScope(scope, req, res);
 			if (upstreamUrl != null) {
@@ -561,34 +640,76 @@ public class DataProxyHandler implements Handler {
 			if (b2Code != null) {
 				scope.setExtra("b2.code", b2Code);
 			}
+			if (cause != null) {
+				scope.setExtra("upstream.error", cause.toString());
+			}
 		});
+	}
+
+	/**
+	 * An upstream request that failed before a response was received (connection refused, timeout, etc.).
+	 */
+	private static class UpstreamRequestException extends IOException {
+		final HttpUrl url;
+
+		UpstreamRequestException(HttpUrl url, IOException cause) {
+			super("Upstream request failed: " + url, cause);
+			this.url = url;
+		}
 	}
 
 	private static class AccessLog {
 		final String method;
 		final String path;
+		final String clientIp;
+		final String userAgent;
+		final String referer;
 		final Instant start = Instant.now();
 		String outcome = "error";
 		String upstreamCalls = "NONE";
+		String upstreamContentLength;
+		String precondition = "none";
 		long bytesSent = 0;
 
-		AccessLog(String method, String path) {
+		AccessLog(String method, String path, String clientIp, String userAgent, String referer) {
 			this.method = method;
 			this.path = path;
+			this.clientIp = clientIp;
+			this.userAgent = userAgent;
+			this.referer = referer;
 		}
 
 		void log(ServerResponse res) {
 			var duration = java.time.Duration.between(start, Instant.now());
-			Optional<Integer> status = res.isSent() ? Optional.of(res.status().code()) : Optional.empty();
+			// A streamed response isn't marked as sent until Helidon commits it after the handler returns, so use the
+			// status set on the response. On "error" the final status is set later by the error handler.
+			var status =
+					outcome.equals("error") ? "-" : String.valueOf(res.status().code());
 			accessLog.info(
-					"method={} path={} status={} bytesSent={} durationMs={} outcome={} upstreamCalls={}",
+					"method={} path={} status={} bytesSent={} upstreamContentLength={} durationMs={} outcome={} "
+							+ "precondition={} upstreamCalls={} clientIp={} userAgent={} referer={}",
 					method,
 					path,
-					status.map(String::valueOf).orElse("-"),
+					status,
 					bytesSent,
+					Optional.ofNullable(upstreamContentLength).orElse("-"),
 					duration.toMillis(),
 					outcome,
-					upstreamCalls);
+					precondition,
+					upstreamCalls,
+					quote(clientIp),
+					quote(userAgent),
+					quote(referer));
+		}
+
+		/**
+		 * Quotes a client-supplied value so it can't break the key=value format.
+		 */
+		private static String quote(String value) {
+			if (value == null) {
+				return "-";
+			}
+			return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
 		}
 	}
 }

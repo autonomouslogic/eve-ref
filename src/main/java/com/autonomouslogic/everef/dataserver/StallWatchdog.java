@@ -51,6 +51,14 @@ public class StallWatchdog {
 		}
 	}
 
+	/**
+	 * Whether the watchdog has cut off the stream for lack of progress.
+	 */
+	public boolean isStalled(long id) {
+		var state = streams.get(id);
+		return state != null && state.stalled;
+	}
+
 	public void unregister(long id) {
 		streams.remove(id);
 	}
@@ -66,8 +74,9 @@ public class StallWatchdog {
 	private void checkStreams() {
 		var cutoff = System.nanoTime() - timeoutNanos;
 		streams.forEach((id, state) -> {
-			if (state.lastProgressNanos < cutoff) {
+			if (!state.stalled && state.lastProgressNanos < cutoff) {
 				log.warn("Stream {} stalled, interrupting handler thread", id);
+				state.stalled = true;
 				state.handlerThread.interrupt();
 			}
 		});
@@ -76,6 +85,7 @@ public class StallWatchdog {
 	private static class StreamState {
 		final Thread handlerThread;
 		volatile long lastProgressNanos;
+		volatile boolean stalled;
 
 		StreamState(Thread handlerThread) {
 			this.handlerThread = handlerThread;

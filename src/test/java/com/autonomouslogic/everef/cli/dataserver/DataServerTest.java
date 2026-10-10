@@ -6,18 +6,35 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.autonomouslogic.everef.dataserver.StallWatchdog;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.autonomouslogic.everef.test.LogCapture;
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import mockwebserver3.MockResponse;
+import mockwebserver3.MockResponseBody;
 import mockwebserver3.MockWebServer;
 import mockwebserver3.SocketEffect;
+import okio.BufferedSink;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +55,13 @@ public class DataServerTest {
 	private static final String VERSION_ID = "4_z1234";
 	private static final String LAST_MODIFIED_MILLIS = "1700000000000";
 
+	private static final Pattern ACCESS_LOG_FIELD = Pattern.compile("(\\w+)=(\"(?:[^\"\\\\]|\\\\.)*\"|\\S*)");
+
 	@Inject
 	DataServer dataServer;
+
+	@Inject
+	StallWatchdog watchdog;
 
 	MockWebServer upstream;
 	HttpClient httpClient;
@@ -613,5 +635,278 @@ public class DataServerTest {
 		upstream.enqueue(fileResponse().build());
 		var res = send("GET", "/file2.txt");
 		assertEquals(200, res.statusCode());
+	}
+
+	// --- Last-Modified format ---
+
+	@Test
+	void lastModifiedShouldBeImfFixdateWithTwoDigitDay() throws Exception {
+		// 2021-01-01T00:00:00.123Z
+		upstream.enqueue(fileResponse()
+				.setHeader("x-amz-meta-src_last_modified_millis", "1609459200123")
+				.build());
+		var res = send("GET", "/file.txt");
+		assertEquals(
+				"Fri, 01 Jan 2021 00:00:00 GMT",
+				res.headers().firstValue("Last-Modified").orElse(null));
+	}
+
+	// --- Non-200 success statuses ---
+
+	@Test
+	void shouldMapUpstream206To502() throws Exception {
+		upstream.enqueue(fileResponse().code(206).build());
+		var res = send("GET", "/file.txt");
+		assertEquals(502, res.statusCode());
+		assertEquals("Bad gateway\n", new String(res.body()));
+	}
+
+	@Test
+	void shouldMapPinnedUpstream206To502() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		upstream.enqueue(fileResponse().code(206).build());
+		var res = send("GET", "/file.txt", "If-None-Match", "\"different\"");
+		assertEquals(502, res.statusCode());
+		assertEquals("Bad gateway\n", new String(res.body()));
+	}
+
+	// --- Upstream unreachable ---
+
+	@Test
+	void shouldReturn502WhenUpstreamUnreachable() throws Exception {
+		upstream.close();
+		var res = send("GET", "/file.txt");
+		assertEquals(502, res.statusCode());
+		assertEquals("Bad gateway\n", new String(res.body()));
+		assertEquals("none", res.headers().firstValue("Accept-Ranges").orElse(null));
+	}
+
+	// --- Concurrency limit ---
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_MAX_CONCURRENCY", value = "2")
+	void shouldReturn503WithRetryAfterWhenOverConcurrencyLimit() throws Exception {
+		upstream.enqueue(fileResponse().headersDelay(2, TimeUnit.SECONDS).build());
+		upstream.enqueue(fileResponse().headersDelay(2, TimeUnit.SECONDS).build());
+		var request = HttpRequest.newBuilder().uri(uri("/slow.txt")).GET().build();
+		var first = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofByteArray());
+		var second = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofByteArray());
+		awaitUpstreamRequestCount(2);
+
+		var rejected = send("GET", "/file.txt");
+		assertEquals(503, rejected.statusCode());
+		assertEquals("1", rejected.headers().firstValue("Retry-After").orElse(null));
+		assertEquals("none", rejected.headers().firstValue("Accept-Ranges").orElse(null));
+		assertEquals("Service unavailable\n", new String(rejected.body()));
+
+		assertEquals(200, first.get().statusCode());
+		assertEquals(200, second.get().statusCode());
+		upstream.enqueue(fileResponse().build());
+		assertEquals(200, send("GET", "/file.txt").statusCode());
+		assertEquals(3, upstream.getRequestCount());
+	}
+
+	// --- Access log ---
+
+	@Test
+	void accessLogShouldRecordStreamedGet() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			upstream.enqueue(fileResponse().build());
+			send("GET", "/file.txt");
+			var fields = awaitAccessLog(log, "/file.txt");
+			assertEquals("GET", fields.get("method"));
+			assertEquals("200", fields.get("status"));
+			assertEquals("ok", fields.get("outcome"));
+			assertEquals("11", fields.get("bytesSent"));
+			assertEquals("11", fields.get("upstreamContentLength"));
+			assertEquals("GET", fields.get("upstreamCalls"));
+			assertEquals("none", fields.get("precondition"));
+		}
+	}
+
+	@Test
+	void accessLogShouldRecordClientDetails() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			upstream.enqueue(fileResponse().build());
+			send(
+					"GET",
+					"/cf.txt",
+					"CF-Connecting-IP",
+					"203.0.113.7",
+					"X-Forwarded-For",
+					"198.51.100.1",
+					"User-Agent",
+					"test-agent/1.0 (x)",
+					"Referer",
+					"https://example.com/");
+			var cf = awaitAccessLog(log, "/cf.txt");
+			assertEquals("203.0.113.7", cf.get("clientIp"));
+			assertEquals("test-agent/1.0 (x)", cf.get("userAgent"));
+			assertEquals("https://example.com/", cf.get("referer"));
+
+			upstream.enqueue(fileResponse().build());
+			send("GET", "/xff.txt", "X-Forwarded-For", "198.51.100.1, 10.0.0.1");
+			assertEquals("198.51.100.1", awaitAccessLog(log, "/xff.txt").get("clientIp"));
+
+			upstream.enqueue(fileResponse().build());
+			send("GET", "/direct.txt");
+			var direct = awaitAccessLog(log, "/direct.txt").get("clientIp");
+			assertTrue(direct != null && !direct.isEmpty() && !direct.equals("-"));
+		}
+	}
+
+	@Test
+	void accessLogShouldRecordPreconditionOutcome() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			upstream.enqueue(headOnlyResponse().build());
+			send("GET", "/304.txt", "If-None-Match", ETAG);
+			var notModified = awaitAccessLog(log, "/304.txt");
+			assertEquals("304", notModified.get("status"));
+			assertEquals("304", notModified.get("precondition"));
+
+			upstream.enqueue(headOnlyResponse().build());
+			send("GET", "/412.txt", "If-Match", "\"nope\"");
+			assertEquals("412", awaitAccessLog(log, "/412.txt").get("precondition"));
+
+			upstream.enqueue(headOnlyResponse().build());
+			upstream.enqueue(fileResponse().build());
+			send("GET", "/proceed.txt", "If-None-Match", "\"different\"");
+			var proceed = awaitAccessLog(log, "/proceed.txt");
+			assertEquals("proceed", proceed.get("precondition"));
+			assertEquals("200", proceed.get("status"));
+			assertEquals("HEAD+GET_VERSION", proceed.get("upstreamCalls"));
+		}
+	}
+
+	// --- Client abort and stall, with a raw socket client ---
+
+	@Test
+	void shouldLogClientAbortAsAborted() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			upstream.enqueue(generatedFileResponse(64L * 1024 * 1024).build());
+			try (var socket = rawGet("/big.bin")) {
+				var in = socket.getInputStream();
+				assertEquals("HTTP/1.1 200 OK", readResponseHead(in));
+				in.readNBytes(64 * 1024);
+				// Reset rather than FIN, so the server's next write fails immediately.
+				socket.setSoLinger(true, 0);
+			}
+			var fields = awaitAccessLog(log, "/big.bin");
+			assertEquals("200", fields.get("status"));
+			assertEquals("aborted", fields.get("outcome"));
+			assertEquals(0, watchdog.activeStreamCount());
+		}
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_WRITE_STALL_TIMEOUT", value = "PT2S")
+	void shouldCutOffStalledClient() throws Exception {
+		var size = 256L * 1024 * 1024;
+		try (var log = new LogCapture("dataserver.access")) {
+			upstream.enqueue(generatedFileResponse(size).build());
+			try (var socket = rawGet("/big.bin")) {
+				var in = socket.getInputStream();
+				assertEquals("HTTP/1.1 200 OK", readResponseHead(in));
+				// Stop reading. The server must cut the stream off once the stall timeout passes.
+				var fields = awaitAccessLog(log, "/big.bin");
+				assertEquals("stalled", fields.get("outcome"));
+				assertEquals(0, watchdog.activeStreamCount());
+
+				// The server closed the socket: draining what's buffered ends without the full body, rather than
+				// blocking.
+				long drained = 0;
+				try {
+					var buffer = new byte[64 * 1024];
+					int n;
+					while ((n = in.read(buffer)) != -1) {
+						drained += n;
+					}
+				} catch (SocketTimeoutException e) {
+					throw e;
+				} catch (IOException e) {
+					// Connection reset is also a valid way for the server to close.
+				}
+				assertTrue(drained < size);
+			}
+		}
+	}
+
+	private Map<String, String> awaitAccessLog(LogCapture log, String path) {
+		var line = log.await(l -> l.contains("path=" + path + " "), Duration.ofSeconds(20))
+				.orElseThrow(() -> new AssertionError("No access log line for " + path + ": " + log.messages()));
+		var fields = new HashMap<String, String>();
+		var matcher = ACCESS_LOG_FIELD.matcher(line);
+		while (matcher.find()) {
+			var value = matcher.group(2);
+			if (value.startsWith("\"")) {
+				value = value.substring(1, value.length() - 1)
+						.replace("\\\"", "\"")
+						.replace("\\\\", "\\");
+			}
+			fields.put(matcher.group(1), value);
+		}
+		return fields;
+	}
+
+	@SneakyThrows
+	private void awaitUpstreamRequestCount(int count) {
+		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+		while (upstream.getRequestCount() < count && System.nanoTime() < deadline) {
+			Thread.sleep(10);
+		}
+		assertEquals(count, upstream.getRequestCount());
+	}
+
+	private MockResponse.Builder generatedFileResponse(long size) {
+		return new MockResponse.Builder()
+				.code(200)
+				.setHeader("ETag", ETAG)
+				.setHeader("x-amz-version-id", VERSION_ID)
+				.body(new MockResponseBody() {
+					@Override
+					public long getContentLength() {
+						return size;
+					}
+
+					@Override
+					public void writeTo(BufferedSink sink) throws IOException {
+						var chunk = new byte[64 * 1024];
+						long remaining = size;
+						while (remaining > 0) {
+							int n = (int) Math.min(chunk.length, remaining);
+							sink.write(chunk, 0, n);
+							remaining -= n;
+						}
+					}
+				});
+	}
+
+	private Socket rawGet(String path) throws IOException {
+		var socket = new Socket();
+		socket.setReceiveBufferSize(16 * 1024);
+		socket.setSoTimeout(10_000);
+		socket.connect(new InetSocketAddress("localhost", DATA_SERVER_TEST_PORT));
+		var out = socket.getOutputStream();
+		out.write(("GET " + path + " HTTP/1.1\r\nHost: localhost\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
+		out.flush();
+		return socket;
+	}
+
+	/**
+	 * Reads the status line and headers of a response, returning the status line.
+	 */
+	private String readResponseHead(InputStream in) throws IOException {
+		var head = new ByteArrayOutputStream();
+		int lastFour = 0;
+		while (lastFour != 0x0D0A0D0A) {
+			var b = in.read();
+			if (b == -1) {
+				throw new EOFException();
+			}
+			head.write(b);
+			lastFour = (lastFour << 8) | b;
+		}
+		var text = head.toString(StandardCharsets.US_ASCII);
+		return text.substring(0, text.indexOf("\r\n"));
 	}
 }

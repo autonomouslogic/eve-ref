@@ -214,6 +214,9 @@ Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2
       sent to Sentry.
     - **Verify with a test** that the interrupt really unblocks a Helidon response write. If it doesn't, find the Helidon
       hook that closes the connection, and record which mechanism was used here.
+      **Verified** (`DataServerTest.shouldCutOffStalledClient`): the interrupt unblocks the write. Helidon surfaces
+      client write failures as `ServerConnectionException` (a `CloseConnectionException`), not `IOException`, so the
+      handler catches both and asks the watchdog whether it cut the stream off to tell `stalled` from `aborted`.
     - Only lack of progress counts. A slow client that keeps reading is never cut off, however long the download takes.
       There is no total-duration cap and no minimum-rate rule.
     - The timeout stays well above Cloudflare's and the host proxy's own stalls, so it only catches truly dead streams.

@@ -7,8 +7,12 @@ import com.autonomouslogic.everef.dataserver.DataProxyHandler;
 import com.autonomouslogic.everef.service.HealthcheckService;
 import com.autonomouslogic.everef.util.SentryUtil;
 import io.helidon.common.concurrency.limits.FixedLimit;
-import io.helidon.common.concurrency.limits.LimitException;
+import io.helidon.http.DirectHandler;
+import io.helidon.http.HeaderNames;
+import io.helidon.http.ServerResponseHeaders;
+import io.helidon.http.Status;
 import io.helidon.webserver.WebServer;
+import io.helidon.webserver.http.DirectHandlers;
 import io.helidon.webserver.http.HttpRouting;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
@@ -54,6 +58,11 @@ public class DataServer implements Command {
 				.port(port)
 				.host("0.0.0.0")
 				.concurrencyLimit(limit)
+				// Requests over the concurrency limit are rejected by Helidon before routing, so they never reach
+				// the routing error handlers; they're answered by the direct handler for EventType.OTHER instead.
+				.directHandlers(DirectHandlers.builder()
+						.addHandler(DirectHandler.EventType.OTHER, this::handleDirect)
+						.build())
 				.routing(this::routing)
 				.build();
 		server.start();
@@ -74,18 +83,29 @@ public class DataServer implements Command {
 		routing = routing.get("/*", dataProxyHandler);
 		routing = routing.head("/*", dataProxyHandler);
 		routing = routing.any("/*", dataProxyHandler);
-		routing = routing.error(LimitException.class, this::handleLimitExceeded);
 		routing = routing.error(Exception.class, this::handleUnexpectedError);
 		return routing;
 	}
 
-	private void handleLimitExceeded(
-			io.helidon.webserver.http.ServerRequest req,
-			io.helidon.webserver.http.ServerResponse res,
-			LimitException e) {
-		res.header("Retry-After", "1")
-				.status(io.helidon.http.Status.SERVICE_UNAVAILABLE_503)
-				.send("Service unavailable\n".getBytes(StandardCharsets.UTF_8));
+	private DirectHandler.TransportResponse handleDirect(
+			DirectHandler.TransportRequest request,
+			DirectHandler.EventType eventType,
+			Status defaultStatus,
+			ServerResponseHeaders responseHeaders,
+			String message) {
+		if (defaultStatus.code() != Status.SERVICE_UNAVAILABLE_503.code()) {
+			return DirectHandler.defaultHandler().handle(request, eventType, defaultStatus, responseHeaders, message);
+		}
+		var response = DirectHandler.TransportResponse.builder()
+				.status(Status.SERVICE_UNAVAILABLE_503)
+				.headers(responseHeaders)
+				.header(HeaderNames.RETRY_AFTER, "1")
+				.header(HeaderNames.ACCEPT_RANGES, "none")
+				.keepAlive(false);
+		if (!request.method().equals("HEAD")) {
+			response.entity("Service unavailable\n");
+		}
+		return response.build();
 	}
 
 	private void handleUnexpectedError(
