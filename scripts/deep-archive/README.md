@@ -35,8 +35,8 @@ isn't in progress (PLAN 2.21).
 ```
 ./00-preflight.py
 ```
-Checks the settings, both directories (`SCRATCH_DIR` empty, room in `SEED_DIR`), rclone, the B2 key and bucket,
-libtorrent and the tracker list. Reports every problem, then aborts if there were any.
+Checks the settings, both directories (created if missing; `SCRATCH_DIR` empty, room in `SEED_DIR`), rclone, the B2
+key and bucket, libtorrent and the tracker list. Reports every problem, then aborts if there were any.
 
 ### 01: Find
 ```

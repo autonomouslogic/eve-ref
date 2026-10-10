@@ -13,8 +13,9 @@ directory must be empty.
 Checks:
 - the settings are there: SCRATCH_DIR, SEED_DIR, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY (environment
   or torrents.env, see lib/workflow.py);
-- SCRATCH_DIR exists, is writable, and is empty (log/ aside): one workflow per scratch directory;
-- SEED_DIR exists and is writable, with room for the largest possible torrent (MAX_BYTES);
+- SCRATCH_DIR and SEED_DIR exist (created, with their parents, if missing) and are writable;
+- SCRATCH_DIR is empty (log/ aside): one workflow per scratch directory;
+- SEED_DIR has room for the largest possible torrent (MAX_BYTES);
 - SCRATCH_DIR and SEED_DIR are separate;
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable;
@@ -63,7 +64,7 @@ def main():
     env_file = load_env()
 
     # The scratch directory must be empty, apart from the logs of earlier preflight attempts that failed.
-    scratch = usable_dir("SCRATCH_DIR")
+    scratch, scratch_created, scratch_problem = prepare_dir("SCRATCH_DIR")
     scratch_entries = sorted(e for e in os.listdir(scratch) if e != "log") if scratch else None
     if scratch:
         start_log(scratch, STEP)
@@ -75,15 +76,20 @@ def main():
 
     section("Directories")
     if scratch is None:
-        checks.fail(f"SCRATCH_DIR is not a writable directory: {os.environ.get('SCRATCH_DIR') or '(not set)'}")
-    elif scratch_entries:
-        checks.fail(f"SCRATCH_DIR isn't empty: {len(scratch_entries)} entries, e.g. {scratch_entries[0]}")
+        checks.fail(scratch_problem)
     else:
-        print(f"SCRATCH_DIR: {scratch}, empty")
-    seed = usable_dir("SEED_DIR")
+        if scratch_created:
+            print(f"Created SCRATCH_DIR: {scratch}")
+        if scratch_entries:
+            checks.fail(f"SCRATCH_DIR isn't empty: {len(scratch_entries)} entries, e.g. {scratch_entries[0]}")
+        else:
+            print(f"SCRATCH_DIR: {scratch}, empty")
+    seed, seed_created, seed_problem = prepare_dir("SEED_DIR")
     if seed is None:
-        checks.fail(f"SEED_DIR is not a writable directory: {os.environ.get('SEED_DIR') or '(not set)'}")
+        checks.fail(seed_problem)
     else:
+        if seed_created:
+            print(f"Created SEED_DIR: {seed}")
         free = shutil.disk_usage(seed).free
         if free < MAX_BYTES:
             checks.fail(
@@ -110,15 +116,27 @@ def main():
     ok("Preflight OK")
 
 
-def usable_dir(name):
-    """The setting's directory, if it exists and is writable."""
+def prepare_dir(name):
+    """
+    (path, created, None) for the setting's directory, creating it and its parents if it doesn't exist; or
+    (None, False, problem) if it isn't set, can't be created, isn't a directory, or isn't writable.
+    """
     value = os.environ.get(name)
     if not value:
-        return None
+        return None, False, f"{name} is not set (environment or torrents.env)"
     path = os.path.realpath(value)
-    if not os.path.isdir(path) or not os.access(path, os.W_OK | os.X_OK):
-        return None
-    return path
+    created = False
+    if not os.path.exists(path):
+        try:
+            os.makedirs(path)
+            created = True
+        except OSError as e:
+            return None, False, f"Couldn't create {name} {path}: {e.strerror}"
+    if not os.path.isdir(path):
+        return None, False, f"{name} is not a directory: {path}"
+    if not os.access(path, os.W_OK | os.X_OK):
+        return None, False, f"{name} is not writable: {path}"
+    return path, created, None
 
 
 def run_rclone(*args):
