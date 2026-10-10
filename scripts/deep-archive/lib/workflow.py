@@ -102,19 +102,10 @@ PIECE_SIZE = 32 * MIB
 # Most data in one torrent: what the seeder holds per torrent and what a full download is.
 MAX_BYTES = 1 * TIB
 
-# Most files in one torrent, worked out from a target .torrent size:
-# - TARGET_TORRENT_BYTES: ~8 MB, under libtorrent's 10 MB default (max_buffer_size) with a 20% margin, so any
-#   libtorrent client opens it unchanged, and below the 43,620 files (10.8 MiB) that hung qBittorrent's WebUI (PLAN
-#   Appendix B).
-# - PIECE_HASH_BYTES: piece hashes for MAX_BYTES of data, 20 bytes (v1) + 32 bytes (v2) per piece:
-#   1 TiB / 32 MiB = 32,768 pieces * 52 bytes = 1,703,936 bytes.
-# - BYTES_PER_FILE: measured 261 bytes per file for a hybrid torrent (Appendix B), rounded up to 300 for longer real
-#   site paths.
-# (8,000,000 - 1,703,936) / 300 = 20,986 files.
-TARGET_TORRENT_BYTES = 8_000_000
-PIECE_HASH_BYTES = (MAX_BYTES // PIECE_SIZE) * (20 + 32)
-BYTES_PER_FILE = 300
-MAX_FILES = (TARGET_TORRENT_BYTES - PIECE_HASH_BYTES) // BYTES_PER_FILE
+# Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
+# max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs a few KB high (its FIXED_BYTES
+# allowance), so a .torrent at the limit still loads. This is what limits the file count.
+MAX_TORRENT_BYTES = 10_000_000
 
 
 def step_name(step):

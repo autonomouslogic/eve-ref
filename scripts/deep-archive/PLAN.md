@@ -147,7 +147,7 @@ rewrites every index on each full run, so that date is the last `DataIndex` run,
 would never reach the minimum age. Only the folder's own `index.json`; parent folders' aren't added. Consequences:
 
 - In the torrent they're data files like any other: in the selection, the `.txt` and the `.sha256`. They count
-  towards `MAX_FILES` and `MAX_BYTES`.
+  towards the `.torrent` size estimate and `MAX_BYTES`.
 - They're never in the delete set: their modification date never matches the selection's. The index cleanup removes
   them from folders the delete empties (2.15); in folders that keep files, they stay as the live index.
 - A folder split across torrents (files on both sides of a cutoff) has its `index.json` in each of them, as it was
@@ -539,8 +539,8 @@ after that is checked against that list, never against "whatever is in the direc
     `deep-archive/`, 2.5).
   - **Too new:** anything modified less than `MIN_AGE_YEARS` (2) years before today.
   - **Cutoff:** group the remaining candidates (`index.json` aside, 2.2) by modification date (UTC). Find the first
-    date where including every candidate on or before it, plus their folders' `index.json`, goes over `MAX_FILES` or
-    `MAX_BYTES`; the cutoff is **the day before** that date. If
+    date where including every candidate on or before it, plus their folders' `index.json`, goes over `MAX_BYTES` of
+    data or a `.torrent` estimate over `MAX_TORRENT_BYTES`; the cutoff is **the day before** that date. If
     the limits are never reached, the cutoff is the newest allowed date (and the report flags that the torrent could
     be bigger). If the oldest date alone is over a limit, `01-find` fails: a date can't be split.
   - **Torrent ID** = `everef-deep-archive-<cutoff date>`: everything not yet archived, modified on or before that date.
@@ -550,10 +550,12 @@ after that is checked against that list, never against "whatever is in the direc
     keeps files on the site, and selected folders with no `index.json` to select.
 - **Limits, hard-coded in `lib/workflow.py`:**
   - `MAX_BYTES` = 1 TiB: what the seeder holds per torrent, and what a full download is.
-  - `MAX_FILES` = (8,000,000 − 1,703,936) / 300 = **20,986**: a target `.torrent` of ~8 MB (20% under libtorrent's
-    10 MB default), minus the piece hashes for `MAX_BYTES` at 32 MiB pieces (32,768 pieces × 52 bytes), at ~300
-    bytes per file (measured 261 for hybrid, Appendix B, rounded up for longer real paths). The calculation is in
-    the code.
+  - `MAX_TORRENT_BYTES` = 10,000,000: the largest `.torrent`, libtorrent's default `max_buffer_size`. The estimate
+    runs a few KB high, so a `.torrent` at the limit still loads. This is what limits the file count. `lib/torrent_size.py` estimates the hybrid `.torrent` from the selection's paths and sizes
+    as files are added, mirroring libtorrent's layout (v1 entries and pad files, v1 piece hashes, v2 file tree and
+    piece layers), plus a 4 KiB allowance for trackers, comment and root files. The per-file part matched libtorrent
+    byte for byte in tests. Earlier, a fixed `MAX_FILES` of 20,986 assumed ~300 bytes per file and the piece hashes
+    of a full 1 TiB.
 - **`files.jsonl` is the selection.** `01-find` can't run twice in a workflow (2.10), so it can't change afterwards.
   To change it on purpose, delete `01-find`'s completion file and run it again.
 - `02-load` downloads **exactly** the files in the list from the bucket into `$SEED_DIR/<ID>/` with
@@ -1030,7 +1032,7 @@ accurate (excluded datasets, timing, links), and update it only if the rules cha
 ## 6. Open questions
 
 Decided so far: one torrent per workflow, as big as the size limits allow (2.1, 2.8); hard-coded limits
-(`MAX_FILES` 20,986, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by modification date with a 2-year minimum age;
+(a `.torrent` estimate of at most 10 MB, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by modification date with a 2-year minimum age;
 torrent IDs from the cutoff date; exclusions `market-history`, `killmails` and `ccp`; Fuzzwork in scope with a sync
 cutoff; Fuzzwork cutoff at the lowest dated ID on the site; checksums and README inside the torrent; hybrid v1+v2; no
 notice period, but a start announcement; deletion last; no MD5 matching; no Cloudflare
@@ -1053,7 +1055,7 @@ Still open:
    network)?
 7. Stale index cleanup: in the delete step (2.15a), in `DataIndex` (2.15b), or both?
 8. Add the `DataIndex` "Archived data" note (2.20)?
-9. **Small-snapshot datasets** (Appendix B): ~553,700 files (69 %) for ~6 GiB; at 20,986 files per torrent they'd
+9. **Small-snapshot datasets** (Appendix B): ~553,700 files (69 %) for ~6 GiB; at ~21,000 files per torrent they'd
    fill ~26 torrents with almost no data. Being addressed separately: a script that rolls whole years of small files
    up into a single highly compressed file. Still open: which "no year folder" directories must stay on HTTP
    (`characters-corporations-alliances/backfills`, …)? (`ccp/` is excluded.)

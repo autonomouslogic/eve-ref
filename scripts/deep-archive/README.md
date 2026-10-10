@@ -313,6 +313,7 @@ scripts/deep-archive/
   00-preflight.py  01-find.py  …   # the steps
   create_torrent.py                # experiment: measure .torrent sizes; becomes 06-make-torrent
   lib/workflow.py                  # shared: settings, size limits, completion files, output
+  lib/torrent_size.py              # .torrent size estimate from paths and sizes, for 01-find's cutoff
 
 $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
   00-preflight.done, 01-find.done, … # completion files

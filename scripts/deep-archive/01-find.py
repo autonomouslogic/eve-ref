@@ -17,8 +17,9 @@ How the cutoff is chosen:
    torrents below). Set index.json files aside: they aren't selected by their own date (see index.json below).
 3. Drop files modified after the newest allowed date (MIN_AGE_YEARS before today). The rest are candidates.
 4. Group the candidates by modification date (UTC). Find the first date where including every candidate on or
-   before it, plus the index.json of every folder they're in, goes over MAX_FILES or MAX_BYTES (lib/workflow.py). The
-   cutoff is the day before that date. If the limits are never reached, the cutoff is the newest allowed date.
+   before it, plus the index.json of every folder they're in, goes over MAX_BYTES of data or a .torrent estimate
+   (lib/torrent_size.py) over MAX_TORRENT_BYTES (lib/workflow.py). The cutoff is the day before that date. If the
+   limits are never reached, the cutoff is the newest allowed date.
 5. Select every candidate modified on or before the cutoff, and the index.json of every folder they're in.
 
 index.json: a folder's index.json is selected when any file directly in that folder is, whatever its own
@@ -60,7 +61,6 @@ import argparse
 import datetime
 import gzip
 import json
-import math
 import os
 import re
 import shutil
@@ -70,16 +70,16 @@ import urllib.parse
 from collections import defaultdict
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
+from torrent_size import TorrentSize  # noqa: E402
 from workflow import (  # noqa: E402
     GIB,
     KIB,
     DATA_BASE_URL,
     DEEP_ARCHIVE_DIR,
     MAX_BYTES,
-    MAX_FILES,
+    MAX_TORRENT_BYTES,
     MIB,
     PIECE_SIZE,
-    TARGET_TORRENT_BYTES,
     TIB,
     TORRENT_EXCLUDE,
     TORRENT_ID_PREFIX,
@@ -118,7 +118,7 @@ LIMITS = [
 
 LOG_SAMPLE = 20
 
-LIMIT_NAMES = {"files": "the file limit", "bytes": "the size limit", "both": "both limits"}
+LIMIT_NAMES = {"torrent": "the .torrent size limit", "bytes": "the data size limit", "both": "both limits"}
 
 class Obj:
     """One file in the bucket. path is relative to the site root; mtime is a POSIX timestamp."""
@@ -149,7 +149,10 @@ def main():
     print(f"Source: {remote}")
     print(f"Seed dir: {workflow.seed_dir}")
     print(f"Excluded datasets: {', '.join(excludes) or '(none)'}")
-    print(f"Limits: {fmt_count(MAX_FILES)} files, {fmt_bytes(MAX_BYTES)}, nothing modified after {newest_allowed}")
+    print(
+        f"Limits: .torrent {fmt_size(MAX_TORRENT_BYTES)}, data {fmt_bytes(MAX_BYTES)}, "
+        f"nothing modified after {newest_allowed}"
+    )
 
     section("Listing")
     listing = list_remote(remote, args.progress_seconds)
@@ -174,6 +177,7 @@ def main():
         fail(f"{content_dir} already exists: a torrent with this ID was started before")
 
     summary = build_summary(listing, scan, cut, data, selected, torrent_id, remote, excludes, taken, newest_allowed)
+    print(f"Estimated .torrent: {fmt_size(summary['torrent_estimate']['bytes'])}, max {fmt_size(MAX_TORRENT_BYTES)}")
     report = render_report(summary)
     section("Report")
     print(report, end="")
@@ -205,6 +209,7 @@ def main():
             "cutoff": summary["cutoff"],
             "files": summary["selected"]["files"],
             "bytes": summary["selected"]["bytes"],
+            "torrent_bytes": summary["torrent_estimate"]["bytes"],
             "flags": summary["flags"],
         },
     )
@@ -386,54 +391,66 @@ def skip_reason(path, excludes):
 class Cutoff:
     def __init__(self):
         self.cutoff = None  # last date included
-        self.reason = None  # "files", "bytes", "both" or "age"
+        self.reason = None  # "torrent", "bytes", "both" or "age"
         self.over_date = None  # first date that went over a limit
         self.over_files = None  # cumulative files including over_date
         self.over_bytes = None
+        self.over_torrent_bytes = None  # .torrent estimate including over_date
         self.over_day = None  # (files, bytes) on over_date alone
         self.too_new = [0, 0]  # candidates modified after newest_allowed
 
 
 def choose_cutoff(candidates, indexes, newest_allowed):
     """
-    Last date such that every candidate on or before it, with the index.json of their folders, fits within MAX_FILES
-    and MAX_BYTES. A folder's index.json counts on the first date one of its files is included. Prints each date
-    considered, with that date's files and bytes and the running totals.
+    Last date such that every candidate on or before it, with the index.json of their folders, fits within MAX_BYTES
+    of data and a .torrent estimate of MAX_TORRENT_BYTES. A folder's index.json counts on the first date one of its
+    files is included. Prints each date considered, with that date's files and bytes and the running totals.
     """
     cut = Cutoff()
-    days = defaultdict(lambda: [0, 0])
+    days = defaultdict(list)  # date -> [Obj], index.json included
     counted = set()  # folders whose index.json is counted
     for o in candidates:  # sorted by mtime, so dates come in order
         date = o.date
         if date > newest_allowed:
             add(cut.too_new, o.size)
             continue
-        add(days[date], o.size)
+        days[date].append(o)
         folder = folder_of(o.path)
         if folder not in counted:
             counted.add(folder)
             if folder in indexes:
-                add(days[date], indexes[folder].size)
+                days[date].append(indexes[folder])
     files = 0
     size = 0
+    torrent = TorrentSize(PIECE_SIZE)
     if days:
-        print("Dates considered (files and bytes that date, then the totals up to it, index.json included):")
+        print(
+            "Dates considered (files and bytes that date, then the totals up to it and the .torrent estimate, "
+            "index.json included):"
+        )
     for date in sorted(days):
-        day_files, day_bytes = days[date]
+        day_files = len(days[date])
+        day_bytes = sum(o.size for o in days[date])
+        for o in days[date]:
+            torrent.add(o.path, o.size)
         files += day_files
         size += day_bytes
-        over_files = files > MAX_FILES
+        over_torrent = torrent.bytes > MAX_TORRENT_BYTES
         over_bytes = size > MAX_BYTES
-        reason = "both" if over_files and over_bytes else "files" if over_files else "bytes" if over_bytes else None
+        reason = (
+            "both" if over_torrent and over_bytes else "torrent" if over_torrent else "bytes" if over_bytes else None
+        )
         print(
             f"  {date}  {fmt_count(day_files):>9} {fmt_bytes(day_bytes):>10}"
-            f"  total {fmt_count(files):>9} {fmt_bytes(size):>10}{'  over ' + LIMIT_NAMES[reason] if reason else ''}"
+            f"  total {fmt_count(files):>9} {fmt_bytes(size):>10}  .torrent {fmt_bytes(torrent.bytes):>9}"
+            f"{'  over ' + LIMIT_NAMES[reason] if reason else ''}"
         )
         if reason:
             cut.reason = reason
             cut.over_date = date
             cut.over_files = files
             cut.over_bytes = size
+            cut.over_torrent_bytes = torrent.bytes
             cut.over_day = (day_files, day_bytes)
             if files == day_files:
                 # The first date alone is over a limit: it can't be split by date.
@@ -552,10 +569,10 @@ def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, e
         "next_date": cut.over_date.isoformat() if cut.over_date else None,
         "next_date_files": cut.over_day[0] if cut.over_day else None,
         "next_date_bytes": cut.over_day[1] if cut.over_day else None,
+        "next_date_torrent_bytes": cut.over_torrent_bytes,
         "limits": {
-            "max_files": MAX_FILES,
             "max_bytes": MAX_BYTES,
-            "target_torrent_bytes": TARGET_TORRENT_BYTES,
+            "max_torrent_bytes": MAX_TORRENT_BYTES,
             "piece_size": PIECE_SIZE,
             "min_age_years": MIN_AGE_YEARS,
             "newest_allowed": newest_allowed.isoformat(),
@@ -591,45 +608,11 @@ def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, e
 
 
 def estimate_torrent(files):
-    """
-    Rough size of a hybrid v1+v2 .torrent for these files at PIECE_SIZE, and its bdecode token count.
-
-    Hybrid torrents align every file to a piece, so each file gets its own pieces, a pad file in the v1 list, and an
-    entry in the v2 file tree. Trackers, comment and the two root files are ignored (small). This is an estimate
-    for spotting problems, not an exact number.
-    """
-    piece = PIECE_SIZE
-    size = 1024
-    tokens = 50
-    pieces = 0
-    directories = set()
+    """The .torrent estimate for these files at PIECE_SIZE (lib/torrent_size.py)."""
+    torrent = TorrentSize(PIECE_SIZE)
     for o in files:
-        parts = o.path.split("/")
-        path_bytes = sum(len(p.encode("utf-8")) + len(str(len(p.encode("utf-8")))) + 1 for p in parts)
-        file_pieces = max(1, math.ceil(o.size / piece))
-        pieces += file_pieces
-        # v1 file entry: d6:lengthi<n>e4:pathl...ee
-        size += 20 + len(str(o.size)) + path_bytes
-        tokens += 5 + len(parts)
-        # v1 pad file entry: d4:attr1:p6:lengthi<n>e4:pathl4:.pad<n>:<n>ee
-        if o.size % piece:
-            size += 50
-            tokens += 9
-        # v1 piece hashes
-        size += 20 * file_pieces
-        # v2 file tree leaf: <name>d0:d6:lengthi<n>e11:pieces root32:...ee
-        size += 60 + len(str(o.size)) + len(parts[-1].encode("utf-8"))
-        tokens += 8
-        # v2 piece layers, only for files bigger than one piece
-        if o.size > piece:
-            size += 36 + 32 * file_pieces
-            tokens += 2
-        for i in range(1, len(parts)):
-            directories.add("/".join(parts[:i]))
-    for directory in directories:
-        size += len(directory.rsplit("/", 1)[-1].encode("utf-8")) + 4
-        tokens += 2
-    return {"piece_size": piece, "pieces": pieces, "bytes": size, "tokens": tokens}
+        torrent.add(o.path, o.size)
+    return {"piece_size": PIECE_SIZE, "pieces": torrent.pieces, "bytes": torrent.bytes, "tokens": torrent.tokens}
 
 
 def write_file_list(path, selected, base_url):
@@ -660,7 +643,7 @@ def render_report(summary):
     lines.append(f"Source:     {summary['source']}")
     lines.append(f"Exclude:    {', '.join(summary['exclude']) or '(none)'}")
     lines.append(
-        f"Limits:     {fmt_count(limits['max_files'])} files, {fmt_bytes(limits['max_bytes'])}, "
+        f"Limits:     .torrent {fmt_size(limits['max_torrent_bytes'])}, data {fmt_bytes(limits['max_bytes'])}, "
         f"modified on or before {limits['newest_allowed']}"
     )
     listed = summary["listed"]
@@ -687,7 +670,7 @@ def render_report(summary):
         lines.append(f"Modified:   {selected['oldest_last_modified']} to {selected['newest_last_modified']}")
     lines.append(f"Cutoff:     {summary['cutoff']}, {render_cutoff_reason(summary)}")
     lines.append(
-        f"Estimate:   .torrent {fmt_bytes(est['bytes'])}, {fmt_count(est['tokens'])} tokens, "
+        f"Estimate:   .torrent {fmt_size(est['bytes'])}, {fmt_count(est['tokens'])} tokens, "
         f"{fmt_count(est['pieces'])} pieces of {fmt_bytes(est['piece_size'])}"
     )
     lines.append("")
@@ -724,7 +707,8 @@ def render_cutoff_reason(summary):
     limit = LIMIT_NAMES[summary["cutoff_reason"]]
     return (
         f"the day before {summary['next_date']}, which goes over {limit} "
-        f"({fmt_count(summary['next_date_files'])} files, {fmt_bytes(summary['next_date_bytes'])} that day)"
+        f"({fmt_count(summary['next_date_files'])} files, {fmt_bytes(summary['next_date_bytes'])} that day, "
+        f".torrent {fmt_bytes(summary['next_date_torrent_bytes'])} with it)"
     )
 
 
@@ -736,9 +720,9 @@ def render_no_cutoff(cut, scan):
         )
     files, size = cut.over_day
     return (
-        f"The oldest date, {cut.over_date}, alone has {fmt_count(files)} files ({fmt_bytes(size)}), over the limit of "
-        f"{fmt_count(MAX_FILES)} files or {fmt_bytes(MAX_BYTES)}. A single date can't be split: this needs resolving "
-        "by hand."
+        f"The oldest date, {cut.over_date}, alone has {fmt_count(files)} files ({fmt_bytes(size)}, .torrent "
+        f"{fmt_size(cut.over_torrent_bytes)}), over the limit of a {fmt_size(MAX_TORRENT_BYTES)} .torrent or "
+        f"{fmt_bytes(MAX_BYTES)} of data. A single date can't be split: this needs resolving by hand."
     )
 
 
@@ -790,6 +774,11 @@ def fmt_duration(seconds):
     if minutes:
         return f"{minutes}m {seconds}s"
     return f"{seconds}s"
+
+
+def fmt_size(n):
+    """Bytes with the exact count, for .torrent sizes: limits are in decimal bytes, fmt_bytes rounds to binary units."""
+    return f"{fmt_bytes(n)} ({fmt_count(n)} bytes)"
 
 
 def fmt_bytes(n):
