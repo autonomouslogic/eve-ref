@@ -3,7 +3,8 @@
 ## Context
 data.everef.net is served today by a Cloudflare Worker in front of the B2 bucket `data-everef-net-425eb511`, using the B2
 S3-compatible endpoint (`x-amz-meta-*` headers in responses, `dir/` serves `dir/index.html`, Range and ETag work, missing
-keys return a plain-text `Not found` 404). The Worker is too expensive, so it is being replaced by our own server.
+keys return a plain-text `Not found` 404). The Worker is too expensive, so it is being replaced by our own server: a
+Java re-implementation of the Worker, with improvements. The data stays on B2, read the same way the Worker reads it.
 Requirements and decisions:
 - New, separate command `data-server` with its own deployment. `api` / `ApiRunner` stay as they are.
 - Cloudflare stays in front, with caching on (files are served with `Cache-Control: public, max-age=120`). The server
@@ -13,32 +14,38 @@ Requirements and decisions:
   120 s with `If-None-Match` / `If-Modified-Since`.
 - No virtual-host routing in this repo. A reverse proxy on the host machine routes by Host.
 - Plain B2 passthrough plus access logging. No redirects or deep-archive logic yet.
+- Public responses must not change where the Worker's are correct. In particular every `ETag` stays exactly as it is
+  today (B2's S3 MD5), and `x-amz-meta-*` headers stay as they are.
 - Every file streams through the server, including multi-GB ones. Memory use must stay constant regardless of file size.
 - Range requests are not supported and not needed (no known users). They are ignored, never rejected.
 - Egress cost has been checked and is acceptable.
 - Health checks, metrics, graceful shutdown, rollout and host-proxy config are handled outside this work.
 
-## Upstream: B2 native download API (not S3)
-The server does **not** talk to B2 over the S3 API, and does not use any SDK. It uses anonymous HTTP against B2's native
-download endpoints, which work because the bucket is public:
-- **By name:** `GET|HEAD https://f005.backblazeb2.com/file/data-everef-net-425eb511/<key>`
-- **By ID:** `GET|HEAD https://f005.backblazeb2.com/b2api/v3/b2_download_file_by_id?fileId=<x-bz-file-id>`
+## Upstream: B2 S3-compatible endpoint, plain HTTP
+The server reads the same endpoint the Worker reads: B2's S3-compatible endpoint, path-style, with plain anonymous HTTP
+GET/HEAD (the bucket is public). It does **not** use the S3 SDK, request signing or any S3 API operation other than
+fetching an object.
+- **Object:** `GET|HEAD https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/<key>`
+- **Pinned version:** the same URL plus `?versionId=<x-amz-version-id>`
 
-Behaviour verified against the live bucket (2026-10-10). The design depends on every point here:
-- Responses carry **no `ETag` and no `Last-Modified`**. They carry `x-bz-file-id`, `x-bz-file-name`,
-  `x-bz-content-sha1` (may be `unverified:<sha1>` or `none` for large files), `X-Bz-Upload-Timestamp` (epoch millis),
-  `Content-Length`, `Content-Type`, `Cache-Control`, `Accept-Ranges`, `Strict-Transport-Security` and
-  `X-Bz-Server-Side-Encryption`.
-- Custom metadata arrives as `x-bz-info-<key>` (e.g. `x-bz-info-src_last_modified_millis`), not `x-amz-meta-<key>`.
-  Values are percent-encoded.
-- **All conditional headers are ignored.** `If-None-Match`, `If-Match`, `If-Modified-Since` and `If-Unmodified-Since`
-  all return 200. Every precondition must therefore be evaluated locally.
-- Download by ID returns the same headers as download by name, and identifies one immutable file version (content and
-  file info). It is used to pin a version between a HEAD and a GET.
-- A missing file returns 404 with a JSON body `{"code":"not_found",...}` on GET, and no body on HEAD. Error responses
-  carry `Cache-Control: max-age=0, no-cache, no-store`.
-- An unknown file ID returns 400 `{"code":"bad_request",...}`.
-- Query strings on the by-name URL are ignored by B2.
+Why this endpoint and not B2's native download API (`/file/<bucket>/<key>`): the native API sends no `ETag`, renames
+metadata to `x-bz-info-*` and ignores conditional headers. Using it would change every public ETag, and unchanged files
+are re-uploaded regularly (e.g. `ccp/sde/schema-changelog.yaml`: content from 2026-10-07, uploaded again 2026-10-10), so
+any per-version ETag would change on every re-upload.
+
+Behaviour verified against the live bucket (2026-10-10):
+- `ETag` is the content MD5, identical to what data.everef.net serves today and stable across re-uploads of identical
+  content. This is also true for the large market-orders file (no `-N` multipart suffix).
+- `Last-Modified` is the **upload** time, not the source time. It must be rewritten (step 9), as the Worker does.
+- Custom metadata arrives as `x-amz-meta-<key>` (e.g. `x-amz-meta-src_last_modified_millis`).
+- Every object response carries `x-amz-version-id` (the B2 file ID). A GET with `?versionId=<id>` returns exactly that
+  version anonymously. This is used to pin a version between a HEAD and a GET.
+- B2 honours conditional headers here (`If-None-Match` gives 304, `If-Match` gives 412), but evaluates dates against
+  the upload time. The server evaluates everything locally instead (step 8) and sends B2 no conditionals.
+- A missing key returns 404 with an XML body (`<Code>NoSuchKey</Code>`). Error responses carry
+  `Cache-Control: max-age=0, no-cache, no-store` (as seen through the Worker).
+- Other headers sent: `Strict-Transport-Security`, `Accept-Ranges`, `x-amz-server-side-encryption`,
+  `x-amz-request-id`, `x-amz-id-2`, `Cache-Control`, `Content-Type`, `Content-Length`, `Date`.
 - The endpoint speaks HTTP/1.1 only, so aborting a GET mid-body discards the pooled connection.
 
 ## Design
@@ -78,54 +85,58 @@ Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2
      - percent-encoding is invalid (`%zz`, a truncated `%4`) or the decoded bytes are not valid UTF-8;
      - the final key exceeds 1024 bytes in UTF-8 (B2's file-name limit).
    - Names that merely contain dots, like `file..txt`, are fine.
-   - Why: the upstream base `https://f005.backblazeb2.com/file/data-everef-net-425eb511/` sits next to other buckets
-     (`/file/<other-bucket>/…`) and the B2 API (`/b2api/…`). `/../other-bucket/x` would let anyone fetch any public B2
-     bucket on that cluster through data.everef.net. That is an open proxy under our domain, usable for malware hosting
-     and bandwidth abuse.
+   - Why: the upstream base is a *path-style* S3 URL (`https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/`).
+     `/../other-bucket/x` would resolve to `https://s3…/other-bucket/x`, letting anyone fetch any public B2 bucket in that
+     region through data.everef.net. That is an open proxy under our domain, usable for malware hosting and bandwidth
+     abuse.
    - A path that is empty or ends in `/` gets `index.html` appended.
    - Build upstream URLs only through `HttpUrl.Builder` (`addPathSegment` per decoded segment, `addQueryParameter` for
-     the file ID). Never string-join the raw path.
+     `versionId`). Never string-join the raw path. The client's query string is never forwarded (step 2 rejects it).
 4. **Range.** `Range` and `If-Range` are ignored. They are not forwarded and not evaluated, and the response is a full
    200 (RFC 9110 §14.2 allows a server to ignore `Range`; `If-Range` only has meaning with `Range`). Every response,
    including errors, sets `Accept-Ranges: none` (§14.3), replacing B2's `Accept-Ranges: bytes`.
 5. **Don't forward any client request headers to B2.** Upstream requests only carry `Accept-Encoding: identity` and
-   `User-Agent`. B2 ignores conditionals anyway (see above), so all of them are evaluated here (step 8).
+   `User-Agent`. Every conditional is evaluated here (step 8), because B2 compares dates against the upload time, not
+   the rewritten `Last-Modified`.
 6. **Call upstream** with `call.execute()`. This blocks, which is fine because Helidon 4 runs each request on a virtual thread. Wrap every `Response` in try-with-resources.
-   - **Client HEAD (with or without preconditions):** one upstream HEAD by name. Preconditions are evaluated on its headers.
+   - **Client HEAD (with or without preconditions):** one upstream HEAD. Preconditions are evaluated on its headers.
    - **Client GET, no preconditions** (`If-Match`, `If-None-Match`, `If-Modified-Since`, `If-Unmodified-Since` all
-     absent): one upstream GET by name. No extra round trip.
+     absent): one upstream GET. No extra round trip.
    - **Client GET, any precondition present:**
-     1. Send an upstream HEAD by name.
+     1. Send an upstream HEAD.
      2. Map non-2xx responses as in step 7. Per §13.2.1, preconditions are ignored when the unconditional response
         wouldn't be 2xx or 412, so a missing file is still 404 even with `If-Match: *`.
      3. Evaluate preconditions on the HEAD's headers. Answer 304 and 412 from them, with response headers taken from the HEAD.
-     4. On `PROCEED`, send an upstream GET **by ID** using the HEAD's `x-bz-file-id`. That pins the exact version, so a
-        file replaced between the two calls can't be served under stale validators. Response headers for the 200 come
-        from this GET, which describes the same version.
-     5. If the by-ID GET returns 400 or 404 (the version was deleted in between), restart once from step 1. A second
+     4. On `PROCEED`, send an upstream GET with `?versionId=<x-amz-version-id from the HEAD>`. That pins the exact
+        version (content and metadata), so a file replaced between the two calls can't be served under stale
+        validators. Response headers for the 200 come from this GET, which describes the same version.
+     5. If the pinned GET returns 400 or 404 (the version was deleted in between), restart once from step 1. A second
         failure returns 503 `Service unavailable\n` with `Retry-After: 1`.
-     6. If the by-ID GET's `x-bz-file-name` doesn't equal the requested key, return 502 and capture to Sentry. This
-        should never happen.
+     6. If the pinned GET's `ETag` differs from the HEAD's, return 502 and capture to Sentry. This should never happen.
    - The HEAD-first path avoids opening a multi-GB GET just to abort it for a 304. Over HTTP/1.1, aborting would also throw away the pooled connection.
-   - **Required headers.** A 200 from B2 without `Content-Length` or `x-bz-file-id` returns 500 `Internal server error\n`
-     and is captured to Sentry. The check runs before any response header is sent.
+   - **Required headers.** A 200 from B2 without `Content-Length` or `ETag`, or a HEAD on the pinned path without
+     `x-amz-version-id`, returns 500 `Internal server error\n` and is captured to Sentry. The check runs before any
+     response header is sent.
 7. **Map upstream status codes.** Error bodies are text/plain. Every Sentry capture goes through one helper that calls
    `SentryUtil.configureScope` (which sets `http.method` and `http.uri`, the requested URL) and adds `upstream.url`,
-   `upstream.status` and, when a JSON body was available, `b2.code`.
+   `upstream.status` and, when an XML error body was available, `b2.code` (the S3 `<Code>`).
    | Upstream | Served | Sentry |
    |---|---|---|
    | 200 | 200, streamed | — |
    | Any other 2xx (e.g. 206), any 3xx | 502 `Bad gateway\n` | yes |
    | 404 | 404 `Not found\n`, keeping upstream `Cache-Control` | — |
-   | 400 on a by-name request (B2 rejects the file name) | 404 `Not found\n`, logged at warn | — |
-   | 400 / 404 on a by-ID request | restart, per step 6.5 | only on the second failure |
-   | 401, 403 (e.g. `download_cap_exceeded`, bucket made private) | 503 `Service unavailable\n` | yes, with `b2.code` |
+   | 400 on an unpinned request (B2 rejects the key) | 404 `Not found\n`, logged at warn | — |
+   | 400 / 404 on a pinned (`versionId`) request | restart, per step 6.5 | only on the second failure |
+   | 401, 403 (e.g. download cap exceeded, bucket made private) | 503 `Service unavailable\n` | yes, with `b2.code` |
    | 429, 503 | 503, passing through `Retry-After` when present | yes |
    | Other 4xx/5xx, IO failure before response headers | 502 `Bad gateway\n` | yes |
-   - Reading the JSON error body is best effort, capped at 4 KiB. HEAD errors have no body, so `b2.code` is absent.
-   - 401 and 403 must not become 404: that would turn a download-cap or permission outage into a silent site-wide 404.
+   - Reading the XML error body is best effort, capped at 4 KiB; extract `<Code>` without a full XML parser if simpler.
+     HEAD errors have no body, so `b2.code` is absent.
+   - 401 and 403 must not become 404, unlike the Worker: that would turn a download-cap or permission outage into a
+     silent site-wide 404. If B2 turns out to return 403 for some ordinary missing keys, the Sentry captures will show
+     it, and the mapping can be narrowed by `<Code>`.
 8. **Evaluate preconditions (RFC 9110 §13)** in a pure, separately unit-tested class `dataserver/Preconditions.java`.
-   Inputs: method, request headers, the synthesized ETag and the resolved Last-Modified (both from step 9). Result:
+   Inputs: method, request headers, B2's ETag and the resolved Last-Modified (step 9). Result:
    `PROCEED`, `NOT_MODIFIED` or `PRECONDITION_FAILED`. Steps follow §13.2.2 in order:
    1. **`If-Match` present (§13.1.1):**
       - `*` is true when the file exists.
@@ -160,26 +171,19 @@ Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2
      - No body, `Content-Length`, `Content-Type` or `x-amz-meta-*`.
    - **412:** text/plain `Precondition failed\n` (no body on HEAD), with `Cache-Control: no-store`.
 9. **Build response headers** (on 200: from the GET; on 304: from the HEAD).
-   - **ETag (synthesized):** B2's native API sends none, so set a strong `ETag: "<x-bz-file-id>"`. The file ID is
-     present on every response, unique per uploaded version, and covers both content and metadata (B2 file info is
-     immutable per version). Rejected alternative: `x-bz-content-sha1`, which is `none` or `unverified:` for large files.
-     - Consequence: ETag values change at cutover from the S3 MD5 to the file ID. Caches and clients holding an MD5 ETag
-       will refetch once. The `etag` fields in the published data index (`DataIndex`) are S3 MD5s and will no longer
-       equal the HTTP ETag.
-   - **Last-Modified (synthesized)**, in this order of precedence:
-     1. `x-bz-info-src_last_modified_millis` (epoch millis; reuse `S3HeaderNames.SRC_LAST_MODIFIED_MILLIS` for the key name)
-     2. `x-bz-info-mtime` (epoch seconds as a float, set by rclone)
-     3. `X-Bz-Upload-Timestamp` (epoch millis)
+   - **ETag:** passed through unchanged from B2 (the MD5, same as today).
+   - **Rewrite `Last-Modified`** from object metadata, in this order of precedence:
+     1. `x-amz-meta-src_last_modified_millis` (epoch millis; reuse `S3HeaderNames.SRC_LAST_MODIFIED_MILLIS`)
+     2. `x-amz-meta-mtime` (epoch seconds as a float, set by rclone)
+     3. B2's `Last-Modified` (upload time)
 
      An unparseable value falls through to the next source.
-   - **Metadata:** each `x-bz-info-<key>` becomes `x-amz-meta-<key>`, with its value percent-decoded, so the public
-     headers stay as they are today (outside tools may read `x-amz-meta-src_last_modified_millis`). Keys starting with
-     `b2-` are B2-reserved and are skipped. If a decoded value isn't valid for a header (non-ASCII or control characters),
-     the encoded value is sent instead.
-   - **Passed through:** `Content-Type`, `Content-Length`, `Cache-Control`, `Content-Encoding`, `Content-Disposition`,
-     `Content-Language`, `Expires`.
-   - **Dropped:** everything else, including all `x-bz-*`, `X-Bz-*`, `Accept-Ranges` (replaced with `none`),
-     `Content-Range`, `Strict-Transport-Security`, B2's `Date`, and hop-by-hop headers.
+   - **Passed through:** `ETag`, `Content-Type`, `Content-Length`, `Cache-Control`, `Content-Encoding`,
+     `Content-Disposition`, `Content-Language`, `Expires`, and every `x-amz-meta-*` (the Worker passes them through
+     today, and outside tools may read `x-amz-meta-src_last_modified_millis`).
+   - **Dropped:** everything else, including `x-amz-version-id`, `x-amz-request-id`, `x-amz-id-2`,
+     `x-amz-server-side-encryption` and any other non-meta `x-amz-*`, any `x-bz-*`, `Accept-Ranges` (replaced with
+     `none`), `Content-Range`, `Strict-Transport-Security`, B2's `Date`, and hop-by-hop headers.
    - Set `Server: eve-ref/<version>` (version from `Configs.EVE_REF_VERSION`, as in `ApiUtil`).
 10. **Stream the body**
     - Set `Content-Length` explicitly first so Helidon sends a fixed-length response instead of chunked.
@@ -214,7 +218,7 @@ Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2
       There is no total-duration cap and no minimum-rate rule.
     - The timeout stays well above Cloudflare's and the host proxy's own stalls, so it only catches truly dead streams.
 13. **Access log.** Log one line per request through a dedicated logger (`dataserver.access`), so log4j can route it on its own. Fields:
-    - method, path, status, bytes sent, upstream Content-Length, duration, outcome (`ok`/`aborted`/`stalled`/`upstream_aborted`), precondition outcome (none/proceed/304/412), upstream calls made (e.g. `GET`, `HEAD+GET_BY_ID`)
+    - method, path, status, bytes sent, upstream Content-Length, duration, outcome (`ok`/`aborted`/`stalled`/`upstream_aborted`), precondition outcome (none/proceed/304/412), upstream calls made (e.g. `GET`, `HEAD`, `HEAD+GET_VERSION`)
     - client IP (`CF-Connecting-IP`, then `X-Forwarded-For`, then remote address), User-Agent, Referer
 
 ### Command: `cli/dataserver/DataServer.java`
@@ -225,6 +229,9 @@ Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2
   - Leave Helidon's `maxTcpConnections` and `maxConcurrentRequests` unlimited (the defaults), and raise the listener `backlog` to 8192, so bursts aren't refused at accept.
   - Disable content encoding explicitly: `contentEncoding(ContentEncodingContext.builder().contentEncodingsDiscoverServices(false).build())`. Gzipping GB streams would burn CPU and break Content-Length. Run `./gradlew dependencies | grep encoding` to confirm what is on the classpath.
   - Keep Helidon's default `writeBufferSize`. Don't raise it: a larger buffer multiplies per-stream memory.
+- Routing: `get("/*")` and `head("/*")` go to `DataProxyHandler`, and `any("/*")` returns the 405 from step 1. An error
+  handler returns text/plain 500 `Internal server error\n` and captures to Sentry through the step 7 helper. The existing
+  JSON `ErrorHandler` doesn't fit here.
 
 ### Concurrency and slow readers
 Goal: the server handles enough concurrent connections that slow clients never become a capacity problem. The
@@ -238,15 +245,12 @@ write-stall timeout (step 12a) is only the backstop for dead streams.
 - Cloudflare and the host reverse proxy sit between real users and this server. Depending on how the proxy buffers
   responses, they may absorb most slow end users. This design doesn't rely on it.
 - B2 may throttle a single IP at high concurrency. That surfaces as 429/503 and is mapped by step 7.
-- Routing: `get("/*")` and `head("/*")` go to `DataProxyHandler`, and `any("/*")` returns the 405 from step 1. An error
-  handler returns text/plain 500 `Internal server error\n` and captures to Sentry through the step 7 helper. The existing
-  JSON `ErrorHandler` doesn't fit here.
 
 ### Wiring and config
 - `cli/CommandRunner.java`: inject `Provider<DataServer>` and add `case "data-server"`.
 - `config/Configs.java`:
-  - `DATA_SERVER_B2_DOWNLOAD_URL` (URI, default `https://f005.backblazeb2.com`)
-  - `DATA_SERVER_B2_BUCKET` (string, required, e.g. `data-everef-net-425eb511`)
+  - `DATA_SERVER_ORIGIN_URL` (URI, required, e.g. `https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/`,
+    the same URL the Worker uses). Validate at startup that it has no query and ends with `/`.
   - `DATA_SERVER_MAX_CONCURRENCY` (int, default 10000)
   - `DATA_SERVER_WRITE_STALL_TIMEOUT` (Duration, default `PT120S`)
   - Reuse `HTTP_PORT`.
@@ -258,7 +262,7 @@ write-stall timeout (step 12a) is only the backstop for dead streams.
 All HTTP tests use OkHttp's MockWebServer as the B2 stand-in. Use the `mockwebserver3` package, which is needed for
 two cases: streaming bodies that are generated rather than buffered (`MockResponseBody`), and mid-body disconnects
 (`SocketEffect`). Follow the `SearchHandlerTest` pattern otherwise: `DaggerTestComponent`, a `Dispatcher` keyed on the
-path, `@SetEnvironmentVariable` for the B2 download URL (pointing at MockWebServer), the bucket and a unique
+path, `@SetEnvironmentVariable` for the origin URL (MockWebServer plus a bucket path, e.g. `http://localhost:<port>/bucket/`) and a unique
 `HTTP_PORT`, and a JDK `HttpClient` as the client. Every test also asserts on the requests MockWebServer recorded:
 count, method, path and headers. Write the tests before the implementation.
 
@@ -273,16 +277,14 @@ Test classes:
 ### `DataServerTest` (end to end)
 | Area | Case | Expected |
 |---|---|---|
-| Basic GET | File GET | 200; body byte-identical; Content-Type, Content-Length and Cache-Control passed through; `ETag: "<file-id>"`; Last-Modified synthesized; exactly one upstream GET to `/file/<bucket>/<key>` |
-| Header mapping | Upstream sends `x-bz-info-src_last_modified_millis`, `x-bz-info-foo` | Served as `x-amz-meta-src_last_modified_millis`, `x-amz-meta-foo`; no `x-bz-info-*` |
-| Header mapping | `x-bz-info-foo: a%20b` | `x-amz-meta-foo: a b` |
-| Header mapping | `x-bz-info-b2-content-disposition` | Not forwarded as `x-amz-meta-*` |
-| Header stripping | Upstream sends `x-bz-file-id`, `x-bz-file-name`, `x-bz-content-sha1`, `X-Bz-Upload-Timestamp`, `X-Bz-Server-Side-Encryption`, `Strict-Transport-Security`, `Accept-Ranges: bytes` | None present; `Accept-Ranges: none` |
+| Basic GET | File GET | 200; body byte-identical; Content-Type, Content-Length, Cache-Control and `ETag` passed through unchanged; Last-Modified rewritten; exactly one upstream GET to `/bucket/<key>` with no query |
+| Metadata | Upstream sends `x-amz-meta-src_last_modified_millis`, `x-amz-meta-foo` | Both passed through unchanged |
+| Header stripping | Upstream sends `x-amz-version-id`, `x-amz-request-id`, `x-amz-id-2`, `x-amz-server-side-encryption`, `Strict-Transport-Security`, `Accept-Ranges: bytes` | None present; `Accept-Ranges: none` |
 | Header passthrough | Upstream sends `Content-Encoding`, `Content-Disposition`, `Content-Language`, `Expires` | All passed through |
 | Server header | Any response | `Server: eve-ref/<version>` |
-| Last-Modified | Millis set / only `mtime` / only upload timestamp | Precedence: millis, then mtime, then upload timestamp |
-| Last-Modified | Millis value unparseable | Falls back to mtime / upload timestamp |
-| Directory mapping | `/` and `/dir/` | Upstream path is `…/index.html` and `…/dir/index.html` |
+| Last-Modified | Millis set / only `mtime` / neither | Precedence: millis, then mtime, then B2's `Last-Modified` |
+| Last-Modified | Millis value unparseable | Falls back to mtime / B2's `Last-Modified` |
+| Directory mapping | `/` and `/dir/` | Upstream path is `/bucket/index.html` and `/bucket/dir/index.html` |
 | Query string | `/file.txt?a=b`, `/?list-type=2` | 404 `Not found`; upstream never called |
 | Method | POST, PUT, DELETE, OPTIONS | 405 with `Allow: GET, HEAD`; upstream never called |
 | Path safety | `/../x`, `/%2e%2e/x`, `/a/./b`, `/a%2Fb`, `/a%5Cb`, `/a%00b`, `//x`, `/a//b` | 400; upstream never called |
@@ -298,28 +300,29 @@ Test classes:
 | HEAD | HEAD on missing file | 404; no body |
 | Request headers | Client sends `Cookie`, `Authorization`, `If-None-Match`, `Range`, `Accept-Encoding: gzip` | Upstream request carries only `Accept-Encoding: identity` and `User-Agent` |
 | Compression | Client sends `Accept-Encoding: gzip` | No `Content-Encoding` added; byte-identical body; Content-Length kept |
-| Not found | Upstream 404 (GET with JSON body, HEAD without) | 404 `Not found` text/plain; upstream `Cache-Control` kept |
-| Not found | Upstream 400 on by-name request | 404; no Sentry capture |
-| Upstream errors | 401, 403 with `download_cap_exceeded` | 503; Sentry captured with `b2.code` |
+| Not found | Upstream 404 (GET with `NoSuchKey` XML body, HEAD without) | 404 `Not found` text/plain; upstream `Cache-Control` kept |
+| Not found | Upstream 400 on an unpinned request | 404; no Sentry capture |
+| Upstream errors | 401; 403 with an XML `<Code>` | 503; Sentry captured with `b2.code` |
 | Upstream errors | 429 / 503 with `Retry-After: 5` | 503 with `Retry-After: 5`; Sentry captured |
 | Upstream errors | 500, 302, 206 | 502; Sentry captured |
 | Upstream errors | Connection refused / disconnect before headers | 502; Sentry captured |
 | Required headers | Upstream 200 without `Content-Length` (chunked) | 500; Sentry captured; no partial body sent |
-| Required headers | Upstream 200 without `x-bz-file-id` | 500; Sentry captured |
+| Required headers | Upstream 200 without `ETag` | 500; Sentry captured |
+| Required headers | Conditional GET whose upstream HEAD has no `x-amz-version-id` | 500; Sentry captured |
 | Sentry context | Any capture above | Scope has `http.method`, `http.uri` (the requested URL), `upstream.url`, `upstream.status` (verify with `Mockito.mockStatic(Sentry.class)`, running the scope callback against a mock `IScope`) |
-| Upstream calls | No precondition headers, GET | Exactly one upstream GET by name; no HEAD |
-| Upstream calls | Precondition passes, GET | Upstream HEAD by name, then GET to `/b2api/v3/b2_download_file_by_id?fileId=<id from HEAD>`; 200 headers come from the by-ID GET |
+| Upstream calls | No precondition headers, GET | Exactly one upstream GET, no query; no HEAD |
+| Upstream calls | Precondition passes, GET | Upstream HEAD, then GET with `?versionId=<x-amz-version-id from HEAD>`; no conditional headers sent upstream; 200 headers come from the pinned GET |
 | Upstream calls | Precondition gives 304 / 412 | Only an upstream HEAD; no GET |
 | Upstream calls | HEAD with preconditions | Only an upstream HEAD |
-| Pinning | By-ID GET returns 400 or 404 once | Restarted from HEAD; 200 served |
-| Pinning | By-ID GET fails twice | 503 with `Retry-After: 1` |
-| Pinning | File replaced between HEAD and GET (by-name now returns a new ID) | Body served is the version from the HEAD's file ID |
-| Pinning | By-ID GET returns a different `x-bz-file-name` | 502; Sentry captured |
+| Pinning | Pinned GET returns 400 or 404 once | Restarted from HEAD; 200 served |
+| Pinning | Pinned GET fails twice | 503 with `Retry-After: 1` |
+| Pinning | File replaced between HEAD and GET (unpinned URL now serves new content) | Body served is the version named by the HEAD's `x-amz-version-id` |
+| Pinning | Pinned GET returns a different `ETag` from the HEAD | 502; Sentry captured |
 | Missing file | Upstream 404 with `If-Match: *` or `If-None-Match: *` | 404 (preconditions ignored, §13.2.1) |
 | If-Match | Matching strong tag; `*`; list with one match | 200 |
-| If-Match | Mismatch; `W/` tag equal to the ETag; an old S3 MD5 ETag | 412 |
+| If-Match | Mismatch; `W/` tag equal to the ETag | 412 |
 | If-None-Match | Exact tag; `W/` tag equal to the ETag; `*`; list with one match | 304 |
-| If-None-Match | Mismatch; an old S3 MD5 ETag | 200 |
+| If-None-Match | Mismatch | 200 |
 | If-None-Match | Header repeated on two lines, match on the second | 304 |
 | Precedence | Failing If-Match together with a matching If-None-Match | 412 |
 | Precedence | Failing IUS together with a matching If-None-Match | 412 |
@@ -377,41 +380,43 @@ Every path-safety and key-encoding case from `DataServerTest`, asserting the res
 - Then stop all readers and assert the stall watchdog cleans every stream up (no tracked streams, upstream pool idle).
 
 ## Worker parity
+Current behavior comes from the Cloudflare Worker that proxies to `https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/`.
 Kept as-is:
+- Same upstream endpoint, so `ETag` values and `x-amz-meta-*` headers are unchanged.
 - GET and HEAD only; anything else returns 405 (now also with `Allow: GET, HEAD`).
 - A path ending in `/` serves `index.html`.
 - A missing file returns `Not found\n`.
 - `Last-Modified` is rewritten from metadata.
 - `Strict-Transport-Security` is stripped.
-- `x-amz-meta-*` headers are served (now mapped from `x-bz-info-*`).
 
 Intentional differences:
-- **Upstream API:** B2 native download API instead of the S3 endpoint.
-- **ETag values:** the file ID instead of the S3 MD5. Clients and Cloudflare refetch once after cutover. The data
-  index's `etag` fields no longer match the HTTP ETag.
 - **Request headers:** the Worker forwards every request header to B2. Here none are forwarded.
 - **Query strings:** return 404.
-- **Paths:** the Worker resolves `..` through `new URL()`, which can climb out of the bucket. Here `.` and `..`
-  segments return 400.
-- **Conditional requests:** evaluated locally, in RFC 9110 §13.2.2 order, against the synthesized ETag and
-  Last-Modified (the native API ignores conditionals). A conditional GET that passes costs an upstream HEAD plus a
-  by-ID GET; a 304 or 412 costs only the HEAD.
+- **Paths:** the Worker resolves `..` through `new URL()`, which on a path-style S3 URL can climb out of the bucket into
+  other public buckets (Cloudflare normalizes paths first, so it is likely harmless today). Here `.` and `..` segments
+  return 400.
+- **Conditional requests:** the Worker forwards `If-Match`, `If-None-Match` and `If-Modified-Since` to B2. B2 compares
+  dates against its upload time, then the Worker re-checks IMS against a different date, with no RFC precedence. Here
+  every precondition is evaluated locally, in RFC 9110 §13.2.2 order, against the rewritten `Last-Modified`. A
+  conditional GET that passes costs an upstream HEAD plus a pinned GET; a 304 or 412 costs only the HEAD.
 - **Range:** the Worker supported `Range` and `If-Range`. Here both are ignored, a full 200 is served, and the server
   advertises `Accept-Ranges: none`. No known users rely on Range.
 - **`If-Unmodified-Since`:** the Worker returns 501. Here it is evaluated, returning 412 on failure.
 - **Millisecond bug:** the Worker compares `src_last_modified_millis` with milliseconds intact against the IMS date.
   Here dates are compared at second precision.
 - **ETag precedence:** `If-None-Match` takes precedence over `If-Modified-Since`, and `If-Match` over `If-Unmodified-Since`.
-- **B2 permission/cap errors:** 401/403 return 503 and alert through Sentry instead of becoming 404.
+- **B2 permission/cap errors:** the Worker turns 403 into 404. Here 401/403 return 503 and alert through Sentry.
 
 ## Verification
 1. `make generate-database`, then `./gradlew test --tests "*.dataserver.*"` and the slow large-stream task.
 2. Run locally:
    ```
-   DATA_SERVER_B2_BUCKET=data-everef-net-425eb511 HTTP_PORT=8081 bin/eve-ref data-server
+   DATA_SERVER_ORIGIN_URL=https://s3.us-east-005.backblazeb2.com/data-everef-net-425eb511/ HTTP_PORT=8081 bin/eve-ref data-server
    ```
    Then:
-   - `curl -I localhost:8081/` returns 200 with `ETag`, `Last-Modified`, `Accept-Ranges: none` and no `x-bz-*`
+   - `curl -I localhost:8081/ccp/sde/schema-changelog.yaml` returns the same `ETag`, `Last-Modified` and
+     `x-amz-meta-*` as `curl -I https://data.everef.net/ccp/sde/schema-changelog.yaml`, plus `Accept-Ranges: none`
+     and no other `x-amz-*`
    - `curl -i -r 0-99 localhost:8081/market-orders/market-orders-latest.v3.csv.bz2 -o /dev/null -D -` returns 200 with the full Content-Length
    - Take the ETag from `curl -I`, then `curl -i -H 'If-None-Match: <etag>'` should return 304, and `-H 'If-Match: "nope"'` should return 412
    - Take `Last-Modified` from `curl -I`, then `curl -i -H 'If-Modified-Since: <it>'` should return 304
