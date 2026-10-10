@@ -530,7 +530,7 @@ def render_report(summary):
     est = summary["torrent_estimate"]
     limits = summary["limits"]
     lines = []
-    lines.append(f"EVE Ref Deep Archive — find, cutoff {summary['cutoff']}")
+    lines.append(f"EVE Ref Deep Archive find, cutoff {summary['cutoff']}")
     lines.append(f"Torrent ID: {summary['torrent_id']}")
     lines.append(f"Source:     {summary['source']}")
     lines.append(f"Exclude:    {', '.join(summary['exclude']) or '(none)'}")

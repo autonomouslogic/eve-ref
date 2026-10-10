@@ -44,7 +44,7 @@ CREATOR = "EVE Ref"
 # PLAN 2.4. {ID} is the torrent name.
 COMMENT_TEMPLATE = """EVE Ref Deep Archive: {id}
 Data from {years}. Datasets: {datasets}.
-What this is, how to use and verify it, and how to help seed: https://docs.everef.net/datasets/deep-archive.html
+What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
 File list: https://data.everef.net/deep-archive/{id}.txt"""
 
 KIB = 1024

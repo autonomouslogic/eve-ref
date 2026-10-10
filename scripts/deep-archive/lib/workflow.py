@@ -57,6 +57,8 @@ STEPS = [
     "find",
     "load",
     "check-load",
+    "make-checksums",
+    "check-checksums",
     "make-torrent",
     "check-torrent",
     "seed",
