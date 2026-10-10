@@ -53,7 +53,7 @@ Aborts if a single date is over a limit: that needs resolving by hand.
 ### Review the selection (manual)
 
 Read the report (`$SCRATCH_DIR/find/report.txt`):
-- No `market-history/` or `killmails/` files.
+- No `market-history/`, `killmails/` or `ccp/` files.
 - Every flag looked at.
 - Every "(no year folder)" dataset is archive data, not a current file that just hasn't changed.
 - If the limits weren't reached, a smaller torrent is worth making now.
@@ -105,7 +105,7 @@ and generates the file list `$SCRATCH_DIR/<ID>.txt` from it.
 - Files = the manifest plus `<ID>.sha256` and `<ID>-README.txt`; bytes match.
 - Hybrid, `name` is `<ID>`, not private, no web seed; trackers one per tier; the comment is right.
 - The `.txt` matches the torrent and passes `file_list_problems` (`lib/workflow.py`: full site paths,
-  sorted, data files only); no `market-history/` or `killmails/` paths.
+  sorted, data files only); no `market-history/`, `killmails/` or `ccp/` paths.
 - Loads with libtorrent's default limits.
 - Copy the v1 and v2 info-hashes into `NOTES.md`.
 

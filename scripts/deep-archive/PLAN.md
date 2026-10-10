@@ -20,6 +20,7 @@ Related work in progress (as of 2026-10-10):
     (2.17);
   - `SyncFuzzworkOrdersetsTest` (new, plus its `inject` line in `TestComponent`): the Fuzzwork ID cutoff and its
     guard (2.18).
+- `ccp/` added to `TORRENT_EXCLUDE` (2.2).
 - `create_torrent.py`: **experiment** for measuring `.torrent` sizes (Appendix B). Hybrid v1+v2 with Python
   libtorrent, `PIECE_SIZE` pieces, trackers from `trackers.txt`, comment from the 2.4 template. It becomes
   `06-make-torrent`.
@@ -134,6 +135,8 @@ A denylist, hard-coded in `lib/workflow.py` (`TORRENT_EXCLUDE`):
   modified in place. A torrent can't follow that. (For `market-history`, `ScrapeMarketHistory` also re-reads the last
   `ESI_MARKET_HISTORY_LOOKBACK` (450 days) of files on every run, and `import-market-history` depends on the full
   history being on HTTP.)
+- `ccp/`. CCP's own data (SDE, MER, image export collections, CSM minutes, QENs, etc.): reference material linked
+  from the docs and downloaded by URL, not scraped history. ~62 GiB, cheap to keep on HTTP (Appendix B).
 
 Also never included, from any dataset: `*-latest.*`, `index.html`, hidden files, files at the root of the site (e.g.
 `robots.txt`), and everything under `deep-archive/`.
@@ -157,8 +160,8 @@ would never reach the minimum age. Only the folder's own `index.json`; parent fo
 Everything else is in scope. Using a denylist means:
 
 - New datasets are archived automatically once they're old enough.
-- `fuzzwork/ordersets` and `ccp/mer` **are** in scope. Their sync commands get cutoffs (2.18), so they don't
-  re-upload deleted files.
+- `fuzzwork/ordersets` **is** in scope. Its sync command gets a cutoff (2.18), so it doesn't re-upload deleted
+  files. `ccp/mer` isn't (excluded with `ccp/`), so `SyncMer` needs no change.
 
 **No version of a file lands in two torrents.** `01-find` reads every published `<ID>.txt`. A listed path still on
 the site with a modification date on or before that torrent's cutoff (the date in its ID) is the version the torrent
@@ -224,7 +227,7 @@ files:  everef-deep-archive-2023-04-11.sha256          # checksums for every dat
   Example:
   ```
   EVE Ref Deep Archive: everef-deep-archive-2023-04-11
-  Data from 2017–2023. Datasets: ccp/mer, ccp/sde, esi-scrape, fuzzwork/ordersets, market-orders, public-contracts, ...
+  Data from 2017–2023. Datasets: esi-scrape, fuzzwork/ordersets, market-orders, public-contracts, reference-data, ...
   What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
   File list: https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.txt
   ```
@@ -730,7 +733,7 @@ There is no notice period, but a notice is posted to the **announcement channel*
 >   https://data.everef.net/deep-archive/feed.xml.
 > - Once the torrent is published, seeded and backed up, the HTTP copies of these files will be **removed** from
 >   data.everef.net. There's no fixed date.
-> - `market-history`, `killmails` and all `-latest` files are **not** affected.
+> - `market-history`, `killmails`, `ccp` and all `-latest` files are **not** affected.
 >
 > **What you might need to do:**
 > - If you mirror the data with `rclone sync`, switch to `rclone copy`, or your local copies of these files will be
@@ -827,7 +830,7 @@ Must be handled **before** deleting the affected datasets:
 | Consumer | Problem | Mitigation |
 |---|---|---|
 | `SyncFuzzworkOrdersets` | Re-syncs every orderset missing from the data site, so it **would re-upload the deleted files**. Fuzzwork's listing goes back a long way (IDs 90019–174817 on 2026-10-08). | ID cutoff (2.18). |
-| `SyncMer` | Rescans from `MER_FIRST_MONTH` if no MER files exist. | Guard (2.18). |
+| `SyncMer` | Rescans from `MER_FIRST_MONTH` if no MER files exist. | `ccp/` is never archived. |
 | `DataCrawler` | Today it logs and returns nothing when an index page is missing. Decision: make it **fail** instead (revert if it causes problems). Between the delete and the full `DataIndex`, parent indexes still link to removed directories, so crawling jobs will fail. | Pause crawling jobs during that window (2.14). |
 | `ScrapeMarketHistory` / `import-market-history` | Re-read up to 450 days of `market-history/`, and the full history. | `market-history` is never archived. |
 | `HistoricalOrdersRegionTypeSource` | Reads the last 30 days of market orders (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`). | Safe with the 2-year minimum age. |
@@ -835,10 +838,10 @@ Must be handled **before** deleting the affected datasets:
 | Users following `downloading-datasets.md` (`rclone sync`) | **`rclone sync` deletes their local copies** of files deleted on the site. | Change the docs to `rclone copy` before the first deletion. The start announcement repeats it. |
 | Users with `wget -N` / custom scripts | Get 404s. | Start announcement, docs page. |
 
-### 2.18 Sync cutoffs for Fuzzwork and MER
+### 2.18 Sync cutoff for Fuzzwork
 
-The sync commands must never fetch data the archival process removed. Both changes must be **deployed before the
-first deletion** of `fuzzwork/` or `ccp/mer/` data (README, "Setup"). Tests first (repo convention).
+The sync commands must never fetch data the archival process removed. The change must be **deployed before the
+first deletion** of `fuzzwork/` data (README, "Setup"). Tests first (repo convention).
 
 **`SyncFuzzworkOrdersets`, decided: cutoff at the lowest ID on the data site.**
 
@@ -854,10 +857,9 @@ first deletion** of `fuzzwork/` or `ccp/mer/` data (README, "Setup"). Tests firs
 - Fuzzwork sequence IDs are incremental (confirmed), and ordersets are uploaded in ID order, so the ID cutoff follows
   the archive cutoff automatically: once older ordersets are deleted, the lowest remaining ID moves up.
 
-**`SyncMer`: guard.** MER is already mostly safe: it only goes back two months from the latest file it finds, and
-recent MER files stay on the site. The one hole is "no MER files at all, so re-sync from `MER_FIRST_MONTH`".
-**Guard:** if the data site has no MER files, fail instead of syncing everything (same as Fuzzwork). No config
-needed (an earlier draft had an `ARCHIVE_MIN_AGE_YEARS` setting; dropped).
+**`SyncMer`: no change.** `ccp/` is never archived (2.2), so MER files are never deleted. (An earlier draft had a
+guard for "no MER files at all, so re-sync from `MER_FIRST_MONTH`", and before that an `ARCHIVE_MIN_AGE_YEARS`
+setting; both dropped.)
 
 ### 2.19 Durability
 
@@ -970,7 +972,7 @@ The live list of torrents is the `deep-archive/` directory and the feed.
    - Files stored on the site at least 2 years ago, oldest first.
    - Once a torrent is published, its files are **removed from data.everef.net**.
    - Never archived (always on HTTP): `market-history` and `killmails` (they work as a database and change in
-     place), and `*-latest` files.
+     place), `ccp` (CCP's own reference data), and `*-latest` files.
 4. **When new torrents appear.** Ad hoc, whenever enough data has passed the 2-year age to fill a torrent. There is
    no fixed date. Until a file is archived, it stays on data.everef.net. Each new torrent is announced on Discord
    when work on it starts. Subscribe to the feed to be notified of new torrents.
@@ -1011,7 +1013,7 @@ accurate (excluded datasets, timing, links), and update it only if the rules cha
 - **This repo:**
   - Docs site (4.2): the Deep Archive page and related edits, before the first deletion.
   - Operator docs in `deep-archive/` (4.1), kept in sync with the scripts.
-  - `SyncFuzzworkOrdersets` ID cutoff and `SyncMer` guard (2.18). Deployed before the first deletion.
+  - `SyncFuzzworkOrdersets` ID cutoff (2.18). Deployed before the first deletion.
   - `DataCrawler` fails on a missing directory index (2.17).
   - Optional `DataIndex` changes: the "Archived data" note (2.20) and stale index cleanup (2.15b).
   - `deep-archive/` scripts and `Dockerfile`.
@@ -1029,8 +1031,8 @@ accurate (excluded datasets, timing, links), and update it only if the rules cha
 
 Decided so far: one torrent per workflow, as big as the size limits allow (2.1, 2.8); hard-coded limits
 (`MAX_FILES` 20,986, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by modification date with a 2-year minimum age;
-torrent IDs from the cutoff date; exclusions `market-history` and `killmails`; Fuzzwork/MER in scope with sync
-cutoffs; Fuzzwork cutoff at the lowest dated ID on the site; checksums and README inside the torrent; hybrid v1+v2; no
+torrent IDs from the cutoff date; exclusions `market-history`, `killmails` and `ccp`; Fuzzwork in scope with a sync
+cutoff; Fuzzwork cutoff at the lowest dated ID on the site; checksums and README inside the torrent; hybrid v1+v2; no
 notice period, but a start announcement; deletion last; no MD5 matching; no Cloudflare
 purge; `DataCrawler` fails on missing indexes; a manual process with numbered scripts and completion files in
 `deep-archive/`; storage is reached only through rclone with one B2 key, soft deletes only, never the AWS CLI
@@ -1054,7 +1056,7 @@ Still open:
 9. **Small-snapshot datasets** (Appendix B): ~553,700 files (69 %) for ~6 GiB; at 20,986 files per torrent they'd
    fill ~26 torrents with almost no data. Being addressed separately: a script that rolls whole years of small files
    up into a single highly compressed file. Still open: which "no year folder" directories must stay on HTTP
-   (`ccp/iec`, `ccp/sde/older`, …)?
+   (`characters-corporations-alliances/backfills`, …)? (`ccp/` is excluded.)
 10. Which Discord channel gets the announcements, and who posts them?
 11. Trackers: add all from both lists, a curated set, or the core only (2.4 "Trackers")? Refresh tracker lists in
     published `.torrent` files later?
@@ -1311,9 +1313,10 @@ Fuzzwork backfills). Each needs a decision (README, "Review the selection"):
 | `incursions/history/backfills` | 1 | 1.6 MiB | Linked from `incursions.md`. Goes with `incursions` (exclude). |
 | `<dataset>/history` (no year folder): `industry-systems`, `sovereignty-*`, `system-jumps`, `system-kills`, `wars`, `shadow-war-arc-goals` | 5–18 each | ~4.1 GiB in total | Files directly under `history/`: probably an older layout or bulk backfills. Check what they are; most belong to small-snapshot datasets (exclude with them). |
 
-Suggestion: exclude `ccp/iec`, `ccp/ccp_quant`, `ccp/csm`, `ccp/qen`, `ccp/sde/older` and probably `ccp/portraits` as
-**reference collections** (~29 GiB, cheap to keep, linked from docs and likely downloaded by URL). The CCP
-reference collections are a different kind of data from the scraped history, which is what the archive is for.
+**Decided: all of `ccp/` is excluded** (2.2), including `ccp/mer` and the dated `ccp/sde` folders, not just the
+reference collections above: ~62 GiB in all, cheap to keep, linked from docs and likely downloaded by URL. CCP's data
+is a different kind of data from the scraped history, which is what the archive is for. The `ccp/*` rows above are
+no longer selected.
 
 **Follow-ups for `01-find`:**
 

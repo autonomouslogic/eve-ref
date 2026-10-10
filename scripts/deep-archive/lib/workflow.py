@@ -46,8 +46,9 @@ RCLONE_FIXED = {
 REMOTE_NAME = "everef"
 
 # Datasets never archived (PLAN 2.2): paths from the site root. market-history and killmails work as databases, with
-# past files modified in place, which a torrent can't follow.
-TORRENT_EXCLUDE = ["market-history", "killmails"]
+# past files modified in place, which a torrent can't follow. ccp holds CCP's own data (SDE, MER, image collections,
+# etc.), linked from the docs and downloaded by URL; it's small enough to keep on HTTP.
+TORRENT_EXCLUDE = ["market-history", "killmails", "ccp"]
 
 # Public URL of the data site.
 DATA_BASE_URL = "https://data.everef.net/"
