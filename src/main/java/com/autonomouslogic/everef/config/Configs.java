@@ -670,6 +670,30 @@ public class Configs {
 			.build();
 
 	/**
+	 * The B2 S3-compatible origin the data-server command proxies to. Must have no query and end with {@code /}.
+	 */
+	public static final Config<URI> DATA_SERVER_ORIGIN_URL =
+			Config.<URI>builder().name("DATA_SERVER_ORIGIN_URL").type(URI.class).build();
+
+	/**
+	 * Maximum number of concurrent requests the data-server command will handle before returning 503.
+	 */
+	public static final Config<Integer> DATA_SERVER_MAX_CONCURRENCY = Config.<Integer>builder()
+			.name("DATA_SERVER_MAX_CONCURRENCY")
+			.defaultValue(10000)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * How long a data-server response stream can make no write progress before the connection is closed.
+	 */
+	public static final Config<Duration> DATA_SERVER_WRITE_STALL_TIMEOUT = Config.<Duration>builder()
+			.name("DATA_SERVER_WRITE_STALL_TIMEOUT")
+			.defaultValue(Duration.ofSeconds(120))
+			.type(Duration.class)
+			.build();
+
+	/**
 	 * Client ID for OAuth2 against EVE Online.
 	 */
 	public static final Config<String> EVE_OAUTH_CLIENT_ID = Config.<String>builder()
