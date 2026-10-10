@@ -112,7 +112,8 @@ Dates and IDs in this document (`everef-deep-archive-2023-04-11`, …) are **exa
 - One workflow makes one torrent, and is completed (published, backed up, deleted) before the next starts. The first
   workflows catch up on the backlog (~800,000 files and ~4 TiB on 2026-10-08, Appendix B), one torrent at a time; after
   that, a workflow runs whenever enough data has passed the minimum age to fill a torrent.
-- A torrent can't be changed after it's published. Replacements are possible but should be rare (2.3, Appendix A).
+- A torrent can't be changed after it's published, and is never replaced. Files that change before their delete
+  stay on the site and go into a later torrent (Appendix A).
 
 ### 2.2 What gets archived
 
@@ -137,13 +138,18 @@ A denylist, hard-coded in `lib/workflow.py` (`TORRENT_EXCLUDE`):
 Also never included, from any dataset: `*-latest.*`, `index.html`, hidden files, files at the root of the site (e.g.
 `robots.txt`), and everything under `deep-archive/`.
 
-**`index.json` files are included**, by their own modification date, like any other file. Consequences:
+**`index.json` files are included with their folder:** a folder's `index.json` is selected whenever any file
+directly in that folder is, whatever its own modification date. It's never selected on its own date: `DataIndex`
+rewrites every index on each full run, so that date is the last `DataIndex` run, not the data's, and an `index.json`
+would never reach the minimum age. Only the folder's own `index.json`; parent folders' aren't added. Consequences:
 
-- They're data files like any other: in the selection, the `.txt`, the `.sha256` and the delete set.
-- `DataIndex` rewrites them, so their modification date is the last `DataIndex` run, not the data's. An `index.json`
-  can land in a later torrent than the files it lists, and a selected one can list files that stay on the site (the
-  find report flags those).
-- The pre-delete check only checks they still exist (2.14).
+- In the torrent they're data files like any other: in the selection, the `.txt` and the `.sha256`. They count
+  towards `MAX_FILES` and `MAX_BYTES`.
+- They're never in the delete set: their modification date never matches the selection's. The index cleanup removes
+  them from folders the delete empties (2.15); in folders that keep files, they stay as the live index.
+- A folder split across torrents (files on both sides of a cutoff) has its `index.json` in each of them, as it was
+  then: `DataIndex` rewrites it, so it counts as changed (below). The one in the earlier torrent lists files that
+  stay on the site. The find report flags those, and folders with selected files but no `index.json`.
 - Their content links to data.everef.net URLs that stop working after deletion. That's expected; they're a record.
 - rclone mirrors usually have them too (the HTML listing links `index.json`), but possibly a newer version. Mirror
   seeders' clients then re-download those few small files on recheck.
@@ -154,7 +160,11 @@ Everything else is in scope. Using a denylist means:
 - `fuzzwork/ordersets` and `ccp/mer` **are** in scope. Their sync commands get cutoffs (2.18), so they don't
   re-upload deleted files.
 
-**No file lands in two torrents:** `01-find` skips every path listed in a published `<ID>.txt`.
+**No version of a file lands in two torrents.** `01-find` reads every published `<ID>.txt`. A listed path still on
+the site with a modification date on or before that torrent's cutoff (the date in its ID) is the version the torrent
+holds: it's skipped, and flagged, since its delete should have removed it. A later date means the file was uploaded
+again after it was archived, so it's a candidate like any other and goes into a later torrent. The same path can be in
+several torrents, one version each.
 
 **Risk of selecting by modification date:** a file that is still current but simply hasn't changed in two years
 would be archived and deleted from the site, e.g. a reference file a tool downloads by a fixed URL (`ccp/iec`,
@@ -169,7 +179,6 @@ list, files inside the torrent, seed folder, backup prefix.
 | Case | ID |
 |---|---|
 | Normal | `everef-deep-archive-<cutoff date>`, e.g. `everef-deep-archive-2023-04-11` |
-| Replacement (Appendix A) | `everef-deep-archive-2023-04-11-r2`, `-r3`, … |
 
 Cutoffs only move forward (each torrent skips everything already published), so IDs sort in publication order.
 
@@ -405,26 +414,26 @@ deep-archive/                       # at the root of data.everef.net
   feed.xml                          # RSS: all torrents
   torrents.json                     # catalogue of all torrents (NOT index.json: DataIndex owns that name)
   everef-deep-archive-2023-04-11.torrent
-  everef-deep-archive-2023-04-11.txt      # every file path in the torrent, one per line
+  everef-deep-archive-2023-04-11.txt      # every data file in the torrent, one site path per line
   everef-deep-archive-2024-02-20.torrent
   everef-deep-archive-2024-02-20.txt
   ...
 ```
 
-- **"Already archived" is decided per file:** `01-find` downloads every published `.txt` and skips any path listed
-  in one. That works the same for normal and replacement torrents.
+- **"Already archived" is decided per file:** `01-find` downloads every published `<ID>.txt` (a `.txt` whose name
+  isn't a torrent ID is ignored) and skips the paths whose version a torrent already holds (2.2).
 - `torrents.json` and the feed are **regenerated in full** from the `.torrent` files in `deep-archive/` each time, never
   edited by appending. The bucket's `deep-archive/` stays the single source of truth.
   - Publication date comes from the torrent's `creation date` field.
-  - Replaced torrents are listed in `deep-archive/superseded.txt` in this repo (`<old ID> <new ID>` per line).
-    `build-feed` marks them as superseded in `torrents.json` and leaves them out of the feed.
 
 #### File list: `<ID>.txt`
 
 For quick review and search without having to parse torrent files:
 
-- Plain text, UTF-8, `\n` line endings. **One file path per line**, as the full site path (without the torrent's root
-  folder), **sorted**. Data files only. For example:
+- Plain text, UTF-8, `\n` line endings, ending with one. **One file path per line**, as the full site path
+  (without the torrent's root folder), **sorted** by code point, no duplicates. Data files only: not the torrent's
+  README and `.sha256`. Inside the torrent, every data file has this same path under the root folder (2.3). For
+  example:
   ```
   ccp/sde/2023/sde-20230101-TRANSLATIONS.zip
   market-orders/history/2023/2023-01-01/market-orders-2023-01-01_00-00-00.v3.csv.bz2
@@ -432,6 +441,9 @@ For quick review and search without having to parse torrent files:
   ```
 - Generated **from the `.torrent` itself** after it's made, minus the two root files. `check-torrent` compares it
   with the manifest.
+- The format is checked by `file_list_problems` (`lib/workflow.py`): `check-torrent` checks the new list, and
+  `01-find` fails if any published list doesn't pass. A list in the wrong format (say, with the torrent's root folder
+  in the paths) would otherwise match no site path, and its files could land in a second torrent without any error.
 - Paths match the site layout, so someone looking for e.g. "public contracts from March 2024" can `grep` it and
   knows which torrent to grab and which file to select.
 - Content-Type `text/plain; charset=utf-8`, set on the object at upload (2.21). At most ~21,000 files makes a list of
@@ -508,8 +520,7 @@ RSS 2.0, one `<item>` per torrent, compatible with qBittorrent's RSS auto-downlo
 - `guid` = v1 info-hash, which is stable, so feed readers never pick up the same torrent twice.
 - `pubDate` = the torrent's `creation date` (2.5). New items sort to the top.
 - The total data size goes in the description and `torrent:contentLength`, so subscribers can filter by size.
-- The feed includes **all** current torrents (it's small), so new subscribers can pull in the backlog. Superseded
-  torrents are left out.
+- The feed includes **all** torrents (it's small), so new subscribers can pull in the backlog.
 - One feed only.
 - Content-Type `application/rss+xml`. Short cache max-age, like `DATA_INDEX_CACHE_CONTROL_MAX_AGE`. Both are set on
   the object at upload (2.21).
@@ -524,15 +535,16 @@ after that is checked against that list, never against "whatever is in the direc
   - **Never selected:** see 2.2 ("Never archived"), plus paths already in a published `.txt` (read from the bucket's
     `deep-archive/`, 2.5).
   - **Too new:** anything modified less than `MIN_AGE_YEARS` (2) years before today.
-  - **Cutoff:** group the remaining candidates by modification date (UTC). Find the first date where including every
-    candidate on or before it goes over `MAX_FILES` or `MAX_BYTES`; the cutoff is **the day before** that date. If
+  - **Cutoff:** group the remaining candidates (`index.json` aside, 2.2) by modification date (UTC). Find the first
+    date where including every candidate on or before it, plus their folders' `index.json`, goes over `MAX_FILES` or
+    `MAX_BYTES`; the cutoff is **the day before** that date. If
     the limits are never reached, the cutoff is the newest allowed date (and the report flags that the torrent could
     be bigger). If the oldest date alone is over a limit, `01-find` fails: a date can't be split.
   - **Torrent ID** = `everef-deep-archive-<cutoff date>`: everything not yet archived, modified on or before that date.
   - Output in `$SCRATCH_DIR/find/`: `files.jsonl` (path, size, last-modified, URL), `listing.jsonl.gz` (the full
     listing the selection came from), `report.txt`, `summary.json`, `find.log`. The report breaks the selection down
     by modification month, year folder in the path, and dataset, and flags selected `index.json` files whose folder
-    keeps files on the site.
+    keeps files on the site, and selected folders with no `index.json` to select.
 - **Limits, hard-coded in `lib/workflow.py`:**
   - `MAX_BYTES` = 1 TiB: what the seeder holds per torrent, and what a full download is.
   - `MAX_FILES` = (8,000,000 − 1,703,936) / 300 = **20,986**: a target `.torrent` of ~8 MB (20% under libtorrent's
@@ -546,8 +558,8 @@ after that is checked against that list, never against "whatever is in the direc
 - `03-check-load` checks every listed file is on disk with the listed size, and nothing else is. It then computes
   SHA-256 for every file into `manifest.json` (the selection plus hashes). The manifest feeds the `.sha256`, the
   torrent checks and the backup.
-- The delete set is the selection. Before deleting, a fresh listing of the bucket is checked against it by **size
-  and modification time**.
+- The delete set comes from the torrent, confirmed file by file against a fresh listing of the bucket by **size
+  and modification time** (2.14).
 - **No MD5/ETag matching anywhere.** Size and timestamp are enough to detect changes; content integrity from load
   onwards is covered by SHA-256 (manifest, `.sha256`, torrent piece hashes).
 
@@ -744,13 +756,25 @@ There is no notice period, but a notice is posted to the **announcement channel*
 **Deletion is the last step of a workflow.** It happens only after the torrent has passed publishing, seeding,
 testing, docs and backup checks.
 
-- **Delete set = the selection** (2.8), re-validated against a **fresh listing** of the bucket at deletion time:
-  - Every file must still exist with the same size and modification time as in the selection. If any differs, **stop**:
-    the data changed after it was selected (Appendix A). Exception: `index.json` files are rewritten by
-    `DataIndex`, so for them only existence is checked; differences are reported.
-  - Files in the same folders that aren't in the selection (uploaded after the cutoff) **stay**. Only selected keys
-    are ever deleted.
-  - Deletes are an explicit list (`rclone delete --files-from`), never a prefix or a pattern.
+- **Only files confirmed to be in the torrent are deleted.** The delete set is built from the **torrent itself**,
+  not from the selection, and every file in it is confirmed against a **fresh listing** of the bucket. A data file
+  is in the delete set only if all of these hold:
+  - it's in the published `.torrent` (`deep-archive/<ID>.torrent`, read back from the bucket, with the same
+    info-hash as `$SCRATCH_DIR/<ID>.torrent`), at its site path under the root folder, with the size the torrent
+    gives;
+  - it's in the manifest, so its SHA-256 was computed from the loaded copy, which the seeder verified against the
+    torrent (full recheck at 100%);
+  - it's on the bucket now with the **same size and modification time as in the selection**: the same version that
+    was loaded. On B2 a new upload always gets a new modification time.
+  - it isn't an `index.json` (they're rewritten by `DataIndex`, so they never match; 2.15 handles them), or the
+    torrent's README or `.sha256` (not site files).
+- A file that fails a check **stays on the site**, and the step goes on with the rest. It's reported, and noted in
+  `NOTES.md`. A file that changed after it was selected has a newer modification date, so `01-find` picks it up for a
+  later torrent once it's old enough (2.2, Appendix A). Many failures point at a problem rather than at changed data:
+  look before executing.
+- Files in the same folders that aren't in the torrent (uploaded after the cutoff) **stay**. Only confirmed keys are
+  ever deleted.
+- Deletes are an explicit list (`rclone delete --files-from`), never a prefix or a pattern.
 - **Treat deletion as permanent.** On B2, rclone's delete **hides** the file: the `everef` remote has `hard_delete`
   fixed to `false` (2.21), and the bucket's lifecycle rule purges hidden files, currently after **2 days**. The new
   storage may have no soft delete at all. So the process doesn't rely on it:
@@ -760,22 +784,28 @@ testing, docs and backup checks.
 - **Dry run by default.** The step prints the file count, total bytes and a sample of keys, and only acts with an
   explicit `--execute`. The dry run doesn't complete the step.
 - Log every deleted path (with size and modification time) to `$SCRATCH_DIR/deleted.jsonl` for audit and rollback.
-- Folders are virtual on B2: they disappear with their last file. Index files left in emptied folders are handled
-  by 2.15.
+- Folders are virtual on B2: they disappear with their last file. Index files left in emptied folders are removed
+  right after the data (2.15).
 - **Pause jobs that crawl the data site** (`sync-fuzzwork-ordersets`, the market history scrape) from the delete
   until the full `DataIndex` has finished (2.17).
 
 ### 2.15 Stale index files after deletion
 
 `DataIndex` regenerates the parent directories correctly (the deleted year vanishes from them), but it **leaves the
-old `index.html`/`index.json` in every emptied directory**. Fix it one of these ways:
+old `index.html`/`index.json` in every emptied directory**. So `21-delete` cleans them up, right after the data:
 
-- **(a)** The delete step also deletes `index.html`, and any `index.json` not in the selection, in every folder it
-  emptied. Simple, and self-contained in the process.
-- **(b)** Make `DataIndex` delete index files in directories that no longer contain any data. A more general fix,
-  but it's a Java change, and it needs care so it never deletes the root index.
+- It lists the bucket again, and checks every folder that held a deleted file, and each of its parent folders up to
+  the site root, deepest first.
+- A folder holding **nothing but `index.html` and `index.json`** (no other file, at any depth) loses those index
+  files. Deepest first, so a parent left with only index files once its children are gone is cleaned up too.
+- Only `index.html` and `index.json` are deleted this way, by explicit key. Any other file keeps its folder, and all
+  its parents, as they are.
+- Never the site root, and never anything under `deep-archive/`.
+- Logged to `$SCRATCH_DIR/deleted.jsonl` like the data, marked as index cleanup.
+- The full `DataIndex` that follows rewrites the parents, so they stop listing the removed folders.
 
-Recommendation: **(a)** now, and **(b)** as a follow-up.
+Follow-up: make `DataIndex` itself delete index files in folders with no data, so stale indexes can't build up from
+other deletes either. It's a Java change, and it needs care so it never deletes the root index.
 
 ### 2.16 Cloudflare cache
 
@@ -913,7 +943,6 @@ deep-archive/
   README.md             # setup and the step-by-step manual process
   PLAN.md               # design decisions and reasoning; goes away once the process is settled
   LOG.md                # one line per published torrent
-  superseded.txt        # replaced torrents (2.5); created when first needed
   trackers.txt
   torrents.env.example  # copy to torrents.env (not committed)
   README-template.txt   # source for the README inside each torrent
@@ -1045,10 +1074,12 @@ Still open:
 ## Appendix A: If archived data turns out to have changed
 
 If the pre-delete check (`20-check-before-delete`) finds that a file changed on the storage after it was selected:
-- **Don't delete.**
-- The torrent is already published at that point: make a replacement `<ID>-r2` torrent in a new workflow, add
-  `<old ID> <new ID>` to `deep-archive/superseded.txt`, and keep seeding the old torrent too, if possible.
-- Then consider adding the dataset to `TORRENT_EXCLUDE`, since its old files evidently still change.
+- **Don't delete that file.** It isn't the version in the torrent. Everything else that's confirmed is deleted as
+  usual (2.14).
+- The torrent stays as it is: it holds the version from when it was made. No replacement torrent.
+- The changed file has a new modification date, so a later `01-find` selects it for a new torrent once it's old
+  enough (2.2). The same path is then in two torrents, one version each.
+- Find out why it changed. If the dataset's old files still change, consider adding it to `TORRENT_EXCLUDE`.
 
 ---
 

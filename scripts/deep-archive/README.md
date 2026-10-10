@@ -44,8 +44,9 @@ key and bucket, libtorrent and the tracker list. Reports every problem, then abo
 ./01-find.py
 ```
 Lists the bucket and selects the oldest files not archived yet, by modification date, up to the last date that stays
-within the size limits (`lib/workflow.py`), and nothing newer than the minimum age (`01-find.py`). Prints the cutoff,
-the torrent ID and a report, and writes the selection to `$SCRATCH_DIR/find/files.jsonl`.
+within the size limits (`lib/workflow.py`), and nothing newer than the minimum age (`01-find.py`). Each folder with a
+selected file brings its own `index.json`, whatever that file's date. Prints the cutoff, the torrent ID and a report,
+and writes the selection to `$SCRATCH_DIR/find/files.jsonl`.
 
 Aborts if a single date is over a limit: that needs resolving by hand.
 
@@ -103,7 +104,8 @@ and generates the file list `$SCRATCH_DIR/<ID>.txt` from it.
 ```
 - Files = the manifest plus `<ID>.sha256` and `<ID>-README.txt`; bytes match.
 - Hybrid, `name` is `<ID>`, not private, no web seed; trackers one per tier; the comment is right.
-- The `.txt` matches the torrent; no `market-history/` or `killmails/` paths.
+- The `.txt` matches the torrent and passes `file_list_problems` (`lib/workflow.py`: full site paths,
+  sorted, data files only); no `market-history/` or `killmails/` paths.
 - Loads with libtorrent's default limits.
 - Copy the v1 and v2 info-hashes into `NOTES.md`.
 
@@ -205,8 +207,10 @@ result. Deleting doesn't wait for it.
 ./20-check-before-delete.py
 ```
 - Docs live, backup still checks out, seeder at 100%.
-- Every selected file is still on the bucket with the same size and modification time. If not, stop
-  (Appendix E).
+- The published `.torrent` on the bucket has the same info-hash as `$SCRATCH_DIR/<ID>.torrent`.
+- Builds the delete set from the torrent: each data file in it that is in the manifest, and is on the bucket with
+  the same size and modification time as in the selection (PLAN 2.14). No `index.json`, README or `.sha256`.
+- Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
 - Note the printed delete set: files, bytes, datasets.
 
 ### Pause crawling jobs (manual)
@@ -220,14 +224,17 @@ Disable the scheduled `sync-fuzzwork-ordersets` and the market history scrape un
 ```
 - The dry run shows exactly the delete set from step 20.
 
-`--execute` re-checks, then deletes exactly the selected files (soft deletes; never by prefix). Treat it as
+`--execute` re-checks against a fresh listing, then deletes exactly the confirmed files (soft deletes; never by
+prefix). Then it removes `index.html` and `index.json` from every folder the delete left with nothing else in it,
+and from parents left the same way, deepest first; never the site root or `deep-archive/` (PLAN 2.15). Treat it as
 permanent.
 
 ### 22: Check delete
 ```
 ./22-check-delete.py
 ```
-- Every selected file is gone, no index files are left in emptied folders, and nothing else changed.
+- Every file in the delete set is gone, no folder holds only index files, and nothing else changed (files that
+  failed the check in step 20 are still there).
 
 ### Full DataIndex (manual)
 ```
@@ -339,16 +346,18 @@ restore the affected bundles from the backup (`<ID>-backup-index.tsv` says which
 ## Appendix D: Rollback
 
 Re-upload the deleted files from `$SEED_DIR/<ID>/` (or a backup restore) into the bucket, using the published `<ID>.txt`
-as the list (planned script, outside the numbered steps). Re-uploaded files get a new upload time. While B2 still holds
+as the list (planned script, outside the numbered steps). Upload with rclone, which keeps the modification times,
+so `01-find` still sees them as the archived version. A path can be in several torrents, one version each: restore
+from the newest torrent holding it. While B2 still holds
 the hidden versions (the bucket's lifecycle rules decide how long), removing the hide markers in B2's web console is
 quicker (PLAN 2.14). Then run a full `DataIndex` and check the files are served again.
 
 ## Appendix E: If data changed
 
 If `20-check-before-delete` finds a file that changed after it was selected:
-- Don't delete. Note it in `NOTES.md`.
+- That file isn't deleted; the rest of the delete set is. Note it in `NOTES.md`.
+- No replacement torrent: the changed file goes into a later torrent once it's old enough (PLAN Appendix A).
 - Find out why. If the dataset still changes after the minimum age, add it to `TORRENT_EXCLUDE`.
-- The torrent is already published: replace it as in PLAN Appendix A (`<ID>-r2`).
 
 ## Appendix F: Script reference
 

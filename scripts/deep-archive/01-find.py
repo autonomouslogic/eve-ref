@@ -13,31 +13,42 @@ Needs 00-preflight's completion file, and refuses to run twice (lib/workflow.py)
 
 How the cutoff is chosen:
 1. List the entire bucket, with each file's size and modification time (rclone's ModTime: on B2, the upload time).
-2. Drop what is never archived (see Skipped below), and files already in a published torrent.
+2. Drop what is never archived (see Skipped below), and files a published torrent already holds (see Published
+   torrents below). Set index.json files aside: they aren't selected by their own date (see index.json below).
 3. Drop files modified after the newest allowed date (MIN_AGE_YEARS before today). The rest are candidates.
 4. Group the candidates by modification date (UTC). Find the first date where including every candidate on or
-   before it goes over MAX_FILES or MAX_BYTES (lib/workflow.py). The cutoff is the day before that date. If the limits
-   are never reached, the cutoff is the newest allowed date.
-5. Select every candidate modified on or before the cutoff.
+   before it, plus the index.json of every folder they're in, goes over MAX_FILES or MAX_BYTES (lib/workflow.py). The
+   cutoff is the day before that date. If the limits are never reached, the cutoff is the newest allowed date.
+5. Select every candidate modified on or before the cutoff, and the index.json of every folder they're in.
+
+index.json: a folder's index.json is selected when any file directly in that folder is, whatever its own
+modification date (DataIndex rewrites it on every run, so its date says nothing about the data). It isn't selected
+otherwise. Only the folder's own index.json; parent folders' aren't added.
+
+Published torrents: a path listed in a published deep-archive/<ID>.txt is skipped only if its modification date is on
+or before that torrent's cutoff (the date in the ID): it's the version the torrent holds, still on the site because
+its delete didn't happen (flagged). A later date means the file was uploaded again after it was archived (it
+changed), so it's a candidate like any other and can land in a new torrent. The same path can be in several torrents,
+one version each.
 
 The torrent ID is everef-deep-archive-YYYY-MM-DD, with the cutoff date. The torrent holds everything not yet archived
 that was modified on or before that date. Writes, in SCRATCH_DIR:
 
     find/
-      files.jsonl          the selection: one file per line: path, size, last_modified, url
+      files.jsonl          the selection, index.json files included: one file per line: path, size, last_modified, url
       listing.jsonl.gz     the full bucket listing the selection was made from
       report.txt           the printed report
       summary.json         everything in the report, machine-readable
-      find.log             details: flagged files
+      find.log             details: flagged files and folders
     01-find.done           completion file, with the torrent ID
 
 The torrent content folder, SEED_DIR/<ID>/, must not exist yet. find doesn't create it; load does.
 
 Skipped:
-- index.html files (index.json files are selected like any other file);
+- index.html files (index.json files are selected with their folder, see above);
 - datasets in TORRENT_EXCLUDE (lib/workflow.py), *-latest.* files, hidden files, files at the root of the site,
   everything under deep-archive/;
-- files listed in a published deep-archive/<ID>.txt, so no file lands in two torrents.
+- files a published torrent already holds (see Published torrents above).
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR
@@ -63,6 +74,7 @@ from workflow import (  # noqa: E402
     GIB,
     KIB,
     DATA_BASE_URL,
+    DEEP_ARCHIVE_DIR,
     MAX_BYTES,
     MAX_FILES,
     MIB,
@@ -70,9 +82,13 @@ from workflow import (  # noqa: E402
     TARGET_TORRENT_BYTES,
     TIB,
     TORRENT_EXCLUDE,
+    TORRENT_ID_PREFIX,
+    TORRENT_ID_RE,
     Workflow,
     data_remote,
+    error,
     fail,
+    file_list_problems,
     join,
     lsjson,
     ok,
@@ -82,10 +98,8 @@ from workflow import (  # noqa: E402
 
 STEP = "find"
 
-TORRENT_ID_PREFIX = "everef-deep-archive-"
 INDEX_JSON = "index.json"
 IGNORED_NAMES = {"index.html"}
-DEEP_ARCHIVE_DIR = "deep-archive"
 LATEST_RE = re.compile(r"-latest\.")
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 
@@ -103,6 +117,8 @@ LIMITS = [
 ]
 
 LOG_SAMPLE = 20
+
+LIMIT_NAMES = {"files": "the file limit", "bytes": "the size limit", "both": "both limits"}
 
 class Obj:
     """One file in the bucket. path is relative to the site root; mtime is a POSIX timestamp."""
@@ -145,10 +161,11 @@ def main():
 
     section("Selection")
     scan = classify_all(listing, excludes, taken)
-    cut = choose_cutoff(scan.candidates, newest_allowed)
+    cut = choose_cutoff(scan.candidates, scan.indexes, newest_allowed)
     if cut.cutoff is None:
         fail(render_no_cutoff(cut, scan))
-    selected = [o for o in scan.candidates if o.date <= cut.cutoff]
+    data = [o for o in scan.candidates if o.date <= cut.cutoff]
+    selected = data + folder_indexes(data, scan.indexes)
     torrent_id = f"{TORRENT_ID_PREFIX}{cut.cutoff.isoformat()}"
     print(f"Cutoff: {cut.cutoff}")
     print(f"Torrent ID: {torrent_id}")
@@ -156,7 +173,7 @@ def main():
     if os.path.exists(content_dir):
         fail(f"{content_dir} already exists: a torrent with this ID was started before")
 
-    summary = build_summary(listing, scan, cut, selected, torrent_id, remote, excludes, taken, newest_allowed)
+    summary = build_summary(listing, scan, cut, data, selected, torrent_id, remote, excludes, taken, newest_allowed)
     report = render_report(summary)
     section("Report")
     print(report, end="")
@@ -171,7 +188,7 @@ def main():
     write_listing(os.path.join(tmp_dir, "listing.jsonl.gz"), listing)
     write_text(os.path.join(tmp_dir, "summary.json"), json.dumps(summary, indent=2, sort_keys=True) + "\n")
     write_text(os.path.join(tmp_dir, "report.txt"), report)
-    write_text(os.path.join(tmp_dir, "find.log"), render_log(scan, selected))
+    write_text(os.path.join(tmp_dir, "find.log"), render_log(scan, data))
     if os.path.exists(find_dir):
         # Left by an earlier attempt that failed before completing.
         print(f"Replacing incomplete output in {find_dir}")
@@ -230,28 +247,51 @@ def list_remote(data_remote, progress_seconds):
 
 
 def load_published_lists(data_remote, listing):
-    """Paths already in a published torrent, from deep-archive/*.txt in the bucket."""
+    """
+    Path -> torrent ID for every path in a published torrent, from the deep-archive/<ID>.txt file lists in the
+    bucket. A path in several lists maps to the newest torrent. Fails if any list isn't in the PLAN 2.5 format: a list
+    find can't read correctly would let the same version of a file land in two torrents.
+    """
     published = {}
-    lists = [o.path for o in listing if o.path.startswith(DEEP_ARCHIVE_DIR + "/") and o.path.endswith(".txt")]
-    lists = [p for p in lists if "/" not in p[len(DEEP_ARCHIVE_DIR) + 1 :]]
+    lists = {}  # path -> torrent ID
+    for o in listing:
+        folder, _, name = o.path.rpartition("/")
+        if folder == DEEP_ARCHIVE_DIR and name.endswith(".txt"):
+            torrent_id = name[: -len(".txt")]
+            if is_torrent_id(torrent_id):
+                lists[o.path] = torrent_id
+            else:
+                print(f"Not a file list (no torrent ID in the name), ignored: {o.path}")
     if not lists:
         print(f"No published file lists in {DEEP_ARCHIVE_DIR}/")
         return published
     print(f"Loading {len(lists)} published file lists from {DEEP_ARCHIVE_DIR}/")
-    for path in sorted(lists):
-        torrent_id = path.rsplit("/", 1)[-1][: -len(".txt")]
-        for line in rclone("cat", join(data_remote, path)).splitlines():
-            line = line.strip()
-            if line:
-                published[line] = f"published {torrent_id}"
+    bad = 0
+    for path, torrent_id in sorted(lists.items()):
+        text = rclone("cat", join(data_remote, path))
+        problems = file_list_problems(text)
+        if problems:
+            bad += 1
+            error(f"{path}: {len(problems)} problems, e.g.")
+            for problem in problems[:LOG_SAMPLE]:
+                error(f"  {problem}")
+            continue
+        for line in text.splitlines():
+            published[line] = torrent_id  # sorted by ID, so the newest torrent wins
+    if bad:
+        fail(f"{bad} published file lists aren't in the PLAN 2.5 format: full site paths, sorted, one per line")
     print(f"Loaded {fmt_count(len(published))} paths from {len(lists)} published file lists")
     return published
 
 
 class Scan:
     def __init__(self):
-        self.candidates = []  # [Obj], sorted by mtime then path
-        self.taken = defaultdict(lambda: [0, 0])  # "published <ID>" -> [files, bytes]
+        self.candidates = []  # [Obj], sorted by mtime then path; no index.json
+        self.indexes = {}  # folder -> its index.json Obj, if not in a published torrent
+        self.taken_indexes = set()  # folders whose index.json is the version a published torrent holds
+        self.taken = defaultdict(lambda: [0, 0])  # <ID> -> [files, bytes]: the version that torrent holds
+        self.changed = defaultdict(lambda: [0, 0])  # <ID> -> [files, bytes]: changed since that torrent, candidates
+        self.changed_paths = set()
         self.excluded = defaultdict(lambda: [0, 0])  # dataset -> [files, bytes]
         self.ignored = defaultdict(lambda: [0, 0])  # reason -> [files, bytes]
         self.root_files = []
@@ -271,15 +311,55 @@ def classify_all(listing, excludes, taken):
             else:
                 add(scan.ignored[label], o.size)
             continue
-        if o.path in taken:
-            add(scan.taken[taken[o.path]], o.size)
+        is_index = file_name(o.path) == INDEX_JSON
+        archived_in = taken.get(o.path)
+        if archived_in is not None:
+            if o.date <= torrent_cutoff(archived_in):
+                add(scan.taken[archived_in], o.size)
+                if is_index:
+                    scan.taken_indexes.add(folder_of(o.path))
+                continue
+            if not is_index:  # DataIndex rewrites them, so they always look changed
+                add(scan.changed[archived_in], o.size)
+                scan.changed_paths.add(o.path)
+        if is_index:
+            scan.indexes[folder_of(o.path)] = o
             continue
         if o.size == 0:
             scan.empty.append(o.path)
         scan.candidates.append(o)
     scan.candidates.sort(key=lambda o: (o.mtime, o.path))
-    print(f"{fmt_count(len(scan.candidates))} candidates")
+    print(f"{fmt_count(len(scan.candidates))} candidates, {fmt_count(len(scan.indexes))} index.json files")
     return scan
+
+
+def is_torrent_id(name):
+    if not TORRENT_ID_RE.match(name):
+        return False
+    try:
+        torrent_cutoff(name)
+    except ValueError:
+        return False
+    return True
+
+
+def torrent_cutoff(torrent_id):
+    """The cutoff date in a torrent ID: the torrent holds nothing modified after it."""
+    return datetime.date.fromisoformat(torrent_id[len(TORRENT_ID_PREFIX) :])
+
+
+def file_name(path):
+    return path.rsplit("/", 1)[-1]
+
+
+def folder_of(path):
+    return path.rsplit("/", 1)[0] if "/" in path else ""
+
+
+def folder_indexes(files, indexes):
+    """The index.json of every folder the files are directly in, where there is one."""
+    folders = {folder_of(o.path) for o in files}
+    return [indexes[f] for f in sorted(folders) if f in indexes]
 
 
 def skip_reason(path, excludes):
@@ -314,26 +394,43 @@ class Cutoff:
         self.too_new = [0, 0]  # candidates modified after newest_allowed
 
 
-def choose_cutoff(candidates, newest_allowed):
-    """Last date such that every candidate on or before it fits within MAX_FILES and MAX_BYTES."""
+def choose_cutoff(candidates, indexes, newest_allowed):
+    """
+    Last date such that every candidate on or before it, with the index.json of their folders, fits within MAX_FILES
+    and MAX_BYTES. A folder's index.json counts on the first date one of its files is included. Prints each date
+    considered, with that date's files and bytes and the running totals.
+    """
     cut = Cutoff()
     days = defaultdict(lambda: [0, 0])
-    for o in candidates:
+    counted = set()  # folders whose index.json is counted
+    for o in candidates:  # sorted by mtime, so dates come in order
         date = o.date
         if date > newest_allowed:
             add(cut.too_new, o.size)
-        else:
-            add(days[date], o.size)
+            continue
+        add(days[date], o.size)
+        folder = folder_of(o.path)
+        if folder not in counted:
+            counted.add(folder)
+            if folder in indexes:
+                add(days[date], indexes[folder].size)
     files = 0
     size = 0
+    if days:
+        print("Dates considered (files and bytes that date, then the totals up to it, index.json included):")
     for date in sorted(days):
         day_files, day_bytes = days[date]
         files += day_files
         size += day_bytes
         over_files = files > MAX_FILES
         over_bytes = size > MAX_BYTES
-        if over_files or over_bytes:
-            cut.reason = "both" if over_files and over_bytes else "files" if over_files else "bytes"
+        reason = "both" if over_files and over_bytes else "files" if over_files else "bytes" if over_bytes else None
+        print(
+            f"  {date}  {fmt_count(day_files):>9} {fmt_bytes(day_bytes):>10}"
+            f"  total {fmt_count(files):>9} {fmt_bytes(size):>10}{'  over ' + LIMIT_NAMES[reason] if reason else ''}"
+        )
+        if reason:
+            cut.reason = reason
             cut.over_date = date
             cut.over_files = files
             cut.over_bytes = size
@@ -375,7 +472,7 @@ def partial_index_dirs(listing, selected):
     selected_paths = {o.path for o in selected}
     remaining = set()
     for o in listing:
-        name = o.path.rsplit("/", 1)[-1]
+        name = file_name(o.path)
         if o.path in selected_paths or name in IGNORED_NAMES or name == INDEX_JSON:
             continue
         parts = o.path.split("/")[:-1]
@@ -383,14 +480,21 @@ def partial_index_dirs(listing, selected):
             remaining.add("/".join(parts[:i]))
     partial = []
     for o in selected:
-        if o.path.rsplit("/", 1)[-1] == INDEX_JSON:
-            folder = o.path.rsplit("/", 1)[0] if "/" in o.path else ""
-            if folder in remaining:
-                partial.append(o.path)
+        if file_name(o.path) == INDEX_JSON and folder_of(o.path) in remaining:
+            partial.append(o.path)
     return partial
 
 
-def build_summary(listing, scan, cut, selected, torrent_id, data_remote, excludes, taken, newest_allowed):
+def unindexed_folders(data, scan):
+    """Folders of selected files with no index.json to select: (missing, already in a published torrent)."""
+    folders = {folder_of(o.path) for o in data}
+    missing = sorted(f for f in folders if f not in scan.indexes and f not in scan.taken_indexes)
+    taken = sorted(f for f in folders if f in scan.taken_indexes)
+    return missing, taken
+
+
+def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, excludes, taken, newest_allowed):
+    """data: the selected files without index.json, in mtime order; selected: data plus their folders' index.json."""
     now = datetime.datetime.now(datetime.timezone.utc)
     datasets = defaultdict(lambda: [0, 0])
     years = defaultdict(lambda: [0, 0])
@@ -398,12 +502,18 @@ def build_summary(listing, scan, cut, selected, torrent_id, data_remote, exclude
     for o in selected:
         add(datasets[dataset_of(o.path)], o.size)
         add(years[path_year(o.path)], o.size)
+    for o in data:
+        # By the data's dates only: an index.json's date is the last DataIndex run.
         add(months[o.date.strftime("%Y-%m")], o.size)
     total = sum(o.size for o in selected)
     estimate = estimate_torrent(selected)
-    index_files = sum(1 for o in selected if o.path.rsplit("/", 1)[-1] == INDEX_JSON)
+    index_files = len(selected) - len(data)
+    index_bytes = total - sum(o.size for o in data)
     partial = partial_index_dirs(listing, selected)
     scan.partial_index = partial
+    missing_index, taken_index = unindexed_folders(data, scan)
+    scan.missing_index = missing_index
+    scan.taken_index = taken_index
 
     flags = []
     if cut.reason == "age":
@@ -415,8 +525,21 @@ def build_summary(listing, scan, cut, selected, torrent_id, data_remote, exclude
         flags.append(f"empty files: {len(scan.empty)}")
     if partial:
         flags.append(f"selected index.json files that list files staying on the site: {len(partial)} (see find.log)")
+    if missing_index:
+        flags.append(f"folders with selected files but no index.json: {len(missing_index)} (see find.log)")
+    if taken_index:
+        flags.append(
+            f"folders with selected files whose index.json, unchanged, is in a published torrent: {len(taken_index)} "
+            "(see find.log)"
+        )
     if scan.taken:
-        flags.append("some files are already in a published torrent but still on the site (see Skipped)")
+        flags.append(
+            "files a published torrent holds are still on the site, unchanged: its delete didn't remove them "
+            "(see Skipped)"
+        )
+    changed_selected = sum(1 for o in data if o.path in scan.changed_paths)
+    if changed_selected:
+        flags.append(f"selected files that changed after an earlier torrent archived them: {changed_selected}")
     for limit_name, unit, limit in LIMITS:
         value = estimate[unit]
         if value > limit:
@@ -440,7 +563,8 @@ def build_summary(listing, scan, cut, selected, torrent_id, data_remote, exclude
         "source": data_remote,
         "run_at": iso(now.timestamp()),
         "exclude": excludes,
-        "taken_by": sorted(set(taken.values())),
+        "published": sorted(set(taken.values())),
+        "changed_since": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.changed.items())},
         "listed": {"files": len(listing), "bytes": sum(o.size for o in listing)},
         "candidates": {"files": len(scan.candidates), "bytes": sum(o.size for o in scan.candidates)},
         "too_new": {"files": cut.too_new[0], "bytes": cut.too_new[1]},
@@ -448,8 +572,9 @@ def build_summary(listing, scan, cut, selected, torrent_id, data_remote, exclude
             "files": len(selected),
             "bytes": total,
             "index_json": index_files,
-            "oldest_last_modified": iso(selected[0].mtime) if selected else None,
-            "newest_last_modified": iso(selected[-1].mtime) if selected else None,
+            "index_json_bytes": index_bytes,
+            "oldest_last_modified": iso(data[0].mtime) if data else None,
+            "newest_last_modified": iso(data[-1].mtime) if data else None,
         },
         "torrent_estimate": estimate,
         "datasets": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(datasets.items())},
@@ -458,7 +583,7 @@ def build_summary(listing, scan, cut, selected, torrent_id, data_remote, exclude
         "flags": flags,
         "skipped": {
             "excluded": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.excluded.items())},
-            "already_taken": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.taken.items())},
+            "still_on_site": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.taken.items())},
             "root_files": len(scan.root_files),
             "ignored": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.ignored.items())},
         },
@@ -546,10 +671,17 @@ def render_report(summary):
         f"Candidates: {fmt_count(candidates['files'])} files, {fmt_bytes(candidates['bytes'])} "
         f"({fmt_count(too_new['files'])} files, {fmt_bytes(too_new['bytes'])} too new)"
     )
+    changed = summary["changed_since"]
+    if changed:
+        lines.append(
+            f"Changed:    {fmt_count(sum(c['files'] for c in changed.values()))} files, "
+            f"{fmt_bytes(sum(c['bytes'] for c in changed.values()))}, changed after a published torrent archived them "
+            "(candidates again)"
+        )
     lines.append("")
     lines.append(
         f"Selected:   {fmt_count(selected['files'])} files, {fmt_bytes(selected['bytes'])} "
-        f"(incl. {fmt_count(selected['index_json'])} index.json)"
+        f"(incl. {fmt_count(selected['index_json'])} index.json, {fmt_bytes(selected['index_json_bytes'])})"
     )
     if selected["oldest_last_modified"]:
         lines.append(f"Modified:   {selected['oldest_last_modified']} to {selected['newest_last_modified']}")
@@ -559,7 +691,7 @@ def render_report(summary):
         f"{fmt_count(est['pieces'])} pieces of {fmt_bytes(est['piece_size'])}"
     )
     lines.append("")
-    lines.append("Modified (month, UTC):")
+    lines.append("Modified (month, UTC, without index.json):")
     lines.extend(render_rows([(name, s["files"], s["bytes"]) for name, s in summary["modified_months"].items()]))
     lines.append("")
     lines.append("Year folder in the path:")
@@ -575,7 +707,7 @@ def render_report(summary):
     skipped = summary["skipped"]
     rows = []
     rows += [(f"excluded {name}", s["files"], s["bytes"]) for name, s in skipped["excluded"].items()]
-    rows += [(f"already in {label}", s["files"], s["bytes"]) for label, s in skipped["already_taken"].items()]
+    rows += [(f"unchanged, in {label}", s["files"], s["bytes"]) for label, s in skipped["still_on_site"].items()]
     if skipped["root_files"]:
         rows.append(("root-level files", skipped["root_files"], None))
     rows += [(name, s["files"], s["bytes"]) for name, s in skipped["ignored"].items()]
@@ -589,7 +721,7 @@ def render_report(summary):
 def render_cutoff_reason(summary):
     if summary["cutoff_reason"] == "age":
         return "the newest allowed date (limits not reached)"
-    limit = {"files": "the file limit", "bytes": "the size limit", "both": "both limits"}[summary["cutoff_reason"]]
+    limit = LIMIT_NAMES[summary["cutoff_reason"]]
     return (
         f"the day before {summary['next_date']}, which goes over {limit} "
         f"({fmt_count(summary['next_date_files'])} files, {fmt_bytes(summary['next_date_bytes'])} that day)"
@@ -619,18 +751,20 @@ def render_rows(rows):
     ]
 
 
-def render_log(scan, selected):
+def render_log(scan, data):
     lines = []
-    no_year = [o.path for o in selected if path_year(o.path) == "(none)"]
+    no_year = [o.path for o in data if path_year(o.path) == "(none)"]
     sections = [
         ("selected files with no year folder in the path", no_year),
         ("selected index.json files that list files staying on the site", scan.partial_index),
+        ("folders with selected files but no index.json", scan.missing_index),
+        ("folders with selected files whose index.json, unchanged, is in a published torrent", scan.taken_index),
         ("empty files", scan.empty),
         ("root-level files, never selected", scan.root_files),
     ]
     for title, paths in sections:
         if paths:
-            lines.append(f"{title}: {len(paths)} files, e.g.")
+            lines.append(f"{title}: {len(paths)}, e.g.")
             lines.extend(f"  {p}" for p in paths[:LOG_SAMPLE])
     return "\n".join(lines) + "\n"
 

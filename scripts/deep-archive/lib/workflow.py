@@ -28,6 +28,7 @@ import os
 import re
 import subprocess
 import sys
+import threading
 
 ENV_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "torrents.env")
 
@@ -50,6 +51,13 @@ TORRENT_EXCLUDE = ["market-history", "killmails"]
 
 # Public URL of the data site.
 DATA_BASE_URL = "https://data.everef.net/"
+
+# Torrent IDs (PLAN 2.3): everef-deep-archive-<cutoff date>.
+TORRENT_ID_PREFIX = "everef-deep-archive-"
+TORRENT_ID_RE = re.compile(r"^everef-deep-archive-\d{4}-\d{2}-\d{2}$")
+
+# The site folder holding the published torrents and their file lists (PLAN 2.5).
+DEEP_ARCHIVE_DIR = "deep-archive"
 
 # The workflow's scripted steps, in order (README). Each step's script is named after its number and name, e.g.
 # 01-find.py. Manual steps in between have no script and no completion file.
@@ -282,6 +290,57 @@ def data_remote():
     return f"{REMOTE_NAME}:{bucket}"
 
 
+def file_list_problems(text):
+    """
+    Problems with a <ID>.txt file list (PLAN 2.5), as "line N: ..." strings; empty if it's well-formed. The format:
+    UTF-8, "\\n" line endings, one data file per line as its full path from the site root (the same path inside the
+    torrent, without the torrent's root folder), sorted by code point, no duplicates. The torrent's own README and
+    .sha256 aren't listed.
+    """
+    if not text:
+        return ["empty file"]
+    problems = []
+    if "\r" in text:
+        problems.append("contains \\r: line endings must be \\n")
+    if text and not text.endswith("\n"):
+        problems.append("doesn't end with \\n")
+    lines = text.split("\n")
+    if text.endswith("\n"):
+        lines.pop()
+    previous = None
+    for number, line in enumerate(lines, 1):
+        line = line.rstrip("\r")  # reported once above
+        problem = site_path_problem(line)
+        if problem is None and previous is not None and line <= previous:
+            problem = "duplicate" if line == previous else f"not sorted (after {previous!r})"
+        if problem is not None:
+            problems.append(f"line {number}: {problem}: {line!r}")
+        previous = line
+    return problems
+
+
+def site_path_problem(path):
+    """Why a path isn't a data file's full path from the site root, or None."""
+    if not path:
+        return "empty line"
+    if path != path.strip():
+        return "leading or trailing whitespace"
+    if path.startswith("/"):
+        return "starts with /"
+    if "\\" in path:
+        return "contains a backslash"
+    parts = path.split("/")
+    if any(part in ("", ".", "..") for part in parts):
+        return "empty, . or .. path segment"
+    if len(parts) == 1:
+        return "at the site root: data files never are, and the torrent's README and .sha256 aren't listed"
+    if parts[0].startswith(TORRENT_ID_PREFIX):
+        return "starts with a torrent ID: the torrent's root folder isn't part of the path"
+    if parts[0] == DEEP_ARCHIVE_DIR:
+        return f"under {DEEP_ARCHIVE_DIR}/"
+    return None
+
+
 def join(base, path):
     return f"{base}/{path}" if path else base
 
@@ -310,16 +369,30 @@ def lsjson(path, recursive=False):
         process = subprocess.Popen([*args, path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     except FileNotFoundError:
         fail("rclone is not installed")
+    # Drain stderr while stdout is read: if it's only read at the end, rclone blocks once the pipe buffer fills (e.g.
+    # with retry messages on a long listing) and the listing hangs. Printing it also shows retries as they happen.
+    errors = []
+    drain = threading.Thread(target=_drain_stderr, args=(process.stderr, errors), daemon=True)
+    drain.start()
     for line in process.stdout:
         line = line.strip().rstrip(",")
         if not line or line in ("[", "]"):
             continue
         entry = json.loads(line)
         yield entry["Path"], entry["Size"], parse_modtime(entry["ModTime"])
-    stderr = process.stderr.read()
-    if process.wait() != 0:
-        lines = [line for line in stderr.splitlines() if line.strip()]
-        fail(f"rclone lsjson {path} failed: {lines[-1] if lines else f'exit code {process.returncode}'}")
+    process.wait()
+    drain.join()
+    if process.returncode != 0:
+        fail(f"rclone lsjson {path} failed: {errors[-1] if errors else f'exit code {process.returncode}'}")
+
+
+def _drain_stderr(stream, errors):
+    """Prints rclone's stderr line by line, and keeps the last non-empty line in errors."""
+    for line in stream:
+        line = line.rstrip("\n")
+        if line.strip():
+            print(f"rclone: {line}", flush=True)
+            errors[:] = [line]
 
 
 MODTIME_RE = re.compile(r"^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)(?:\.(\d+))?(Z|[+-]\d\d:\d\d)$")
