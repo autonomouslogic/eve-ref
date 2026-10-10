@@ -53,20 +53,12 @@ Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, t
 and the completion markers. The scripts never clear it. Remove it yourself once the rollup is `COMPLETE` and the
 2-day undo window has passed: until then, `download/` is the only local copy of the original files.
 
-Only one step runs at a time: each step locks `/tmp/everef-rollup.lock` and aborts if another step holds it.
-
-Markers: each step writes `<step>.done` in the scratch dir when all of its checks pass. A step refuses to run if:
-
-- any earlier marker is missing;
-- its own marker already exists;
-- `COMPLETE` exists.
-
 If a step fails partway, remove its partial output and rerun it. Download and delete can simply be rerun.
 
 | Step | Script            | Changes remote?      | Check before moving on                                        |
 |------|-------------------|----------------------|---------------------------------------------------------------|
-| 1    | `00-preflight.sh` | no                   | Tools OK, archive not already on the remote, enough space in the scratch root |
-| 2    | `10-list.sh`      | no                   | File counts, days covered, gaps. No anomalies                 |
+| 1    | `00-preflight.sh` | no                   | Tools OK, archive not already on the remote                   |
+| 2    | `10-list.sh`      | no                   | File counts, days covered, gaps, no anomalies, enough space in the scratch root |
 | 3    | `20-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
 | 4    | `30-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
 | 5    | `40-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
@@ -80,3 +72,15 @@ window.
 
 The scripts don't touch index pages. `<archive>/history/index.json` picks up the archive at the dataset's next
 scrape, or at the next scheduled `data-index` run for datasets that no longer scrape.
+
+## Appendix: locking and markers
+
+Implementation detail, not needed to run a rollup.
+
+Only one step runs at a time: each step locks `/tmp/everef-rollup.lock` and aborts if another step holds it.
+
+Each step writes `<step>.done` in the scratch dir when all of its checks pass. A step refuses to run if:
+
+- any earlier marker is missing;
+- its own marker already exists;
+- `COMPLETE` exists.

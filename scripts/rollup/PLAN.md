@@ -139,20 +139,16 @@ mistake.
 ```bash
 # Copy to rollup.env (gitignored) and fill in. Sourced by bash, so ${...} references work.
 
-# B2 application key for bucket data-everef-net-425eb511
-B2_KEY_ID=
-B2_APPLICATION_KEY=
-ROLLUP_BUCKET=data-everef-net-425eb511
+ROLLUP_BUCKET=
 
-# rclone remote "everef": native b2 backend. Never enable hard_delete.
-RCLONE_CONFIG_EVEREF_TYPE=b2
-RCLONE_CONFIG_EVEREF_ACCOUNT=${B2_KEY_ID}
-RCLONE_CONFIG_EVEREF_KEY=${B2_APPLICATION_KEY}
-RCLONE_CONFIG_EVEREF_HARD_DELETE=false
+# rclone remote "everef" account/key. common.sh sets the rest (type, hard_delete).
+RCLONE_CONFIG_EVEREF_ACCOUNT=
+RCLONE_CONFIG_EVEREF_KEY=
 
 # Scratch root. Each rollup gets <root>/<archive>-<year>/. Holds the download, the decompressed stage and the
-# archive, so use a disk-backed path (not a tmpfs) for big datasets.
-ROLLUP_SCRATCH_ROOT=/tmp/everef-rollup
+# archive, so use a disk-backed path (not a tmpfs) for big datasets. common.sh defaults to
+# /tmp/everef-rollup; uncomment to override.
+#ROLLUP_SCRATCH_ROOT=/tmp/everef-rollup
 ```
 
 `common.sh` derives `REMOTE="everef:${ROLLUP_BUCKET}"` and `SCRATCH="${ROLLUP_SCRATCH_ROOT}/<archive>-<year>"`.
@@ -221,8 +217,8 @@ Before anything else, `common.sh` also:
 | `.gitignore`         | n/a          | Ignores `rollup.env`                                                   |
 | `rollup.env.sample`  | n/a          | Template for the gitignored `rollup.env`                               |
 | `common.sh`          | n/a          | Loads `rollup.env`, lock, tool environment, constants (`REMOTE`, `SCRATCH`, public URL), arg checks, markers, helpers |
-| `00-preflight.sh`    | read         | Config, tools, remote access, year dir present, archive absent, free space in the scratch root |
-| `10-list.sh`         | read         | `listing.json` plus anomaly report                                     |
+| `00-preflight.sh`    | read         | Config, tools, remote access, year dir present, archive absent        |
+| `10-list.sh`         | read         | `listing.json`, anomaly report, free space in the scratch root        |
 | `20-download.sh`     | read         | `rclone copy` and `rclone check`, then verify against `listing.json`   |
 | `30-prepare.sh`      | none         | Build `stage/`, decompress, hash-verify against the originals          |
 | `40-archive.sh`      | none         | Build tar.xz, verify headers, order and contents, set mtime            |
@@ -232,18 +228,18 @@ Before anything else, `common.sh` also:
 
 ### 00-preflight
 
-- `rollup.env` loaded, required variables set, `RCLONE_CONFIG_EVEREF_HARD_DELETE` is `false`.
+- `rollup.env` loaded, required variables set.
 - Tools present: `rclone` (version printed), GNU `tar`, `xz`, `bzip2`, `jq`, `sha256sum`, `sha1sum`, `curl`,
   `find`, `sort`, `flock`.
-- `rclone lsf $REMOTE/<archive>/history/` works and contains `<year>/`. `<archive>-<year>.tar.xz` exists
-  neither in that listing nor at the public URL (HTTP 404).
-- `rclone size` of the year dir. Free space on the filesystem holding `ROLLUP_SCRATCH_ROOT` must be at least 2x
-  that size plus 2x an estimate of the decompressed size (from a sampled file's bz2 ratio). That covers the
-  download, the stage, the archive and its public copy.
+- `rclone lsf $REMOTE/<archive>/history/` works and contains `<year>/`. It also contains `<year+1>/`,
+  confirming the year is actually finished (scraping has moved on), beyond the current-UTC-year check in
+  `common.sh`. `<archive>-<year>.tar.xz` exists neither in that listing nor at the public URL (HTTP 404).
 
 ### 10-list
 
 - `rclone lsjson -R --hash --files-only --fast-list $REMOTE/<archive>/history/<year>` writes `listing.json`.
+  This is the one recursive listing of the year dir; later steps and the free space check below reuse its
+  byte counts instead of listing again.
 - Abort on anomalies:
   - a non-index name that does not match `^<year>-MM-DD/<archive>-<that date>_HH-mm-ss(\.v[0-9]+)?\.json\.bz2$`;
   - a date outside `<year>`;
@@ -251,6 +247,10 @@ Before anything else, `common.sh` also:
   - zero-byte files;
   - files without a SHA-1 hash.
 - Report: file count by kind, total bytes, files per day (min, max, missing days), first and last timestamp.
+- Free space: download one sampled data file (`rclone cat`) to get its bz2 ratio, and apply that ratio to
+  the data bytes already known from `listing.json` to estimate the decompressed size. Free space on the
+  filesystem holding `ROLLUP_SCRATCH_ROOT` must be at least 2x the year's total bytes plus 2x that estimate.
+  That covers the download, the stage, the archive and its public copy.
 
 ### 20-download
 
