@@ -19,9 +19,9 @@ repositories {
 }
 
 dependencies {
-    jooqGenerator "com.h2database:h2:2.5.250"
+    jooqGenerator "com.h2database:h2:2.5.252"
     implementation "org.flywaydb:flyway-core:13.9.0"
-    implementation "com.h2database:h2:2.5.250"
+    implementation "com.h2database:h2:2.5.252"
 }
 
 flyway {
