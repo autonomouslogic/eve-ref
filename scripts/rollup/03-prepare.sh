@@ -35,33 +35,9 @@ if [[ "$INDEX_HTML_DELETED" -ne "$INDEX_HTML_COUNT" ]]; then
 fi
 echo "Deleted $INDEX_HTML_DELETED index.html files"
 
-echo "## 🔵 Hashing originals"
-export DOWNLOAD_DIR YEAR_PATH
-find "$DOWNLOAD_DIR" -type f ! -name 'index.html' -print0 \
-	| xargs -0 -P"$(nproc)" -n1 bash -c '
-		f="$1"
-		rel="${f#$DOWNLOAD_DIR/}"
-		if [[ "$rel" == *.bz2 ]]; then
-			name="$YEAR_PATH/${rel%.bz2}"
-			hash="$(bzcat "$f" | sha256sum | cut -d" " -f1)"
-		else
-			name="$YEAR_PATH/$rel"
-			hash="$(sha256sum "$f" | cut -d" " -f1)"
-		fi
-		printf "%s  %s\n" "$hash" "$name"
-	' _ >"$SCRATCH/expected.sha256.unsorted"
-LC_ALL=C sort -k2 "$SCRATCH/expected.sha256.unsorted" -o "$SCRATCH/expected.sha256"
-rm -f "$SCRATCH/expected.sha256.unsorted"
-echo "Hashed $(wc -l <"$SCRATCH/expected.sha256") original files (bzcat for .bz2, plain for index.json)"
-
 echo "## 🔵 Decompressing"
 find "$STAGE_DIR" -name '*.bz2' -print0 | xargs -0 -P"$(nproc)" -n500 bunzip2
-REMAINING_BZ2="$(find "$STAGE_DIR" -name '*.bz2' | wc -l)"
-if [[ "$REMAINING_BZ2" -ne 0 ]]; then
-	echo "🔴 $REMAINING_BZ2 .bz2 files remain in stage" >&2
-	exit 1
-fi
-echo "Decompressed all .bz2 files, none remain"
+echo "Decompressed all .bz2 files"
 
 echo "## 🔵 Checking file count"
 STAGE_FILE_COUNT="$(find "$STAGE_DIR" -type f | wc -l)"
@@ -72,21 +48,12 @@ if [[ "$STAGE_FILE_COUNT" -ne "$EXPECTED_STAGE_COUNT" ]]; then
 fi
 echo "Stage has $STAGE_FILE_COUNT files ($EXPECTED_STAGE_COUNT expected: data + index.json)"
 
-echo "## 🔵 Hashing stage"
+echo "## 🔵 Hashing"
 (
 	cd "$STAGE_ROOT"
-	find "$YEAR_PATH" -type f -print0 | sort -z | xargs -0 sha256sum
-) >"$SCRATCH/stage.sha256.unsorted"
-LC_ALL=C sort -k2 "$SCRATCH/stage.sha256.unsorted" -o "$SCRATCH/stage.sha256"
-rm -f "$SCRATCH/stage.sha256.unsorted"
-
-SHA_DIFF="$(diff "$SCRATCH/expected.sha256" "$SCRATCH/stage.sha256" || true)"
-if [[ -n "$SHA_DIFF" ]]; then
-	echo "🔴 stage.sha256 differs from expected.sha256:" >&2
-	echo "$SHA_DIFF" >&2
-	exit 1
-fi
-echo "stage.sha256 matches expected.sha256 ($STAGE_FILE_COUNT files)"
+	find "$YEAR_PATH" -type f -exec sha256sum {} +
+) | LC_ALL=C sort -k2 >"$SCRATCH/$ARCHIVE-$YEAR.sha256"
+echo "Wrote $ARCHIVE-$YEAR.sha256 ($STAGE_FILE_COUNT files)"
 
 echo "## 🔵 Checking mtimes"
 STAGE_MTIME_TSV="$(

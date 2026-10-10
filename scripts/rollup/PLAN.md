@@ -1,7 +1,9 @@
 # Yearly history rollup: implementation plan
 
-Status: **planning**. No scripts exist yet. This file holds implementation notes for review; the operator
-runbook lives in [README.md](README.md).
+Status: `00-preflight.sh` through `03-prepare.sh` are written; `04-archive.sh` through `07-complete.sh` are
+still planned. This file holds implementation notes for review; the operator runbook lives in
+[README.md](README.md). **Keep README.md's status line and procedure table up to date whenever a script is
+added or changed** — it must never drift from what's actually implemented.
 
 ## Goal
 
@@ -174,8 +176,7 @@ $ROLLUP_SCRATCH_ROOT/<archive>-<year>/
   listing.json                          rclone lsjson -R --hash --files-only of the remote year dir
   download/<archive>/history/<year>/    untouched rclone copy (.bz2, index.html, index.json)
   stage/<archive>/history/<year>/       working copy: no index.html, bz2 decompressed (tar root = stage/)
-  expected.sha256                       sha256 of each staged file, computed from download/ (bzcat for .bz2)
-  stage.sha256                          sha256 of each file in stage/
+  <archive>-<year>.sha256               sha256 of each staged file, computed directly from stage/
   <archive>-<year>.tar.xz
   archive-contents.sha256               sha256 of each archive entry, streamed out of the archive
   archive.sha256 / archive.sha1
@@ -266,13 +267,12 @@ Before anything else, `common.sh` also:
 
 - `cp -a download/<archive>/history/<year> stage/<archive>/history/<year>`.
 - Delete `index.html` files. The count must equal the `index.html` count in `listing.json`.
-- `expected.sha256` comes from `download/`: `bzcat | sha256sum` for each `.bz2` (recorded under the name
-  without `.bz2`), plain `sha256sum` for `index.json`.
-- `find stage -name '*.bz2' -print0 | xargs -0 -P"$(nproc)" -n 500 bunzip2`.
+- `find stage -name '*.bz2' -print0 | xargs -0 -P"$(nproc)" -n 500 bunzip2`. `bunzip2` fails loudly on
+  corrupt input, so no separate integrity re-check is needed here (`bzip2 -t` already ran in `02-download`).
+- `<archive>-<year>.sha256` comes straight from `stage/`: `find stage -type f -exec sha256sum {} +`,
+  `LC_ALL=C` sorted by path. No separate "expected" hash is computed from `download/`.
 - Verify:
-  - no `.bz2` left;
   - the file count equals the data plus `index.json` count from `listing.json`;
-  - `stage.sha256` equals `expected.sha256`;
   - mtimes match `listing.json`;
   - `jq empty` passes on every file (valid JSON).
 
@@ -294,7 +294,7 @@ Before anything else, `common.sh` also:
     	> archive-contents.sha256
     ```
 
-    `archive-contents.sha256` must equal `expected.sha256` exactly (the tar is already in sorted order).
+    `archive-contents.sha256` must equal `<archive>-<year>.sha256` exactly (the tar is already in sorted order).
 - Write `archive.sha256` and `archive.sha1`.
 
 ### 05-upload
