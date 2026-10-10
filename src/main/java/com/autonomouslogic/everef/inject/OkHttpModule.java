@@ -104,6 +104,24 @@ public class OkHttpModule {
 
 	@Provides
 	@Singleton
+	@Named("data-proxy")
+	public OkHttpClient dataProxyHttpClient(UserAgentInterceptor userAgentInterceptor) {
+		return new OkHttpClient.Builder()
+				.addInterceptor(userAgentInterceptor)
+				.cache(null)
+				.callTimeout(Duration.ZERO)
+				.connectTimeout(Duration.ofSeconds(5))
+				.readTimeout(Duration.ofSeconds(60))
+				.writeTimeout(Duration.ofSeconds(60))
+				.followRedirects(false)
+				.followSslRedirects(false)
+				.retryOnConnectionFailure(true)
+				.connectionPool(new okhttp3.ConnectionPool(64, 5, java.util.concurrent.TimeUnit.MINUTES))
+				.build();
+	}
+
+	@Provides
+	@Singleton
 	public OkHttpWrapper mainWrapper(OkHttpClient client) {
 		return new OkHttpWrapper(client);
 	}

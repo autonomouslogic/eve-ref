@@ -55,6 +55,17 @@ public class TestOkHttpModule {
 
 	@Provides
 	@Singleton
+	@Named("data-proxy")
+	public OkHttpClient dataProxyHttpClient(UserAgentInterceptor userAgentInterceptor) {
+		return new OkHttpModule()
+				.dataProxyHttpClient(userAgentInterceptor)
+				.newBuilder()
+				.addInterceptor(new NonLocalhostBlockingInterceptor())
+				.build();
+	}
+
+	@Provides
+	@Singleton
 	public OkHttpClient okHttpClient(UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
 		return new OkHttpModule()
 				.mainHttpClient(null, userAgentInterceptor, loggingInterceptor)

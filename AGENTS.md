@@ -22,6 +22,8 @@ Java build requires jOOQ classes to exist first. `make` targets that need them d
 generated jOOQ sources.
 
 - Full test suite: `make test` (Java + UI). Java only: `make test-java`. UI only: `make test-ui`.
+- Slow tests (tagged `slow`, e.g. data-server large-stream/concurrency tests): excluded from `make test-java`;
+  run separately with `make slow-test-java` (`./gradlew slowTest`). Run in CI after the regular Java tests.
 - Single Java test: `./gradlew test --tests "com.autonomouslogic.everef.cli.SomeTest"`
   (run `make generate-database` first).
 - Format (required before committing): `make format` — runs `./gradlew spotlessApply` (palantir Java
@@ -99,6 +101,10 @@ reading env vars ad hoc.
 - `api/`: the `api` command runs a **Helidon** webserver exposing endpoints (search, industry cost,
   etc.). API spec is `spec/eve-ref-api.yaml`; models are generated via the OpenAPI generator into the
   `openapi` package.
+- `dataserver/`: the `data-server` command runs a separate **Helidon** webserver that streams
+  data.everef.net straight through from B2 (replacing the old Cloudflare Worker), with RFC 9110
+  conditional-request handling, a write-stall watchdog for dead streams, and a dedicated `data-proxy`
+  OkHttp client. See `data-server-plan.md` for the full design.
 - Jackson is the serialization workhorse (JSON/YAML/CSV). Note the build pins **two** Jackson lines:
   Jackson 3 (`tools.jackson.*`) as primary, and Jackson 2 (`com.fasterxml.jackson.*`) kept only for
   swagger-core and the dynamo-mapper — keep imports on the right one.
