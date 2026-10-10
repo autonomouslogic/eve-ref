@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.http;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -10,7 +11,9 @@ import com.autonomouslogic.everef.url.UrlParser;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
+import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.QueueDispatcher;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,6 +91,22 @@ public class DataCrawlerTest {
 				List.of(urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
 						+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
 				urls);
+
+		testDataUtil.assertRequest(server.takeRequest(), "/data/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
+		testDataUtil.assertNoMoreRequests(server);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldFailOnMissingDirectoryIndex() {
+		var dispatcher = new QueueDispatcher();
+		dispatcher.enqueueResponse(
+				testDataUtil.mockResponse(ResourceUtil.loadContextual(DataCrawlerTest.class, "/page1.html")));
+		dispatcher.enqueueResponse(new MockResponse().setResponseCode(404));
+		server.setDispatcher(dispatcher);
+
+		assertThrows(RuntimeException.class, () -> dataCrawler.crawl());
 
 		testDataUtil.assertRequest(server.takeRequest(), "/data/");
 		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");

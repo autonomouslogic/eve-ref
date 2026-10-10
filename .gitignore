@@ -2,6 +2,8 @@
 .idea/
 build/
 local.env
+scripts/deep-archive/torrents.env
+__pycache__/
 node_modules/
 .kotlin/
 .profileconfig.json
