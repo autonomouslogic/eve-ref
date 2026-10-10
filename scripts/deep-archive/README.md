@@ -12,7 +12,7 @@ Ad hoc, by hand, **at most once per calendar year**:
 1. Select the data on data.everef.net from years ≤ current year − 2. Never `market-history` or `killmails`. The
    selection is a frozen file list that every later step is checked against.
 2. Announce the run on Discord.
-3. Download the selection into a local directory, which is also the seeding directory.
+3. Copy the selection from the mounted data storage into a local directory, which is also the seeding directory.
 4. Make `everef-deep-archive-YYYY.torrent` (hybrid v1+v2), with checksums (`.sha256`) and a README with verification
    instructions inside it, plus a file list `everef-deep-archive-YYYY.txt`.
 5. Seed it and test it.
@@ -50,3 +50,6 @@ deep-archive/
 
 `--dir` is required on every script. It's the working directory and the directory torrents are seeded from. See
 RUNBOOK "Conventions".
+
+The scripts reach the data site's storage only through a filesystem mount, `DATA_MOUNT` in `torrents.env` (today
+B2 through `rclone mount`). No S3 API or B2 credentials. See PLAN 2.21.
