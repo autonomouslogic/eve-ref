@@ -14,7 +14,8 @@ Design and reasoning: [`PLAN.md`](PLAN.md).
   sudo apt-get install python3 rclone python3-libtorrent
   ```
 - A B2 key for the data bucket.
-- `SEED_DIR` on redundant storage (e.g. a ZFS mirror or RAID), with room for one more torrent (up to 1 TiB).
+- `SEED_DIR` on redundant storage (e.g. a ZFS mirror or RAID), with room for one more torrent (`MAX_BYTES` in
+  `lib/workflow.py`).
 - qBittorrent-nox, for seeding.
 
 ## Setup
@@ -43,8 +44,8 @@ key and bucket, libtorrent and the tracker list. Reports every problem, then abo
 ./01-find.py
 ```
 Lists the bucket and selects the oldest files not archived yet, by modification date, up to the last date that stays
-within 14,320 files and 1 TiB. Nothing modified in the last 2 years (PLAN 2.8). Prints the cutoff, the torrent ID and
-a report, and writes the selection to `$SCRATCH_DIR/find/files.jsonl`.
+within the size limits (`lib/workflow.py`), and nothing newer than the minimum age (`01-find.py`). Prints the cutoff,
+the torrent ID and a report, and writes the selection to `$SCRATCH_DIR/find/files.jsonl`.
 
 Aborts if a single date is over a limit: that needs resolving by hand.
 
@@ -93,7 +94,7 @@ Writes `<ID>.sha256` into `$SEED_DIR/<ID>/`, from the manifest.
 ```
 ./06-make-torrent.py
 ```
-Writes `<ID>-README.txt` into `$SEED_DIR/<ID>/`, makes `$SCRATCH_DIR/<ID>.torrent` (hybrid v1+v2, 32 MiB pieces),
+Writes `<ID>-README.txt` into `$SEED_DIR/<ID>/`, makes `$SCRATCH_DIR/<ID>.torrent` (hybrid v1+v2),
 and generates the file list `$SCRATCH_DIR/<ID>.txt` from it.
 
 ### 07: Check torrent
@@ -167,14 +168,14 @@ On the first workflow, also add the feed to a qBittorrent RSS reader and check t
 ./15-check-docs.py
 ```
 - The Deep Archive page is reachable and its links resolve.
-- Its rules still match: 2-year minimum age, size-limited torrents, the excluded datasets. If not, update the page
+- Its rules still match the scripts: minimum age, size-limited torrents, the excluded datasets. If not, update the page
   and confirm it's live before deleting anything.
 
 ### 16: Prepare backup
 ```
 ./16-prepare-backup.py
 ```
-Plans the backup bundles (~50 GB ZIPs) from the manifest.
+Plans the backup bundles (ZIPs) from the manifest.
 
 ### 17: Check backup plan
 ```
@@ -336,16 +337,16 @@ restore the affected bundles from the backup (`<ID>-backup-index.tsv` says which
 
 ## Appendix D: Rollback
 
-Re-upload the deleted files from `$SEED_DIR/<ID>/` (or a backup restore) into the bucket, using the published
-`<ID>.txt` as the list (planned script, outside the numbered steps). Re-uploaded files get a new upload time. While
-B2 still holds the hidden versions (about 2 days), removing the hide markers in B2's web console is quicker (PLAN
-2.14). Then run a full `DataIndex` and check the files are served again.
+Re-upload the deleted files from `$SEED_DIR/<ID>/` (or a backup restore) into the bucket, using the published `<ID>.txt`
+as the list (planned script, outside the numbered steps). Re-uploaded files get a new upload time. While B2 still holds
+the hidden versions (the bucket's lifecycle rules decide how long), removing the hide markers in B2's web console is
+quicker (PLAN 2.14). Then run a full `DataIndex` and check the files are served again.
 
 ## Appendix E: If data changed
 
 If `20-check-before-delete` finds a file that changed after it was selected:
 - Don't delete. Note it in `NOTES.md`.
-- Find out why. If the dataset still changes after two years, add it to `TORRENT_EXCLUDE`.
+- Find out why. If the dataset still changes after the minimum age, add it to `TORRENT_EXCLUDE`.
 - The torrent is already published: replace it as in PLAN Appendix A (`<ID>-r2`).
 
 ## Appendix F: Script reference

@@ -434,7 +434,7 @@ For quick review and search without having to parse torrent files:
   with the manifest.
 - Paths match the site layout, so someone looking for e.g. "public contracts from March 2024" can `grep` it and
   knows which torrent to grab and which file to select.
-- Content-Type `text/plain; charset=utf-8`, set on the object at upload (2.21). At most ~14,000 files makes a list of
+- Content-Type `text/plain; charset=utf-8`, set on the object at upload (2.21). At most ~21,000 files makes a list of
   about 1–2 MB. Cloudflare compresses it in transit.
 
 ### 2.6 Files inside the torrent: checksums and README
@@ -492,7 +492,7 @@ RSS 2.0, one `<item>` per torrent, compatible with qBittorrent's RSS auto-downlo
       <link>https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.torrent</link>
       <guid isPermaLink="false">INFOHASH_V1</guid>
       <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
-      <description>EVE Ref Deep Archive, data modified up to 2023-04-11. 980 GB, 14,000 files.
+      <description>EVE Ref Deep Archive, data modified up to 2023-04-11. 980 GB, 21,000 files.
         Datasets: market-orders, public-contracts, ...
         File list: https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.txt</description>
       <enclosure url="https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.torrent"
@@ -535,7 +535,7 @@ after that is checked against that list, never against "whatever is in the direc
     keeps files on the site.
 - **Limits, hard-coded in `lib/workflow.py`:**
   - `MAX_BYTES` = 1 TiB: what the seeder holds per torrent, and what a full download is.
-  - `MAX_FILES` = (6,000,000 − 1,703,936) / 300 = **14,320**: a target `.torrent` of ~6 MB (well under libtorrent's
+  - `MAX_FILES` = (8,000,000 − 1,703,936) / 300 = **20,986**: a target `.torrent` of ~8 MB (20% under libtorrent's
     10 MB default), minus the piece hashes for `MAX_BYTES` at 32 MiB pieces (32,768 pieces × 52 bytes), at ~300
     bytes per file (measured 261 for hybrid, Appendix B, rounded up for longer real paths). The calculation is in
     the code.
@@ -608,7 +608,7 @@ Every torrent's data is backed up to **S3 Glacier Deep Archive** before anything
 EVE Ref controls if the seed directory is lost.
 
 **Why bundles, not one object per file.** Deep Archive charges per request and adds about 40 KB of billed metadata
-per object, and restores are requested per object. A torrent with ~14,000 files, many of them small, would be slow and
+per object, and restores are requested per object. A torrent with ~21,000 files, many of them small, would be slow and
 expensive to upload and to restore one by one. So the files are packed into large bundles.
 
 **Bundle format:** uncompressed (store-only) **ZIP64** files, `<ID>-part-NNN.zip`, about 50 GB each, files in sorted
@@ -673,7 +673,7 @@ Researched 2026-10-08 (sources at the end of this section).
 
 **What that means for EVE Ref:**
 
-- A torrent has up to ~14,000 files and 1 TiB: over the recommended item size and file count, and up to the hard
+- A torrent has up to ~21,000 files and 1 TiB: over the recommended item size and file count, and up to the hard
   1 TB limit. It **doesn't fit one item well**, so the Internet Archive can't mirror the files one-to-one.
 - It **can't be a web seed for our torrents.** A web seed (BEP 19) needs every file at `<url>/<torrent name>/<path>`,
   which would need one item holding the whole torrent's files.
@@ -931,7 +931,7 @@ The live list of torrents is the `deep-archive/` directory and the feed.
 
 1. **What it is.** BitTorrent archives of data.everef.net datasets, `everef-deep-archive-YYYY-MM-DD.torrent`. Each one
    holds the oldest data that wasn't in an earlier torrent, from every archived dataset, up to the date in its name,
-   in the same paths as on the site. Each torrent is as big as client limits allow (up to ~14,000 files, 1 TiB).
+   in the same paths as on the site. Each torrent is as big as client limits allow (up to ~21,000 files, 1 TiB).
 2. **Why they exist.** data.everef.net keeps growing (5.7 TB+). Old data is moved off the HTTP site to keep hosting
    sustainable, and torrents keep it available, with the community helping to host it. Be honest about the
    trade-off: old data is only available as long as someone seeds it, and seeding is appreciated.
@@ -997,7 +997,7 @@ accurate (excluded datasets, timing, links), and update it only if the rules cha
 ## 6. Open questions
 
 Decided so far: one torrent per workflow, as big as the size limits allow (2.1, 2.8); hard-coded limits
-(`MAX_FILES` 14,320, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by modification date with a 2-year minimum age;
+(`MAX_FILES` 20,986, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by modification date with a 2-year minimum age;
 torrent IDs from the cutoff date; exclusions `market-history` and `killmails`; Fuzzwork/MER in scope with sync
 cutoffs; Fuzzwork cutoff at the lowest dated ID on the site; checksums and README inside the torrent; hybrid v1+v2; no
 notice period, but a start announcement; deletion last; no MD5 matching; no Cloudflare
@@ -1020,8 +1020,8 @@ Still open:
    network)?
 7. Stale index cleanup: in the delete step (2.15a), in `DataIndex` (2.15b), or both?
 8. Add the `DataIndex` "Archived data" note (2.20)?
-9. **Small-snapshot datasets** (Appendix B): ~553,700 files (69 %) for ~6 GiB; at 14,320 files per torrent they'd
-   fill ~39 torrents with almost no data. Being addressed separately: a script that rolls whole years of small files
+9. **Small-snapshot datasets** (Appendix B): ~553,700 files (69 %) for ~6 GiB; at 20,986 files per torrent they'd
+   fill ~26 torrents with almost no data. Being addressed separately: a script that rolls whole years of small files
    up into a single highly compressed file. Still open: which "no year folder" directories must stay on HTTP
    (`ccp/iec`, `ccp/sde/older`, …)?
 10. Which Discord channel gets the announcements, and who posts them?
@@ -1212,7 +1212,7 @@ in 2.4, and large single years (120,000–280,000 files) would be 36–85 MB eac
 default means roughly 33,000 files per torrent at most, before any margin.
 
 **Outcome (2026-10-10):** size-limited torrents (2.8). Each torrent takes the oldest data up to the file and byte
-limits (14,320 files, 1 TiB), which fits every default limit with margin. Options considered and not taken: aiming
+limits (20,986 files, 1 TiB), which fits every default limit with margin. Options considered and not taken: aiming
 at qBittorrent's raised limits (other clients refuse them), v1-only torrents (2.4 decided hybrid), and bundling
 small files into ZIPs inside the torrent (breaks the site layout and mirror seeding).
 
@@ -1249,7 +1249,7 @@ to keep on B2, and under a file limit they'd take up most of the torrents (open 
   dozen ~21,000-file hourly datasets, the small snapshots are 69 % of the files and 0.14 % of the bytes.
 - **Archiving them saves nothing.** 5.8 GiB on B2 costs a few cents a month. The point of the Deep Archive is
   storage cost, and these aren't it.
-- **Without them**, the whole catch-up is ~246,000 files: about 17 torrents at 14,320 files each, rather than ~56
+- **Without them**, the whole catch-up is ~246,000 files: about 12 torrents at 20,986 files each, rather than ~38
   with them.
 - **The big three** are `fuzzwork/ordersets` (85,464 files, 1.9 TiB, plus 23,854 backfill files, 560 GiB),
   `market-orders` (67,833, 1.1 TiB) and `public-contracts` (66,967, 322 GiB). Together ~244,000 files and ~3.9 TiB:

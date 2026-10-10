@@ -93,14 +93,15 @@ PIECE_SIZE = 32 * MIB
 MAX_BYTES = 1 * TIB
 
 # Most files in one torrent, worked out from a target .torrent size:
-# - TARGET_TORRENT_BYTES: ~6 MB, well under libtorrent's 10 MB default (max_buffer_size), so any libtorrent client
-#   opens it unchanged, and far below the 43,620 files (10.8 MiB) that hung qBittorrent's WebUI (PLAN Appendix B).
+# - TARGET_TORRENT_BYTES: ~8 MB, under libtorrent's 10 MB default (max_buffer_size) with a 20% margin, so any
+#   libtorrent client opens it unchanged, and below the 43,620 files (10.8 MiB) that hung qBittorrent's WebUI (PLAN
+#   Appendix B).
 # - PIECE_HASH_BYTES: piece hashes for MAX_BYTES of data, 20 bytes (v1) + 32 bytes (v2) per piece:
 #   1 TiB / 32 MiB = 32,768 pieces * 52 bytes = 1,703,936 bytes.
 # - BYTES_PER_FILE: measured 261 bytes per file for a hybrid torrent (Appendix B), rounded up to 300 for longer real
 #   site paths.
-# (6,000,000 - 1,703,936) / 300 = 14,320 files.
-TARGET_TORRENT_BYTES = 6_000_000
+# (8,000,000 - 1,703,936) / 300 = 20,986 files.
+TARGET_TORRENT_BYTES = 8_000_000
 PIECE_HASH_BYTES = (MAX_BYTES // PIECE_SIZE) * (20 + 32)
 BYTES_PER_FILE = 300
 MAX_FILES = (TARGET_TORRENT_BYTES - PIECE_HASH_BYTES) // BYTES_PER_FILE
