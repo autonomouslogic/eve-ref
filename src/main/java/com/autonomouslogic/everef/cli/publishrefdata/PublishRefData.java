@@ -343,7 +343,8 @@ public class PublishRefData implements Command {
 		return Completable.fromAction(() -> {
 			discordNotifier.notifyDiscord(String.format(
 					"Reference data published - SDE: %s, Hoboleaks: %s)",
-					latestMeta.getSde().getVersion(), latestMeta.getHoboleaks().getVersion()));
+					currentMeta.getSde().getVersion(),
+					currentMeta.getHoboleaks().getVersion()));
 		});
 	}
 
