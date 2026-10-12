@@ -63,7 +63,7 @@ If a step fails partway, remove its partial output and rerun it. Download and de
 | 4    | `03-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
 | 5    | `04-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
 | 6    | `05-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
-| 7    | `06-delete.sh`    | **hides year dir**   | Dry-run count equals listing. Typed `<archive>-<year>` confirmation |
+| 7    | `06-delete.sh`    | **hides year dir**   | Remaining files all in the listing, dry-run count matches. Typed `<archive>-<year>` confirmation |
 | 8    | `07-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
 
 Steps 1-6 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (6).

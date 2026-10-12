@@ -12,7 +12,7 @@ The year's directory is removed and replaced by one `.tar.xz` file next to it:
 For example, [`incursions/history/incursions-2023.tar.xz`](https://data.everef.net/incursions/history/incursions-2023.tar.xz).
 
 Only finished years are rolled up. The current year always stays as individual files.
-Market history and killmails are never rolled up.
+Market history and killmails will never be rolled up.
 
 ## Contents
 

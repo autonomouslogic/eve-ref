@@ -274,7 +274,10 @@ Before anything else, `common.sh` also:
 - Verify:
   - the file count equals the data plus `index.json` count from `listing.json`;
   - mtimes match `listing.json`;
-  - `jq empty` passes on every file (valid JSON).
+  - every file holds exactly one valid JSON value. jq runs on 500 files at a time and reads them as one
+    stream, where a truncated file could join up with the next one and still parse. So `jq -r input_filename`
+    (the file each value ended in) must print exactly the file list, in order. This also rejects empty files
+    and files with several values.
 
 ### 04-archive
 
@@ -321,12 +324,14 @@ Before anything else, `common.sh` also:
 
 - The path is built from the validated args and must match `^[a-z0-9-]+/history/20[0-9]{2}$`. It is never a
   bare `history` dir.
+- `rclone lsf -R --files-only` of the year dir: every remaining file must be in `listing.json`. Fewer is
+  fine, which makes the step safe to rerun after a partial delete or after a later check failed. Exit code 3
+  (directory not found) counts as empty. If nothing is left, skip straight to the checks.
 - `rclone delete --dry-run --fast-list` on `$REMOTE/<archive>/history/<year>`: show the count, which must
-  equal the `listing.json` count. This is a sanity check on the path, not a change check, because the data
+  equal the remaining count. This is a sanity check on the path, not a change check, because the data
   files of finished years don't change.
 - The operator types `<archive>-<year>` to confirm.
-- `rclone delete --fast-list --max-delete <listing count> $REMOTE/<archive>/history/<year>`. Safe to rerun if
-  it fails partway.
+- `rclone delete --fast-list --max-delete <remaining count> $REMOTE/<archive>/history/<year>`.
 - Verify:
   - `rclone lsf -R` of the year dir is empty;
   - 10 random old public URLs return 404;

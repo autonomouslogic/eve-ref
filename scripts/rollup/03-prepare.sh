@@ -80,11 +80,15 @@ fi
 echo "mtimes match listing.json for all $STAGE_FILE_COUNT files"
 
 echo "## 🔵 Checking JSON validity"
-if ! find "$STAGE_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n1 jq empty; then
-	echo "🔴 jq empty failed on one or more files in stage" >&2
+# jq is run on 500 files at a time, but it reads them as one stream, so a truncated file could
+# join up with the next one and still parse. Each file must therefore end exactly one JSON value:
+# input_filename prints the file each value ended in, which must equal the file list in order.
+if ! find "$STAGE_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n500 bash -c \
+	'out="$(jq -r input_filename "$@")" && diff <(printf "%s\n" "$out") <(printf "%s\n" "$@") >&2' bash; then
+	echo "🔴 JSON check failed: invalid JSON, or files not holding exactly one JSON value (diff above)" >&2
 	exit 1
 fi
-echo "jq empty passed on every file"
+echo "Every file holds exactly one valid JSON value"
 
 STAGE_BYTES="$(du -sb "$STAGE_DIR" | cut -f1)"
 

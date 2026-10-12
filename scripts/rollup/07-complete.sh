@@ -30,7 +30,7 @@ if [[ -n "$REMAINING" ]]; then
 fi
 echo "$REMOTE/$YEAR_PATH is still empty"
 
-DATA_FILE_COUNT="$(jq 'length' "$SCRATCH/listing.json")"
+DATA_FILE_COUNT="$(jq '[.[] | select(.Path | test("index\\.html$") | not)] | length' "$SCRATCH/listing.json")"
 
 echo "## 🔵 Summary"
 echo "archive:          $ARCHIVE"
