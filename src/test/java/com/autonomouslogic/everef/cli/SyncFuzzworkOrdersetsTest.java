@@ -31,9 +31,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + SyncFuzzworkOrdersetsTest.BUCKET_NAME + "/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
-@SetEnvironmentVariable(
-		key = "FUZZWORK_MARKET_BASE_PATH",
-		value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
+@SetEnvironmentVariable(key = "FUZZWORK_MARKET_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
 public class SyncFuzzworkOrdersetsTest {
 	static final String BUCKET_NAME = "data-bucket";
 	static final Pattern ORDERSET_DOWNLOAD = Pattern.compile("/orderbooks/orderset-([0-9]+)\\.csv\\.gz");
@@ -74,9 +72,8 @@ public class SyncFuzzworkOrdersetsTest {
 
 	@Test
 	@SneakyThrows
-	void shouldNotSyncOrdersetsBelowLowestExistingId() {
-		existingPaths.add(
-				"fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-10.csv.gz");
+	void shouldOnlySyncOrdersetsAfterLatestExistingId() {
+		existingPaths.add("fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-10.csv.gz");
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
 		fuzzworkIds.addAll(List.of(9L, 10L, 50L, 100L, 101L));
 
@@ -90,26 +87,40 @@ public class SyncFuzzworkOrdersetsTest {
 
 	@Test
 	@SneakyThrows
-	void shouldSyncMissingOrdersetsAboveLowestExistingId() {
+	void shouldNotSyncGapsBeforeLatestExistingId() {
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-102-2026-01-01_01-00-00.csv.gz");
-		fuzzworkIds.addAll(List.of(100L, 101L, 102L, 103L));
+		fuzzworkIds.addAll(List.of(100L, 101L, 102L, 103L, 104L));
 
 		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
 
-		assertEquals(List.of(101L, 103L), downloadedIds.stream().sorted().toList());
+		assertEquals(List.of(103L, 104L), downloadedIds.stream().sorted().toList());
 		assertEquals(
 				List.of(
-						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz",
-						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-103-2026-01-02_12-00-00.csv.gz"),
+						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-103-2026-01-02_12-00-00.csv.gz",
+						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-104-2026-01-02_12-00-00.csv.gz"),
+				uploadedOrdersets());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldIgnoreBackfills() {
+		existingPaths.add("fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-101.csv.gz");
+		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
+		fuzzworkIds.addAll(List.of(100L, 101L));
+
+		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
+
+		assertEquals(List.of(101L), downloadedIds);
+		assertEquals(
+				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldFailWhenNoOrdersetsExist() {
-		existingPaths.add(
-				"fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-10.csv.gz");
+		existingPaths.add("fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-10.csv.gz");
 		fuzzworkIds.addAll(List.of(10L, 50L, 100L));
 
 		assertThrows(Exception.class, () -> VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run));

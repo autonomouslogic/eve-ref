@@ -32,7 +32,16 @@ import time
 import libtorrent as lt
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
-from workflow import PIECE_SIZE, fail, load_env, ok, section  # noqa: E402
+from workflow import (  # noqa: E402
+    PIECE_SIZE,
+    fail,
+    fmt_bytes,
+    fmt_count,
+    fmt_duration,
+    load_env,
+    ok,
+    section,
+)
 
 TRACKERS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "trackers.txt")
 TRACKER_SCHEMES = ("udp://", "http://", "https://")
@@ -46,11 +55,6 @@ COMMENT_TEMPLATE = """EVE Ref Deep Archive: {id}
 Data from {years}. Datasets: {datasets}.
 What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
 File list: https://data.everef.net/deep-archive/{id}.txt"""
-
-KIB = 1024
-MIB = 1024 * KIB
-GIB = 1024 * MIB
-
 
 
 def main():
@@ -237,27 +241,6 @@ def try_load(path):
         return True, None
     except RuntimeError as e:
         return False, str(e)
-
-
-def fmt_count(n):
-    return f"{n:,}"
-
-
-def fmt_duration(seconds):
-    minutes, seconds = divmod(int(seconds), 60)
-    hours, minutes = divmod(minutes, 60)
-    if hours:
-        return f"{hours}h {minutes}m {seconds}s"
-    if minutes:
-        return f"{minutes}m {seconds}s"
-    return f"{seconds}s"
-
-
-def fmt_bytes(n):
-    for unit, factor in (("TiB", 1024**4), ("GiB", GIB), ("MiB", MIB), ("KiB", KIB)):
-        if n >= factor:
-            return f"{n / factor:.1f} {unit}"
-    return f"{n} B"
 
 
 if __name__ == "__main__":

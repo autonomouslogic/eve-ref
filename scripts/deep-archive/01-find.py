@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 find: step 2 of the EVE Ref Deep Archive workflow. Selects the files for the torrent: the oldest files on
-data.everef.net that aren't archived yet, by modification date, up to the last date that keeps the torrent as big as
-the size limits allow.
+data.everef.net that aren't archived yet, by date (see Dates below), up to the last date that keeps the torrent as big
+as the size limits allow.
 
 DRAFT. Lists the data site's bucket on B2 with rclone (DATA_BUCKET, see lib/workflow.py). Read-only: it only lists
 files and reads published file lists.
@@ -15,28 +15,37 @@ How the cutoff is chosen:
 1. List the entire bucket, with each file's size and modification time (rclone's ModTime: on B2, the upload time).
 2. Drop what is never archived (see Skipped below), and files a published torrent already holds (see Published
    torrents below). Set index.json files aside: they aren't selected by their own date (see index.json below).
-3. Drop files modified after the newest allowed date (MIN_AGE_YEARS before today). The rest are candidates.
-4. Group the candidates by modification date (UTC). Find the first date where including every candidate on or
-   before it, plus the index.json of every folder they're in, goes over MAX_BYTES of data or a .torrent estimate
-   (lib/torrent_size.py) over MAX_TORRENT_BYTES (lib/workflow.py). The cutoff is the day before that date. If the
-   limits are never reached, the cutoff is the newest allowed date.
-5. Select every candidate modified on or before the cutoff, and the index.json of every folder they're in.
+3. Drop files dated after the newest allowed date (MIN_AGE_YEARS before today). The rest are candidates.
+4. Group the candidates by date. Find the first date where including every candidate on or before it, plus the
+   index.json of every folder they're in, goes over MAX_BYTES of data or a .torrent estimate (lib/torrent_size.py)
+   over MAX_TORRENT_BYTES (lib/workflow.py). The cutoff is the day before that date. If the limits are never reached,
+   the cutoff is the newest allowed date.
+5. Select every candidate dated on or before the cutoff, and the index.json of every folder they're in.
+
+Dates: a file's date is the earliest of:
+- its modification date (UTC);
+- any ISO date (YYYY-MM-DD) in its file name;
+- 31 December of any year (a 4-digit number from FIRST_YEAR on) in its file name.
+Only the file name counts, not the folders. A 4-digit ID in a name looks like a year and dates the file too early;
+the report counts the files dated each way, and find.log lists samples.
 
 index.json: a folder's index.json is selected when any file directly in that folder is, whatever its own
 modification date (DataIndex rewrites it on every run, so its date says nothing about the data). It isn't selected
 otherwise. Only the folder's own index.json; parent folders' aren't added.
 
-Published torrents: a path listed in a published deep-archive/<ID>.txt is skipped only if its modification date is on
-or before that torrent's cutoff (the date in the ID): it's the version the torrent holds, still on the site because
-its delete didn't happen (flagged). A later date means the file was uploaded again after it was archived (it
-changed), so it's a candidate like any other and can land in a new torrent. The same path can be in several torrents,
-one version each.
+Published torrents: a path listed in a published deep-archive/<ID>.txt is skipped only if its modification date (not
+its date from the name) is on or before that torrent's cutoff (the date in the ID): it's the version the torrent
+holds, still on the site because its delete didn't happen (flagged). A later modification date means the file was
+uploaded again after it was archived (it changed), so it's a candidate like any other and can land in a new torrent.
+The same path can be in several torrents, one version each. A file the torrent selected by a date in its name, but
+modified after the cutoff, looks changed too: if its delete didn't happen, it's selected again (flagged).
 
 The torrent ID is everef-deep-archive-YYYY-MM-DD, with the cutoff date. The torrent holds everything not yet archived
-that was modified on or before that date. Writes, in SCRATCH_DIR:
+that was dated on or before that date. Writes, in SCRATCH_DIR:
 
     find/
-      files.jsonl          the selection, index.json files included: one file per line: path, size, last_modified, url
+      files.jsonl          the selection, index.json files included: one file per line: path, size, last_modified,
+                           date, dated_by, url
       listing.jsonl.gz     the full bucket listing the selection was made from
       report.txt           the printed report
       summary.json         everything in the report, machine-readable
@@ -72,15 +81,13 @@ from collections import defaultdict
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from torrent_size import TorrentSize  # noqa: E402
 from workflow import (  # noqa: E402
-    GIB,
-    KIB,
     DATA_BASE_URL,
     DEEP_ARCHIVE_DIR,
     MAX_BYTES,
     MAX_TORRENT_BYTES,
     MIB,
+    MIN_AGE_YEARS,
     PIECE_SIZE,
-    TIB,
     TORRENT_EXCLUDE,
     TORRENT_ID_PREFIX,
     TORRENT_ID_RE,
@@ -89,6 +96,10 @@ from workflow import (  # noqa: E402
     error,
     fail,
     file_list_problems,
+    fmt_bytes,
+    fmt_count,
+    fmt_duration,
+    fmt_size,
     join,
     lsjson,
     ok,
@@ -102,9 +113,10 @@ INDEX_JSON = "index.json"
 IGNORED_NAMES = {"index.html"}
 LATEST_RE = re.compile(r"-latest\.")
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
-
-# Files modified less than this many years before today are never selected.
-MIN_AGE_YEARS = 2
+NAME_DATE_RE = re.compile(r"(?<![0-9])([0-9]{4})-([0-9]{2})-([0-9]{2})(?![0-9])")
+NAME_YEAR_RE = re.compile(r"(?<![0-9])([0-9]{4})(?![0-9])")
+# Earlier numbers in a file name aren't years: EVE Online was released in 2003.
+FIRST_YEAR = 2003
 
 # Limits a .torrent should stay within (PLAN 2.4 "Creating the torrent"), checked against the estimate.
 # libtorrent defaults from its documentation; the qBittorrent values are assumed and need checking.
@@ -121,18 +133,43 @@ LOG_SAMPLE = 20
 LIMIT_NAMES = {"torrent": "the .torrent size limit", "bytes": "the data size limit", "both": "both limits"}
 
 class Obj:
-    """One file in the bucket. path is relative to the site root; mtime is a POSIX timestamp."""
+    """
+    One file in the bucket. path is relative to the site root; mtime is a POSIX timestamp. date is what the file is
+    selected by, and dated_by where it came from (file_date).
+    """
 
-    __slots__ = ("path", "size", "mtime")
+    __slots__ = ("path", "size", "mtime", "date", "dated_by")
 
     def __init__(self, path, size, mtime):
         self.path = path
         self.size = size
         self.mtime = mtime
+        self.date, self.dated_by = file_date(path, self.modified)
 
     @property
-    def date(self):
+    def modified(self):
         return datetime.datetime.fromtimestamp(self.mtime, datetime.timezone.utc).date()
+
+
+def file_date(path, modified):
+    """
+    (date, dated_by): the earliest of the modification date ("modified"), any ISO date in the file name ("name date"),
+    and 31 December of any year in the file name ("name year"). On a tie, the first of those.
+    """
+    name = file_name(path)
+    dates = [(modified, "modified")]
+    for match in NAME_DATE_RE.finditer(name):
+        try:
+            date = datetime.date(int(match[1]), int(match[2]), int(match[3]))
+        except ValueError:
+            continue
+        if date.year >= FIRST_YEAR:
+            dates.append((date, "name date"))
+    for match in NAME_YEAR_RE.finditer(name):
+        year = int(match[1])
+        if year >= FIRST_YEAR:
+            dates.append((datetime.date(year, 12, 31), "name year"))
+    return min(dates, key=lambda d: d[0])
 
 
 def main():
@@ -151,7 +188,7 @@ def main():
     print(f"Excluded datasets: {', '.join(excludes) or '(none)'}")
     print(
         f"Limits: .torrent {fmt_size(MAX_TORRENT_BYTES)}, data {fmt_bytes(MAX_BYTES)}, "
-        f"nothing modified after {newest_allowed}"
+        f"nothing dated after {newest_allowed}"
     )
 
     section("Listing")
@@ -291,7 +328,7 @@ def load_published_lists(data_remote, listing):
 
 class Scan:
     def __init__(self):
-        self.candidates = []  # [Obj], sorted by mtime then path; no index.json
+        self.candidates = []  # [Obj], sorted by date, mtime, then path; no index.json
         self.indexes = {}  # folder -> its index.json Obj, if not in a published torrent
         self.taken_indexes = set()  # folders whose index.json is the version a published torrent holds
         self.taken = defaultdict(lambda: [0, 0])  # <ID> -> [files, bytes]: the version that torrent holds
@@ -319,7 +356,8 @@ def classify_all(listing, excludes, taken):
         is_index = file_name(o.path) == INDEX_JSON
         archived_in = taken.get(o.path)
         if archived_in is not None:
-            if o.date <= torrent_cutoff(archived_in):
+            # By modification date: a date from the name stays the same when the file is uploaded again.
+            if o.modified <= torrent_cutoff(archived_in):
                 add(scan.taken[archived_in], o.size)
                 if is_index:
                     scan.taken_indexes.add(folder_of(o.path))
@@ -333,7 +371,7 @@ def classify_all(listing, excludes, taken):
         if o.size == 0:
             scan.empty.append(o.path)
         scan.candidates.append(o)
-    scan.candidates.sort(key=lambda o: (o.mtime, o.path))
+    scan.candidates.sort(key=lambda o: (o.date, o.mtime, o.path))
     print(f"{fmt_count(len(scan.candidates))} candidates, {fmt_count(len(scan.indexes))} index.json files")
     return scan
 
@@ -349,7 +387,7 @@ def is_torrent_id(name):
 
 
 def torrent_cutoff(torrent_id):
-    """The cutoff date in a torrent ID: the torrent holds nothing modified after it."""
+    """The cutoff date in a torrent ID: the torrent holds nothing dated after it."""
     return datetime.date.fromisoformat(torrent_id[len(TORRENT_ID_PREFIX) :])
 
 
@@ -397,7 +435,7 @@ class Cutoff:
         self.over_bytes = None
         self.over_torrent_bytes = None  # .torrent estimate including over_date
         self.over_day = None  # (files, bytes) on over_date alone
-        self.too_new = [0, 0]  # candidates modified after newest_allowed
+        self.too_new = [0, 0]  # candidates dated after newest_allowed
 
 
 def choose_cutoff(candidates, indexes, newest_allowed):
@@ -409,7 +447,7 @@ def choose_cutoff(candidates, indexes, newest_allowed):
     cut = Cutoff()
     days = defaultdict(list)  # date -> [Obj], index.json included
     counted = set()  # folders whose index.json is counted
-    for o in candidates:  # sorted by mtime, so dates come in order
+    for o in candidates:  # sorted by date, so dates come in order
         date = o.date
         if date > newest_allowed:
             add(cut.too_new, o.size)
@@ -511,17 +549,19 @@ def unindexed_folders(data, scan):
 
 
 def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, excludes, taken, newest_allowed):
-    """data: the selected files without index.json, in mtime order; selected: data plus their folders' index.json."""
+    """data: the selected files without index.json, in date order; selected: data plus their folders' index.json."""
     now = datetime.datetime.now(datetime.timezone.utc)
     datasets = defaultdict(lambda: [0, 0])
     years = defaultdict(lambda: [0, 0])
     months = defaultdict(lambda: [0, 0])
+    dated_by = defaultdict(lambda: [0, 0])
     for o in selected:
         add(datasets[dataset_of(o.path)], o.size)
         add(years[path_year(o.path)], o.size)
     for o in data:
         # By the data's dates only: an index.json's date is the last DataIndex run.
         add(months[o.date.strftime("%Y-%m")], o.size)
+        add(dated_by[o.dated_by], o.size)
     total = sum(o.size for o in selected)
     estimate = estimate_torrent(selected)
     index_files = len(selected) - len(data)
@@ -535,7 +575,7 @@ def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, e
     flags = []
     if cut.reason == "age":
         flags.append(
-            f"limits not reached: everything modified up to {newest_allowed} fits. The torrent is smaller than it "
+            f"limits not reached: everything dated up to {newest_allowed} fits. The torrent is smaller than it "
             "could be; consider waiting"
         )
     if scan.empty:
@@ -590,13 +630,16 @@ def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, e
             "bytes": total,
             "index_json": index_files,
             "index_json_bytes": index_bytes,
-            "oldest_last_modified": iso(data[0].mtime) if data else None,
-            "newest_last_modified": iso(data[-1].mtime) if data else None,
+            "oldest_date": data[0].date.isoformat() if data else None,
+            "newest_date": data[-1].date.isoformat() if data else None,
+            "oldest_last_modified": iso(min(o.mtime for o in data)) if data else None,
+            "newest_last_modified": iso(max(o.mtime for o in data)) if data else None,
         },
+        "dated_by": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(dated_by.items())},
         "torrent_estimate": estimate,
         "datasets": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(datasets.items())},
         "path_years": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(years.items())},
-        "modified_months": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(months.items())},
+        "date_months": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(months.items())},
         "flags": flags,
         "skipped": {
             "excluded": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.excluded.items())},
@@ -622,6 +665,8 @@ def write_file_list(path, selected, base_url):
                 "path": o.path,
                 "size": o.size,
                 "last_modified": iso(o.mtime),
+                "date": o.date.isoformat(),
+                "dated_by": o.dated_by,
                 "url": base_url + urllib.parse.quote(o.path),
             }
             f.write(json.dumps(record) + "\n")
@@ -644,7 +689,7 @@ def render_report(summary):
     lines.append(f"Exclude:    {', '.join(summary['exclude']) or '(none)'}")
     lines.append(
         f"Limits:     .torrent {fmt_size(limits['max_torrent_bytes'])}, data {fmt_bytes(limits['max_bytes'])}, "
-        f"modified on or before {limits['newest_allowed']}"
+        f"dated on or before {limits['newest_allowed']}"
     )
     listed = summary["listed"]
     candidates = summary["candidates"]
@@ -666,7 +711,8 @@ def render_report(summary):
         f"Selected:   {fmt_count(selected['files'])} files, {fmt_bytes(selected['bytes'])} "
         f"(incl. {fmt_count(selected['index_json'])} index.json, {fmt_bytes(selected['index_json_bytes'])})"
     )
-    if selected["oldest_last_modified"]:
+    if selected["oldest_date"]:
+        lines.append(f"Dated:      {selected['oldest_date']} to {selected['newest_date']}")
         lines.append(f"Modified:   {selected['oldest_last_modified']} to {selected['newest_last_modified']}")
     lines.append(f"Cutoff:     {summary['cutoff']}, {render_cutoff_reason(summary)}")
     lines.append(
@@ -674,8 +720,11 @@ def render_report(summary):
         f"{fmt_count(est['pieces'])} pieces of {fmt_bytes(est['piece_size'])}"
     )
     lines.append("")
-    lines.append("Modified (month, UTC, without index.json):")
-    lines.extend(render_rows([(name, s["files"], s["bytes"]) for name, s in summary["modified_months"].items()]))
+    lines.append("Dated by (the earliest of the three, without index.json):")
+    lines.extend(render_rows([(name, s["files"], s["bytes"]) for name, s in summary["dated_by"].items()]))
+    lines.append("")
+    lines.append("Date (month, without index.json):")
+    lines.extend(render_rows([(name, s["files"], s["bytes"]) for name, s in summary["date_months"].items()]))
     lines.append("")
     lines.append("Year folder in the path:")
     lines.extend(render_rows([(name, s["files"], s["bytes"]) for name, s in summary["path_years"].items()]))
@@ -715,7 +764,7 @@ def render_cutoff_reason(summary):
 def render_no_cutoff(cut, scan):
     if cut.over_date is None:
         return (
-            f"No candidates modified on or before the newest allowed date. "
+            f"No candidates dated on or before the newest allowed date. "
             f"{fmt_count(len(scan.candidates))} candidates, all newer."
         )
     files, size = cut.over_day
@@ -738,7 +787,11 @@ def render_rows(rows):
 def render_log(scan, data):
     lines = []
     no_year = [o.path for o in data if path_year(o.path) == "(none)"]
+    by_name_date = [f"{o.path} ({o.date}, modified {o.modified})" for o in data if o.dated_by == "name date"]
+    by_name_year = [f"{o.path} ({o.date}, modified {o.modified})" for o in data if o.dated_by == "name year"]
     sections = [
+        ("selected files dated by a year in the name (check it isn't an ID)", by_name_year),
+        ("selected files dated by a date in the name, earlier than modified", by_name_date),
         ("selected files with no year folder in the path", no_year),
         ("selected index.json files that list files staying on the site", scan.partial_index),
         ("folders with selected files but no index.json", scan.missing_index),
@@ -760,32 +813,6 @@ def write_text(path, text):
 
 def iso(timestamp):
     return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def fmt_count(n):
-    return f"{n:,}"
-
-
-def fmt_duration(seconds):
-    minutes, seconds = divmod(int(seconds), 60)
-    hours, minutes = divmod(minutes, 60)
-    if hours:
-        return f"{hours}h {minutes}m {seconds}s"
-    if minutes:
-        return f"{minutes}m {seconds}s"
-    return f"{seconds}s"
-
-
-def fmt_size(n):
-    """Bytes with the exact count, for .torrent sizes: limits are in decimal bytes, fmt_bytes rounds to binary units."""
-    return f"{fmt_bytes(n)} ({fmt_count(n)} bytes)"
-
-
-def fmt_bytes(n):
-    for unit, factor in (("TiB", TIB), ("GiB", GIB), ("MiB", MIB), ("KiB", KIB)):
-        if n >= factor:
-            return f"{n / factor:.1f} {unit}"
-    return f"{n} B"
 
 
 if __name__ == "__main__":

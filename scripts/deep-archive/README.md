@@ -1,27 +1,34 @@
 # EVE Ref Deep Archive
 
 Moves old data.everef.net data into torrents. One workflow makes one torrent: the oldest data not archived yet, as
-much as the size limits allow, named after the last modification date it covers (`everef-deep-archive-YYYY-MM-DD`).
+much as the size limits allow, named after the last date it covers (`everef-deep-archive-YYYY-MM-DD`).
 It's then seeded, published, backed up, and deleted from the site.
 
-Status: **draft**. Implemented: `00-preflight`, `01-find`, `02-load`. Every other step is designed but not written yet.
+Status: **draft**. Every step 00-23 is written; none has run against real data yet.
 Design and reasoning: [`PLAN.md`](PLAN.md).
 
 ## Requirements
 
-- Python 3, **rclone**, and the libtorrent Python bindings, **2.x** (1.x can't make hybrid torrents):
+- Python 3, **rclone**, the libtorrent Python bindings, **2.x** (1.x can't make hybrid torrents), and **boto3**
+  (18-backup, 19-check-backup: real AWS S3 Glacier Deep Archive, not B2):
   ```
   sudo apt-get install python3 rclone python3-libtorrent
+  pip install boto3
   ```
 - A B2 key for the data bucket.
+- An AWS account and credentials (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, or a
+  profile) and an S3 bucket for the Glacier Deep Archive backup (`BACKUP_BUCKET`).
 - `SEED_DIR` on redundant storage (e.g. a ZFS mirror or RAID), with room for one more torrent (`MAX_BYTES` in
   `lib/workflow.py`).
-- qBittorrent-nox, for seeding.
+- `SCRATCH_DIR` with room for one torrent too: 18-backup builds the backup tarball there.
+- qBittorrent-nox, for seeding, with its Web API reachable (`QBITTORRENT_URL`).
 
 ## Setup
 
 Copy `torrents.env.example` to `torrents.env` and fill in `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET`,
-`RCLONE_CONFIG_EVEREF_ACCOUNT` and `RCLONE_CONFIG_EVEREF_KEY` (Appendix B).
+`RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY`, `BACKUP_BUCKET` and the qBittorrent settings
+(Appendix B). AWS credentials go in the environment (not `torrents.env`), the way `boto3` and the AWS CLI
+normally read them.
 
 ## Procedure
 
@@ -43,7 +50,8 @@ key and bucket, libtorrent and the tracker list. Reports every problem, then abo
 ```
 ./01-find.py
 ```
-Lists the bucket and selects the oldest files not archived yet, by modification date, up to the last date that stays
+Lists the bucket and selects the oldest files not archived yet, by date (the earliest of the modification date, an
+ISO date in the file name, and 31 December of a year in the file name; PLAN 2.2), up to the last date that stays
 within the size limits (`lib/workflow.py`), and nothing newer than the minimum age (`01-find.py`). Each folder with a
 selected file brings its own `index.json`, whatever that file's date. Prints the cutoff, the torrent ID and a report,
 and writes the selection to `$SCRATCH_DIR/find/files.jsonl`.
@@ -56,6 +64,7 @@ Read the report (`$SCRATCH_DIR/find/report.txt`):
 - No `market-history/`, `killmails/` or `ccp/` files.
 - Every flag looked at.
 - Every "(no year folder)" dataset is archive data, not a current file that just hasn't changed.
+- Files dated by a year in the name (`find.log`): the number is a year, not an ID.
 - If the limits weren't reached, a smaller torrent is worth making now.
 
 To change the selection: fix `TORRENT_EXCLUDE` in `lib/workflow.py`, delete `$SCRATCH_DIR/01-find.done`, and run
@@ -180,29 +189,34 @@ On the first workflow, also add the feed to a qBittorrent RSS reader and check t
 ```
 ./16-prepare-backup.py
 ```
-Plans the backup bundles (ZIPs) from the manifest.
+Plans the backup: one uncompressed tarball (`<ID>.tar`) from the manifest, plus the backup index
+(`<ID>-backup-index.tsv`: path, bundle, size, sha256).
 
 ### 17: Check backup plan
 ```
 ./17-check-backup-plan.py
 ```
-- Every file is in exactly one bundle, and the sizes add up.
+- Every manifest file is in the plan exactly once, with the same size and SHA-256, and the backup index matches it.
 
 ### 18: Backup
 ```
 ./18-backup.py
 ```
-Shows the target and asks first. Builds and uploads one bundle at a time, then the metadata files. Resumable.
+Shows the target and asks first. Builds `<ID>.tar` in `$SCRATCH_DIR/backup/`, uploads it to the backup bucket
+(`BACKUP_BUCKET`) on **AWS S3**, storage class **DEEP_ARCHIVE** (real Glacier Deep Archive, not B2: the one step
+that uses AWS credentials instead of rclone), then deletes the local tarball and uploads the metadata files
+(manifest, backup index, `.torrent`, `.txt`, `.sha256`, README) next to it in the default storage class. Resumable:
+a tarball already built (with its recorded SHA-256) or already uploaded (same size and hash) is reused.
 
 ### 19: Check backup
 ```
 ./19-check-backup.py
 ```
-- Every bundle and metadata file is in the backup, with the recorded size and hash.
+- The bundle and every metadata file are in the bucket, with the recorded size, storage class and SHA-256.
 
 ### Restore drill (manual, first workflow only)
 
-Restore the smallest bundle, unzip it, and run `sha256sum -c --ignore-missing <ID>.sha256` against it. Record the
+Restore `<ID>.tar`, extract it, and run `sha256sum -c --ignore-missing <ID>.sha256` inside `<ID>/`. Record the
 result. Deleting doesn't wait for it.
 
 ### 20: Check before delete
@@ -306,7 +320,8 @@ Everything else is fixed in `lib/workflow.py`: the size limits, the excluded dat
 URL (`DATA_BASE_URL`), and the rclone settings. As in the roll-up scripts, rclone is
 configured only from `RCLONE_CONFIG_*` variables (`RCLONE_CONFIG=/dev/null`, so your own `rclone.conf` is never
 used), with type `b2` and `hard_delete=false`, so deletes stay soft and the bucket's lifecycle rules give an undo
-window. All storage access goes through rclone, never the AWS CLI or an S3 library.
+window. All data bucket access goes through rclone; only the AWS backup (18-backup, 19-check-backup,
+20-check-before-delete) uses boto3.
 
 ```
 scripts/deep-archive/

@@ -44,14 +44,13 @@ import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
-    GIB,
-    KIB,
-    MIB,
-    TIB,
     Workflow,
     data_remote,
     error,
     fail,
+    fmt_bytes,
+    fmt_count,
+    fmt_duration,
     ok,
     rclone_run,
     section,
@@ -261,27 +260,6 @@ def report_problems(title, items):
 
 def iso(timestamp):
     return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def fmt_count(n):
-    return f"{n:,}"
-
-
-def fmt_duration(seconds):
-    minutes, seconds = divmod(int(seconds), 60)
-    hours, minutes = divmod(minutes, 60)
-    if hours:
-        return f"{hours}h {minutes}m {seconds}s"
-    if minutes:
-        return f"{minutes}m {seconds}s"
-    return f"{seconds}s"
-
-
-def fmt_bytes(n):
-    for unit, factor in (("TiB", TIB), ("GiB", GIB), ("MiB", MIB), ("KiB", KIB)):
-        if n >= factor:
-            return f"{n / factor:.1f} {unit}"
-    return f"{n} B"
 
 
 if __name__ == "__main__":

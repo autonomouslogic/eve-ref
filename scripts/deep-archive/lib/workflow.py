@@ -19,7 +19,8 @@ anything the environment doesn't set:
                  the B2 key for the "everef" rclone remote; the rest of the remote is fixed here (RCLONE_FIXED)
     DATA_BUCKET  the data site's bucket on B2; its root is the site root (data_remote)
 
-The scripts reach the storage only through rclone (data_remote), never through the AWS CLI or an S3 library.
+The scripts reach the data bucket only through rclone (data_remote). The AWS Glacier backup is the one exception
+(boto3, BACKUP_BUCKET).
 """
 
 import datetime
@@ -50,6 +51,9 @@ REMOTE_NAME = "everef"
 # etc.), linked from the docs and downloaded by URL; it's small enough to keep on HTTP.
 TORRENT_EXCLUDE = ["market-history", "killmails", "ccp"]
 
+# Files modified less than this many years before today are never selected (01-find; 15-check-docs prints it).
+MIN_AGE_YEARS = 2
+
 # Public URL of the data site.
 DATA_BASE_URL = "https://data.everef.net/"
 
@@ -59,6 +63,10 @@ TORRENT_ID_RE = re.compile(r"^everef-deep-archive-\d{4}-\d{2}-\d{2}$")
 
 # The site folder holding the published torrents and their file lists (PLAN 2.5).
 DEEP_ARCHIVE_DIR = "deep-archive"
+
+# Cache-Control max-age for feed.xml and torrents.json (PLAN 2.7, 2.21): short, like DataIndex's index pages
+# (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
+FEED_CACHE_MAX_AGE_SECONDS = 120
 
 # The workflow's scripted steps, in order (README). Each step's script is named after its number and name, e.g.
 # 01-find.py. Manual steps in between have no script and no completion file.
@@ -94,6 +102,33 @@ MIB = 1024 * KIB
 GIB = 1024 * MIB
 TIB = 1024 * GIB
 
+
+def fmt_count(n):
+    return f"{n:,}"
+
+
+def fmt_duration(seconds):
+    minutes, seconds = divmod(int(seconds), 60)
+    hours, minutes = divmod(minutes, 60)
+    if hours:
+        return f"{hours}h {minutes}m {seconds}s"
+    if minutes:
+        return f"{minutes}m {seconds}s"
+    return f"{seconds}s"
+
+
+def fmt_bytes(n):
+    for unit, factor in (("TiB", TIB), ("GiB", GIB), ("MiB", MIB), ("KiB", KIB)):
+        if n >= factor:
+            return f"{n / factor:.1f} {unit}"
+    return f"{n} B"
+
+
+def fmt_size(n):
+    """Bytes with the exact count, for .torrent sizes: limits are in decimal bytes, fmt_bytes rounds to binary units."""
+    return f"{fmt_bytes(n)} ({fmt_count(n)} bytes)"
+
+
 # Size limits for one torrent (find chooses the selection by them; make-torrent uses PIECE_SIZE).
 
 # Piece size the limits are worked out for.
@@ -106,6 +141,31 @@ MAX_BYTES = 1 * TIB
 # max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs a few KB high (its FIXED_BYTES
 # allowance), so a .torrent at the limit still loads. This is what limits the file count.
 MAX_TORRENT_BYTES = 10_000_000
+
+# Backup (PLAN 2.11, open question 2): a single uncompressed tarball per torrent, uploaded straight to AWS S3 with
+# storage class DEEP_ARCHIVE. This is real AWS S3 Glacier Deep Archive, not B2, so it's the one place these scripts
+# use AWS credentials instead of rclone/B2 (2.21's "one B2 key" rule is about the data bucket). Standard boto3
+# environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION, or a profile) configure the
+# client; only the bucket is a setting here.
+BACKUP_PREFIX = "everef-deep-archive"
+STORAGE_CLASS = "DEEP_ARCHIVE"
+
+
+def backup_bucket():
+    """The S3 bucket for the Glacier Deep Archive backup (BACKUP_BUCKET, environment or torrents.env)."""
+    bucket = os.environ.get("BACKUP_BUCKET", "").strip()
+    if not bucket:
+        fail("BACKUP_BUCKET is not set (environment or torrents.env)")
+    return bucket
+
+
+# qBittorrent's Web API (08-seed, 09-check-seed, 10-test-download), with its save path set to SEED_DIR.
+def qbittorrent_settings():
+    """(url, username, password) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
+    url = os.environ.get("QBITTORRENT_URL", "").strip().rstrip("/")
+    if not url:
+        fail("QBITTORRENT_URL is not set (environment or torrents.env)")
+    return url, os.environ.get("QBITTORRENT_USERNAME", ""), os.environ.get("QBITTORRENT_PASSWORD", "")
 
 
 def step_name(step):

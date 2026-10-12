@@ -35,6 +35,7 @@ from workflow import (  # noqa: E402
     data_remote,
     error,
     fail,
+    fmt_bytes,
     is_inside,
     join,
     load_env,
@@ -84,6 +85,15 @@ def main():
             checks.fail(f"SCRATCH_DIR isn't empty: {len(scratch_entries)} entries, e.g. {scratch_entries[0]}")
         else:
             print(f"SCRATCH_DIR: {scratch}, empty")
+        # 18-backup builds the whole backup tarball here.
+        free = shutil.disk_usage(scratch).free
+        if free < MAX_BYTES:
+            checks.fail(
+                f"Not enough free space in SCRATCH_DIR for the backup tarball: {fmt_bytes(free)}, a torrent can be up "
+                f"to {fmt_bytes(MAX_BYTES)}"
+            )
+        else:
+            print(f"SCRATCH_DIR: {fmt_bytes(free)} free, room for the backup tarball")
     seed, seed_created, seed_problem = prepare_dir("SEED_DIR")
     if seed is None:
         checks.fail(seed_problem)
@@ -207,13 +217,6 @@ def check_remote(checks):
             print(f"{DEEP_ARCHIVE_DIR}/: {len(torrents)} published torrents, newest {torrents[-1]}")
         else:
             print(f"{DEEP_ARCHIVE_DIR}/: no published torrents yet")
-
-
-def fmt_bytes(n):
-    for unit, factor in (("TiB", 1024**4), ("GiB", 1024**3), ("MiB", 1024**2), ("KiB", 1024)):
-        if n >= factor:
-            return f"{n / factor:.1f} {unit}"
-    return f"{n} B"
 
 
 if __name__ == "__main__":

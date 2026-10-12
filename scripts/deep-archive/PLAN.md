@@ -3,7 +3,7 @@
 Status: **draft for review**. Revised 2026-10-10:
 
 - **One workflow, one torrent, as big as the size limits allow** (2.1, 2.8). `01-find` takes the oldest files not
-  archived yet, by modification date, until the next date would go over a hard-coded file count or byte size. Torrent
+  archived yet, by date (2.2), until the next date would go over a hard-coded file count or byte size. Torrent
   IDs carry that cutoff date (`everef-deep-archive-YYYY-MM-DD`). There are no yearly torrents.
 - **The scripts reach the storage only through rclone** (2.21), with one B2 key. Never the AWS CLI or an S3
   library. The earlier filesystem-mount design (revision of 2026-10-09) is dropped.
@@ -12,15 +12,28 @@ Status: **draft for review**. Revised 2026-10-10:
   workflow), torrent content in `SEED_DIR` (kept for seeding).
 - The operator process is in [`README.md`](README.md); the separate runbook is gone.
 
-Related work in progress (as of 2026-10-10):
-- `./00-preflight.py`, `./01-find.py` and `./02-load.py`: **drafts** of the first three steps, with `lib/workflow.py`
-  (settings, size limits, completion files) and `lib/torrent_size.py` (the `.torrent` estimate). Run directly with Python 3 and rclone (no `run.sh`/Docker image yet).
+Related work in progress (as of 2026-10-11):
+- `./00-preflight.py` through `./23-check-site.py`: **drafts** of every step, with `lib/workflow.py` (settings,
+  size limits, completion files), `lib/torrent_size.py` (the `.torrent` estimate) and `lib/qbittorrent.py` (a
+  stdlib-only Web API client for 08/09/10). Run directly with Python 3, rclone, libtorrent and boto3 (no
+  `run.sh`/Docker image yet). None has run against real data yet.
+- **Backup decided: a single uncompressed tarball per torrent, uploaded to real AWS S3 with storage class
+  DEEP_ARCHIVE** (resolves open questions 2 and 3): not the many-ZIP-bundle design further down in this document.
+  `BACKUP_BUCKET` plus standard AWS credentials (not rclone/B2) configure it; see `lib/workflow.py`
+  (`backup_bucket`, `BACKUP_PREFIX`, `STORAGE_CLASS`) and steps 16-19. The rest of 2.11 (bundle layout, restore
+  drill) still applies with "bundle" read as "the one tarball".
 - Tests written first, for changes not yet made. They fail against the current code, as intended:
   - `DataCrawlerTest.shouldFailOnMissingDirectoryIndex`: `DataCrawler` must fail when a directory index is missing
     (2.17);
   - `SyncFuzzworkOrdersetsTest` (new, plus its `inject` line in `TestComponent`): the Fuzzwork ID cutoff and its
     guard (2.18).
 - `ccp/` added to `TORRENT_EXCLUDE` (2.2).
+- `01-find` dates files by the earliest of the modification date, an ISO date in the file name and 31 December of a
+  year in the file name (2.2), not the modification date alone. **Not run yet**, not even on a test listing: written
+  without a Python interpreter at hand. Open questions 17 and 18.
+- `SyncFuzzworkOrdersets` (2026-10-12): backfills are ignored entirely (not only for the lowest ID), and the code now
+  syncs only IDs **above the latest** dated ID on the site, without filling gaps. That differs from 2.18 as decided;
+  open question 16.
 - `create_torrent.py`: **experiment** for measuring `.torrent` sizes (Appendix B). Hybrid v1+v2 with Python
   libtorrent, `PIECE_SIZE` pieces, trackers from `trackers.txt`, comment from the 2.4 template. It becomes
   `06-make-torrent`.
@@ -105,7 +118,7 @@ Dates and IDs in this document (`everef-deep-archive-2023-04-11`, …) are **exa
 ### 2.1 Unit of archiving: one torrent per workflow, as big as the limits allow
 
 - **Each torrent holds the oldest data not archived yet**, from **every** in-scope dataset, up to a cutoff date:
-  everything modified on or before that date that isn't in an earlier torrent (2.8). The torrent ID carries the date:
+  everything dated (2.2) on or before that date that isn't in an earlier torrent (2.8). The torrent ID carries the date:
   `everef-deep-archive-2023-04-11`.
 - The cutoff is chosen to make the torrent **as big as possible** within hard-coded limits on file count and bytes
   (2.8). Those limits come from what torrent clients accept (2.4 "Creating the torrent", Appendix B): a `.torrent`
@@ -118,11 +131,18 @@ Dates and IDs in this document (`everef-deep-archive-2023-04-11`, …) are **exa
 
 ### 2.2 What gets archived
 
-**Files at least 2 years old, by modification date** (`MIN_AGE_YEARS`). The modification date is rclone's
-`ModTime`. On B2 that's the upload time, unless the uploader set `src_last_modified_millis` (EVE Ref's Java uploads go
-through B2's S3 API, which doesn't; check on real files). So it's when EVE Ref stored the file, not the date in its
-path. For scraped data, the two are
-close; for backfills, the upload date can be much later than the data.
+**Files at least 2 years old, by date** (`MIN_AGE_YEARS`). A file's date is the **earliest** of:
+
+- its modification date: rclone's `ModTime`, in UTC. On B2 that's the upload time, unless the uploader set
+  `src_last_modified_millis` (EVE Ref's Java uploads go through B2's S3 API, which doesn't; check on real files). So
+  it's when EVE Ref stored the file;
+- any ISO date (`YYYY-MM-DD`) in the file name;
+- 31 December of any year (a 4-digit number from 2003, EVE's release, on) in the file name.
+
+Only the file name counts, not the folders. For scraped data, the upload date and the name's date are close; for
+backfills and re-uploads, the upload date can be much later than the data, and the name's date puts the file with its
+period. A 4-digit ID in a name would read as a year and date the file too early: the find report counts the files
+dated each way, and `find.log` lists samples dated by a year in the name, to check.
 
 The snapshot lookback used by the market history scraper (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`) is only 30 days,
 so the 2-year minimum age is safe for `market-orders`.
@@ -165,11 +185,14 @@ Everything else is in scope. Using a denylist means:
 
 **No version of a file lands in two torrents.** `01-find` reads every published `<ID>.txt`. A listed path still on
 the site with a modification date on or before that torrent's cutoff (the date in its ID) is the version the torrent
-holds: it's skipped, and flagged, since its delete should have removed it. A later date means the file was uploaded
-again after it was archived, so it's a candidate like any other and goes into a later torrent. The same path can be in
-several torrents, one version each.
+holds: it's skipped, and flagged, since its delete should have removed it. A later modification date means the file
+was uploaded again after it was archived, so it's a candidate like any other and goes into a later torrent. The same
+path can be in several torrents, one version each. This check uses the modification date, not the file's date: a
+date from the name stays the same when the file is uploaded again. The catch: a file the torrent selected by a date in
+its name, but modified after the cutoff, also looks changed. If its delete didn't happen, it's selected again (and
+flagged as changed); a duplicate rather than a lost version.
 
-**Risk of selecting by modification date:** a file that is still current but simply hasn't changed in two years
+**Risk of selecting by date:** a file that is still current but simply hasn't changed in two years
 would be archived and deleted from the site, e.g. a reference file a tool downloads by a fixed URL (`ccp/iec`,
 `ccp/sde/older`, Appendix B). The find report breaks the selection down by dataset, marks datasets with no year folder,
 and the operator must check them (README, "Review the selection"). Add anything that must stay to `TORRENT_EXCLUDE`.
@@ -537,16 +560,17 @@ after that is checked against that list, never against "whatever is in the direc
   modification time (2.2): one B2 request per 1,000 files, minutes for the whole site.
   - **Never selected:** see 2.2 ("Never archived"), plus paths already in a published `.txt` (read from the bucket's
     `deep-archive/`, 2.5).
-  - **Too new:** anything modified less than `MIN_AGE_YEARS` (2) years before today.
-  - **Cutoff:** group the remaining candidates (`index.json` aside, 2.2) by modification date (UTC). Find the first
+  - **Too new:** anything dated (2.2) less than `MIN_AGE_YEARS` (2) years before today.
+  - **Cutoff:** group the remaining candidates (`index.json` aside, 2.2) by date (2.2). Find the first
     date where including every candidate on or before it, plus their folders' `index.json`, goes over `MAX_BYTES` of
     data or a `.torrent` estimate over `MAX_TORRENT_BYTES`; the cutoff is **the day before** that date. If
     the limits are never reached, the cutoff is the newest allowed date (and the report flags that the torrent could
     be bigger). If the oldest date alone is over a limit, `01-find` fails: a date can't be split.
-  - **Torrent ID** = `everef-deep-archive-<cutoff date>`: everything not yet archived, modified on or before that date.
-  - Output in `$SCRATCH_DIR/find/`: `files.jsonl` (path, size, last-modified, URL), `listing.jsonl.gz` (the full
-    listing the selection came from), `report.txt`, `summary.json`, `find.log`. The report breaks the selection down
-    by modification month, year folder in the path, and dataset, and flags selected `index.json` files whose folder
+  - **Torrent ID** = `everef-deep-archive-<cutoff date>`: everything not yet archived, dated on or before that date.
+  - Output in `$SCRATCH_DIR/find/`: `files.jsonl` (path, size, last-modified, date, what dated it, URL),
+    `listing.jsonl.gz` (the full listing the selection came from), `report.txt`, `summary.json`, `find.log`. The
+    report breaks the selection down by what dated each file, date month, year folder in the path, and dataset, and
+    flags selected `index.json` files whose folder
     keeps files on the site, and selected folders with no `index.json` to select.
 - **Limits, hard-coded in `lib/workflow.py`:**
   - `MAX_BYTES` = 1 TiB: what the seeder holds per torrent, and what a full download is.
@@ -845,7 +869,9 @@ Must be handled **before** deleting the affected datasets:
 The sync commands must never fetch data the archival process removed. The change must be **deployed before the
 first deletion** of `fuzzwork/` data (README, "Setup"). Tests first (repo convention).
 
-**`SyncFuzzworkOrdersets`, decided: cutoff at the lowest ID on the data site.**
+**`SyncFuzzworkOrdersets`, decided: cutoff at the lowest ID on the data site.** Reopened (2026-10-12): the code now
+syncs only IDs above the latest ID on the site, without filling gaps (open question 16). The rest of this section
+describes the lowest-ID rule.
 
 - It decides what to sync by **sequence ID**, comparing Fuzzwork's listing with the IDs found on the data site. The
   year of an orderset is only known after downloading it, so a date cutoff would mean re-downloading every archived
@@ -1032,9 +1058,10 @@ accurate (excluded datasets, timing, links), and update it only if the rules cha
 ## 6. Open questions
 
 Decided so far: one torrent per workflow, as big as the size limits allow (2.1, 2.8); hard-coded limits
-(a `.torrent` estimate of at most 10 MB, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by modification date with a 2-year minimum age;
+(a `.torrent` estimate of at most 10 MB, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by date (the earliest of the
+modification date and dates in the file name, 2.2) with a 2-year minimum age;
 torrent IDs from the cutoff date; exclusions `market-history`, `killmails` and `ccp`; Fuzzwork in scope with a sync
-cutoff; Fuzzwork cutoff at the lowest dated ID on the site; checksums and README inside the torrent; hybrid v1+v2; no
+cutoff (lowest or latest ID: reopened, question 16); checksums and README inside the torrent; hybrid v1+v2; no
 notice period, but a start announcement; deletion last; no MD5 matching; no Cloudflare
 purge; `DataCrawler` fails on missing indexes; a manual process with numbered scripts and completion files in
 `deep-archive/`; storage is reached only through rclone with one B2 key, soft deletes only, never the AWS CLI
@@ -1045,10 +1072,12 @@ Still open:
 
 1. **Is rclone's `ModTime` on B2 the upload time** for files uploaded by EVE Ref's Java code (2.2)? And does B2
    honour `Content-Type` and `Cache-Control` set through rclone's `--header-upload` (2.21)? Check on real files.
-2. **Backup destination** (2.11): with one B2 key and no AWS CLI, Glacier needs a second key. A separate B2 bucket
-   on the same account, Glacier with its own key after all, or no backup? Then: Object Lock or versioning? Bundle size
-   (~50 GB proposed)?
-3. Bundle format: ZIP64 store-only (Internet-Archive-friendly) or tar?
+2. ~~**Backup destination** (2.11)~~ **Decided (2026-10-11): real AWS S3, storage class DEEP_ARCHIVE, with its own
+   AWS credentials** (not a second B2 key, not rclone). Object Lock/versioning on the backup bucket is still worth
+   adding by hand.
+3. ~~Bundle format: ZIP64 store-only or tar?~~ **Decided: a single uncompressed tar per torrent** (not many ~50 GB
+   ZIP64 parts): simpler, and the Internet-Archive-friendly ZIP format no longer matters since Internet Archive
+   use is still undecided (open question 4 below).
 4. Internet Archive: use it at all? Is redistribution there allowed for CCP and Fuzzwork data? Item grouping?
 5. Seeder host: where is it, how much disk and upload, and does it have a redundant filesystem?
 6. Where to run `10-test-download` so it actually tests reachability from outside (another machine on another
@@ -1072,6 +1101,22 @@ Still open:
     `21-delete` (2.14 doesn't rely on it).
 15. Timing against the storage migration: run the first workflows before, after, or as part of it? Archiving first
     means ~4 TiB less to migrate; migrating first means the process runs on the final storage.
+16. **Fuzzwork sync: lowest ID with gap filling (2.18 as decided) or latest ID without?** The code now syncs only IDs
+    above the latest one on the site. Risk: it downloads 4 ordersets at a time, so if one fails while a later one
+    uploads, the next run starts after the later one and the failed orderset is never fetched. A permanent gap, from
+    a network blip. The lowest-ID rule already follows the archive (deletes take the oldest files, so the lowest ID
+    moves up); latest-ID only helps if archiving could delete a range while keeping older ordersets. If latest-ID
+    stays, sync one orderset at a time so a failure stops the run before anything later is uploaded. 2.18 needs
+    updating either way.
+17. **4-digit IDs read as years (2.2).** Any 4-digit number from 2003 on in a file name dates the file 31 December of
+    that "year", possibly much too early. Fuzzwork IDs are clear (backfills 21000–59999, live from 90019); other
+    datasets aren't checked. The first real run's `find.log` ("dated by a year in the name") answers it; if IDs show
+    up, narrow the rule (e.g. only years next to a separator and no other digits, or per dataset).
+18. **Re-selection after a failed delete (2.2).** The published-torrent check compares the modification date, not
+    the file's date, so a re-uploaded file is never taken for the archived version. The cost: a file a torrent took
+    by the date in its name, but modified after that torrent's cutoff, looks changed if its delete fails, and is
+    selected again (a duplicate in the next torrent, flagged as changed). Acceptable, or record each file's
+    modification time in the published `<ID>.txt` so the check can match the exact version?
 
 ---
 

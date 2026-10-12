@@ -20,7 +20,6 @@ import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -43,6 +42,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class SyncFuzzworkOrdersets implements Command {
 	private static final int CONCURRENCY = 4;
 	private static final Pattern ORDERSET_PATTERN = Pattern.compile("\\/orderbooks\\/orderset-([0-9]+).csv.gz");
+	private static final String BACKFILLS_FOLDER = FUZZWORK_ORDERSET.getFolder() + "/backfills/";
 
 	@Inject
 	protected UrlParser urlParser;
@@ -132,6 +132,9 @@ public class SyncFuzzworkOrdersets implements Command {
 			log.trace("Scanning existing files");
 			var stream = dataCrawlerProvider.get().setPrefix(FUZZWORK_ORDERSET.getFolder() + "/").crawl().stream()
 					.flatMap(url -> {
+						if (url.getPath().contains(BACKFILLS_FOLDER)) {
+							return Stream.<Long>empty();
+						}
 						var id = FUZZWORK_ORDERSET.parseSequenceNumber(url.getPath());
 						if (id == null) {
 							return Stream.<Long>empty();
@@ -142,12 +145,21 @@ public class SyncFuzzworkOrdersets implements Command {
 		});
 	}
 
+	/**
+	 * Only ordersets after the latest existing ID in the main archive are synced. Old ordersets get moved off the
+	 * data site into the deep archive, and must not be downloaded again. Backfills are ignored entirely.
+	 */
 	private Flowable<FuzzworkFile> getFilesToSync() {
 		return scanExistingFiles()
 				.toList()
 				.flatMapPublisher(existing -> {
-					var set = new HashSet<>(existing);
-					return scanFuzzworkFiles().filter(file -> !set.contains(file.getId()));
+					var latest = existing.stream().mapToLong(Long::longValue).max();
+					if (latest.isEmpty()) {
+						return Flowable.error(new RuntimeException(
+								"No existing ordersets found in the main archive, refusing to sync everything"));
+					}
+					log.info("Latest existing orderset ID: {}", latest.getAsLong());
+					return scanFuzzworkFiles().filter(file -> file.getId() > latest.getAsLong());
 				})
 				.sorted(Ordering.natural().onResultOf(FuzzworkFile::getId));
 	}
