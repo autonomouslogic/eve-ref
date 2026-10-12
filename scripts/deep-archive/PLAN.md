@@ -22,11 +22,10 @@ Related work in progress (as of 2026-10-11):
   `BACKUP_BUCKET` plus standard AWS credentials (not rclone/B2) configure it; see `lib/workflow.py`
   (`backup_bucket`, `BACKUP_PREFIX`, `STORAGE_CLASS`) and steps 16-19. The rest of 2.11 (bundle layout, restore
   drill) still applies with "bundle" read as "the one tarball".
-- Tests written first, for changes not yet made. They fail against the current code, as intended:
-  - `DataCrawlerTest.shouldFailOnMissingDirectoryIndex`: `DataCrawler` must fail when a directory index is missing
-    (2.17);
-  - `SyncFuzzworkOrdersetsTest` (new, plus its `inject` line in `TestComponent`): the Fuzzwork ID cutoff and its
-    guard (2.18).
+- Java changes implemented, tests first, and passing (2026-10-12):
+  - `DataCrawler` fails when a directory index is missing (2.17), `DataCrawlerTest.shouldFailOnMissingDirectoryIndex`;
+  - `SyncFuzzworkOrdersets`: the Fuzzwork ID cutoff and its guard (2.18), `SyncFuzzworkOrdersetsTest` (new, plus its
+    `inject` line in `TestComponent`). Not deployed yet; it must be before the first `fuzzwork/` deletion.
 - `ccp/` added to `TORRENT_EXCLUDE` (2.2).
 - `01-find` dates files by the earliest of the modification date, an ISO date in the file name and 31 December of a
   year in the file name (2.2), not the modification date alone. **Not run yet**, not even on a test listing: written
