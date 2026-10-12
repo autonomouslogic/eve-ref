@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Shared setup for scripts/rollup/*.sh. Sourced, never run directly: `source common.sh "$@"`.
-# See PLAN.md for the full design.
+# See README.md for the procedure and NOTES.md for development notes.
 
 set -euo pipefail
 
@@ -51,7 +51,7 @@ if [[ ! "$ARCHIVE" =~ ^[a-z0-9-]+$ ]]; then
 fi
 
 if ! in_rollup_scope "$ARCHIVE"; then
-	echo "🔴 archive is not in the rollup scope: $ARCHIVE (see PLAN.md, \"Scope\")" >&2
+	echo "🔴 archive is not in the rollup scope: $ARCHIVE (see NOTES.md, \"Scope\")" >&2
 	exit 1
 fi
 

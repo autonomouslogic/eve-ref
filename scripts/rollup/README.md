@@ -8,7 +8,7 @@ into a single archive:
 ```
 
 > **Status:** `00-preflight.sh` through `07-complete.sh` are all written.
-> Design notes are in [PLAN.md](PLAN.md).
+> Development notes are in [NOTES.md](NOTES.md).
 
 ## Archive format (2023 onward)
 
@@ -29,7 +29,7 @@ unsorted). It stays as is.
 ## When to roll up
 
 - Only **finished years**, never the current UTC year.
-- Only in-scope datasets (see PLAN.md, "Scope"). These are `.json.bz2` snapshot datasets whose history the
+- Only in-scope datasets (see NOTES.md, "Scope"). These are `.json.bz2` snapshot datasets whose history the
   code never reads back.
 
 ## Setup
