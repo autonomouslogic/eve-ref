@@ -1,6 +1,6 @@
 # Yearly history rollup: implementation plan
 
-Status: `00-preflight.sh` through `06-delete.sh` are written; `07-complete.sh` is still planned. This
+Status: `00-preflight.sh` through `07-complete.sh` are all written. This
 file holds implementation notes for review; the operator runbook lives in
 [README.md](README.md). **Keep README.md's status line and procedure table up to date whenever a script is
 added or changed** — it must never drift from what's actually implemented.
