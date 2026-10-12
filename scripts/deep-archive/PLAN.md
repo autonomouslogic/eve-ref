@@ -1139,9 +1139,9 @@ step and were dropped with it (2.11).
 
 **Housekeeping**
 
-- **R12. Not run since the rework.** None of the Python changes of 2026-10-12 have been executed (no Python where
-  they were made), and `07-check-seed`'s aria2c part was never run either. Run `00-preflight` and every step on a
-  small test selection before real data.
+- **R12. Barely run since the rework.** Every script parses and passes pyflakes, and `01-find`'s selection logic
+  has unit tests (`tests/test_find.py`, `make test-deep-archive`). Nothing else has run: no step against rclone,
+  libtorrent, qBittorrent or aria2c. Run `00-preflight` and every step on a small test selection before real data.
 - **R13. Completion-file names changed.** Step numbers changed with every merge on 2026-10-12; a
   `SCRATCH_DIR` from before won't resume. (None has run on real data.)
 - **R14. `create_torrent.py`** is still in the folder as an experiment; `05-make-torrent` has replaced it. Remove it,

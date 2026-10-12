@@ -24,6 +24,12 @@ Design and reasoning: [`PLAN.md`](PLAN.md).
 Copy `torrents.env.example` to `torrents.env` and fill in `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET`,
 `RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY` and the qBittorrent settings (Appendix B).
 
+## Tests
+
+`make test-deep-archive` (from the repo root) runs the unit tests in `tests/`: how `01-find` dates files from their
+names, what it skips, how published torrents and `index.json` files are handled, and how it chooses the cutoff.
+Standard library only; it uses your `python3`, or Docker if there isn't one.
+
 ## Procedure
 
 Run each step in order, from `scripts/deep-archive/`. A step only starts once the previous one has completed, and it
@@ -245,6 +251,7 @@ scripts/deep-archive/
   create_torrent.py                # experiment: measure .torrent sizes; becomes 05-make-torrent
   lib/workflow.py                  # shared: settings, size limits, completion files, output
   lib/torrent_size.py              # .torrent size estimate from paths and sizes, for 01-find's cutoff
+  tests/                           # unit tests: make test-deep-archive (from the repo root)
 
 $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
   00-preflight.done, 01-find.done, … # completion files

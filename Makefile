@@ -1,4 +1,4 @@
-.PHONY: dist test format clean docker docs openapi-ui
+.PHONY: dist test test-deep-archive format clean docker docs openapi-ui
 EVE_REF_VERSION = $(shell ./gradlew properties | grep 'version:' | cut -d' ' -f 2)
 DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
@@ -50,6 +50,19 @@ test-java: generate-database
 
 test-ui:
 	cd ui ; npm run test
+
+test-deep-archive:
+ifeq ($(shell command -v python3),)
+	docker run --rm \
+		-u $(shell id -u):$(shell id -g) \
+		-e PYTHONDONTWRITEBYTECODE=1 \
+		-v ./scripts/deep-archive:/app \
+		-w /app \
+		python:3.12-slim \
+		python -m unittest discover -s tests -v
+else
+	cd scripts/deep-archive ; PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
+endif
 
 test: test-java test-ui
 

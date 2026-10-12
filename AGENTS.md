@@ -25,6 +25,9 @@ Java build requires jOOQ classes to exist first. `make` targets that need them d
 generated jOOQ sources.
 
 - Full test suite: `make test` (Java + UI). Java only: `make test-java`. UI only: `make test-ui`.
+- Deep Archive scripts: `make test-deep-archive` runs the Python unit tests in `scripts/deep-archive/tests/`
+  (stdlib `unittest`, no packages needed) with the local `python3`, or in the `python:3.12-slim` image if there is
+  none. Not part of `make test`.
 - Single Java test: `./gradlew test --tests "com.autonomouslogic.everef.cli.SomeTest"`
   (run `make generate-database` first).
 - Format (required before committing): `make format` — runs `./gradlew spotlessApply` (palantir Java
