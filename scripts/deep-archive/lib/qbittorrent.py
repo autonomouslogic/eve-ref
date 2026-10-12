@@ -1,6 +1,6 @@
 """
 qbittorrent: a tiny client for qBittorrent's Web API (https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API),
-stdlib only (urllib + http.cookiejar), for 08-seed, 09-check-seed and 10-test-download.
+stdlib only (urllib + http.cookiejar), for 06-seed and 07-check-seed.
 """
 
 import http.cookiejar

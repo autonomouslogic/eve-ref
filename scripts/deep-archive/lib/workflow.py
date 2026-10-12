@@ -19,8 +19,7 @@ anything the environment doesn't set:
                  the B2 key for the "everef" rclone remote; the rest of the remote is fixed here (RCLONE_FIXED)
     DATA_BUCKET  the data site's bucket on B2; its root is the site root (data_remote)
 
-The scripts reach the data bucket only through rclone (data_remote). The AWS Glacier backup is the one exception
-(boto3, BACKUP_BUCKET).
+The scripts reach the data bucket only through rclone (data_remote).
 """
 
 import datetime
@@ -51,7 +50,7 @@ REMOTE_NAME = "everef"
 # etc.), linked from the docs and downloaded by URL; it's small enough to keep on HTTP.
 TORRENT_EXCLUDE = ["market-history", "killmails", "ccp"]
 
-# Files modified less than this many years before today are never selected (01-find; 15-check-docs prints it).
+# Files modified less than this many years before today are never selected (01-find).
 MIN_AGE_YEARS = 2
 
 # Public URL of the data site.
@@ -68,34 +67,40 @@ DEEP_ARCHIVE_DIR = "deep-archive"
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
 
-# The workflow's scripted steps, in order (README). Each step's script is named after its number and name, e.g.
-# 01-find.py. Manual steps in between have no script and no completion file.
+# The workflow's steps, in order (README), numbered by their place here. Each scripted step's script is named after
+# its number and name, e.g. 01-find.py. Manual steps (MANUAL_STEPS) are numbered too, but have no script and no
+# completion file: a script waits for the nearest earlier scripted step.
 STEPS = [
     "preflight",
     "find",
+    "review",
+    "announce",
     "load",
-    "check-load",
-    "make-checksums",
-    "check-checksums",
     "make-torrent",
-    "check-torrent",
     "seed",
     "check-seed",
-    "test-download",
-    "upload-torrent",
-    "check-upload",
-    "build-feed",
-    "check-feed",
-    "check-docs",
-    "prepare-backup",
-    "check-backup-plan",
-    "backup",
-    "check-backup",
+    "publish",
     "check-before-delete",
+    "pause-jobs",
     "delete",
     "check-delete",
+    "data-index",
+    "resume-jobs",
     "check-site",
+    "record",
+    "announce-result",
+    "delete-scratch",
 ]
+MANUAL_STEPS = {
+    "review",
+    "announce",
+    "pause-jobs",
+    "data-index",
+    "resume-jobs",
+    "record",
+    "announce-result",
+    "delete-scratch",
+}
 
 KIB = 1024
 MIB = 1024 * KIB
@@ -142,24 +147,7 @@ MAX_BYTES = 1 * TIB
 # allowance), so a .torrent at the limit still loads. This is what limits the file count.
 MAX_TORRENT_BYTES = 10_000_000
 
-# Backup (PLAN 2.11, open question 2): a single uncompressed tarball per torrent, uploaded straight to AWS S3 with
-# storage class DEEP_ARCHIVE. This is real AWS S3 Glacier Deep Archive, not B2, so it's the one place these scripts
-# use AWS credentials instead of rclone/B2 (2.21's "one B2 key" rule is about the data bucket). Standard boto3
-# environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION, or a profile) configure the
-# client; only the bucket is a setting here.
-BACKUP_PREFIX = "everef-deep-archive"
-STORAGE_CLASS = "DEEP_ARCHIVE"
-
-
-def backup_bucket():
-    """The S3 bucket for the Glacier Deep Archive backup (BACKUP_BUCKET, environment or torrents.env)."""
-    bucket = os.environ.get("BACKUP_BUCKET", "").strip()
-    if not bucket:
-        fail("BACKUP_BUCKET is not set (environment or torrents.env)")
-    return bucket
-
-
-# qBittorrent's Web API (08-seed, 09-check-seed, 10-test-download), with its save path set to SEED_DIR.
+# qBittorrent's Web API (06-seed, 07-check-seed), with its save path set to SEED_DIR.
 def qbittorrent_settings():
     """(url, username, password) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
     url = os.environ.get("QBITTORRENT_URL", "").strip().rstrip("/")
@@ -169,8 +157,16 @@ def qbittorrent_settings():
 
 
 def step_name(step):
-    """The step with its number, e.g. 01-find: the name of its script (.py) and its completion file (.done)."""
+    """
+    The step with its number, e.g. 01-find: the name of its script (.py) and its completion file (.done).
+    """
     return f"{STEPS.index(step):02d}-{step}"
+
+
+def previous_scripted_step(step):
+    """The nearest scripted step before this one, skipping manual steps; None for the first step."""
+    earlier = [s for s in STEPS[: STEPS.index(step)] if s not in MANUAL_STEPS]
+    return earlier[-1] if earlier else None
 
 
 class _Tee:
@@ -295,17 +291,16 @@ class Workflow:
         Refuses to start a step that already completed, or whose previous step hasn't. Then starts the step's log and
         prints its header, with the torrent ID once find has chosen it.
         """
-        if step not in STEPS:
-            raise ValueError(f"unknown step: {step}")
+        if step not in STEPS or step in MANUAL_STEPS:
+            raise ValueError(f"unknown scripted step: {step}")
         done = self.read_done(step)
         if done is not None:
             fail(
                 f"{step_name(step)} already completed at {done.get('completed_at')}, refusing to rerun. "
                 f"To redo it on purpose, delete {self.done_path(step)} and every later step's by hand"
             )
-        index = STEPS.index(step)
-        if index > 0:
-            previous = STEPS[index - 1]
+        previous = previous_scripted_step(step)
+        if previous is not None:
             if self.read_done(previous) is None:
                 fail(f"Earlier step {step_name(previous)} has not completed yet ({self.done_path(previous)} missing)")
         find = self.read_done("find")
@@ -346,8 +341,8 @@ def file_list_problems(text):
     """
     Problems with a <ID>.txt file list (PLAN 2.5), as "line N: ..." strings; empty if it's well-formed. The format:
     UTF-8, "\\n" line endings, one data file per line as its full path from the site root (the same path inside the
-    torrent, without the torrent's root folder), sorted by code point, no duplicates. The torrent's own README and
-    .sha256 aren't listed.
+    torrent, without the torrent's root folder), sorted by code point, no duplicates. The torrent's own README isn't
+    listed.
     """
     if not text:
         return ["empty file"]
@@ -385,7 +380,7 @@ def site_path_problem(path):
     if any(part in ("", ".", "..") for part in parts):
         return "empty, . or .. path segment"
     if len(parts) == 1:
-        return "at the site root: data files never are, and the torrent's README and .sha256 aren't listed"
+        return "at the site root: data files never are, and the torrent's README isn't listed"
     if parts[0].startswith(TORRENT_ID_PREFIX):
         return "starts with a torrent ID: the torrent's root folder isn't part of the path"
     if parts[0] == DEEP_ARCHIVE_DIR:

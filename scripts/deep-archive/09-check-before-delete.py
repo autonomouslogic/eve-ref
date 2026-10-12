@@ -1,35 +1,34 @@
 #!/usr/bin/env python3
 """
-check-before-delete: step 21 of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
-re-verifies docs, backup and seeding, confirms the published torrent matches the local one, and builds the
+check-before-delete: step 10 of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
+re-verifies the docs page and seeding, confirms the published torrent matches the local one, and builds the
 delete set from the torrent against a fresh listing of the bucket (PLAN 2.14).
 
-DRAFT. Read-only on the bucket, S3 and qBittorrent.
+DRAFT. Read-only on the bucket and qBittorrent.
 
-    20-check-before-delete.py
+    09-check-before-delete.py
 
-Needs 15-check-docs's completion file, and refuses to run twice (lib/workflow.py).
+Needs 08-publish's completion file, and refuses to run twice (lib/workflow.py).
 
 A data file is in the delete set only if all of these hold:
-- it's a data file in the published torrent (not index.json, the README or the .sha256);
+- it's a data file in the published torrent (not index.json or the README);
 - it's in the manifest (so its SHA-256 was checked against the torrent at 100%, PLAN 2.14);
 - it's on the bucket right now, in a **fresh** listing, with the same size and modification time recorded when
   it was selected (01-find's files.jsonl).
 
 A file that fails stays on the site (Appendix E); it's listed and doesn't stop the step. Many failures point at a
-problem; look before going on (README, "20: Check before delete").
+problem; look before going on (README, "09: Check before delete").
 
 Writes, in SCRATCH_DIR:
 
     delete-set.json              torrent_id, confirmed files (path, size, last_modified), bytes, datasets, failed
-    20-check-before-delete.done  completion file
+    09-check-before-delete.done  completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY,
-    BACKUP_BUCKET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION,
     QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
 
-Needs rclone, libtorrent 2.x and boto3.
+Needs rclone and libtorrent 2.x.
 """
 
 import datetime
@@ -47,11 +46,8 @@ import libtorrent as lt
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from qbittorrent import Client, QbittorrentError  # noqa: E402
 from workflow import (  # noqa: E402
-    BACKUP_PREFIX,
     DEEP_ARCHIVE_DIR,
-    STORAGE_CLASS,
     Workflow,
-    backup_bucket,
     data_remote,
     error,
     fail,
@@ -81,9 +77,6 @@ def main():
 
     section("Docs")
     check_docs_live()
-
-    section("Backup")
-    check_backup(workflow, torrent_id)
 
     section("Seeder")
     check_seeder(workflow, torrent_id)
@@ -152,25 +145,6 @@ def check_docs_live():
     print(f"{DOCS_PAGE}: 200")
 
 
-def check_backup(workflow, torrent_id):
-    import boto3
-
-    s3 = boto3.client("s3")
-    bucket = backup_bucket()
-    prefix = f"{BACKUP_PREFIX}/{torrent_id}/"
-    plan_path = os.path.join(workflow.scratch_dir, "backup-plan.json")
-    with open(plan_path, encoding="utf-8") as f:
-        plan = json.load(f)
-    bundle_key = prefix + plan["bundle"]
-    try:
-        response = s3.head_object(Bucket=bucket, Key=bundle_key)
-    except Exception as e:
-        fail(f"Backup bundle missing or unreachable: s3://{bucket}/{bundle_key}: {e}")
-    if response["ContentLength"] == 0 or response.get("StorageClass", "STANDARD") != STORAGE_CLASS:
-        fail(f"Backup bundle looks wrong: s3://{bucket}/{bundle_key}")
-    print(f"s3://{bucket}/{bundle_key}: {fmt_bytes(response['ContentLength'])}, {response.get('StorageClass')}")
-
-
 def check_seeder(workflow, torrent_id):
     url, username, password = qbittorrent_settings()
     seed_done = workflow.read_done("seed")
@@ -188,8 +162,8 @@ def check_seeder(workflow, torrent_id):
 
 
 def check_published_torrent(workflow, remote, torrent_id):
-    check_torrent = workflow.read_done("check-torrent")["summary"]
-    local_v1_hash = check_torrent["v1_info_hash"]
+    make_torrent = workflow.read_done("make-torrent")["summary"]
+    local_v1_hash = make_torrent["v1_info_hash"]
     tmp = os.path.join(workflow.scratch_dir, f"{torrent_id}.published.torrent")
     rclone("copyto", join(remote, f"{DEEP_ARCHIVE_DIR}/{torrent_id}.torrent"), tmp)
     try:
@@ -203,7 +177,7 @@ def check_published_torrent(workflow, remote, torrent_id):
             "something republished it differently"
         )
     print(f"Published torrent matches: v1 info-hash {published_v1_hash}")
-    root_names = {f"{torrent_id}.sha256", f"{torrent_id}-README.txt"}
+    root_names = {f"{torrent_id}-README.txt"}
     prefix = torrent_id + "/"
     storage = ti.files()
     data_paths = set()

@@ -190,7 +190,7 @@ def add_files(source, name):
 def classify(path, mtime, years, datasets):
     """
     Year: the first YYYY directory, or the modification year without one. Dataset: the directories before the year
-    (or the first three without one), minus a trailing history/backfills. Root-level files (.sha256, README) count
+    (or the first three without one), minus a trailing history/backfills. Root-level files (the README) count
     for neither.
     """
     dirs = path.split("/")[:-1]

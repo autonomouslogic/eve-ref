@@ -16,7 +16,7 @@ root files) is the FIXED_BYTES allowance, not worked out. Token counts are withi
 import math
 
 # Allowance for the parts that don't depend on the selection: trackers, comment, creator, name, top-level keys, and the
-# .sha256 and README files at the root of the torrent.
+# README file at the root of the torrent.
 # About 1 KB with the 7 trackers in trackers.txt and the longest PLAN 2.4 comment; rounded up for more trackers.
 FIXED_BYTES = 4096
 FIXED_TOKENS = 100

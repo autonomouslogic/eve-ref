@@ -1,31 +1,45 @@
 #!/usr/bin/env python3
 """
-check-load: step 4 of the EVE Ref Deep Archive workflow. Checks 02-load's result again from scratch, then computes
-the SHA-256 manifest the rest of the workflow is built on.
+load: step 5 of the EVE Ref Deep Archive workflow. Downloads exactly the files find selected from the data site's
+bucket into the torrent's content folder, SEED_DIR/<ID>/, keeping each file's modification time, checks the result,
+and computes the SHA-256 manifest the rest of the workflow is built on.
 
-DRAFT. Read-only on SEED_DIR/<ID>/; writes only manifest.json and SCRATCH_DIR.
+DRAFT. Reads the bucket; writes only to SEED_DIR/<ID>/ and SCRATCH_DIR.
 
-    03-check-load.py
+    04-load.py
 
-Needs 02-load's completion file, and refuses to run twice (lib/workflow.py).
+Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
 
-1. Read the selection, SCRATCH_DIR/find/files.jsonl (the same source 02-load used), and check it.
-2. Walk SEED_DIR/<ID>/ itself (never trusting 02-load's own result) and compare it with the selection, by size and
-   modification time. Any file missing, different, or on disk but not selected, fails the step.
-3. Read every selected file once, computing its SHA-256 and, for .bz2 and .gz files, testing that the compressed
+1. Read the selection, SCRATCH_DIR/find/files.jsonl, and check it: well-formed site paths, no duplicates, and the
+   file count find recorded in its completion file.
+2. Compare it with the content folder, if it exists from an earlier attempt: files already there with the listed size
+   and modification time are kept, and rclone skips them. Anything in the folder that isn't in the selection aborts
+   the step before downloading: it needs looking at by hand.
+3. Check there's room in SEED_DIR for what's left to download.
+4. rclone copy --files-from-raw from the bucket into SEED_DIR/<ID>/. rclone keeps the modification times, skips files
+   already there, and checks each download's SHA-1 where B2 has one.
+5. Walk the content folder again and check every listed file is on disk with the listed size and modification time,
+   and nothing else is. Any problem aborts the step without a completion file; running it again carries on where it
+   stopped.
+6. Read every selected file once, computing its SHA-256 and, for .bz2 and .gz files, testing that the compressed
    stream decompresses cleanly (tolerating concatenated streams). An archive test failure is reported but doesn't
-   fail the step: corrupt files are archived as they are (README, "Check load"); the operator decides whether to
-   accept it in NOTES.md before going on.
-4. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 04-make-checksums builds <ID>.sha256
-   from it; 05-check-checksums re-reads all the data again to confirm it.
+   fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
+   in NOTES.md before going on.
+7. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 05-make-torrent and
+   09-check-before-delete use it.
 
 Writes, in SCRATCH_DIR:
 
-    manifest.json           the selection plus a SHA-256 for every file (torrent_id, generated_at, files)
-    03-check-load.done      completion file
+    load/
+      files-from.txt       the selected paths, one per line: rclone's --files-from-raw list
+    manifest.json          the selection plus a SHA-256 for every file (torrent_id, generated_at, files)
+    04-load.done           completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR
+    DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY   the bucket and B2 key (lib/workflow.py)
+
+Needs rclone.
 """
 
 import bz2
@@ -33,6 +47,7 @@ import datetime
 import hashlib
 import json
 import os
+import shutil
 import sys
 import time
 import zlib
@@ -41,20 +56,29 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "li
 from workflow import (  # noqa: E402
     MIB,
     Workflow,
+    data_remote,
     error,
     fail,
     fmt_bytes,
     fmt_count,
     fmt_duration,
     ok,
+    rclone_run,
     section,
     site_path_problem,
 )
 
-STEP = "check-load"
+STEP = "load"
 
+# rclone parallelism: the selection is tens of thousands of files, mostly small.
+TRANSFERS = 16
+CHECKERS = 32
+STATS_INTERVAL = "30s"
+
+# Hashing.
 CHUNK_SIZE = 4 * MIB
 PROGRESS_INTERVAL = 30  # seconds
+
 LOG_SAMPLE = 20
 
 
@@ -74,21 +98,71 @@ def main():
     workflow = Workflow()
     workflow.begin(STEP)
     torrent_id = workflow.torrent_id()
-    content_dir = os.path.join(workflow.seed_dir, torrent_id)
+    remote = data_remote()
     find_dir = os.path.join(workflow.scratch_dir, "find")
+    content_dir = os.path.join(workflow.seed_dir, torrent_id)
 
     section("Settings")
+    print(f"Source: {remote}")
     print(f"Content folder: {content_dir}")
 
     section("Selection")
     selection_path = os.path.join(find_dir, "files.jsonl")
     files = read_selection(selection_path, workflow.read_done("find"))
-    total_bytes = sum(f.size for f in files)
-    print(f"{fmt_count(len(files))} files ({fmt_bytes(total_bytes)}) in {selection_path}")
+    total = sum(f.size for f in files)
+    print(f"{fmt_count(len(files))} files ({fmt_bytes(total)}) in {selection_path}")
 
     section("Content folder")
-    if not os.path.isdir(content_dir):
-        fail(f"{content_dir} does not exist: run 02-load first")
+    if os.path.isdir(content_dir):
+        state = compare(content_dir, files)
+        print(
+            f"Exists from an earlier attempt: {fmt_count(len(state.matching))} files already there, "
+            f"{fmt_count(len(state.missing))} missing, {fmt_count(len(state.different))} different"
+        )
+        if state.extra:
+            report_problems("files that aren't in the selection", state.extra)
+            fail(f"{content_dir} holds {fmt_count(len(state.extra))} files that aren't selected: resolve by hand")
+        to_copy = [f for f in files if f.path not in state.matching]
+    elif os.path.exists(content_dir):
+        fail(f"{content_dir} exists and isn't a folder")
+    else:
+        print("New")
+        to_copy = files
+    to_copy_bytes = sum(f.size for f in to_copy)
+    free = shutil.disk_usage(workflow.seed_dir).free
+    print(f"To download: {fmt_count(len(to_copy))} files ({fmt_bytes(to_copy_bytes)}), {fmt_bytes(free)} free")
+    if to_copy_bytes > free:
+        fail(f"Not enough free space in SEED_DIR: {fmt_bytes(to_copy_bytes)} to download, {fmt_bytes(free)} free")
+
+    if to_copy:
+        section("Download")
+        os.makedirs(content_dir, exist_ok=True)
+        load_dir = os.path.join(workflow.scratch_dir, "load")
+        os.makedirs(load_dir, exist_ok=True)
+        files_from = os.path.join(load_dir, "files-from.txt")
+        with open(files_from, "w", encoding="utf-8") as f:
+            f.writelines(o.path + "\n" for o in files)
+        print(f"rclone copy {remote} -> {content_dir}, {TRANSFERS} transfers, list in {files_from}")
+        download_started = time.monotonic()
+        rclone_run(
+            "copy",
+            remote,
+            content_dir,
+            "--files-from-raw",
+            files_from,
+            "--transfers",
+            str(TRANSFERS),
+            "--checkers",
+            str(CHECKERS),
+            "--stats",
+            STATS_INTERVAL,
+            "--stats-one-line",
+            "--stats-log-level",
+            "NOTICE",
+        )
+        print(f"rclone finished in {fmt_duration(time.monotonic() - download_started)}")
+
+    section("Result")
     state = compare(content_dir, files)
     problems = 0
     for title, items in (
@@ -100,13 +174,14 @@ def main():
             problems += len(items)
             report_problems(title, items)
     if problems:
-        fail(f"{fmt_count(problems)} problems in {content_dir}. Run 02-load again, or resolve by hand")
-    print(f"{fmt_count(len(state.matching))} files ({fmt_bytes(total_bytes)}) match the selection")
+        fail(f"{fmt_count(problems)} problems in {content_dir}. Run load again to retry, or resolve by hand")
+    print(f"{fmt_count(len(state.matching))} files ({fmt_bytes(total)}) in {content_dir}, all as selected")
 
     section("Hashing")
     manifest_files = []
     archive_failures = []
-    last_progress = started
+    hashing_started = time.monotonic()
+    last_progress = hashing_started
     hashed_bytes = 0
     for index, f in enumerate(sorted(files, key=lambda s: s.path), 1):
         full = os.path.join(content_dir, f.path)
@@ -119,7 +194,7 @@ def main():
         if now - last_progress >= PROGRESS_INTERVAL or index == len(files):
             print(
                 f"{fmt_count(index)}/{fmt_count(len(files))} files, "
-                f"{fmt_bytes(hashed_bytes)}/{fmt_bytes(total_bytes)}, {fmt_duration(now - started)} elapsed"
+                f"{fmt_bytes(hashed_bytes)}/{fmt_bytes(total)}, {fmt_duration(now - hashing_started)} elapsed"
             )
             last_progress = now
 
@@ -128,7 +203,7 @@ def main():
         report_problems("files that failed their archive integrity test", archive_failures)
         print(
             f"{fmt_count(len(archive_failures))} archive test failures. Corrupt files are archived as they are "
-            f"(README, 'Check load'): accept each one in NOTES.md before going on, or investigate first"
+            f"(README, 'Load'): accept each one in NOTES.md before going on, or investigate first"
         )
 
     section("Manifest")
@@ -150,13 +225,14 @@ def main():
         {
             "content_dir": content_dir,
             "manifest": manifest_path,
-            "files": len(manifest_files),
-            "bytes": total_bytes,
+            "files": len(files),
+            "bytes": total,
+            "downloaded_files": len(to_copy),
             "archive_test_failures": len(archive_failures),
         },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
-    ok(f"Check load OK for {torrent_id}")
+    ok(f"Load OK for {torrent_id}")
 
 
 def read_selection(path, find_done):
@@ -213,10 +289,7 @@ class State:
 
 
 def compare(content_dir, files):
-    """
-    The content folder against the selection, by size and modification time (to the second). Re-walks the folder
-    from scratch: never trusts 02-load's own result (lib/workflow.py, "Every action has a separate check step").
-    """
+    """The content folder against the selection, by size and modification time (to the second)."""
     state = State()
     selected = {f.path: f for f in files}
     on_disk = set()

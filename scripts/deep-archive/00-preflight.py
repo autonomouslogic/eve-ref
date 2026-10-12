@@ -19,7 +19,7 @@ Checks:
 - SCRATCH_DIR and SEED_DIR are separate;
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable;
-- the tools later steps need: libtorrent 2.x, the tracker list.
+- the tools later steps need: libtorrent 2.x, the tracker list, aria2c (07-check-seed's test download).
 """
 
 import json
@@ -85,15 +85,6 @@ def main():
             checks.fail(f"SCRATCH_DIR isn't empty: {len(scratch_entries)} entries, e.g. {scratch_entries[0]}")
         else:
             print(f"SCRATCH_DIR: {scratch}, empty")
-        # 18-backup builds the whole backup tarball here.
-        free = shutil.disk_usage(scratch).free
-        if free < MAX_BYTES:
-            checks.fail(
-                f"Not enough free space in SCRATCH_DIR for the backup tarball: {fmt_bytes(free)}, a torrent can be up "
-                f"to {fmt_bytes(MAX_BYTES)}"
-            )
-        else:
-            print(f"SCRATCH_DIR: {fmt_bytes(free)} free, room for the backup tarball")
     seed, seed_created, seed_problem = prepare_dir("SEED_DIR")
     if seed is None:
         checks.fail(seed_problem)
@@ -177,6 +168,11 @@ def check_tools(checks):
             print(f"libtorrent {version}")
     except ImportError:
         checks.fail("Missing required tool: libtorrent Python bindings (needed by make-torrent)")
+    aria2c = subprocess.run(["aria2c", "--version"], capture_output=True, text=True) if shutil.which("aria2c") else None
+    if aria2c is None or aria2c.returncode != 0:
+        checks.fail("Missing required tool: aria2c (needed by 07-check-seed's test download)")
+    else:
+        print(aria2c.stdout.splitlines()[0] if aria2c.stdout else "aria2c")
     path = os.path.realpath(TRACKERS_FILE)
     if not os.path.isfile(path):
         checks.fail(f"Tracker list not found: {path}")

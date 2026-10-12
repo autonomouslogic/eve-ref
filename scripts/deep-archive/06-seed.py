@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-seed: step 9 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent, save path $SEED_DIR, so it
+seed: step 7 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent, save path $SEED_DIR, so it
 checks the files where they already are instead of downloading them.
 
 DRAFT. Writes only to qBittorrent (via its Web API) and SCRATCH_DIR.
 
-    08-seed.py
+    06-seed.py
 
-Needs 07-check-torrent's completion file, and refuses to run twice (lib/workflow.py).
+Needs 05-make-torrent's completion file, and refuses to run twice (lib/workflow.py).
 
 Adds $SCRATCH_DIR/<ID>.torrent to qBittorrent with save path $SEED_DIR and automatic torrent management off, so
-qBittorrent uses $SEED_DIR/<ID>/ (already there from 02-load) rather than moving or re-downloading anything.
+qBittorrent uses $SEED_DIR/<ID>/ (already there from 04-load) rather than moving or re-downloading anything.
 Waits for qBittorrent to report the torrent, then triggers a recheck (qBittorrent doesn't always check a torrent
 added from existing files without being asked).
 
@@ -43,8 +43,8 @@ def main():
     workflow = Workflow()
     workflow.begin(STEP)
     torrent_id = workflow.torrent_id()
-    check_torrent = workflow.read_done("check-torrent")
-    v1_hash = check_torrent["summary"]["v1_info_hash"]
+    make_torrent = workflow.read_done("make-torrent")
+    v1_hash = make_torrent["summary"]["v1_info_hash"]
     torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
 
     section("qBittorrent")
@@ -75,7 +75,7 @@ def main():
 
     section("Recheck")
     client.recheck(v1_hash)
-    print("Recheck triggered. Run 09-check-seed once it reaches 100%.")
+    print("Recheck triggered. Run 07-check-seed once it reaches 100%.")
 
     workflow.complete(STEP, torrent_id, {"info_hash": v1_hash, "save_path": workflow.seed_dir})
     print(f"Done in {fmt_duration(time.monotonic() - started)}")

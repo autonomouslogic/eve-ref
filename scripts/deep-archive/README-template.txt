@@ -20,8 +20,8 @@ https://data.everef.net/deep-archive/{id}.txt
 Integrity
 ---------
 
-{id}.sha256, in this torrent, holds the SHA-256 of every data file, in standard "sha256sum" format. Your
-torrent client already verifies every piece; this file is for anyone checking the data outside a client.
+Your torrent client verifies every piece as it downloads. This is a hybrid v1+v2 torrent, so v2 clients also check
+each file against its own SHA-256 hash tree.
 
 Licence
 -------
