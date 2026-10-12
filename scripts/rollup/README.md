@@ -7,8 +7,8 @@ into a single archive:
 <archive>/history/<year>/...   ->   <archive>/history/<archive>-<year>.tar.xz
 ```
 
-> **Status:** `00-preflight.sh` through `06-delete.sh` are written. `07-complete.sh` is still planned.
-> Design notes are in [PLAN.md](PLAN.md).
+> **Status:** `00-preflight.sh` through `07-complete.sh` are all written.
+> Development notes are in [NOTES.md](NOTES.md).
 
 ## Archive format (2023 onward)
 
@@ -29,7 +29,7 @@ unsorted). It stays as is.
 ## When to roll up
 
 - Only **finished years**, never the current UTC year.
-- Only in-scope datasets (see PLAN.md, "Scope"). These are `.json.bz2` snapshot datasets whose history the
+- Only in-scope datasets (see NOTES.md, "Scope"). These are `.json.bz2` snapshot datasets whose history the
   code never reads back.
 
 ## Setup
@@ -63,7 +63,7 @@ If a step fails partway, remove its partial output and rerun it. Download and de
 | 4    | `03-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
 | 5    | `04-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
 | 6    | `05-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
-| 7    | `06-delete.sh`    | **hides year dir**   | Dry-run count equals listing. Typed `<archive>-<year>` confirmation |
+| 7    | `06-delete.sh`    | **hides year dir**   | Remaining files all in the listing, dry-run count matches. Typed `<archive>-<year>` confirmation |
 | 8    | `07-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
 
 Steps 1-6 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (6).

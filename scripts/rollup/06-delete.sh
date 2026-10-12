@@ -11,31 +11,59 @@ fi
 
 TOTAL_COUNT="$(jq 'length' "$SCRATCH/listing.json")"
 
-echo "## 🔵 Dry-run preview"
-DRY_RUN_OUTPUT="$(rclone delete --dry-run --fast-list "$REMOTE/$YEAR_PATH" 2>&1)" || true
-echo "$DRY_RUN_OUTPUT"
-DRY_RUN_COUNT="$(grep -c 'Skipped delete' <<<"$DRY_RUN_OUTPUT" || true)"
-if [[ "$DRY_RUN_COUNT" -ne "$TOTAL_COUNT" ]]; then
-	echo "🔴 Dry-run would delete $DRY_RUN_COUNT files, listing.json has $TOTAL_COUNT" >&2
+# Prints the files left under the year dir, one path per line. rclone exits 3 (directory not
+# found) once nothing is left, which counts as empty. Any other failure aborts.
+list_remaining() {
+	local status=0
+	rclone lsf -R --files-only --fast-list "$REMOTE/$YEAR_PATH" || status=$?
+	if [[ "$status" -ne 0 && "$status" -ne 3 ]]; then
+		echo "🔴 rclone lsf of $REMOTE/$YEAR_PATH failed with exit code $status" >&2
+		return 1
+	fi
+}
+
+# A rerun after a partial delete, or after a later check failed, finds fewer files than
+# listing.json. That's fine, as long as every remaining file is one from listing.json.
+echo "## 🔵 Checking what's left against the listing"
+REMAINING="$(list_remaining)"
+REMAINING_COUNT="$(grep -c . <<<"$REMAINING" || true)"
+UNKNOWN="$(comm -23 <(sort <<<"$REMAINING") <(jq -r '.[].Path' "$SCRATCH/listing.json" | sort))"
+if [[ -n "$UNKNOWN" ]]; then
+	echo "🔴 Files under $REMOTE/$YEAR_PATH that are not in listing.json:" >&2
+	echo "$UNKNOWN" >&2
 	exit 1
 fi
-echo "Dry-run would delete $DRY_RUN_COUNT files, matches listing.json"
+echo "$REMAINING_COUNT of $TOTAL_COUNT files from listing.json are left, no unknown files"
 
-echo "## 🔵 Confirmation"
-echo "About to permanently hide $TOTAL_COUNT files under $REMOTE/$YEAR_PATH"
-echo "(soft delete: hidden versions are kept for 2 days by the bucket lifecycle rules)"
-read -r -p "Type '$ARCHIVE-$YEAR' to confirm: " CONFIRM
-if [[ "$CONFIRM" != "$ARCHIVE-$YEAR" ]]; then
-	echo "🔴 Confirmation did not match '$ARCHIVE-$YEAR', aborting" >&2
-	exit 1
+if [[ "$REMAINING_COUNT" -eq 0 ]]; then
+	echo "Nothing left to delete (an earlier run already deleted everything), going straight to the checks"
+else
+	echo "## 🔵 Dry-run preview"
+	DRY_RUN_OUTPUT="$(rclone delete --dry-run --fast-list "$REMOTE/$YEAR_PATH" 2>&1)" || true
+	echo "$DRY_RUN_OUTPUT"
+	DRY_RUN_COUNT="$(grep -c 'Skipped delete' <<<"$DRY_RUN_OUTPUT" || true)"
+	if [[ "$DRY_RUN_COUNT" -ne "$REMAINING_COUNT" ]]; then
+		echo "🔴 Dry-run would delete $DRY_RUN_COUNT files, $REMAINING_COUNT are left" >&2
+		exit 1
+	fi
+	echo "Dry-run would delete $DRY_RUN_COUNT files, matches what's left"
+
+	echo "## 🔵 Confirmation"
+	echo "About to permanently hide $REMAINING_COUNT files under $REMOTE/$YEAR_PATH"
+	echo "(soft delete: hidden versions are kept for 2 days by the bucket lifecycle rules)"
+	read -r -p "Type '$ARCHIVE-$YEAR' to confirm: " CONFIRM
+	if [[ "$CONFIRM" != "$ARCHIVE-$YEAR" ]]; then
+		echo "🔴 Confirmation did not match '$ARCHIVE-$YEAR', aborting" >&2
+		exit 1
+	fi
+
+	echo "## 🔵 Deleting"
+	rclone delete -v --fast-list --max-delete "$REMAINING_COUNT" "$REMOTE/$YEAR_PATH"
+	echo "rclone delete done"
 fi
-
-echo "## 🔵 Deleting"
-rclone delete -v --fast-list --max-delete "$TOTAL_COUNT" "$REMOTE/$YEAR_PATH"
-echo "rclone delete done"
 
 echo "## 🔵 Checking the year dir is empty"
-REMAINING="$(rclone lsf -R --fast-list "$REMOTE/$YEAR_PATH" 2>/dev/null || true)"
+REMAINING="$(list_remaining)"
 if [[ -n "$REMAINING" ]]; then
 	echo "🔴 Files remain under $REMOTE/$YEAR_PATH:" >&2
 	echo "$REMAINING" >&2
@@ -80,6 +108,7 @@ echo "$ARCHIVE_NAME is still present with unchanged SHA-1"
 
 mark_done \
 	"deleted_count=$TOTAL_COUNT" \
+	"deleted_this_run=$REMAINING_COUNT" \
 	"remote_archive_sha1=$REMOTE_ARCHIVE_SHA1"
 
 echo "✅ Delete OK for $ARCHIVE $YEAR"
