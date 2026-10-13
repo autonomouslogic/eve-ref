@@ -21,6 +21,7 @@ import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.google.common.collect.Iterators;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -284,12 +285,18 @@ public class PublishRefData implements Command {
 							.filter(entry -> filterExisting(skipped, existing, entry))
 							.iterator();
 					VirtualThreads.checkIsVirtual();
+					// NOT VirtualThreads.runAll(Iterator<T>, Consumer<T>, int): that convenience overload
+					// drains the whole iterator into an ArrayList<Runnable> up front (one closure per file,
+					// each capturing its full ReferenceEntry/byte[] content) before running anything, which
+					// defeats the laziness above just as completely as the original .toList() did. Iterators
+					// .transform keeps the Runnable construction lazy, so runAll(Iterator<? extends
+					// Runnable>, int) - the one overload that actually pulls one task at a time - only ever
+					// has uploadConcurrency entries' worth of bytes alive.
 					VirtualThreads.runAll(
-							entries,
-							entry -> {
+							Iterators.transform(entries, entry -> (Runnable) () -> {
 								uploaded.incrementAndGet();
 								uploadFile(entry).blockingAwait();
-							},
+							}),
 							uploadConcurrency);
 					log.info("Uploaded {} entries", uploaded.get());
 					log.info("Skipped {} entries", skipped.get());
