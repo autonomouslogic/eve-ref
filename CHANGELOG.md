@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.82.2](https://github.com/autonomouslogic/eve-ref/compare/2.82.1...2.82.2) (2026-10-13)
+
+
+### Bug Fixes
+
+* Make publish-ref-data upload concurrency configurable ([99d9b36](https://github.com/autonomouslogic/eve-ref/commit/99d9b36fbb4d8f50da8063e4295d73a7a60e364c))
+* **ui:** Fix dependencies ([14a1fec](https://github.com/autonomouslogic/eve-ref/commit/14a1feca5c793aeb8f32590e41d72f381e59c136))
+
+
+### Miscellaneous Chores
+
+* Archive rollups ([#1136](https://github.com/autonomouslogic/eve-ref/issues/1136)) ([a225e5e](https://github.com/autonomouslogic/eve-ref/commit/a225e5e057ba8cbf5f1f15c35ff8a3efba63f744))
+* More archive rollups ([#1139](https://github.com/autonomouslogic/eve-ref/issues/1139)) ([5ac2fe7](https://github.com/autonomouslogic/eve-ref/commit/5ac2fe747ab23bc8d9c612954b90e0f5919f3f34))
+
+
+### Tests
+
+* Fixed teats ([ea9cc70](https://github.com/autonomouslogic/eve-ref/commit/ea9cc70efbe0a3ccb2c3a1c3506bda295fe07e79))
+
 ## [2.82.1](https://github.com/autonomouslogic/eve-ref/compare/2.82.0...2.82.1) (2026-10-06)
 
 
