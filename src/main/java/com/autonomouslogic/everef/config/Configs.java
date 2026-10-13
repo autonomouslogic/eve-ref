@@ -670,18 +670,32 @@ public class Configs {
 			.build();
 
 	/**
-	 * The B2 S3-compatible origin the data-server command proxies to. Must have no query and end with {@code /}.
-	 */
-	public static final Config<URI> DATA_SERVER_ORIGIN_URL =
-			Config.<URI>builder().name("DATA_SERVER_ORIGIN_URL").type(URI.class).build();
-
-	/**
 	 * Maximum number of concurrent requests the data-server command will handle before returning 503.
 	 */
 	public static final Config<Integer> DATA_SERVER_MAX_CONCURRENCY = Config.<Integer>builder()
 			.name("DATA_SERVER_MAX_CONCURRENCY")
 			.defaultValue(10000)
 			.type(Integer.class)
+			.build();
+
+	/**
+	 * How long the data-server command caches successful HEAD results from the data bucket.
+	 * Set to zero to disable.
+	 */
+	public static final Config<Duration> DATA_SERVER_HEAD_CACHE_TTL = Config.<Duration>builder()
+			.name("DATA_SERVER_HEAD_CACHE_TTL")
+			.defaultValue(Duration.ofSeconds(5))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * How long the data-server command caches 404 results from the data bucket.
+	 * Set to zero to disable.
+	 */
+	public static final Config<Duration> DATA_SERVER_NOT_FOUND_CACHE_TTL = Config.<Duration>builder()
+			.name("DATA_SERVER_NOT_FOUND_CACHE_TTL")
+			.defaultValue(Duration.ofSeconds(5))
+			.type(Duration.class)
 			.build();
 
 	/**

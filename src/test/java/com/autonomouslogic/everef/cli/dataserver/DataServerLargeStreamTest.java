@@ -31,9 +31,12 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
  */
 @Tag("slow")
 @SetEnvironmentVariable(key = "HTTP_PORT", value = "" + DataServerLargeStreamTest.DATA_SERVER_TEST_PORT)
+@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT0S")
+@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT0S")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://bucket/")
 @SetEnvironmentVariable(
-		key = "DATA_SERVER_ORIGIN_URL",
-		value = "http://localhost:" + DataServerLargeStreamTest.UPSTREAM_PORT + "/bucket/")
+		key = "DATA_S3_ENDPOINT_URL",
+		value = "http://localhost:" + DataServerLargeStreamTest.UPSTREAM_PORT)
 @Log4j2
 @Timeout(300)
 public class DataServerLargeStreamTest {

@@ -38,9 +38,12 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
  */
 @Tag("slow")
 @SetEnvironmentVariable(key = "HTTP_PORT", value = "" + DataServerConcurrencyTest.DATA_SERVER_TEST_PORT)
+@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT0S")
+@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT0S")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://bucket/")
 @SetEnvironmentVariable(
-		key = "DATA_SERVER_ORIGIN_URL",
-		value = "http://localhost:" + DataServerConcurrencyTest.UPSTREAM_PORT + "/bucket/")
+		key = "DATA_S3_ENDPOINT_URL",
+		value = "http://localhost:" + DataServerConcurrencyTest.UPSTREAM_PORT)
 @Log4j2
 @Timeout(300)
 public class DataServerConcurrencyTest {
@@ -85,8 +88,12 @@ public class DataServerConcurrencyTest {
 			slowDownloads.add(executor.submit(() -> downloadSlowly(httpClient)));
 		}
 
-		// Give the slow readers time to all open their connections.
-		Thread.sleep(500);
+		// Wait for all slow readers to have reached upstream. Signing and connecting 500 SDK calls takes a while.
+		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(60);
+		while (upstream.getRequestCount() < SLOW_READER_COUNT && System.nanoTime() < deadline) {
+			Thread.sleep(50);
+		}
+		assertTrue(upstream.getRequestCount() >= SLOW_READER_COUNT);
 
 		var start = System.nanoTime();
 		var smallResponse = httpClient.send(

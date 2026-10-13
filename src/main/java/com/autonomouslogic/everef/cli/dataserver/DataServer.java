@@ -4,6 +4,7 @@ import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.dataserver.DataProxyHandler;
+import com.autonomouslogic.everef.dataserver.LogSanitizer;
 import com.autonomouslogic.everef.service.HealthcheckService;
 import com.autonomouslogic.everef.util.SentryUtil;
 import io.helidon.common.concurrency.limits.FixedLimit;
@@ -26,6 +27,9 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class DataServer implements Command {
+	private static final org.apache.logging.log4j.Logger directLog =
+			org.apache.logging.log4j.LogManager.getLogger("dataserver.access");
+
 	private final int port = Configs.HTTP_PORT.getRequired();
 
 	@Inject
@@ -93,6 +97,8 @@ public class DataServer implements Command {
 			Status defaultStatus,
 			ServerResponseHeaders responseHeaders,
 			String message) {
+		// Requests that never reach the handler (over the concurrency limit, malformed) are still access logged.
+		logDirect(request, defaultStatus);
 		if (defaultStatus.code() != Status.SERVICE_UNAVAILABLE_503.code()) {
 			return DirectHandler.defaultHandler().handle(request, eventType, defaultStatus, responseHeaders, message);
 		}
@@ -106,6 +112,17 @@ public class DataServer implements Command {
 			response.entity("Service unavailable\n");
 		}
 		return response.build();
+	}
+
+	private void logDirect(DirectHandler.TransportRequest request, Status status) {
+		var userAgent = request.headers().first(HeaderNames.USER_AGENT).orElse(null);
+		directLog.info(
+				"method={} path={} url={} status={} outcome=rejected userAgent={}",
+				LogSanitizer.sanitizeUnquoted(request.method()),
+				LogSanitizer.sanitizeUnquoted(request.path()),
+				LogSanitizer.quote(request.path()),
+				status.code(),
+				LogSanitizer.quote(userAgent));
 	}
 
 	private void handleUnexpectedError(

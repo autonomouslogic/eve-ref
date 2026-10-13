@@ -103,8 +103,8 @@ reading env vars ad hoc.
   `openapi` package.
 - `dataserver/`: the `data-server` command runs a separate **Helidon** webserver that streams
   data.everef.net straight through from B2 (replacing the old Cloudflare Worker), with RFC 9110
-  conditional-request handling, a write-stall watchdog for dead streams, and a dedicated `data-proxy`
-  OkHttp client. See `data-server-plan.md` for the full design.
+  conditional-request handling, a write-stall watchdog for dead streams, and the `data` S3 client (bucket from `DATA_PATH`).
+  See `data-server-plan.md` for the full design.
 - Jackson is the serialization workhorse (JSON/YAML/CSV). Note the build pins **two** Jackson lines:
   Jackson 3 (`tools.jackson.*`) as primary, and Jackson 2 (`com.fasterxml.jackson.*`) kept only for
   swagger-core and the dynamo-mapper — keep imports on the right one.

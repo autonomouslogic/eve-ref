@@ -1,0 +1,32 @@
+extends layout
+
+block content
+	.container
+		.row
+			.col-12
+				h1.mt-4 Too many requests
+		.row.mb-3
+			.col-12
+				p.
+					You've been rate limited because too many requests were made from your address in a short time.
+					Please slow down and try again shortly.
+				if retryAfterSeconds
+					p.data-rate-limit-retry
+						| Try again in
+						= " "
+						span.data-rate-limit-retry-seconds= retryAfterSeconds
+						= " "
+						| seconds.
+				p.
+					EVE Ref is free and run by volunteers. Hosting and bandwidth cost real money. If you find the
+					data useful, please consider supporting the project on Patreon.
+				p
+					a.btn.btn-primary.data-rate-limit-patreon(href="https://patreon.com/everef", target="_blank", rel="noopener noreferrer")
+						i.fab.fa-patreon
+						= " "
+						| Support EVE Ref on Patreon
+				p
+					| For bulk access, see
+					= " "
+					a(href="https://docs.everef.net/datasets/") docs.everef.net/datasets/
+					| .

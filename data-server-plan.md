@@ -50,21 +50,9 @@ Behaviour verified against the live bucket (2026-10-10):
 
 ## Design
 
-### Upstream fetch: dedicated OkHttp client
-Add `@Named("data-proxy") OkHttpClient` in `inject/OkHttpModule.java`. **Don't reuse `mainHttpClient`.** It has three problems for this use:
-- It has a 4 GiB disk `Cache`, so it would write GB files to disk.
-- Its `callTimeout(120s)` would kill long downloads.
-- Its `LoggingInterceptor` would add noise.
+### Upstream fetch: data S3 client
+Use the existing `@Named("data") S3AsyncClient` (see `inject/S3Module.java`) and the bucket from `DATA_PATH`; no separate HTTP client. HEAD uses `headObject`; GET uses `getObject` with `AsyncResponseTransformer.toBlockingInputStream()` so the body streams on the virtual thread. Only a 200 is accepted (the SDK treats any 2xx as success). SDK errors map to the same upstream statuses via `S3Exception.statusCode()`. The SDK does not request gzip, so `Content-Length` is preserved.
 
-New client settings: no cache, `callTimeout(0)`, `connectTimeout 5s`, `readTimeout 60s` (applies per read, so it is safe
-for long streams), `followRedirects(false)`, `retryOnConnectionFailure(true)` (only retries before a response is
-received, which is safe for GET/HEAD), `UserAgentInterceptor`, and a `ConnectionPool` with `maxIdleConnections` around
-64 (the default of 5 would close most connections after a burst and force new TLS handshakes).
-- **Gotcha:** OkHttp adds `Accept-Encoding: gzip` and decompresses transparently, which removes `Content-Length`. Every upstream request must set `Accept-Encoding: identity`.
-- **Gotcha:** always use the synchronous `call.execute()`, never `enqueue()`. The `Dispatcher` caps async calls at
-  `maxRequestsPerHost = 5`, and every upstream request goes to the same host, so `enqueue()` would serialize all
-  downloads behind five slots. `execute()` is not subject to that cap; the number of active upstream connections is
-  then unbounded and follows client concurrency.
 
 ### Handler: `dataserver/DataProxyHandler.java` (new package `com.autonomouslogic.everef.dataserver`)
 Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2.
@@ -222,7 +210,7 @@ Handles GET and HEAD. Checks run in this order, and steps 1–3 never contact B2
     - The timeout stays well above Cloudflare's and the host proxy's own stalls, so it only catches truly dead streams.
 13. **Access log.** Log one line per request through a dedicated logger (`dataserver.access`), so log4j can route it on its own. Fields:
     - method, path, status, bytes sent, upstream Content-Length, duration, outcome (`ok`/`aborted`/`stalled`/`upstream_aborted`), precondition outcome (none/proceed/304/412), upstream calls made (e.g. `GET`, `HEAD`, `HEAD+GET_VERSION`)
-    - client IP (`CF-Connecting-IP`, then `X-Forwarded-For`, then remote address), User-Agent, Referer
+    - client IP (fixed header, else remote address; see Rate limiting), User-Agent, Referer
 
 ### Command: `cli/dataserver/DataServer.java`
 - Implements `Command`. Its lifecycle mirrors `ApiRunner` (`run()`, `startServer()`, `stop()`, periodic `HealthcheckService.startPeriodicPing()`).
@@ -249,14 +237,126 @@ write-stall timeout (step 12a) is only the backstop for dead streams.
   responses, they may absorb most slow end users. This design doesn't rely on it.
 - B2 may throttle a single IP at high concurrency. That surfaces as 429/503 and is mapped by step 7.
 
+### Rate limiting (per client IP)
+Token bucket per client IP, checked before any upstream call, so a limited request costs no B2 transaction. The
+client IP comes from one fixed header, a constant in `ClientIps` (not configurable; `CF-Connecting-IP` as the
+placeholder until the real name is confirmed). When the header is absent, blank or not a valid IP literal, the IP is
+unknown (see the missing-header rule below). The same resolved IP is used for the limiter key and the access log
+(which falls back to the remote peer address when unknown); it replaces the `CF-Connecting-IP` / `X-Forwarded-For`
+chain in `DataProxyHandler.clientIp`. Only the first value of the header is used; the value is trimmed and parsed as an IP
+literal (no DNS lookups) and IPv6 is keyed on its /64, so one host can't rotate through its address block.
+Rejected requests get 429 with `Retry-After: <seconds>` (rounded up, minimum 1). Browsers (`Accept` contains
+`text/html`) get the `data/rate-limited.pug` page with `retryAfterSeconds`; everything else gets text/plain
+`Too many requests\n`. Access-log outcome: `rate_limited`. The limiter guards request starts only: an admitted
+download is never throttled or cut off by it.
+
+**Library choice: Bucket4j in-memory** (`com.bucket4j:bucket4j_jdk17-core:8.21.0`, Java 17+ build, Apache-2.0, latest
+on Maven Central as of 2026-10-02). All the options below implement a token bucket; they differ in what surrounds it.
+
+| Library | Fit | Verdict |
+|---|---|---|
+| Bucket4j | Purpose-built. Lock-free CAS per bucket. `tryConsumeAndReturnRemaining` returns a `ConsumptionProbe` whose `getNanosToWaitForRefill()` is exactly `Retry-After`. Several limits on one bucket (burst plus sustained). Distributed backends exist if limits ever need sharing across instances. Actively maintained. | **Use** |
+| Guava `RateLimiter` | Already on the classpath (ESI, Fuzzwork). Built to *delay* a caller, not reject. One instance per key, no remaining-time info on `tryAcquire`, one rate only, still `@Beta`. | Rejected: right for outbound throttling, wrong shape for per-client rejection |
+| Resilience4j `RateLimiter` | Refresh-period permits rather than a continuous bucket, so boundary bursts up to 2x. Wait time via `reservePermission`. Fault-tolerance toolkit of which we'd use one module. | Rejected: extra dependency family for one feature |
+| Hand-rolled | Small, but refill, CAS and idle eviction are easy to get subtly wrong. | Rejected |
+
+**pistack post summary** ("Self-Hosted Rate Limiter Libraries", 2026-06-19, https://www.pistack.xyz/posts/2026-06-19-rate-limiter-libraries-bucket4j-resilience4j-governor-guava/).
+Feature-and-API comparison only; it has **no benchmarks**, and it's a blog post (treat as indicative). Argues
+application-level limiting beats proxy-level (Nginx/Envoy) for per-user quotas, tiers and distributed coordination.
+- Bucket4j: token bucket; local plus Redis/Hazelcast/Ignite/Coherence/Infinispan backends; several limits per bucket;
+  blocking and non-blocking; `tryConsumeAndReturnRemaining` for `X-RateLimit-Remaining`; async. Cons: Java-only,
+  distributed backends add ops overhead, verbose API.
+- Resilience4j RateLimiter: part of a suite (CircuitBreaker, Retry, Bulkhead, TimeLimiter); Micrometer metrics, Spring
+  Boot auto-config, runtime-changeable limits. Cons: local only; no blocking `acquire()`.
+- Governor (Rust): token bucket/GCRA, Tower middleware (Axum/Actix/Tonic), `SmartIpKeyExtractor`. Not applicable (Rust).
+- Guava RateLimiter: smooth bursty/warm-up (not a classic token bucket); blocking `acquire()`, timed `tryAcquire()`.
+  Cons: fixed rate, local only, no metrics, no remaining-quota visibility, so no rate-limit headers.
+- Its picks: Bucket4j(+Redis) for distributed Java; Resilience4j if already using circuit breakers/retries; Guava for
+  simple apps. Its FAQ suggests a circuit breaker and a conservative local fallback around a Redis backend; not relevant
+  to us (single-JVM, in-memory).
+Takeaway: confirms the choice above. Nothing in the post changes it, and its "no remaining quota" criticism of Guava
+matches why Guava is rejected.
+
+**Helidon-specific options (researched against Helidon 4.5.4 docs and sources jars).**
+Helidon has no per-client rate limiter. There is no `helidon-webserver-ratelimit` module (the
+`io.helidon.webserver` artifacts on Maven Central have none). What it has is `helidon-common-concurrency-limits`:
+- `FixedLimit`, `AimdLimit`, and `ThroughputLimit` (`rate-limiting-algorithm: TOKEN_BUCKET` default, or `FIXED_RATE`
+  leaky bucket; `amount` per `duration`, optional queue). `ThroughputLimit` *is* a token bucket, but it is a **single
+  global bucket**: no key, so it can't separate clients.
+- Two attach points: `WebServer.builder().concurrencyLimit(limit)` (server-level, before routing, one `Limit` only,
+  which we already use for `FixedLimit`) and the `LimitsFeature` (`server.features.limits`, HTTP only, after routing,
+  a routing filter).
+- Rejection is fixed: `LimitsRoutingFeature` throws `HttpException("Limit exceeded", 503)`, with no `Retry-After`, no
+  429, and no HTML page. At server level the rejection goes to the direct handler (already customised in
+  `DataServer.handleDirect` to add `Retry-After: 1`).
+- `LimitProvider` SPI lets us supply our own `Limit` implementation, but `Limit.tryAcquire()` takes no request, so a
+  per-IP key is not possible through it either.
+- Verdict: native Helidon cannot do per-IP. Use Helidon's `ThroughputLimit` only as an optional *global* ceiling;
+  per-IP is Bucket4j in our own code.
+
+**Implementation in Helidon (two layers).**
+1. *Global request-rate ceiling (optional, Helidon native).* Protects B2 transaction budget against a distributed
+   flood that per-IP limits don't catch. Attach through `LimitsFeature` rather than `.concurrencyLimit(...)` because the
+   builder holds one server-level limit and that slot already holds the `FixedLimit`:
+   ```java
+   var throughput = ThroughputLimit.create(b -> b.amount(globalPerPeriod).duration(period).queueLength(0));
+   builder.addFeature(LimitsFeature.create(f -> f.concurrencyLimit(throughput)));
+   ```
+   Rejections come out as a plain 503 from the routing layer (no `Retry-After`), so add `Retry-After: 1` through the
+   existing `routing.error(HttpException.class, ...)` path, or skip this layer entirely. Config
+   `DATA_SERVER_GLOBAL_RATE_LIMIT_PER_PERIOD` / `_PERIOD`, zero disables (default off). Verify with a test that the
+   feature's 503 reaches the access log; the feature runs as a filter ahead of the handler, which would bypass
+   the handler's access log, so route it through the same `logDirect`-style helper.
+2. *Per-IP limiter (Bucket4j, our own code).* Not a Helidon `Limit`, but a check at the top of `DataProxyHandler.handle`:
+   - Resolve the IP with the shared `ClientIps.resolve(req)` helper (new, pure and unit tested).
+   - Call `clientRateLimiter.tryConsume(ip)`. On reject: set status 429, `Retry-After`, `Accept-Ranges: none`,
+     `Cache-Control: no-store`, set `access.outcome = "rate_limited"`, render the pug page (when `Accept` includes
+     `text/html`) or write `Too many requests\n`, and return. This is **in the handler, not a filter**, so the existing
+     access-log `finally` and Sentry plumbing apply, and the limiter sits ahead of key resolution, HEAD cache and any
+     upstream call. (A Helidon `Filter` would need its own access-log call; rejected for that reason.)
+   - Order: method check (405) first, then rate limit, then path validation. Cheap malformed requests from one IP
+     count toward the limit, which is intended.
+   - `ClientRateLimiter` has the Guava bucket cache described above, lives in the Dagger graph as `@Singleton`
+     (`@Inject` constructor), and is injected into `DataProxyHandler`.
+   - Rendering the pug page reuses the existing pug setup used elsewhere in the project (check which renderer `api`
+     uses and inject it); the `retryAfterSeconds` model value is the same number as the header.
+   - Metric-free for now; the access log `rate_limited` count is the signal.
+
+Bucket4j has no built-in per-key map, so ours:
+- `Cache<String, Bucket>` (Guava, already a dependency) with `expireAfterAccess` just above refill-to-full time and a
+  `maximumSize` bound, so an address scan can't grow memory without limit. Use `cache.get(ip, this::newBucket)`.
+  Evicting a bucket that has refilled anyway never grants an active client extra tokens.
+- Bucket from `Bucket.builder().addLimit(Bandwidth.builder().capacity(burst).refillGreedy(rate, period).build())`.
+- One token per GET/HEAD.
+- Wrap in `dataserver/ClientRateLimiter.java` returning allowed / retry-after, so handler and tests don't touch Bucket4j
+  types. `@Singleton`; takes a `TimeMeter` so tests don't sleep.
+- Allowlist (`DATA_SERVER_RATE_LIMIT_ALLOWLIST`, comma-separated IPs) for health checks and our own jobs.
+- Deployment requirement: the IP header is trustworthy only if the origin accepts traffic solely from the
+  proxy that sets it (and the proxy overwrites any client-supplied copy). Otherwise clients can spoof it to dodge the
+  limit or push another address's bucket empty. Falling back to the remote peer when the header is missing
+  would, behind the proxy, put every such request in the proxy's one bucket. Treat "header
+  missing" as a misconfiguration: log a warning once per minute and, to avoid a self-inflicted outage,
+  skip limiting for those requests rather than limit by the proxy address.
+
+Config: `DATA_SERVER_RATE_LIMIT_ENABLED` (boolean, default true), `DATA_SERVER_RATE_LIMIT_BURST` (int),
+`DATA_SERVER_RATE_LIMIT_PER_S` (double), `DATA_SERVER_RATE_LIMIT_MAX_CLIENTS` (int, cache bound),
+`DATA_SERVER_RATE_LIMIT_ALLOWLIST` (list). Pick defaults from real access-log data (peak legitimate per-IP rate)
+before rollout.
+
+Tests: `ClientRateLimiterTest` (pure) covers burst then reject, refill after clock advance, `Retry-After` value,
+independent IPs, allowlist, idle eviction. `DataServerTest` covers 429 making no upstream call, HTML vs plain-text
+body, and an admitted long download being unaffected.
+
 ### Wiring and config
 - `cli/CommandRunner.java`: inject `Provider<DataServer>` and add `case "data-server"`.
 - `config/Configs.java`:
-  - `DATA_SERVER_ORIGIN_URL` (URI, required, e.g. `https://s3.us-east-005.backblazeb2.com/<bucket>/`,
-    the same URL the Worker uses). Validate at startup that it has no query and ends with `/`.
+  - Origin is the `DATA_PATH` bucket via the `data` S3 client (`DATA_S3_ENDPOINT_URL` overrides the endpoint).
   - `DATA_SERVER_MAX_CONCURRENCY` (int, default 10000)
   - `DATA_SERVER_WRITE_STALL_TIMEOUT` (Duration, default `PT120S`)
+  - `DATA_SERVER_HEAD_CACHE_TTL` (Duration, default `PT5S`): Guava cache (soft values) of successful `headObject` results by key; `DATA_SERVER_NOT_FOUND_CACHE_TTL` (default `PT5S`): same for 404s. Zero disables. The HEAD entry is dropped when a pinned GET fails or its ETag differs.
+  - `DATA_SERVER_RATE_LIMIT_*`: see Rate limiting above.
   - Reuse `HTTP_PORT`.
+- `build.gradle`: add `implementation "com.bucket4j:bucket4j_jdk17-core:8.21.0"`.
 - `AGENTS.md`: document the `data-server` command next to the `api` description.
 - Tests: add `testImplementation "com.squareup.okhttp3:mockwebserver3:5.5.0"`, from the same OkHttp release as the
   existing `mockwebserver`. Add an `inject(DataServerTest)` method to `TestComponent`.
@@ -265,7 +365,7 @@ write-stall timeout (step 12a) is only the backstop for dead streams.
 All HTTP tests use OkHttp's MockWebServer as the B2 stand-in. Use the `mockwebserver3` package, which is needed for
 two cases: streaming bodies that are generated rather than buffered (`MockResponseBody`), and mid-body disconnects
 (`SocketEffect`). Follow the `SearchHandlerTest` pattern otherwise: `DaggerTestComponent`, a `Dispatcher` keyed on the
-path, `@SetEnvironmentVariable` for the origin URL (MockWebServer plus a bucket path, e.g. `http://localhost:<port>/bucket/`) and a unique
+path, `@SetEnvironmentVariable` for `DATA_PATH` (`s3://bucket/`) and `DATA_S3_ENDPOINT_URL` (the MockWebServer; `MockS3Module` then builds a real path-style S3 client against it) and a unique
 `HTTP_PORT`, and a JDK `HttpClient` as the client. Every test also asserts on the requests MockWebServer recorded:
 count, method, path and headers. Write the tests before the implementation.
 
@@ -344,7 +444,7 @@ Test classes:
 | Upstream mid-body failure | Upstream sends headers and half the body, then disconnects (`SocketEffect`) | Client gets an IO error (truncated body), never a clean 200 with a short body; connection not reused; access log `upstream_aborted`; Sentry captured |
 | Upstream mid-body failure | Upstream stalls mid-body past `readTimeout` (shortened for the test) | Same as above |
 | Upstream mid-body failure | Next request after the failure | Served normally (server healthy) |
-| Client abort | Client reads part of a throttled body, then closes | Upstream connection closed (the `data-proxy` client's pool shows no idle connection); access log `aborted`; no Sentry capture |
+| Client abort | Client reads part of a throttled body, then closes | Upstream connection closed (the data S3 client's connection shows no idle connection); access log `aborted`; no Sentry capture |
 | Stalled client | Raw socket client sends GET for a large streamed body, reads the headers, then stops reading (`DATA_SERVER_WRITE_STALL_TIMEOUT` set to 2 s) | Within a few seconds after the timeout: server closes the client socket, upstream connection closed, access log `stalled`, no Sentry capture, watchdog no longer tracks the stream |
 | Slow but progressing client | Client reads 16 KiB every second for longer than the stall timeout | Not cut off; download completes with matching checksum |
 | Concurrency limit | `DATA_SERVER_MAX_CONCURRENCY` set to 2; three concurrent stalled downloads | Third gets 503 with `Retry-After: 1`; after the first two finish, new requests are served |
@@ -414,7 +514,7 @@ Intentional differences:
 1. `make generate-database`, then `./gradlew test --tests "*.dataserver.*"` and the slow large-stream task.
 2. Run locally:
    ```
-   DATA_SERVER_ORIGIN_URL=https://s3.us-east-005.backblazeb2.com/<bucket>/ HTTP_PORT=8081 bin/eve-ref data-server
+   DATA_PATH=s3://<bucket>/ DATA_S3_ENDPOINT_URL=https://s3.us-east-005.backblazeb2.com HTTP_PORT=8081 bin/eve-ref data-server
    ```
    Then:
    - `curl -I localhost:8081/ccp/sde/schema-changelog.yaml` returns the same `ETag`, `Last-Modified` and

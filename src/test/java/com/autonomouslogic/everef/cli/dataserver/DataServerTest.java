@@ -22,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +43,10 @@ import org.junit.jupiter.api.Timeout;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "HTTP_PORT", value = "" + DataServerTest.DATA_SERVER_TEST_PORT)
-@SetEnvironmentVariable(
-		key = "DATA_SERVER_ORIGIN_URL",
-		value = "http://localhost:" + DataServerTest.UPSTREAM_PORT + "/bucket/")
+@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT0S")
+@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT0S")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://bucket/")
+@SetEnvironmentVariable(key = "DATA_S3_ENDPOINT_URL", value = "http://localhost:" + DataServerTest.UPSTREAM_PORT)
 @Log4j2
 @Timeout(60)
 public class DataServerTest {
@@ -123,7 +125,7 @@ public class DataServerTest {
 	 * server sends for a HEAD request (Content-Length still describes the resource, but nothing follows it).
 	 * MockWebServer replays whatever is enqueued regardless of the request method that triggered it, so a
 	 * response meant to answer a HEAD must not carry real body bytes: otherwise they're left unread on the
-	 * data-proxy client's pooled connection and corrupt the next response read from it.
+	 * data S3 client's pooled connection and corrupt the next response read from it.
 	 */
 	private MockResponse.Builder headOnlyResponse() {
 		return new MockResponse.Builder()
@@ -290,7 +292,7 @@ public class DataServerTest {
 	void shouldEncodeKeysCorrectly() throws Exception {
 		upstream.enqueue(fileResponse().build());
 		send("GET", "/a+b.txt");
-		assertEquals("/bucket/a+b.txt", upstream.takeRequest().getUrl().encodedPath());
+		assertEquals("/bucket/a%2Bb.txt", upstream.takeRequest().getUrl().encodedPath());
 
 		upstream.enqueue(fileResponse().build());
 		send("GET", "/a%20b.txt");
@@ -341,8 +343,120 @@ public class DataServerTest {
 		send("GET", "/file.txt", "Cookie", "abc=def", "Authorization", "Bearer xyz");
 		var recorded = upstream.takeRequest();
 		assertNull(recorded.getHeaders().get("Cookie"));
-		assertNull(recorded.getHeaders().get("Authorization"));
-		assertEquals("identity", recorded.getHeaders().get("Accept-Encoding"));
+		assertTrue(recorded.getHeaders().get("Authorization").startsWith("AWS4-HMAC-SHA256"));
+	}
+
+	private static final String[] CLIENT_HEADERS = {
+		"Cookie", "abc=def",
+		"Range", "bytes=0-3",
+		"Accept-Encoding", "gzip",
+		"User-Agent", "client-agent/1.0",
+		"Referer", "https://example.com/",
+		"X-Custom", "custom-value",
+		"X-Amz-Meta-Evil", "evil",
+		"X-Amz-Server-Side-Encryption-Customer-Key", "evilkey",
+		"If-Match", "\"client-etag\"",
+		"If-None-Match", "\"client-other\"",
+		"If-Modified-Since", "Fri, 01 Jan 2010 00:00:00 GMT",
+		"If-Unmodified-Since", "Fri, 01 Jan 2030 00:00:00 GMT",
+		"If-Range", "\"client-etag\"",
+	};
+
+	private void assertNoClientHeadersForwarded(mockwebserver3.RecordedRequest recorded) {
+		for (int i = 0; i < CLIENT_HEADERS.length; i += 2) {
+			var name = CLIENT_HEADERS[i];
+			var value = CLIENT_HEADERS[i + 1];
+			assertTrue(
+					recorded.getHeaders().values(name).stream().noneMatch(v -> v.contains(value)),
+					name + " was forwarded upstream");
+		}
+		for (var name : List.of("Cookie", "Range", "If-Range", "X-Custom", "X-Amz-Meta-Evil", "Referer")) {
+			assertNull(recorded.getHeaders().get(name));
+		}
+		assertTrue(recorded.getHeaders().get("Authorization").startsWith("AWS4-HMAC-SHA256"));
+		var signed = recorded.getHeaders().get("Authorization");
+		for (var name : List.of("if-match", "if-none-match", "if-modified-since", "if-unmodified-since", "range")) {
+			assertFalse(signed.contains(name));
+		}
+	}
+
+	@Test
+	void shouldNotForwardAnyClientHeadersOnPlainGet() throws Exception {
+		upstream.enqueue(fileResponse().build());
+		send("GET", "/file.txt", withoutPreconditionHeaders());
+		assertNoClientHeadersForwarded(upstream.takeRequest());
+	}
+
+	@Test
+	void shouldNotForwardAnyClientHeadersOnPlainHead() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		send("HEAD", "/file.txt", withoutPreconditionHeaders());
+		assertNoClientHeadersForwarded(upstream.takeRequest());
+	}
+
+	@Test
+	void shouldNotForwardAnyClientHeadersWithPreconditions() throws Exception {
+		// All four preconditions present, evaluated locally: If-Match passes only for the current ETag.
+		upstream.enqueue(headOnlyResponse().build());
+		upstream.enqueue(fileResponse().build());
+		var headers = CLIENT_HEADERS.clone();
+		headers[Arrays.asList(headers).indexOf("If-Match") + 1] = ETAG;
+		var res = send("GET", "/file.txt", headers);
+		assertEquals(200, res.statusCode());
+		assertEquals(2, upstream.getRequestCount());
+		assertNoClientHeadersForwarded(upstream.takeRequest());
+		assertNoClientHeadersForwarded(upstream.takeRequest());
+	}
+
+	private String[] withoutPreconditionHeaders() {
+		var result = new java.util.ArrayList<String>();
+		for (int i = 0; i < CLIENT_HEADERS.length; i += 2) {
+			if (!CLIENT_HEADERS[i].startsWith("If-")) {
+				result.add(CLIENT_HEADERS[i]);
+				result.add(CLIENT_HEADERS[i + 1]);
+			}
+		}
+		return result.toArray(new String[0]);
+	}
+
+	// --- Preconditions always HEAD first ---
+
+	@Test
+	void shouldHeadBeforeGetForEachPreconditionHeader() throws Exception {
+		var cases = List.of(
+				List.of("If-Match", ETAG),
+				List.of("If-None-Match", "\"different\""),
+				List.of("If-Modified-Since", "Fri, 01 Jan 2000 00:00:00 GMT"),
+				List.of("If-Unmodified-Since", "Fri, 01 Jan 2099 00:00:00 GMT"));
+		for (var header : cases) {
+			upstream.enqueue(headOnlyResponse().build());
+			upstream.enqueue(fileResponse().build());
+			var res = send("GET", "/file.txt", header.get(0), header.get(1));
+			assertEquals(200, res.statusCode(), header.get(0));
+			assertEquals("hello world", new String(res.body()), header.get(0));
+			assertEquals("HEAD", upstream.takeRequest().getMethod(), header.get(0));
+			var get = upstream.takeRequest();
+			assertEquals("GET", get.getMethod(), header.get(0));
+			assertEquals(VERSION_ID, get.getUrl().queryParameter("versionId"), header.get(0));
+		}
+	}
+
+	@Test
+	void shouldNotStartDownloadWhenPreconditionFails() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		var res = send("GET", "/file.txt", "If-Match", "\"stale\"");
+		assertEquals(412, res.statusCode());
+		assertEquals(1, upstream.getRequestCount());
+		assertEquals("HEAD", upstream.takeRequest().getMethod());
+	}
+
+	@Test
+	void shouldNotStartDownloadWhenNotModifiedSince() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		var res = send("GET", "/file.txt", "If-Modified-Since", "Mon, 01 Jan 2024 00:00:00 GMT");
+		assertEquals(304, res.statusCode());
+		assertEquals(1, upstream.getRequestCount());
+		assertEquals("HEAD", upstream.takeRequest().getMethod());
 	}
 
 	// --- Not found ---
@@ -461,6 +575,138 @@ public class DataServerTest {
 		var res = send("HEAD", "/file.txt", "If-None-Match", ETAG);
 		assertEquals(304, res.statusCode());
 		assertEquals(1, upstream.getRequestCount());
+	}
+
+	// --- Caches ---
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT5S")
+	void shouldCacheHeadResults() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		assertEquals(200, send("HEAD", "/file.txt").statusCode());
+		assertEquals(200, send("HEAD", "/file.txt").statusCode());
+		assertEquals(1, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT5S")
+	void shouldReuseCachedHeadForPreconditionGets() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		upstream.enqueue(fileResponse().build());
+		upstream.enqueue(fileResponse().build());
+		assertEquals(200, send("GET", "/file.txt", "If-None-Match", "\"x\"").statusCode());
+		assertEquals(200, send("GET", "/file.txt", "If-None-Match", "\"y\"").statusCode());
+		assertEquals(3, upstream.getRequestCount());
+		assertEquals("HEAD", upstream.takeRequest().getMethod());
+		assertEquals("GET", upstream.takeRequest().getMethod());
+		assertEquals("GET", upstream.takeRequest().getMethod());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT5S")
+	void shouldRefreshCachedHeadWhenPinnedGetFails() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		assertEquals(200, send("HEAD", "/file.txt").statusCode());
+		// Cached HEAD is stale: pinned GET fails, so the HEAD must be redone.
+		upstream.enqueue(new MockResponse.Builder().code(404).build());
+		upstream.enqueue(headOnlyResponse().build());
+		upstream.enqueue(fileResponse().build());
+		var res = send("GET", "/file.txt", "If-None-Match", "\"x\"");
+		assertEquals(200, res.statusCode());
+		assertEquals(4, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT5S")
+	@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT5S")
+	void shouldNotCacheErrorsInHeadCache() throws Exception {
+		upstream.enqueue(new MockResponse.Builder().code(500).build());
+		upstream.enqueue(headOnlyResponse().build());
+		assertEquals(502, send("HEAD", "/file.txt").statusCode());
+		assertEquals(200, send("HEAD", "/file.txt").statusCode());
+		assertEquals(2, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT5S")
+	void shouldCache404ForHeadAndGet() throws Exception {
+		upstream.enqueue(new MockResponse.Builder()
+				.code(404)
+				.setHeader("Cache-Control", "max-age=0, no-cache, no-store")
+				.build());
+		var first = send("GET", "/missing.txt");
+		assertEquals(404, first.statusCode());
+		var second = send("GET", "/missing.txt");
+		assertEquals(404, second.statusCode());
+		assertEquals("Not found\n", new String(second.body()));
+		assertEquals(
+				"max-age=0, no-cache, no-store",
+				second.headers().firstValue("Cache-Control").orElse(null));
+		assertEquals(404, send("HEAD", "/missing.txt").statusCode());
+		assertEquals(1, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT1S")
+	void shouldRefetchHeadAfterCacheExpires() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		upstream.enqueue(headOnlyResponse().build());
+		assertEquals(200, send("HEAD", "/file.txt").statusCode());
+		Thread.sleep(1300);
+		assertEquals(200, send("HEAD", "/file.txt").statusCode());
+		assertEquals(2, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT1S")
+	void shouldRefetchNotFoundAfterCacheExpires() throws Exception {
+		upstream.enqueue(new MockResponse.Builder().code(404).build());
+		upstream.enqueue(fileResponse().build());
+		assertEquals(404, send("GET", "/file.txt").statusCode());
+		Thread.sleep(1300);
+		assertEquals(200, send("GET", "/file.txt").statusCode());
+		assertEquals(2, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT5S")
+	void shouldNotCacheNon404Errors() throws Exception {
+		upstream.enqueue(new MockResponse.Builder().code(403).build());
+		upstream.enqueue(fileResponse().build());
+		assertEquals(503, send("GET", "/file.txt").statusCode());
+		assertEquals(200, send("GET", "/file.txt").statusCode());
+		assertEquals(2, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_HEAD_CACHE_TTL", value = "PT5S")
+	void shouldDropCachedHeadWhenPinnedGetEtagDiffers() throws Exception {
+		upstream.enqueue(headOnlyResponse().build());
+		upstream.enqueue(fileResponse().setHeader("ETag", "\"other\"").build());
+		assertEquals(502, send("GET", "/file.txt", "If-None-Match", "\"x\"").statusCode());
+		upstream.enqueue(headOnlyResponse().build());
+		upstream.enqueue(fileResponse().build());
+		assertEquals(200, send("GET", "/file.txt", "If-None-Match", "\"x\"").statusCode());
+		assertEquals(4, upstream.getRequestCount());
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_NOT_FOUND_CACHE_TTL", value = "PT5S")
+	void shouldNotShareNotFoundCacheBetweenKeys() throws Exception {
+		upstream.enqueue(new MockResponse.Builder().code(404).build());
+		upstream.enqueue(fileResponse().build());
+		assertEquals(404, send("GET", "/missing.txt").statusCode());
+		assertEquals(200, send("GET", "/file.txt").statusCode());
+		assertEquals(2, upstream.getRequestCount());
+	}
+
+	@Test
+	void shouldNotCacheWhenTtlIsZero() throws Exception {
+		upstream.enqueue(new MockResponse.Builder().code(404).build());
+		upstream.enqueue(new MockResponse.Builder().code(404).build());
+		send("GET", "/missing.txt");
+		send("GET", "/missing.txt");
+		assertEquals(2, upstream.getRequestCount());
 	}
 
 	// --- Pinning ---
@@ -721,6 +967,60 @@ public class DataServerTest {
 			assertEquals("11", fields.get("upstreamContentLength"));
 			assertEquals("GET", fields.get("upstreamCalls"));
 			assertEquals("none", fields.get("precondition"));
+		}
+	}
+
+	@Test
+	void accessLogShouldRecordFullUrlWithQuery() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			send("GET", "/file.txt?a=b&c=d");
+			var fields = awaitAccessLog(log, "/file.txt");
+			assertEquals("/file.txt?a=b&c=d", fields.get("url"));
+			assertEquals("404", fields.get("status"));
+		}
+	}
+
+	@Test
+	void accessLogShouldEscapeClientSuppliedValues() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			upstream.enqueue(fileResponse().build());
+			send("GET", "/file.txt", "User-Agent", "evil\" status=999 outcome=forged \\", "Referer", "r\"x");
+			var line = log.await(l -> l.contains("path=/file.txt "), Duration.ofSeconds(20))
+					.orElseThrow();
+			assertTrue(line.contains("userAgent=\"evil\\u0022 status=999 outcome=forged \\u005c\""), line);
+			assertTrue(line.contains("referer=\"r\\u0022x\""), line);
+			var fields = awaitAccessLog(log, "/file.txt");
+			assertEquals("200", fields.get("status"));
+			assertEquals("ok", fields.get("outcome"));
+			assertFalse(line.contains("\n"));
+		}
+	}
+
+	@Test
+	void accessLogShouldEscapeSuspiciousPathAndQuery() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			send("GET", "/file.txt?x=%0d%0aforged=1%22");
+			var line = log.await(l -> l.contains("path=/file.txt "), Duration.ofSeconds(20))
+					.orElseThrow();
+			assertTrue(line.contains("url=\"/file.txt?x=%0d%0aforged=1%22\""), line);
+		}
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "DATA_SERVER_MAX_CONCURRENCY", value = "1")
+	void accessLogShouldRecordRequestsRejectedOverConcurrencyLimit() throws Exception {
+		try (var log = new LogCapture("dataserver.access")) {
+			upstream.enqueue(fileResponse().headersDelay(2, TimeUnit.SECONDS).build());
+			var first = httpClient.sendAsync(
+					HttpRequest.newBuilder().uri(uri("/slow.txt")).GET().build(),
+					HttpResponse.BodyHandlers.ofByteArray());
+			awaitUpstreamRequestCount(1);
+			var rejected = send("GET", "/rejected.txt?q=1", "User-Agent", "rej\"ected");
+			assertEquals(503, rejected.statusCode());
+			var line = log.await(l -> l.contains("outcome=rejected"), Duration.ofSeconds(20))
+					.orElseThrow();
+			assertTrue(line.contains("status=503"), line);
+			first.get();
 		}
 	}
 

@@ -2,7 +2,12 @@ package com.autonomouslogic.everef.dataserver;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.s3.S3HeaderNames;
+import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.SentryUtil;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import io.helidon.http.HeaderNames;
 import io.helidon.http.Status;
 import io.helidon.webserver.CloseConnectionException;
@@ -19,19 +24,29 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.HttpUrl;
-import okhttp3.Request;
-import okhttp3.Response;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.async.AsyncResponseTransformer;
+import software.amazon.awssdk.core.exception.SdkException;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
- * Handles GET and HEAD requests for the data-server command, streaming objects straight through from B2.
- * See data-server-plan.md for the full design this follows step by step.
+ * Handles GET and HEAD requests for the data-server command, streaming objects straight through from B2 using the
+ * data S3 client. See data-server-plan.md for the full design this follows step by step.
  */
 @Singleton
 @Log4j2
@@ -40,8 +55,6 @@ public class DataProxyHandler implements Handler {
 			org.apache.logging.log4j.LogManager.getLogger("dataserver.access");
 
 	private static final int COPY_BUFFER_SIZE = 16 * 1024;
-	private static final int MAX_ERROR_BODY_BYTES = 4096;
-	private static final Pattern B2_CODE_PATTERN = Pattern.compile("<Code>([^<]*)</Code>");
 	/**
 	 * IMF-fixdate (RFC 9110 §5.6.7). Not {@link DateTimeFormatter#RFC_1123_DATE_TIME}, which omits the leading zero on
 	 * single-digit days.
@@ -50,26 +63,39 @@ public class DataProxyHandler implements Handler {
 					"EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US)
 			.withZone(ZoneOffset.UTC);
 
-	private static final List<String> PASSTHROUGH_HEADERS = List.of(
-			"Content-Type", "Cache-Control", "Content-Encoding", "Content-Disposition", "Content-Language", "Expires");
-
-	private final okhttp3.OkHttpClient client;
+	private final S3AsyncClient client;
 	private final StallWatchdog watchdog;
 	private final String version;
-	private final HttpUrl origin;
+	private final String bucket;
+	private final String prefix;
+	/**
+	 * Short-lived cache of HEAD results by S3 key. Only successful responses are cached. Soft values let the JVM drop
+	 * entries under memory pressure.
+	 */
+	private final Cache<String, Upstream> headCache;
+	/**
+	 * Short-lived cache of 404 results by S3 key, so repeated requests for missing keys don't each hit B2. Covers both
+	 * HEAD and unpinned GET.
+	 */
+	private final Cache<String, UpstreamStatusException> notFoundCache;
 
 	@Inject
-	protected DataProxyHandler(@Named("data-proxy") okhttp3.OkHttpClient client, StallWatchdog watchdog) {
+	protected DataProxyHandler(@Named("data") S3AsyncClient client, StallWatchdog watchdog, UrlParser urlParser) {
 		this.client = client;
 		this.watchdog = watchdog;
 		this.version = Configs.EVE_REF_VERSION.getRequired();
-		var originUri = Configs.DATA_SERVER_ORIGIN_URL.getRequired();
-		var originStr = originUri.toString();
-		if (originUri.getRawQuery() != null || !originStr.endsWith("/")) {
-			throw new IllegalArgumentException(
-					"DATA_SERVER_ORIGIN_URL must have no query and end with '/': " + originUri);
-		}
-		this.origin = HttpUrl.get(originStr.substring(0, originStr.length() - 1));
+		var dataPath = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
+		this.bucket = dataPath.getBucket();
+		var path = dataPath.getPath();
+		this.prefix = path == null || path.isEmpty() || path.endsWith("/") ? (path == null ? "" : path) : path + "/";
+		this.headCache = CacheBuilder.newBuilder()
+				.expireAfterWrite(Configs.DATA_SERVER_HEAD_CACHE_TTL.getRequired())
+				.softValues()
+				.build();
+		this.notFoundCache = CacheBuilder.newBuilder()
+				.expireAfterWrite(Configs.DATA_SERVER_NOT_FOUND_CACHE_TTL.getRequired())
+				.softValues()
+				.build();
 	}
 
 	@Override
@@ -78,6 +104,7 @@ public class DataProxyHandler implements Handler {
 		var access = new AccessLog(
 				method,
 				req.path().rawPath(),
+				fullUrl(req),
 				clientIp(req),
 				req.headers().first(HeaderNames.USER_AGENT).orElse(null),
 				req.headers().first(HeaderNames.REFERER).orElse(null));
@@ -121,6 +148,12 @@ public class DataProxyHandler implements Handler {
 		}
 	}
 
+	/** Path plus raw query, as the client sent it. */
+	private static String fullUrl(ServerRequest req) {
+		var path = req.path().rawPath();
+		return req.prologue().hasQuery() ? path + "?" + req.query().rawValue() : path;
+	}
+
 	private static String clientIp(ServerRequest req) {
 		var cfConnectingIp = req.headers().first(HeaderNames.create("CF-Connecting-IP"));
 		if (cfConnectingIp.isPresent() && !cfConnectingIp.get().isBlank()) {
@@ -142,80 +175,26 @@ public class DataProxyHandler implements Handler {
 				|| req.headers().contains(HeaderNames.IF_NONE_MATCH)
 				|| req.headers().contains(HeaderNames.IF_MODIFIED_SINCE)
 				|| req.headers().contains(HeaderNames.IF_UNMODIFIED_SINCE);
+		var s3Key = prefix + key;
 
 		if (method.equals("HEAD")) {
 			access.upstreamCalls = "HEAD";
-			try (var head = upstreamCall("HEAD", buildUrl(key, null), access)) {
-				if (head.code() != 200) {
-					mapAndSendUpstreamError(req, res, method, head, false, access);
-					return;
-				}
-				var versionId = requireHeader(head, "x-amz-version-id");
-				var etag = requireHeader(head, "ETag");
-				var contentLength = head.header("Content-Length");
-				if (versionId == null || etag == null) {
-					send500(req, res, method, head, access);
-					return;
-				}
-				var lastModified = resolveLastModified(head);
-				if (!hasPreconditions) {
-					sendHeadSuccess(res, head, lastModified, contentLength, access);
-					return;
-				}
-				var result = evaluatePreconditions(req, method, etag, lastModified, access);
-				if (result == PreconditionResult.PRECONDITION_FAILED) {
-					send412(res, access);
-					return;
-				}
-				if (result == PreconditionResult.NOT_MODIFIED) {
-					send304(res, head, access);
-					return;
-				}
-				sendHeadSuccess(res, head, lastModified, contentLength, access);
-			}
-			return;
-		}
-
-		// GET
-		if (!hasPreconditions) {
-			access.upstreamCalls = "GET";
-			try (var get = upstreamCall("GET", buildUrl(key, null), access)) {
-				if (get.code() != 200) {
-					mapAndSendUpstreamError(req, res, method, get, false, access);
-					return;
-				}
-				var etag = requireHeader(get, "ETag");
-				var contentLengthHeader = requireHeader(get, "Content-Length");
-				if (etag == null || contentLengthHeader == null) {
-					send500(req, res, method, get, access);
-					return;
-				}
-				var lastModified = resolveLastModified(get);
-				sendGetSuccess(req, res, get, lastModified, Long.parseLong(contentLengthHeader), access);
-			}
-			return;
-		}
-
-		access.upstreamCalls = "HEAD+GET_VERSION";
-		getWithPreconditions(req, res, method, key, access, 0);
-	}
-
-	private void getWithPreconditions(
-			ServerRequest req, ServerResponse res, String method, String key, AccessLog access, int attempt)
-			throws IOException {
-		try (var head = upstreamCall("HEAD", buildUrl(key, null), access)) {
-			if (head.code() != 200) {
-				mapAndSendUpstreamError(req, res, method, head, false, access);
+			Upstream head;
+			try {
+				head = head(s3Key, access);
+			} catch (UpstreamStatusException e) {
+				mapAndSendUpstreamError(req, res, method, e, false, access);
 				return;
 			}
-			var versionId = requireHeader(head, "x-amz-version-id");
-			var headEtag = requireHeader(head, "ETag");
-			if (versionId == null || headEtag == null) {
-				send500(req, res, method, head, access);
+			if (head.versionId == null || head.etag == null) {
+				send500(req, res, method, head.url, access);
 				return;
 			}
-			var lastModified = resolveLastModified(head);
-			var result = evaluatePreconditions(req, method, headEtag, lastModified, access);
+			if (!hasPreconditions) {
+				sendHeadSuccess(res, head, access);
+				return;
+			}
+			var result = evaluatePreconditions(req, method, head.etag, head.lastModified, access);
 			if (result == PreconditionResult.PRECONDITION_FAILED) {
 				send412(res, access);
 				return;
@@ -224,42 +203,78 @@ public class DataProxyHandler implements Handler {
 				send304(res, head, access);
 				return;
 			}
-			try (var get = upstreamCall("GET", buildUrl(key, versionId), access)) {
-				if (get.code() == 400 || get.code() == 404) {
-					if (attempt == 0) {
-						getWithPreconditions(req, res, method, key, access, attempt + 1);
-						return;
-					}
-					captureSentry(
-							req, res, "Pinned GET failed twice", get.request().url(), get.code(), null);
-					sendPlain(res, method, Status.SERVICE_UNAVAILABLE_503, "Service unavailable\n", "Retry-After", "1");
-					access.outcome = "ok";
+			sendHeadSuccess(res, head, access);
+			return;
+		}
+
+		// GET
+		if (!hasPreconditions) {
+			access.upstreamCalls = "GET";
+			try (var get = get(s3Key, null, access)) {
+				if (get.meta.etag == null || get.meta.contentLength == null) {
+					send500(req, res, method, get.meta.url, access);
 					return;
 				}
-				if (get.code() != 200) {
-					mapAndSendUpstreamError(req, res, method, get, true, access);
-					return;
-				}
-				var getEtag = requireHeader(get, "ETag");
-				var contentLengthHeader = requireHeader(get, "Content-Length");
-				if (getEtag == null || contentLengthHeader == null) {
-					send500(req, res, method, get, access);
-					return;
-				}
-				if (!getEtag.equals(headEtag)) {
-					captureSentry(
-							req,
-							res,
-							"Pinned GET ETag differs from HEAD",
-							get.request().url(),
-							get.code(),
-							null);
-					sendPlain(res, method, Status.create(502, "Bad Gateway"), "Bad gateway\n");
-					access.outcome = "ok";
-					return;
-				}
-				sendGetSuccess(req, res, get, lastModified, Long.parseLong(contentLengthHeader), access);
+				sendGetSuccess(req, res, get, access);
+			} catch (UpstreamStatusException e) {
+				mapAndSendUpstreamError(req, res, method, e, false, access);
 			}
+			return;
+		}
+
+		access.upstreamCalls = "HEAD+GET_VERSION";
+		getWithPreconditions(req, res, method, s3Key, access, 0);
+	}
+
+	private void getWithPreconditions(
+			ServerRequest req, ServerResponse res, String method, String key, AccessLog access, int attempt)
+			throws IOException {
+		Upstream head;
+		try {
+			head = head(key, access);
+		} catch (UpstreamStatusException e) {
+			mapAndSendUpstreamError(req, res, method, e, false, access);
+			return;
+		}
+		if (head.versionId == null || head.etag == null) {
+			send500(req, res, method, head.url, access);
+			return;
+		}
+		var result = evaluatePreconditions(req, method, head.etag, head.lastModified, access);
+		if (result == PreconditionResult.PRECONDITION_FAILED) {
+			send412(res, access);
+			return;
+		}
+		if (result == PreconditionResult.NOT_MODIFIED) {
+			send304(res, head, access);
+			return;
+		}
+		try (var get = get(key, head.versionId, access)) {
+			if (get.meta.etag == null || get.meta.contentLength == null) {
+				send500(req, res, method, get.meta.url, access);
+				return;
+			}
+			if (!get.meta.etag.equals(head.etag)) {
+				headCache.invalidate(key);
+				captureSentry(req, res, "Pinned GET ETag differs from HEAD", get.meta.url, 200, null);
+				sendPlain(res, method, Status.create(502, "Bad Gateway"), "Bad gateway\n");
+				access.outcome = "ok";
+				return;
+			}
+			sendGetSuccess(req, res, get, access);
+		} catch (UpstreamStatusException e) {
+			if (e.status == 400 || e.status == 404) {
+				headCache.invalidate(key);
+				if (attempt == 0) {
+					getWithPreconditions(req, res, method, key, access, attempt + 1);
+					return;
+				}
+				captureSentry(req, res, "Pinned GET failed twice", e.url, e.status, null);
+				sendPlain(res, method, Status.SERVICE_UNAVAILABLE_503, "Service unavailable\n", "Retry-After", "1");
+				access.outcome = "ok";
+				return;
+			}
+			mapAndSendUpstreamError(req, res, method, e, true, access);
 		}
 	}
 
@@ -288,42 +303,151 @@ public class DataProxyHandler implements Handler {
 		return req.headers().get(name).allValues();
 	}
 
-	private Response upstreamCall(String method, HttpUrl url, AccessLog access) throws UpstreamRequestException {
-		var builder = new Request.Builder().url(url).header("Accept-Encoding", "identity");
-		if (method.equals("HEAD")) {
-			builder.head();
-		} else {
-			builder.get();
-		}
-		Response response;
+	private Upstream head(String key, AccessLog access) throws UpstreamRequestException, UpstreamStatusException {
+		throwIfCachedNotFound(key);
 		try {
-			response = client.newCall(builder.build()).execute();
-		} catch (IOException e) {
+			var head = headCache.get(key, () -> headUncached(key));
+			access.upstreamContentLength = String.valueOf(head.contentLength);
+			return head;
+		} catch (ExecutionException | UncheckedExecutionException e) {
+			if (e.getCause() instanceof UpstreamRequestException ure) {
+				throw ure;
+			}
+			if (e.getCause() instanceof UpstreamStatusException use) {
+				cacheIfNotFound(key, use);
+				throw use;
+			}
+			throw new RuntimeException(e.getCause());
+		}
+	}
+
+	private Upstream headUncached(String key) throws UpstreamRequestException, UpstreamStatusException {
+		var url = s3Url(key, null);
+		var response = call(
+				url,
+				() -> client.headObject(
+						HeadObjectRequest.builder().bucket(bucket).key(key).build()));
+		requireOk(url, response.sdkHttpResponse().statusCode());
+		return new Upstream(
+				url,
+				response.eTag(),
+				response.versionId(),
+				response.contentLength(),
+				response.contentType(),
+				response.cacheControl(),
+				response.contentEncoding(),
+				response.contentDisposition(),
+				response.contentLanguage(),
+				response.expiresString(),
+				response.metadata(),
+				resolveLastModified(response.metadata(), response.lastModified()));
+	}
+
+	private UpstreamBody get(String key, String versionId, AccessLog access)
+			throws UpstreamRequestException, UpstreamStatusException {
+		if (versionId == null) {
+			throwIfCachedNotFound(key);
+			try {
+				return getUncached(key, null, access);
+			} catch (UpstreamStatusException e) {
+				cacheIfNotFound(key, e);
+				throw e;
+			}
+		}
+		return getUncached(key, versionId, access);
+	}
+
+	private void throwIfCachedNotFound(String key) throws UpstreamStatusException {
+		var cached = notFoundCache.getIfPresent(key);
+		if (cached != null) {
+			throw cached;
+		}
+	}
+
+	private void cacheIfNotFound(String key, UpstreamStatusException e) {
+		if (e.status == 404) {
+			notFoundCache.put(key, e);
+		}
+	}
+
+	private UpstreamBody getUncached(String key, String versionId, AccessLog access)
+			throws UpstreamRequestException, UpstreamStatusException {
+		var url = s3Url(key, versionId);
+		var request = GetObjectRequest.builder()
+				.bucket(bucket)
+				.key(key)
+				.versionId(versionId)
+				.build();
+		var stream = call(url, () -> client.getObject(request, AsyncResponseTransformer.toBlockingInputStream()));
+		var response = stream.response();
+		try {
+			requireOk(url, response.sdkHttpResponse().statusCode());
+		} catch (UpstreamStatusException e) {
+			closeQuietly(stream);
+			throw e;
+		}
+		access.upstreamContentLength = String.valueOf(response.contentLength());
+		return new UpstreamBody(
+				new Upstream(
+						url,
+						response.eTag(),
+						response.versionId(),
+						response.contentLength(),
+						response.contentType(),
+						response.cacheControl(),
+						response.contentEncoding(),
+						response.contentDisposition(),
+						response.contentLanguage(),
+						response.expiresString(),
+						response.metadata(),
+						resolveLastModified(response.metadata(), response.lastModified())),
+				stream);
+	}
+
+	/**
+	 * Runs an S3 call, mapping SDK failures to either an upstream HTTP status or a failure to get any response.
+	 */
+	private <T> T call(String url, Supplier<CompletableFuture<T>> call)
+			throws UpstreamRequestException, UpstreamStatusException {
+		try {
+			return call.get().join();
+		} catch (CompletionException | CancellationException e) {
+			var cause = e.getCause() == null ? e : e.getCause();
+			if (cause instanceof S3Exception s3e) {
+				throw new UpstreamStatusException(url, s3e);
+			}
+			throw new UpstreamRequestException(url, cause);
+		} catch (SdkException e) {
+			if (e instanceof S3Exception s3e) {
+				throw new UpstreamStatusException(url, s3e);
+			}
 			throw new UpstreamRequestException(url, e);
 		}
-		if (response.code() == 200) {
-			access.upstreamContentLength = response.header("Content-Length");
-		}
-		return response;
 	}
 
-	private HttpUrl buildUrl(String key, String versionId) {
-		var builder = origin.newBuilder();
-		for (var segment : key.split("/")) {
-			builder.addPathSegment(segment);
+	/**
+	 * The SDK treats any 2xx as success, but only 200 is a complete object response.
+	 */
+	private static void requireOk(String url, int status) throws UpstreamStatusException {
+		if (status != 200) {
+			throw new UpstreamStatusException(url, status);
 		}
-		if (versionId != null) {
-			builder.addQueryParameter("versionId", versionId);
-		}
-		return builder.build();
 	}
 
-	private String requireHeader(Response resp, String name) {
-		return resp.header(name);
+	private static void closeQuietly(ResponseInputStream<?> stream) {
+		try {
+			stream.abort();
+		} catch (RuntimeException ignored) {
+			// nothing to do
+		}
 	}
 
-	private Instant resolveLastModified(Response resp) {
-		var millisHeader = resp.header("x-amz-meta-" + S3HeaderNames.SRC_LAST_MODIFIED_MILLIS);
+	private String s3Url(String key, String versionId) {
+		return "s3://" + bucket + "/" + key + (versionId == null ? "" : "?versionId=" + versionId);
+	}
+
+	private static Instant resolveLastModified(Map<String, String> metadata, Instant sdkLastModified) {
+		var millisHeader = metadata.get(S3HeaderNames.SRC_LAST_MODIFIED_MILLIS);
 		if (millisHeader != null) {
 			try {
 				return Instant.ofEpochMilli(Long.parseLong(millisHeader)).truncatedTo(ChronoUnit.SECONDS);
@@ -331,7 +455,7 @@ public class DataProxyHandler implements Handler {
 				// fall through
 			}
 		}
-		var mtimeHeader = resp.header("x-amz-meta-mtime");
+		var mtimeHeader = metadata.get("mtime");
 		if (mtimeHeader != null) {
 			try {
 				var seconds = Double.parseDouble(mtimeHeader);
@@ -340,41 +464,31 @@ public class DataProxyHandler implements Handler {
 				// fall through
 			}
 		}
-		var lastModifiedHeader = resp.header("Last-Modified");
-		if (lastModifiedHeader != null) {
-			var parsed = HttpDates.parse(lastModifiedHeader);
-			if (parsed.isPresent()) {
-				return parsed.get();
-			}
+		if (sdkLastModified != null) {
+			return sdkLastModified.truncatedTo(ChronoUnit.SECONDS);
 		}
 		return Instant.EPOCH;
 	}
 
-	private void sendHeadSuccess(
-			ServerResponse res, Response head, Instant lastModified, String contentLength, AccessLog access) {
-		applyCommonHeaders(res, head, lastModified);
-		if (contentLength != null) {
-			res.header("Content-Length", contentLength);
+	private void sendHeadSuccess(ServerResponse res, Upstream head, AccessLog access) {
+		applyCommonHeaders(res, head);
+		if (head.contentLength != null) {
+			res.header("Content-Length", String.valueOf(head.contentLength));
 		}
 		res.status(Status.OK_200);
 		res.send();
 		access.outcome = "ok";
 	}
 
-	private void sendGetSuccess(
-			ServerRequest req,
-			ServerResponse res,
-			Response get,
-			Instant lastModified,
-			long contentLength,
-			AccessLog access)
+	private void sendGetSuccess(ServerRequest req, ServerResponse res, UpstreamBody get, AccessLog access)
 			throws IOException {
-		applyCommonHeaders(res, get, lastModified);
+		var contentLength = get.meta.contentLength;
+		applyCommonHeaders(res, get.meta);
 		res.status(Status.OK_200);
 		res.contentLength(contentLength);
 		var watchdogId = watchdog.register(Thread.currentThread());
-		try (var body = get.body();
-				var in = body.byteStream()) {
+		try {
+			var in = get.stream;
 			var out = res.outputStream();
 			var buffer = new byte[COPY_BUFFER_SIZE];
 			long bytesSent = 0;
@@ -382,19 +496,13 @@ public class DataProxyHandler implements Handler {
 				int n;
 				try {
 					n = in.read(buffer);
-				} catch (IOException e) {
+				} catch (IOException | SdkException e) {
 					access.bytesSent = bytesSent;
 					if (watchdog.isStalled(watchdogId)) {
 						throw clientWriteFailed(access, watchdogId, e);
 					}
 					access.outcome = "upstream_aborted";
-					captureSentry(
-							req,
-							res,
-							"Upstream read failed mid-body",
-							get.request().url(),
-							get.code(),
-							null);
+					captureSentry(req, res, "Upstream read failed mid-body", get.meta.url, 200, null);
 					throw new CloseConnectionException("upstream read failed mid-body", e);
 				}
 				if (n == -1) {
@@ -414,13 +522,7 @@ public class DataProxyHandler implements Handler {
 			access.bytesSent = bytesSent;
 			if (bytesSent < contentLength) {
 				access.outcome = "upstream_aborted";
-				captureSentry(
-						req,
-						res,
-						"Upstream EOF before Content-Length bytes",
-						get.request().url(),
-						get.code(),
-						null);
+				captureSentry(req, res, "Upstream EOF before Content-Length bytes", get.meta.url, 200, null);
 				throw new CloseConnectionException("upstream EOF before declared Content-Length");
 			}
 			try {
@@ -450,23 +552,16 @@ public class DataProxyHandler implements Handler {
 		return new CloseConnectionException("client write failed", cause);
 	}
 
-	private void send304(ServerResponse res, Response head, AccessLog access) {
+	private void send304(ServerResponse res, Upstream head, AccessLog access) {
 		res.header("Accept-Ranges", "none");
-		var etag = head.header("ETag");
-		if (etag != null) {
-			res.header("ETag", etag);
+		if (head.etag != null) {
+			res.header("ETag", head.etag);
 		}
-		var cacheControl = head.header("Cache-Control");
-		if (cacheControl != null) {
-			res.header("Cache-Control", cacheControl);
+		if (head.cacheControl != null) {
+			res.header("Cache-Control", head.cacheControl);
 		}
-		var expires = head.header("Expires");
-		if (expires != null) {
-			res.header("Expires", expires);
-		}
-		var vary = head.header("Vary");
-		if (vary != null) {
-			res.header("Vary", vary);
+		if (head.expires != null) {
+			res.header("Expires", head.expires);
 		}
 		res.status(Status.NOT_MODIFIED_304);
 		res.send();
@@ -481,102 +576,82 @@ public class DataProxyHandler implements Handler {
 		access.outcome = "ok";
 	}
 
-	private void send500(ServerRequest req, ServerResponse res, String method, Response upstream, AccessLog access) {
-		captureSentry(
-				req, res, "Required upstream header missing", upstream.request().url(), upstream.code(), null);
+	private void send500(ServerRequest req, ServerResponse res, String method, String url, AccessLog access) {
+		captureSentry(req, res, "Required upstream header missing", url, 200, null);
 		sendPlain(res, method, Status.INTERNAL_SERVER_ERROR_500, "Internal server error\n");
 		access.outcome = "ok";
 	}
 
 	private void mapAndSendUpstreamError(
-			ServerRequest req, ServerResponse res, String method, Response upstream, boolean pinned, AccessLog access) {
-		var code = upstream.code();
-		var b2Code = extractB2Code(upstream);
+			ServerRequest req,
+			ServerResponse res,
+			String method,
+			UpstreamStatusException upstream,
+			boolean pinned,
+			AccessLog access) {
+		var code = upstream.status;
+		var b2Code = upstream.errorCode;
 		if (code == 404) {
-			var cacheControl = upstream.header("Cache-Control");
 			res.header("Accept-Ranges", "none");
-			if (cacheControl != null) {
-				res.header("Cache-Control", cacheControl);
+			if (upstream.cacheControl != null) {
+				res.header("Cache-Control", upstream.cacheControl);
 			}
 			sendBody(res, method, Status.NOT_FOUND_404, "Not found\n");
 			access.outcome = "ok";
 			return;
 		}
 		if (code == 400 && !pinned) {
-			log.warn("Upstream rejected key with 400: {}", upstream.request().url());
+			log.warn("Upstream rejected key with 400: {}", upstream.url);
 			sendPlain(res, method, Status.NOT_FOUND_404, "Not found\n");
 			access.outcome = "ok";
 			return;
 		}
 		if (code == 401 || code == 403) {
-			captureSentry(
-					req,
-					res,
-					"Upstream auth/permission error",
-					upstream.request().url(),
-					code,
-					b2Code);
+			captureSentry(req, res, "Upstream auth/permission error", upstream.url, code, b2Code);
 			sendPlain(res, method, Status.SERVICE_UNAVAILABLE_503, "Service unavailable\n");
 			access.outcome = "ok";
 			return;
 		}
 		if (code == 429 || code == 503) {
-			captureSentry(
-					req,
-					res,
-					"Upstream rate-limited or unavailable",
-					upstream.request().url(),
-					code,
-					b2Code);
-			var retryAfter = upstream.header("Retry-After");
-			if (retryAfter != null) {
+			captureSentry(req, res, "Upstream rate-limited or unavailable", upstream.url, code, b2Code);
+			if (upstream.retryAfter != null) {
 				sendPlain(
 						res,
 						method,
 						Status.SERVICE_UNAVAILABLE_503,
 						"Service unavailable\n",
 						"Retry-After",
-						retryAfter);
+						upstream.retryAfter);
 			} else {
 				sendPlain(res, method, Status.SERVICE_UNAVAILABLE_503, "Service unavailable\n");
 			}
 			access.outcome = "ok";
 			return;
 		}
-		captureSentry(req, res, "Unexpected upstream status", upstream.request().url(), code, b2Code);
+		captureSentry(req, res, "Unexpected upstream status", upstream.url, code, b2Code);
 		sendPlain(res, method, Status.create(502, "Bad Gateway"), "Bad gateway\n");
 		access.outcome = "ok";
 	}
 
-	private String extractB2Code(Response resp) {
-		try {
-			var body = resp.peekBody(MAX_ERROR_BODY_BYTES);
-			var text = body.string();
-			var matcher = B2_CODE_PATTERN.matcher(text);
-			return matcher.find() ? matcher.group(1) : null;
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	private void applyCommonHeaders(ServerResponse res, Response upstream, Instant lastModified) {
+	private void applyCommonHeaders(ServerResponse res, Upstream upstream) {
 		res.header("Accept-Ranges", "none");
 		res.header("Server", "eve-ref/" + version);
-		var etag = upstream.header("ETag");
-		if (etag != null) {
-			res.header("ETag", etag);
+		if (upstream.etag != null) {
+			res.header("ETag", upstream.etag);
 		}
-		res.header("Last-Modified", HTTP_DATE_FORMAT.format(lastModified));
-		for (var name : PASSTHROUGH_HEADERS) {
-			var value = upstream.header(name);
-			if (value != null) {
-				res.header(name, value);
-			}
-		}
-		for (var name : upstream.headers().names()) {
-			if (name.toLowerCase().startsWith("x-amz-meta-")) {
-				res.header(name, upstream.header(name));
-			}
+		res.header("Last-Modified", HTTP_DATE_FORMAT.format(upstream.lastModified));
+		setIfPresent(res, "Content-Type", upstream.contentType);
+		setIfPresent(res, "Cache-Control", upstream.cacheControl);
+		setIfPresent(res, "Content-Encoding", upstream.contentEncoding);
+		setIfPresent(res, "Content-Disposition", upstream.contentDisposition);
+		setIfPresent(res, "Content-Language", upstream.contentLanguage);
+		setIfPresent(res, "Expires", upstream.expires);
+		upstream.metadata.forEach((name, value) -> res.header("x-amz-meta-" + name, value));
+	}
+
+	private static void setIfPresent(ServerResponse res, String name, String value) {
+		if (value != null) {
+			res.header(name, value);
 		}
 	}
 
@@ -614,7 +689,7 @@ public class DataProxyHandler implements Handler {
 			ServerRequest req,
 			ServerResponse res,
 			String message,
-			HttpUrl upstreamUrl,
+			String upstreamUrl,
 			Integer upstreamStatus,
 			String b2Code) {
 		captureSentry(req, res, message, upstreamUrl, upstreamStatus, b2Code, null);
@@ -624,7 +699,7 @@ public class DataProxyHandler implements Handler {
 			ServerRequest req,
 			ServerResponse res,
 			String message,
-			HttpUrl upstreamUrl,
+			String upstreamUrl,
 			Integer upstreamStatus,
 			String b2Code,
 			Throwable cause) {
@@ -632,7 +707,7 @@ public class DataProxyHandler implements Handler {
 		Sentry.captureMessage(message, SentryLevel.ERROR, scope -> {
 			SentryUtil.configureScope(scope, req, res);
 			if (upstreamUrl != null) {
-				scope.setExtra("upstream.url", upstreamUrl.toString());
+				scope.setExtra("upstream.url", upstreamUrl);
 			}
 			if (upstreamStatus != null) {
 				scope.setExtra("upstream.status", String.valueOf(upstreamStatus));
@@ -647,20 +722,88 @@ public class DataProxyHandler implements Handler {
 	}
 
 	/**
+	 * Object metadata from a HEAD or GET response.
+	 */
+	private record Upstream(
+			String url,
+			String etag,
+			String versionId,
+			Long contentLength,
+			String contentType,
+			String cacheControl,
+			String contentEncoding,
+			String contentDisposition,
+			String contentLanguage,
+			String expires,
+			Map<String, String> metadata,
+			Instant lastModified) {}
+
+	/**
+	 * A GET response whose body is still being streamed from upstream. Closing aborts the upstream transfer if it
+	 * wasn't read to the end.
+	 */
+	private record UpstreamBody(Upstream meta, ResponseInputStream<GetObjectResponse> stream) implements AutoCloseable {
+		@Override
+		public void close() throws IOException {
+			stream.close();
+		}
+	}
+
+	/**
 	 * An upstream request that failed before a response was received (connection refused, timeout, etc.).
 	 */
 	private static class UpstreamRequestException extends IOException {
-		final HttpUrl url;
+		final String url;
 
-		UpstreamRequestException(HttpUrl url, IOException cause) {
+		UpstreamRequestException(String url, Throwable cause) {
 			super("Upstream request failed: " + url, cause);
 			this.url = url;
+		}
+	}
+
+	/**
+	 * An upstream request that got an HTTP error response.
+	 */
+	private static class UpstreamStatusException extends Exception {
+		final String url;
+		final int status;
+		final String errorCode;
+		final String cacheControl;
+		final String retryAfter;
+
+		UpstreamStatusException(String url, int status) {
+			super("Upstream returned " + status + ": " + url);
+			this.url = url;
+			this.status = status;
+			this.errorCode = null;
+			this.cacheControl = null;
+			this.retryAfter = null;
+		}
+
+		UpstreamStatusException(String url, S3Exception cause) {
+			super("Upstream returned " + cause.statusCode() + ": " + url, cause);
+			this.url = url;
+			this.status = cause.statusCode();
+			this.errorCode = cause.awsErrorDetails() == null
+					? null
+					: cause.awsErrorDetails().errorCode();
+			var headers =
+					cause.awsErrorDetails() == null || cause.awsErrorDetails().sdkHttpResponse() == null
+							? null
+							: cause.awsErrorDetails().sdkHttpResponse();
+			this.cacheControl = headers == null
+					? null
+					: headers.firstMatchingHeader("Cache-Control").orElse(null);
+			this.retryAfter = headers == null
+					? null
+					: headers.firstMatchingHeader("Retry-After").orElse(null);
 		}
 	}
 
 	private static class AccessLog {
 		final String method;
 		final String path;
+		final String url;
 		final String clientIp;
 		final String userAgent;
 		final String referer;
@@ -671,9 +814,10 @@ public class DataProxyHandler implements Handler {
 		String precondition = "none";
 		long bytesSent = 0;
 
-		AccessLog(String method, String path, String clientIp, String userAgent, String referer) {
+		AccessLog(String method, String path, String url, String clientIp, String userAgent, String referer) {
 			this.method = method;
 			this.path = path;
+			this.url = url;
 			this.clientIp = clientIp;
 			this.userAgent = userAgent;
 			this.referer = referer;
@@ -686,10 +830,11 @@ public class DataProxyHandler implements Handler {
 			var status =
 					outcome.equals("error") ? "-" : String.valueOf(res.status().code());
 			accessLog.info(
-					"method={} path={} status={} bytesSent={} upstreamContentLength={} durationMs={} outcome={} "
+					"method={} path={} url={} status={} bytesSent={} upstreamContentLength={} durationMs={} outcome={} "
 							+ "precondition={} upstreamCalls={} clientIp={} userAgent={} referer={}",
 					method,
-					path,
+					LogSanitizer.sanitizeUnquoted(path),
+					LogSanitizer.quote(url),
 					status,
 					bytesSent,
 					Optional.ofNullable(upstreamContentLength).orElse("-"),
@@ -697,19 +842,9 @@ public class DataProxyHandler implements Handler {
 					outcome,
 					precondition,
 					upstreamCalls,
-					quote(clientIp),
-					quote(userAgent),
-					quote(referer));
-		}
-
-		/**
-		 * Quotes a client-supplied value so it can't break the key=value format.
-		 */
-		private static String quote(String value) {
-			if (value == null) {
-				return "-";
-			}
-			return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+					LogSanitizer.quote(clientIp),
+					LogSanitizer.quote(userAgent),
+					LogSanitizer.quote(referer));
 		}
 	}
 }
