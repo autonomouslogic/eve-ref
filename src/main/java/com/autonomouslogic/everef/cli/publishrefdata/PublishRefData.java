@@ -52,7 +52,7 @@ import tools.jackson.databind.json.JsonMapper;
  */
 @Log4j2
 public class PublishRefData implements Command {
-	private static final int UPLOAD_CONCURRENCY = 32;
+	private final int uploadConcurrency = Configs.REF_DATA_UPLOAD_CONCURRENCY.getRequired();
 
 	@Inject
 	@Named("refdata")
@@ -279,7 +279,7 @@ public class PublishRefData implements Command {
 								uploadFile(entry).blockingAwait();
 								return null;
 							},
-							UPLOAD_CONCURRENCY);
+							uploadConcurrency);
 					log.info("Uploaded {} entries", uploaded.get());
 					log.info("Skipped {} entries", skipped.get());
 				})
@@ -343,7 +343,8 @@ public class PublishRefData implements Command {
 		return Completable.fromAction(() -> {
 			discordNotifier.notifyDiscord(String.format(
 					"Reference data published - SDE: %s, Hoboleaks: %s)",
-					latestMeta.getSde().getVersion(), latestMeta.getHoboleaks().getVersion()));
+					currentMeta.getSde().getVersion(),
+					currentMeta.getHoboleaks().getVersion()));
 		});
 	}
 
@@ -359,7 +360,7 @@ public class PublishRefData implements Command {
 						s3Adapter.deleteObject(delete, s3Client);
 						return null;
 					},
-					UPLOAD_CONCURRENCY);
+					uploadConcurrency);
 			log.info("Deleted {} entries", remaining.size());
 		});
 	}

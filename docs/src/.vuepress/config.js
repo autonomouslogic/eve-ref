@@ -64,6 +64,7 @@ module.exports = {
           children: [
             'datasets/',
             'datasets/downloading-datasets',
+            'datasets/history-rollups',
             'datasets/csm',
             'datasets/fuzzwork-ordersets',
             'datasets/hoboleaks-sde',

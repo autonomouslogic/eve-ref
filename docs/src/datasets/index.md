@@ -4,6 +4,8 @@ These pages outline the datasets available for download at [data.everef.net](htt
 
 See [Downloading Datasets](downloading-datasets.md) for instructions on how to download the datasets in full or in part.
 
+Finished years of some datasets are packed into one archive per year, see [History Rollups](history-rollups.md).
+
 | Path                                                                                                               | Dataset                                                                                                         |
 |--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
 | [`ccp/ccp_quant/`](https://data.everef.net/ccp/ccp_quant/)                                                         | Market data [published by CCP Quant](https://www.eveonline.com/news/view/monthly-economic-report-february-2018) |
