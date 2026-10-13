@@ -461,6 +461,29 @@ public class PublishRefDataTest {
 
 	@Test
 	@SneakyThrows
+	@SetEnvironmentVariable(key = "FORCE_REF_DATA", value = "true")
+	void shouldNotReuploadUnchangedFilesWhenForced() {
+		var spyAdapter = Mockito.spy(mockS3Adapter);
+		publishRefData.s3Adapter = spyAdapter;
+
+		VirtualThreads.onVirtualThread(publishRefData::run);
+		Mockito.clearInvocations(spyAdapter);
+
+		// Forced, so shouldUpdate() returns true and the whole render/upload pipeline runs again, but
+		// nothing in the source data changed, so every rendered file's bytes (and hence MD5) should come out
+		// identical to what's already in the bucket. filterExisting should skip all of them.
+		VirtualThreads.onVirtualThread(publishRefData::run);
+
+		Mockito.verify(spyAdapter, Mockito.never()).putObject(any(), any(byte[].class), eq(s3));
+		// B2-style directory marker entries (created alongside every put, see MockS3Adapter.putDirectory)
+		// aren't part of the rendered file set, so they're always cleaned up on the following run; that's
+		// unrelated to this fix. Only object (non-directory-marker) deletes would indicate a real re-publish.
+		Mockito.verify(spyAdapter, Mockito.never())
+				.deleteObject(argThat(req -> req != null && !req.key().endsWith("/")), eq(s3));
+	}
+
+	@Test
+	@SneakyThrows
 	void shouldRetryAllFilesIfPreviousRunFailedPartway() {
 		var failingPath = "base/types/645";
 		var spyAdapter = Mockito.spy(mockS3Adapter);

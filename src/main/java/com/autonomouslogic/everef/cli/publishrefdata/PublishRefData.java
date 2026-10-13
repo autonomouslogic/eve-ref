@@ -295,8 +295,18 @@ public class PublishRefData implements Command {
 					log.info("Skipped {} entries", skipped.get());
 				})
 				.andThen(Completable.defer(() -> {
-					existing.remove(metaEntry.getPath());
-					return deleteRemaining(new ArrayList<>(existing.keySet()));
+					// existing is keyed by full bucket path (e.g. "base/meta"), but metaEntry.getPath() is
+					// the unprefixed render path (e.g. "meta"). Removing the latter from `existing` was a
+					// no-op, which left the meta file in `remaining` and deleted it from the bucket whenever
+					// its rendered bytes happened to still match the existing ETag (uploadMetaFile would
+					// then skip re-uploading it, believing nothing changed) - most visible on a forced
+					// republish of otherwise-unchanged data. The correct full path is excluded from the
+					// *copy* passed to deleteRemaining, not from `existing` itself: uploadMetaFile still
+					// needs to find it there to do its own ETag comparison afterwards.
+					var metaPath = refDataUrl.getPath() + metaEntry.getPath();
+					var remaining = new ArrayList<>(existing.keySet());
+					remaining.remove(metaPath);
+					return deleteRemaining(remaining);
 				}))
 				.andThen(Completable.defer(() -> uploadMetaFile(existing)));
 	}
