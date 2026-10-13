@@ -17,7 +17,12 @@ anything the environment doesn't set:
     SEED_DIR     torrent content, one folder per torrent ID, kept for seeding (qBittorrent save path)
     RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
                  the B2 key for the "everef" rclone remote; the rest of the remote is fixed here (RCLONE_FIXED)
+    QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
+                 qBittorrent's Web API (qbittorrent_settings)
+    QBITTORRENT_SAVE_PATH  optional: SEED_DIR as qBittorrent sees it, if different (qbittorrent_save_path)
     DATA_BUCKET  the data site's bucket on B2; its root is the site root (data_remote)
+    LOCAL_COPY_DIR  optional: a local copy of the data site, same layout as the bucket (local_copy_dir); load copies
+                 matching files from it before downloading the rest
 
 The scripts reach the data bucket only through rclone (data_remote).
 """
@@ -74,7 +79,6 @@ STEPS = [
     "preflight",
     "find",
     "review",
-    "announce",
     "load",
     "make-torrent",
     "seed",
@@ -88,17 +92,14 @@ STEPS = [
     "resume-jobs",
     "check-site",
     "record",
-    "announce-result",
     "delete-scratch",
 ]
 MANUAL_STEPS = {
     "review",
-    "announce",
     "pause-jobs",
     "data-index",
     "resume-jobs",
     "record",
-    "announce-result",
     "delete-scratch",
 }
 
@@ -143,17 +144,26 @@ PIECE_SIZE = 32 * MIB
 MAX_BYTES = 1 * TIB
 
 # Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
-# max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs a few KB high (its FIXED_BYTES
-# allowance), so a .torrent at the limit still loads. This is what limits the file count.
+# max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs up to about 12 KB high (its
+# FIXED_BYTES allowance), so a .torrent at the limit still loads. This is what limits the file count.
 MAX_TORRENT_BYTES = 10_000_000
 
-# qBittorrent's Web API (06-seed, 07-check-seed), with its save path set to SEED_DIR.
+# qBittorrent's Web API (00-preflight, 05-seed, 06-check-seed). Torrents are added with save path
+# QBITTORRENT_SAVE_PATH (qbittorrent_save_path), SEED_DIR as qBittorrent sees it.
 def qbittorrent_settings():
     """(url, username, password) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
     url = os.environ.get("QBITTORRENT_URL", "").strip().rstrip("/")
     if not url:
         fail("QBITTORRENT_URL is not set (environment or torrents.env)")
     return url, os.environ.get("QBITTORRENT_USERNAME", ""), os.environ.get("QBITTORRENT_PASSWORD", "")
+
+
+def qbittorrent_save_path(seed_dir):
+    """
+    The save path given to qBittorrent: QBITTORRENT_SAVE_PATH, or SEED_DIR if it isn't set. The same folder as SEED_DIR,
+    as qBittorrent sees it (e.g. its mount point when it runs in Docker), so it isn't resolved or checked here.
+    """
+    return os.environ.get("QBITTORRENT_SAVE_PATH", "").strip() or seed_dir
 
 
 def step_name(step):
@@ -329,6 +339,15 @@ class Workflow:
         return done["torrent_id"]
 
 
+def local_copy_dir():
+    """
+    LOCAL_COPY_DIR, resolved: a local copy of the data site, laid out like the bucket (index.json at the top). None if
+    it isn't set.
+    """
+    value = os.environ.get("LOCAL_COPY_DIR", "").strip()
+    return os.path.realpath(value) if value else None
+
+
 def data_remote():
     """The rclone path of the data site's root: the "everef" remote and DATA_BUCKET. Call after load_env."""
     bucket = os.environ.get("DATA_BUCKET", "").strip().rstrip("/")
@@ -404,10 +423,10 @@ def rclone(*args):
     return result.stdout
 
 
-def rclone_run(*args):
+def rclone_run(*args, check=True):
     """
     Runs rclone for a long transfer, printing its output (progress, retries, errors) as it comes. Fails with its last
-    output line if it exits with an error.
+    output line if it exits with an error; with check=False, returns the exit code instead.
     """
     try:
         process = subprocess.Popen(["rclone", *args], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -420,6 +439,8 @@ def rclone_run(*args):
             print(f"rclone: {line}", flush=True)
             last = line
     process.wait()
+    if not check:
+        return process.returncode
     if process.returncode != 0:
         fail(f"rclone {args[0]} failed: {last or f'exit code {process.returncode}'}")
 

@@ -11,7 +11,7 @@ The torrent's name is the basename of <dir>, normally the torrent ID. The .torre
 
 Pieces are PIECE_SIZE (lib/workflow.py), the size find's limits are worked out for.
 
-Trackers always come from deep-archive/trackers.txt: one per line, each in its own tier.
+Trackers are downloaded like make-torrent's (lib/trackers.py), each in its own tier.
 
 The comment follows the PLAN 2.4 template. Years and datasets come from the file paths (the first YYYY directory,
 or the modification year for files without one), not from a manifest.
@@ -42,9 +42,8 @@ from workflow import (  # noqa: E402
     ok,
     section,
 )
+from trackers import TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
-TRACKERS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "trackers.txt")
-TRACKER_SCHEMES = ("udp://", "http://", "https://")
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 DATASET_SUFFIXES = {"history", "backfills"}
 DATASETS_MAX_LENGTH = 200
@@ -81,7 +80,11 @@ def main():
     print(f"Output: {output}")
 
     section("Trackers")
-    trackers = load_trackers(TRACKERS_FILE)
+    try:
+        trackers, _ = combine([(n, text) for n, _, text in fetch_tracker_lists()])
+    except TrackersError as e:
+        fail(str(e))
+    print(f"{len(trackers)} trackers from the downloaded lists")
 
     section("Files")
     fs, files, total, years, datasets = add_files(source, name)
@@ -134,28 +137,6 @@ def parse_args():
     parser.add_argument("--output", help="the .torrent to write, default <name>.torrent in SCRATCH_DIR")
     parser.add_argument("--fake-hashes", action="store_true", help="don't read the data; size measurement only")
     return parser.parse_args()
-
-
-def load_trackers(path):
-    """One tracker URL per line; blank lines and # comments are ignored."""
-    path = os.path.realpath(path)
-    if not os.path.isfile(path):
-        fail(f"Tracker list not found: {path}")
-    trackers = []
-    with open(path, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if not line.startswith(TRACKER_SCHEMES):
-                fail(f"Not a UDP or HTTP(S) tracker in {path}: {line}")
-            if line in trackers:
-                fail(f"Duplicate tracker in {path}: {line}")
-            trackers.append(line)
-    if not trackers:
-        fail(f"No trackers in {path}")
-    print(f"{len(trackers)} trackers from {path}")
-    return trackers
 
 
 def add_files(source, name):

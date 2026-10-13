@@ -1,37 +1,39 @@
 #!/usr/bin/env python3
 """
-make-torrent: step 6 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
+make-torrent: step 5 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
 v1+v2 .torrent and its file list, and checks both.
 
 DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.txt and SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 
-    05-make-torrent.py
+    04-make-torrent.py
 
-Needs 04-load's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece
+Needs 03-load's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece
 of every file (hours for a full torrent).
 
 1. Render README-template.txt (ID, cutoff, datasets) into $SEED_DIR/<ID>/<ID>-README.txt.
-2. Build the torrent from exactly the manifest's files plus the root README (<ID>-README.txt), sorted
-   by path, with Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, trackers from trackers.txt (one
-   per tier), the PLAN 2.4 comment (years and datasets from the manifest), creator "EVE Ref", no private flag,
-   no web seed.
-3. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
-4. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
-   MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal
-   trackers.txt, one per tier, in order; the comment; files = the manifest plus <ID>-README.txt, bytes match; the .txt
-   passes file_list_problems, matches the manifest and has no market-history/, killmails/ or ccp/ paths. Prints the
+2. Download the tracker lists (lib/trackers.py): the union of both "best" lists, UDP and HTTP(S) only. Fails if a
+   list can't be downloaded or has no usable trackers, or if the union has fewer than MIN_TRACKERS.
+3. Build the torrent from exactly the manifest's files plus the root README (<ID>-README.txt), sorted by path, with
+   Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the downloaded trackers (one per tier, in order), the
+   PLAN 2.4 comment (years and datasets from the manifest), creator "EVE Ref", no private flag, no web seed.
+4. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
+5. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
+   MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
+   downloaded ones, one per tier, in order; the comment; files = the manifest plus <ID>-README.txt, bytes match; the
+   .txt passes file_list_problems, matches the manifest and has no market-history/, killmails/ or ccp/ paths. Prints the
    v1 and v2 info-hashes (copy them into NOTES.md) and records them in the completion file.
 
 Writes:
     $SEED_DIR/<ID>/<ID>-README.txt
     SCRATCH_DIR/<ID>.torrent
     SCRATCH_DIR/<ID>.txt
-    05-make-torrent.done     completion file
+    SCRATCH_DIR/trackers/     each tracker list as downloaded (<name>.txt), and trackers.txt: the torrent's trackers
+    04-make-torrent.done     completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR
 
-Needs libtorrent 2.x.
+Needs libtorrent 2.x, and HTTPS access to raw.githubusercontent.com for the tracker lists.
 """
 
 import json
@@ -57,11 +59,10 @@ from workflow import (  # noqa: E402
     ok,
     section,
 )
+from trackers import TRACKER_SOURCES, TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
 STEP = "make-torrent"
-TRACKERS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "trackers.txt")
 README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "README-template.txt")
-TRACKER_SCHEMES = ("udp://", "http://", "https://")
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 DATASET_SUFFIXES = {"history", "backfills"}
 DATASETS_MAX_LENGTH = 200
@@ -100,7 +101,7 @@ def main():
     print(f"Written: {os.path.join(content_dir, readme_name)}")
 
     section("Trackers")
-    trackers = load_trackers(TRACKERS_FILE)
+    trackers = download_trackers(os.path.join(workflow.scratch_dir, "trackers"))
 
     section("Torrent")
     fs = lt.file_storage()
@@ -164,6 +165,8 @@ def main():
             "data_files": len(paths),
             "v1_info_hash": v1_hash,
             "v2_info_hash": v2_hash,
+            "trackers": len(trackers),
+            "tracker_sources": [url for _, url in TRACKER_SOURCES],
         },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
@@ -203,7 +206,7 @@ def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, re
 
     actual = sorted(ti.trackers(), key=lambda t: t.tier)
     if [t.url for t in actual] != trackers:
-        problems.append(f"trackers don't match {TRACKERS_FILE}: {[t.url for t in actual]} != {trackers}")
+        problems.append(f"trackers don't match the downloaded lists: {[t.url for t in actual]} != {trackers}")
     if [t.tier for t in actual] != list(range(len(trackers))):
         problems.append(f"trackers aren't one per tier in order: tiers {[t.tier for t in actual]}")
     if ti.comment() != comment:
@@ -329,24 +332,29 @@ def write_readme(path, torrent_id, files, years, datasets):
     os.rename(tmp, path)
 
 
-def load_trackers(path):
-    path = os.path.realpath(path)
-    if not os.path.isfile(path):
-        fail(f"Tracker list not found: {path}")
-    trackers = []
-    with open(path, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if not line.startswith(TRACKER_SCHEMES):
-                fail(f"Not a UDP or HTTP(S) tracker in {path}: {line}")
-            if line in trackers:
-                fail(f"Duplicate tracker in {path}: {line}")
-            trackers.append(line)
-    if not trackers:
-        fail(f"No trackers in {path}")
-    print(f"{len(trackers)} trackers from {path}")
+def download_trackers(trackers_dir):
+    """
+    Downloads the tracker lists (lib/trackers.py) and returns their union, one tracker per tier in order. Saves each
+    list as downloaded, and the union, in trackers_dir, so the torrent's trackers can be reviewed later.
+    """
+    try:
+        lists = fetch_tracker_lists()
+        trackers, counts = combine([(name, text) for name, _, text in lists])
+    except TrackersError as e:
+        fail(str(e))
+    os.makedirs(trackers_dir, exist_ok=True)
+    for name, url, text in lists:
+        path = os.path.join(trackers_dir, f"{name}.txt")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        print(f"{name}: {url}, saved to {path}")
+    for name, usable, skipped in counts:
+        others = f", {len(skipped)} others skipped: {skipped}" if skipped else ""
+        print(f"{name}: {usable} UDP or HTTP(S) trackers{others}")
+    path = os.path.join(trackers_dir, "trackers.txt")
+    with open(path, "w", encoding="utf-8") as f:
+        f.writelines(t + "\n" for t in trackers)
+    print(f"{len(trackers)} trackers together, one per tier, in {path}")
     return trackers
 
 

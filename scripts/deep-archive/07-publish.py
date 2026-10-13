@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
 """
-publish: step 9 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent and <ID>.txt to the bucket's
+publish: step 8 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent and <ID>.txt to the bucket's
 deep-archive/, rebuilds feed.xml and torrents.json from every published .torrent, and checks what data.everef.net
 serves for all four.
 
 DRAFT. Shows the targets and asks before each upload (lib/workflow.py, "Show, then ask"). Writes to the data bucket.
 
-    08-publish.py
+    07-publish.py
 
-Needs 07-check-seed's completion file, and refuses to run twice (lib/workflow.py).
+Needs 06-check-seed's completion file, and refuses to run twice (lib/workflow.py).
 
 1. Upload <ID>.torrent and <ID>.txt to deep-archive/ with the right Content-Type. Never overwrites: a file already
    published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
 2. Rebuild torrents.json (the catalogue) and feed.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth (PLAN 2.5). Each torrent
    is read with libtorrent: name (the ID), creation date, comment (years/datasets, PLAN 2.4), v1/v2 info-hashes, data
-   file count and bytes (the README excluded). Magnet links carry trackers.txt's core trackers; newest first.
+   file count and bytes (the README excluded), trackers. Magnet links carry the torrent's first MAGNET_TRACKERS
+   trackers; newest first.
 3. Show the diff against what's published, and ask. Before uploading, save the published feed.xml to
    SCRATCH_DIR/feed-backup/feed-<UTC time>.xml.
 4. Check over HTTPS, never trusting the uploads' own result: <ID>.torrent and <ID>.txt return 200 with the right
    Content-Type and exactly the local bytes; feed.xml is served as application/rss+xml, is valid XML and has an
    <item> with this torrent's v1 info-hash as its <guid>; torrents.json is served as application/json, is valid JSON
-   and lists this torrent with the right v1/v2 info-hashes (05-make-torrent). Cloudflare may serve the old feed for
+   and lists this torrent with the right v1/v2 info-hashes (04-make-torrent). Cloudflare may serve the old feed for
    up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
 
 On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up (manual, README).
@@ -29,7 +30,7 @@ On the first workflow, also add the feed to a qBittorrent RSS reader and check t
 Writes, in SCRATCH_DIR:
 
     feed-backup/feed-<UTC time>.xml   the feed.xml published before this run (none on the first workflow)
-    08-publish.done                   completion file
+    07-publish.done                   completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
@@ -73,7 +74,9 @@ from workflow import (  # noqa: E402
 )
 
 STEP = "publish"
-TRACKERS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "trackers.txt")
+# Magnet links carry the first trackers of the torrent's own list (ngosang's ranked best first, lib/trackers.py), to
+# keep them short.
+MAGNET_TRACKERS = 10
 COMMENT_RE = re.compile(r"^Data from (.+)\. Datasets: (.+)\.$", re.MULTILINE)
 
 UPLOADS = (
@@ -185,9 +188,8 @@ def publish_feed(workflow, torrent_id, deep_archive):
     entries.sort(key=lambda e: e["id"])
     print(f"Read {len(entries)} torrents")
 
-    trackers = load_trackers(TRACKERS_FILE)
     torrents_json = build_catalogue(entries)
-    feed_xml = build_feed(entries, trackers)
+    feed_xml = build_feed(entries)
 
     section("Feed: diff of torrents.json")
     old_json = fetch_existing(deep_archive, "torrents.json")
@@ -269,14 +271,8 @@ def read_torrent(deep_archive, tmp_dir, name):
         "years": years,
         "datasets": datasets,
         "comment": ti.comment() or "",
+        "trackers": [t.url for t in sorted(ti.trackers(), key=lambda t: t.tier)],
     }
-
-
-def load_trackers(path):
-    if not os.path.isfile(path):
-        fail(f"Tracker list not found: {path}")
-    with open(path, encoding="utf-8") as f:
-        return [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
 
 
 def torrent_url(torrent_id, name):
@@ -305,10 +301,10 @@ def build_catalogue(entries):
     return json.dumps(catalogue, indent=2, sort_keys=True) + "\n"
 
 
-def build_feed(entries, trackers):
+def build_feed(entries):
     items = []
     for e in sorted(entries, key=lambda e: e["pub_date"], reverse=True):
-        magnet = build_magnet(e["id"], e["v1_info_hash"], e["v2_info_hash"], trackers)
+        magnet = build_magnet(e["id"], e["v1_info_hash"], e["v2_info_hash"], e["trackers"][:MAGNET_TRACKERS])
         items.append(
             f"""    <item>
       <title>{xml_escape.escape(e['id'])}</title>

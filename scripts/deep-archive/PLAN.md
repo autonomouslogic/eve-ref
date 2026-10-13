@@ -14,7 +14,7 @@ Status: **draft for review**. Revised 2026-10-10:
 - The operator process is in [`README.md`](README.md); the separate runbook is gone.
 
 Related work in progress (as of 2026-10-11):
-- `./00-preflight.py` through `./15-check-site.py`: **drafts** of every step, with `lib/workflow.py` (settings,
+- `./00-preflight.py` through `./14-check-site.py`: **drafts** of every step, with `lib/workflow.py` (settings,
   size limits, completion files), `lib/torrent_size.py` (the `.torrent` estimate) and `lib/qbittorrent.py` (a
   stdlib-only Web API client for 06/07). Run directly with Python 3, rclone and libtorrent (no
   `run.sh`/Docker image yet). None has run against real data yet.
@@ -32,18 +32,18 @@ Related work in progress (as of 2026-10-11):
   syncs only IDs **above the latest** dated ID on the site, without filling gaps. That differs from 2.18 as decided;
   open question 16.
 - `create_torrent.py`: **experiment** for measuring `.torrent` sizes (Appendix B). Hybrid v1+v2 with Python
-  libtorrent, `PIECE_SIZE` pieces, trackers from `trackers.txt`, comment from the 2.4 template. It becomes
-  `05-make-torrent`.
-- `trackers.txt`: the 7 long-lived core trackers (2.4 "Trackers"), one per tier. The ngosang snapshot from option 2
-  isn't added yet.
+  libtorrent, `PIECE_SIZE` pieces, trackers downloaded like `04-make-torrent`'s, comment from the 2.4 template. It
+  becomes `04-make-torrent`.
+- No `trackers.txt` (removed 2026-10-12): `04-make-torrent` downloads both "best" lists and uses their union
+  (2.4 "Trackers", `lib/trackers.py`).
 - Not done yet: the docs example link changes (2.17, 4.2).
 - Steps consolidated (2026-10-12), 24 scripts down to 20: `check-load` merged into `load`; `make-checksums` and
   `check-checksums` removed with the `<ID>.sha256` file (2.6, revisit later); `check-torrent` merged into
   `make-torrent`. Then the manual steps were numbered too (`STEPS` and `MANUAL_STEPS` in `lib/workflow.py`; no
   script and no completion file), and every script renumbered. Then `check-seed`, the manual "check the trackers
-  from outside" step and `test-download` were merged into `07-check-seed`: qBittorrent's Web API plus an aria2c
+  from outside" step and `test-download` were merged into `06-check-seed`: qBittorrent's Web API plus an aria2c
   download of the README from the `.torrent` (no magnet link). Then `upload-torrent`, `check-upload`,
-  `build-feed` and `check-feed` were merged into `08-publish`, which also saves the published `feed.xml` to
+  `build-feed` and `check-feed` were merged into `07-publish`, which also saves the published `feed.xml` to
   `$SCRATCH_DIR/feed-backup/` before replacing it. Then `check-docs` was removed, and then the Glacier backup
   with its four steps and the restore drill (2.11). Steps 00-18 now, 11 of them scripted. Open points from this
   round: section 7, "Review notes".
@@ -60,21 +60,20 @@ A documented, repeatable workflow that makes **one torrent** each time it runs:
 
 1. **Select** the oldest data on data.everef.net that isn't archived yet, as much as fits in one torrent. The
    selection is a fixed file list, and every later step is checked against it.
-2. **Announce** that archiving has started.
-3. **Load** the selected files into the seed directory.
-4. **Make** the `.torrent` file.
-5. **Seed** it, and test it.
-6. **Upload** the `.torrent` file and its file list to data.everef.net.
-7. **Add** it to an **RSS feed** on data.everef.net, so other people can subscribe and automatically start seeding
+2. **Load** the selected files into the seed directory.
+3. **Make** the `.torrent` file.
+4. **Seed** it, and test it.
+5. **Upload** the `.torrent` file and its file list to data.everef.net.
+6. **Add** it to an **RSS feed** on data.everef.net, so other people can subscribe and automatically start seeding
    new torrents as they are published.
-8. Keep the **docs site** (docs.everef.net) accurate: it's rule-based, so it only changes when the rules do (4.3).
-9. **Delete** the archived files from data.everef.net. This is the **last** step, done only after everything above
-    is verified.
-10. Run a **full `DataIndex`** job and check the site.
+7. Keep the **docs site** (docs.everef.net) accurate: it's rule-based, so it only changes when the rules do (4.3).
+8. **Delete** the archived files from data.everef.net. This is the **last** step, done only after everything above
+   is verified.
+9. Run a **full `DataIndex`** job and check the site.
 
 Workflows run ad hoc, one at a time. A workflow is always completed (published, deleted) before the next
-one starts. There is **no notice period** between publishing a torrent and deleting its files, but an announcement is
-posted when the workflow starts (2.13).
+one starts. There is **no notice period** between publishing a torrent and deleting its files, and no
+announcement (2.13).
 
 The process is **manual**: a human runs each step from [`README.md`](README.md), with supporting scripts and a check
 after every step.
@@ -275,7 +274,16 @@ files:  everef-deep-archive-2023-04-11-README.txt      # what this is (2.6)
 
 #### Trackers
 
-**Notes for review, researched 2026-10-08. Not decided.**
+**Decided (2026-10-12): the union of both "best" lists, downloaded when the torrent is made.** `04-make-torrent`
+downloads ngosang's `trackers_best.txt` and XIU2's `best.txt` (`lib/trackers.py`), keeps the UDP and HTTP(S)
+trackers, and adds their union, ngosang's first, one per tier. It fails if either list can't be downloaded or has no
+usable trackers, or if the union has fewer than 10 (`MIN_TRACKERS`); `00-preflight` checks the same. Both lists, as
+downloaded, and the union are saved in `$SCRATCH_DIR/trackers/`. There is no `trackers.txt` and no fixed core list.
+Magnet links in the feed carry each torrent's first 10 trackers (`MAGNET_TRACKERS` in `07-publish`). That's about 70
+trackers today (XIU2's `best.txt` holds all of ngosang's): more than option 2 below, with the decay, load and
+unwanted-domain concerns noted there, and no denylist.
+
+**Notes for review, researched 2026-10-08.**
 
 Proposal (gut feeling): when creating a torrent, download the lists from
 [XIU2/TrackersListCollection](https://github.com/XIU2/TrackersListCollection) and
@@ -358,7 +366,7 @@ Options:
 
 Whichever option:
 
-- Snapshot the lists at creation time into `$SCRATCH_DIR/trackers.txt` and record where they came from, so a torrent
+- Snapshot the lists at creation time into `$SCRATCH_DIR/trackers/` and record where they came from, so a torrent
   can be reviewed.
 - `make-torrent` checks the torrent's trackers equal the snapshot, and one tracker per tier.
 - Magnet links in the feed and on the docs page carry only the core trackers, to keep them short.
@@ -422,7 +430,7 @@ Tools that do make hybrid torrents:
   date and trackers are outside the info dictionary, so they don't change it.
 - **Keep the creation date.** The feed's `pubDate` uses it (2.5).
 - **No `source` field, not private, no web seeds** (above).
-- **Verify after creating.** Load it in a client and recheck against the content (README, steps 05–07).
+- **Verify after creating.** Load it in a client and recheck against the content (README, steps 04–06).
 
 **Recommendation:** create torrents with Python `libtorrent` 2.x, hybrid, files sorted by path, creation date kept,
 32 MiB pieces.
@@ -494,7 +502,7 @@ and checked by two steps of their own (`make-checksums`, `check-checksums`). Bot
 unnecessary:
 
 - Torrent clients verify every piece, and a hybrid torrent's v2 part has a SHA-256 hash tree per file.
-- The SHA-256 of every file is still computed by `04-load` into `manifest.json`, but that file is only kept in
+- The SHA-256 of every file is still computed by `03-load` into `manifest.json`, but that file is only kept in
   `$SCRATCH_DIR`, which is deleted at the end of the workflow (Review notes, R5).
 
 **Revisit later:** whether to bring the checksum file back for people checking the data outside a torrent client
@@ -589,9 +597,11 @@ after that is checked against that list, never against "whatever is in the direc
     of a full 1 TiB.
 - **`files.jsonl` is the selection.** `01-find` can't run twice in a workflow (2.10), so it can't change afterwards.
   To change it on purpose, delete `01-find`'s completion file and run it again.
-- `04-load` downloads **exactly** the files in the list from the bucket into `$SEED_DIR/<ID>/` with
-  `rclone copy --files-from`: parallel, resumable, and it keeps each file's modification time.
-- `04-load` then checks every listed file is on disk with the listed size, and nothing else is, and computes
+- `03-load` copies **exactly** the files in the list into `$SEED_DIR/<ID>/` with `rclone copy --files-from`:
+  parallel, resumable, and it keeps each file's modification time. With `LOCAL_COPY_DIR` set (a local copy of the
+  site), files there with the selected size and modification time, and the bucket's SHA-1 (`rclone check`), come from
+  it; everything else comes from the bucket.
+- `03-load` then checks every listed file is on disk with the listed size, and nothing else is, and computes
   SHA-256 for every file into `manifest.json` (the selection plus hashes). The manifest feeds the
   torrent checks and the delete set.
 - The delete set comes from the torrent, confirmed file by file against a fresh listing of the bucket by **size
@@ -605,7 +615,7 @@ after that is checked against that list, never against "whatever is in the direc
 |---|---|---|
 | Preflight | `./00-preflight.py` | Fails early on a wrong setup, before anything is selected. |
 | Find | `./01-find.py`: `rclone lsjson` of the whole bucket | One B2 request per 1,000 files; sizes and modification times straight from the storage. |
-| Load | `rclone copy --files-from` from the bucket to `$SEED_DIR/<ID>/` | Concurrent and resumable. Copies exactly the selection. |
+| Load | `rclone copy --files-from` from the bucket (and `LOCAL_COPY_DIR`, if set, after `rclone check`) to `$SEED_DIR/<ID>/` | Concurrent and resumable. Copies exactly the selection. |
 | Make torrent | Python `libtorrent` 2.x (hybrid v1+v2); alternatives in 2.4 "Creating the torrent". Not `mktorrent` (v1 only). | Mature library, same as qBittorrent. Don't write a torrent creator. |
 | Seed | `qBittorrent-nox` in Docker, through its Web API | Headless and scriptable, and it's what most feed subscribers use. |
 | Upload | `rclone copyto` into the bucket's `deep-archive/`, with Content-Type and Cache-Control (no overwrite), then checking over HTTPS | Same metadata as the Java uploads (`S3Util`). |
@@ -623,13 +633,13 @@ moving on. The scripts support the human; they don't replace their judgement.
 
 - **One script, one step, numbered in order:** `./00-preflight.py`, `./01-find.py`, …
   (`STEPS` in `lib/workflow.py`). Scripts never call the next step. There is no "run everything" script. Manual steps
-  take a number in the same sequence (`02` review, `03` announce, …) without a script or completion file
+  take a number in the same sequence (`02` review, `09` pause-jobs, …) without a script or completion file
   (`MANUAL_STEPS`).
 - **Settings in `torrents.env`** (`torrents.env.example`), read for anything the environment doesn't set:
-  `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET` and the B2 key (`RCLONE_CONFIG_EVEREF_ACCOUNT`,
-  `RCLONE_CONFIG_EVEREF_KEY`). Everything else (rclone settings, size limits, `TORRENT_EXCLUDE`, `DATA_BASE_URL`) is
-  fixed in `lib/workflow.py`. No
-  `--dir` or ID arguments.
+  `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET`, the B2 key (`RCLONE_CONFIG_EVEREF_ACCOUNT`,
+  `RCLONE_CONFIG_EVEREF_KEY`), the qBittorrent Web API and, optionally, `LOCAL_COPY_DIR` and
+  `QBITTORRENT_SAVE_PATH`. Everything else (rclone settings, size limits, `TORRENT_EXCLUDE`, `DATA_BASE_URL`) is fixed
+  in `lib/workflow.py`. No `--dir` or ID arguments.
 - **One workflow per scratch directory.** `$SCRATCH_DIR` holds the work files of the current workflow and must be
   empty when it starts (`00-preflight` checks). The operator deletes it by hand once the workflow is complete.
   Torrent content goes in `$SEED_DIR/<ID>/` instead, which is kept for seeding. Neither directory is inside the
@@ -639,14 +649,14 @@ moving on. The scripts support the human; they don't replace their judgement.
   completion file, and refuses if its **own** exists: no step is skipped, and none runs twice by accident. Redoing a
   step is deliberate: delete its completion file and every later one by hand. The torrent ID comes from
   `01-find.done`.
-- **Every action has a separate check step.** E.g. `06-seed` is followed by `07-check-seed`. Checks are read-only,
+- **Every action has a separate check step.** E.g. `05-seed` is followed by `06-check-seed`. Checks are read-only,
   re-derive everything from source (bucket, disk, qBittorrent, site), and never trust the action's output.
-  Exceptions (2026-10-12), like the roll-up scripts' steps: `04-load` checks its own download and writes the
-  manifest; `05-make-torrent` reloads the `.torrent` and `.txt` it wrote and checks them; `08-publish` checks what
+  Exceptions (2026-10-12), like the roll-up scripts' steps: `03-load` checks its own download and writes the
+  manifest; `04-make-torrent` reloads the `.torrent` and `.txt` it wrote and checks them; `07-publish` checks what
   data.everef.net serves for what it uploaded. They re-read from disk or the site rather than trusting in-memory
   state, but they're no longer independent of the action (Review notes, R6).
 - **Show, then ask.** Any step that writes outside `$SCRATCH_DIR` and `$SEED_DIR` (the data bucket,
-  qBittorrent) first prints what it will do (counts, bytes, sample paths) and asks for confirmation. `11-delete`
+  qBittorrent) first prints what it will do (counts, bytes, sample paths) and asks for confirmation. `10-delete`
   needs the torrent ID typed back in, not just `y`.
 - **Resumable until complete.** A step that fails or is interrupted writes no completion file and can be run again;
   copies and uploads carry on where they stopped.
@@ -724,42 +734,11 @@ Sources: [Archive BitTorrents](https://help.archive.org/help/archive-bittorrents
 [Uploading – Tips](https://help.archive.org/help/uploading-tips/),
 [Bulk uploading](https://help.archive.org/?p=433), [BEP 19](https://www.bittorrent.org/beps/bep_0019.html).
 
-### 2.13 Announcements
+### 2.13 Announcements: none (removed 2026-10-12)
 
-There is no notice period, but a notice is posted to the **announcement channel** (Discord) when a workflow
-**starts**, right after `01-find`. A second post follows when it's finished.
-
-**At start:**
-
-> **EVE Ref Deep Archive: archiving data up to {CUTOFF}**
->
-> We're moving old data on data.everef.net into the **EVE Ref Deep Archive**: BitTorrent archives.
-> This one covers files stored up to **{CUTOFF}** that aren't archived yet (about {SIZE}, mostly from {YEARS}).
->
-> - Torrents will be published at https://data.everef.net/deep-archive/, with an RSS feed at
->   https://data.everef.net/deep-archive/feed.xml.
-> - Once the torrent is published, seeded and backed up, the HTTP copies of these files will be **removed** from
->   data.everef.net. There's no fixed date.
-> - `market-history`, `killmails`, `ccp` and all `-latest` files are **not** affected.
->
-> **What you might need to do:**
-> - If you mirror the data with `rclone sync`, switch to `rclone copy`, or your local copies of these files will be
->   deleted.
-> - If you need these files, download them now, or use the torrent once it's out.
-> - Already have a mirror? You can seed the torrents from it without downloading anything. Please do!
->
-> Details: https://docs.everef.net/datasets/deep-archive.html
-
-**At finish:**
-
-> **EVE Ref Deep Archive: {ID} published**
->
-> The torrent for data up to **{CUTOFF}** is out: https://data.everef.net/deep-archive/ (RSS:
-> https://data.everef.net/deep-archive/feed.xml). The files have been removed from data.everef.net. Every torrent has
-> a `.txt` file list, so you can find what you need and select only those files.
->
-> Seeders are very welcome. That's what keeps this data available.
-> How to seed and find files: https://docs.everef.net/datasets/deep-archive.html
+No announcement is posted when a workflow starts or finishes. Earlier designs had two manual steps, `announce` (a
+start notice on Discord right after `01-find`) and `announce-result` (a finish notice), both removed. Users learn
+about new torrents from the RSS feed and the docs page (4.2).
 
 ### 2.14 Deletion design
 
@@ -802,7 +781,7 @@ and testing.
 ### 2.15 Stale index files after deletion
 
 `DataIndex` regenerates the parent directories correctly (the deleted year vanishes from them), but it **leaves the
-old `index.html`/`index.json` in every emptied directory**. So `11-delete` cleans them up, right after the data:
+old `index.html`/`index.json` in every emptied directory**. So `10-delete` cleans them up, right after the data:
 
 - It lists the bucket again, and checks every folder that held a deleted file, and each of its parent folders up to
   the site root, deepest first.
@@ -823,7 +802,7 @@ other deletes either. It's a Java change, and it needs care so it never deletes 
 Cloudflare can keep serving a deleted file from cache for up to 30 days. Index pages have a 2-minute max-age, so they
 update almost at once. That's accepted.
 
-`15-check-site` therefore checks **many** URLs, not one: a random sample of deleted files spread across datasets and
+`14-check-site` therefore checks **many** URLs, not one: a random sample of deleted files spread across datasets and
 months (e.g. 50), plus the `index.json` of emptied folders. Per URL:
 
 - `404`: pass.
@@ -842,8 +821,8 @@ Must be handled **before** deleting the affected datasets:
 | `ScrapeMarketHistory` / `import-market-history` | Re-read up to 450 days of `market-history/`, and the full history. | `market-history` is never archived. |
 | `HistoricalOrdersRegionTypeSource` | Reads the last 30 days of market orders (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`). | Safe with the 2-year minimum age. |
 | Docs examples | `downloading-datasets.md` uses `market-orders/history/2023/` as its example; `structures.md` links 2024 files. They'd 404. | Change the downloading example to `https://data.everef.net/market-history/2026/` (never deleted). Change the structures examples to recent files, or remove them. |
-| Users following `downloading-datasets.md` (`rclone sync`) | **`rclone sync` deletes their local copies** of files deleted on the site. | Change the docs to `rclone copy` before the first deletion. The start announcement repeats it. |
-| Users with `wget -N` / custom scripts | Get 404s. | Start announcement, docs page. |
+| Users following `downloading-datasets.md` (`rclone sync`) | **`rclone sync` deletes their local copies** of files deleted on the site. | Change the docs to `rclone copy` before the first deletion. |
+| Users with `wget -N` / custom scripts | Get 404s. | Docs page. |
 
 ### 2.18 Sync cutoff for Fuzzwork
 
@@ -876,7 +855,7 @@ Copies of each torrent's data after deletion:
 
 1. **The seed directory (`SEED_DIR`)**, on redundant storage, checked regularly (README, "Requirements" and
    Appendix C, "Maintenance").
-2. **Community seeders**, encouraged through the RSS feed, rclone-mirror seeding and the announcements.
+2. **Community seeders**, encouraged through the RSS feed and rclone-mirror seeding.
 3. Optionally the **Internet Archive** (2.12).
 
 There is no backup (2.11): if the seed directory is lost, a torrent nobody else seeds is gone.
@@ -906,21 +885,21 @@ Revised 2026-10-10. The scripts reach the data bucket **only through rclone**, w
 - The bucket is a setting, `DATA_BUCKET` in `torrents.env` (like `ROLLUP_BUCKET` in the roll-up scripts). The site
   root is `everef:$DATA_BUCKET`.
 
-One key means every step could write and delete. The safeguards are the steps themselves: only `08-publish` and
-`11-delete` write to the data bucket, only to explicit paths (or `deep-archive/`), after showing what they'll do and
+One key means every step could write and delete. The safeguards are the steps themselves: only `07-publish` and
+`10-delete` write to the data bucket, only to explicit paths (or `deep-archive/`), after showing what they'll do and
 asking. (The 2026-10-09 design used a filesystem mount; the first draft of this revision used boto3, then separate
 read, write and backup remotes. All dropped.)
 
 - **No mount, no public-HTTP crawl** for decisions. HTTPS against data.everef.net is only used to check what the site
-  serves (`08-publish`, `15-check-site`). The other remote API is qBittorrent.
+  serves (`07-publish`, `14-check-site`). The other remote API is qBittorrent.
 - **Listings are always fresh.** An rclone listing goes straight to the storage, so `01-find`,
-  `09-check-before-delete`, `11-delete` and `12-check-delete` see what EVE Ref's jobs wrote a moment ago.
+  `08-check-before-delete`, `10-delete` and `11-check-delete` see what EVE Ref's jobs wrote a moment ago.
 - **The modification date is rclone's `ModTime`** everywhere: selection (2.2), load (file mtimes), pre-delete check
   (2.14). On B2 it's the upload time, unless the uploader set `src_last_modified_millis` (check on real files).
 - **Content-Type and Cache-Control** go on the files at upload, like `S3Util` does today: `.torrent` →
   `application/x-bittorrent`, `.txt` → `text/plain; charset=utf-8`, `feed.xml` → `application/rss+xml` with a short
   max-age, `torrents.json` → short max-age. With rclone that's `--header-upload`; **check B2 honours both headers**
-  through rclone before `08-publish` is written.
+  through rclone before `07-publish` is written.
 - The writing steps only ever touch paths from an explicit list (or `deep-archive/`).
 
 **Throughput and cost.** Listing ~1 million files is ~1,000 B2 list requests (class C transactions, cents).
@@ -955,12 +934,11 @@ deep-archive/
   README.md             # setup and the step-by-step manual process
   PLAN.md               # design decisions and reasoning; goes away once the process is settled
   LOG.md                # one line per published torrent
-  trackers.txt
   torrents.env.example  # copy to torrents.env (not committed)
   README-template.txt   # source for the README inside each torrent
   run.sh                # Docker wrapper (planned)
   Dockerfile            # (planned)
-  00-preflight.py       # the workflow's steps: 00-preflight.py, 01-find.py, 04-load.py, ...
+  00-preflight.py       # the workflow's steps: 00-preflight.py, 01-find.py, 03-load.py, ...
   lib/                  # shared code: workflow.py
 ```
 
@@ -984,8 +962,8 @@ The live list of torrents is the `deep-archive/` directory and the feed.
    - Never archived (always on HTTP): `market-history` and `killmails` (they work as a database and change in
      place), `ccp` (CCP's own reference data), and `*-latest` files.
 4. **When new torrents appear.** Ad hoc, whenever enough data has passed the 2-year age to fill a torrent. There is
-   no fixed date. Until a file is archived, it stays on data.everef.net. Each new torrent is announced on Discord
-   when work on it starts. Subscribe to the feed to be notified of new torrents.
+   no fixed date. Until a file is archived, it stays on data.everef.net. Subscribe to the feed to be notified of new
+   torrents.
 5. **How to use them.**
    - Links: [`deep-archive/`](https://data.everef.net/deep-archive/) directory and the RSS feed `feed.xml`.
    - **Finding specific data:** every torrent has a matching `.txt` listing every file. Search them, then add the
@@ -1015,7 +993,7 @@ Related one-time changes, all live **before the first deletion**:
 
 The docs are rule-based, so normally **nothing changes**. Update the page only if the rules changed (excluded
 datasets, timing, size limits). There is no docs step any more (removed 2026-10-12; Review notes, R22):
-`09-check-before-delete` only checks the page is reachable.
+`08-check-before-delete` only checks the page is reachable.
 
 ---
 
@@ -1045,7 +1023,7 @@ Decided so far: one torrent per workflow, as big as the size limits allow (2.1, 
 modification date and dates in the file name, 2.2) with a 2-year minimum age;
 torrent IDs from the cutoff date; exclusions `market-history`, `killmails` and `ccp`; Fuzzwork in scope with a sync
 cutoff (lowest or latest ID: reopened, question 16); a README inside the torrent; hybrid v1+v2; no
-notice period, but a start announcement; deletion last; no MD5 matching; no Cloudflare
+notice period and no announcements; deletion last; no MD5 matching; no Cloudflare
 purge; `DataCrawler` fails on missing indexes; a manual process with numbered scripts and completion files in
 `deep-archive/`; the data bucket is reached only through rclone with one B2 key, soft deletes only (2.21); no
 backup (2.11); a date too busy to fit one torrent aborts `01-find` and is resolved by hand.
@@ -1063,7 +1041,7 @@ Still open:
    use is still undecided (open question 4 below).
 4. Internet Archive: use it at all? Is redistribution there allowed for CCP and Fuzzwork data? Item grouping?
 5. Seeder host: where is it, how much disk and upload, and does it have a redundant filesystem?
-6. How to test reachability from outside: `07-check-seed`'s aria2c download runs on the workflow host (Review
+6. How to test reachability from outside: `06-check-seed`'s aria2c download runs on the workflow host (Review
    notes, R16).
 7. Stale index cleanup: in the delete step (2.15a), in `DataIndex` (2.15b), or both?
 8. Add the `DataIndex` "Archived data" note (2.20)?
@@ -1071,17 +1049,18 @@ Still open:
    fill ~26 torrents with almost no data. Being addressed separately: a script that rolls whole years of small files
    up into a single highly compressed file. Still open: which "no year folder" directories must stay on HTTP
    (`characters-corporations-alliances/backfills`, …)? (`ccp/` is excluded.)
-10. Which Discord channel gets the announcements, and who posts them?
-11. Trackers: add all from both lists, a curated set, or the core only (2.4 "Trackers")? Refresh tracker lists in
-    published `.torrent` files later?
+10. ~~Which Discord channel gets the announcements, and who posts them?~~ **Dropped (2026-10-12): no announcements**
+    (2.13).
+11. ~~Trackers: add all from both lists, a curated set, or the core only?~~ **Decided (2026-10-12): the union of
+    both "best" lists** (2.4 "Trackers"). Still open: refresh tracker lists in published `.torrent` files later?
 12. Torrent creation tool: Python `libtorrent` or the qBittorrent Web API creator (2.4 "Creating the torrent")?
 13. **Is deleting still worth it on the cheaper storage?** The saving is ~4 TiB at the new storage's price per month.
     The cost is a seeder host with 4 TiB+ of redundant disk, operator time, and data that's only
     available while someone seeds it. If the saving is small, a middle option is to publish torrents
-    (steps 00–08) without deleting: users get torrents, and nothing is removed. Decide once the new storage's pricing
+    (steps 00–07) without deleting: users get torrents, and nothing is removed. Decide once the new storage's pricing
     is known.
 14. Does the new storage have soft delete, snapshots or versioning? If so, use it as an extra safety net around
-    `11-delete` (2.14 doesn't rely on it).
+    `10-delete` (2.14 doesn't rely on it).
 15. Timing against the storage migration: run the first workflows before, after, or as part of it? Archiving first
     means ~4 TiB less to migrate; migrating first means the process runs on the final storage.
 16. **Fuzzwork sync: lowest ID with gap filling (2.18 as decided) or latest ID without?** The code now syncs only IDs
@@ -1125,17 +1104,17 @@ step and were dropped with it (2.11).
   workflow. Decide before the first torrent is published whether to publish the hashes (`<ID>.sha256` inside the
   torrent, or next to `<ID>.txt` in `deep-archive/`) or at least keep the manifest with `LOG.md`: adding a file to a
   published torrent changes its info-hashes.
-- **R6. Three steps check themselves.** `04-load`, `05-make-torrent` and `08-publish` now check their own results at
+- **R6. Three steps check themselves.** `03-load`, `04-make-torrent` and `07-publish` now check their own results at
   the end, like the roll-up scripts, instead of having a separate read-only check step (2.10). They re-read from disk
   or the site, but a bug shared by the action and its check (e.g. the same wrong comment template, the same path
   handling) is no longer caught: the old `check-torrent` re-rendered the comment from its own copy of the template,
   the merged check compares against the same rendering.
-- **R7. Nothing re-reads the data between load and the torrent.** `04-load` hashes every file into the manifest;
-  `05-make-torrent` reads every file again to compute piece hashes; `07-check-seed`'s recheck then compares the disk
+- **R7. Nothing re-reads the data between load and the torrent.** `03-load` hashes every file into the manifest;
+  `04-make-torrent` reads every file again to compute piece hashes; `06-check-seed`'s recheck then compares the disk
   with the torrent. With `check-checksums` gone, the manifest and the torrent's data files are never compared
   directly (the test download fetches only the README). A file damaged on disk between load and make-torrent would
   be baked into the torrent. Low risk on redundant storage (ZFS/RAID); a cheap guard would be to check size and
-  modification time again in `05-make-torrent`, a full guard would be one more read of all the data.
+  modification time again in `04-make-torrent`, a full guard would be one more read of all the data.
 
 **Housekeeping**
 
@@ -1144,12 +1123,12 @@ step and were dropped with it (2.11).
   libtorrent, qBittorrent or aria2c. Run `00-preflight` and every step on a small test selection before real data.
 - **R13. Completion-file names changed.** Step numbers changed with every merge on 2026-10-12; a
   `SCRATCH_DIR` from before won't resume. (None has run on real data.)
-- **R14. `create_torrent.py`** is still in the folder as an experiment; `05-make-torrent` has replaced it. Remove it,
+- **R14. `create_torrent.py`** is still in the folder as an experiment; `04-make-torrent` has replaced it. Remove it,
   or move it out of the step folder, once Appendix B's measurements no longer need it.
 - **R15. Documentation size.** The README (~400 lines) repeats much of this plan; the roll-up README is ~95 lines
   built around one step table. Consider trimming the README to that shape.
 
-**Seed check (`07-check-seed`, merged 2026-10-12)**
+**Seed check (`06-check-seed`, merged 2026-10-12)**
 
 - **R16. Not an outside test any more.** The manual "check the trackers from outside" step (torrenteditor.com) and
   the separate test download are gone. The aria2c download runs on the workflow host, so it proves the torrent can be
@@ -1163,11 +1142,11 @@ step and were dropped with it (2.11).
   code on `--bt-stop-timeout`, are untested (no aria2c where it was written). No data file is downloaded, so a
   problem specific to data files (e.g. paths with unusual characters) wouldn't show.
 - **R18. Rerunning while the trackers warm up.** The step fails until a tracker reports as working; that's expected
-  for a few minutes after `06-seed`, and rerunning is fine (no completion file is written on failure).
+  for a few minutes after `05-seed`, and rerunning is fine (no completion file is written on failure).
 
-**Publish (`08-publish`, merged 2026-10-12)**
+**Publish (`07-publish`, merged 2026-10-12)**
 
-- **R19. The feed backup is deleted with the scratch directory.** `08-publish` saves the published `feed.xml` to
+- **R19. The feed backup is deleted with the scratch directory.** `07-publish` saves the published `feed.xml` to
   `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, which goes when `$SCRATCH_DIR` is deleted at the end of the
   workflow. Enough to undo a bad rebuild during the workflow; for a longer history, keep it somewhere that persists
   (e.g. next to `LOG.md`). `torrents.json` is rebuilt too but not backed up; it can always
@@ -1183,7 +1162,7 @@ step and were dropped with it (2.11).
 
 - **R22. Nothing checks the docs page against the scripts any more.** `check-docs` followed every link on the Deep
   Archive page and printed `MIN_AGE_YEARS`, `TORRENT_EXCLUDE` and the size limits to compare with the page. Now only
-  `09-check-before-delete` checks the page is reachable (HTTP 200). If a rule changes in `lib/workflow.py` (e.g. a
+  `08-check-before-delete` checks the page is reachable (HTTP 200). If a rule changes in `lib/workflow.py` (e.g. a
   dataset added to `TORRENT_EXCLUDE`) the page has to be updated by hand, before the next delete; a broken link on it
   goes unnoticed.
 
@@ -1193,12 +1172,12 @@ step and were dropped with it (2.11).
   else seeds it. Early on, most torrents will have no other seeders, so a lost or corrupted seed host loses that data
   for good (B2's soft-delete window aside). The egress cost that ruled Glacier out is only paid in a disaster (about
   $500 for everything); the risk it covered is paid in data. Worth deciding on one cheap second copy before the
-  first `11-delete`: an offline disk kept off site, a second seeder, or the Internet Archive (2.12). Appendix C's
+  first `10-delete`: an offline disk kept off site, a second seeder, or the Internet Archive (2.12). Appendix C's
   monthly recheck and scrub matter more now; consider alerting on them.
 
 ## Appendix A: If archived data turns out to have changed
 
-If the pre-delete check (`09-check-before-delete`) finds that a file changed on the storage after it was selected:
+If the pre-delete check (`08-check-before-delete`) finds that a file changed on the storage after it was selected:
 - **Don't delete that file.** It isn't the version in the torrent. Everything else that's confirmed is deleted as
   usual (2.14).
 - The torrent stays as it is: it holds the version from when it was made. No replacement torrent.
@@ -1326,7 +1305,7 @@ Done in 1s
 - **Seeding from existing files works.** The content directory was copied as it was into qBittorrent's incomplete
   torrents directory, then the torrent was added. qBittorrent found the files, checked them, marked the torrent
   complete and started seeding, without downloading anything.
-  - For the real archive, copying terabytes into the incomplete directory isn't practical. `06-seed` instead adds
+  - For the real archive, copying terabytes into the incomplete directory isn't practical. `05-seed` instead adds
     the torrent with its save path set to `$SEED_DIR`, so qBittorrent checks the files where they are.
     **Still to test.**
 

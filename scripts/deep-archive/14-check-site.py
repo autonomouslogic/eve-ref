@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-check-site: step 16 of the EVE Ref Deep Archive workflow, and the last one. Checks what data.everef.net actually
+check-site: step 15 of the EVE Ref Deep Archive workflow, and the last one. Checks what data.everef.net actually
 serves after the delete and the full DataIndex run, over HTTPS (PLAN 2.16).
 
 DRAFT. Read-only, over HTTPS.
 
-    15-check-site.py
+    14-check-site.py
 
-Needs 12-check-delete's completion file, and refuses to run twice (lib/workflow.py). Run this only after the
+Needs 11-check-delete's completion file, and refuses to run twice (lib/workflow.py). Run this only after the
 manual "Full DataIndex" step (README) has finished.
 
 Per sampled URL (a spread of deleted files across datasets and months, every deleted index.json, PLAN 2.16):

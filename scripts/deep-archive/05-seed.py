@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 """
-seed: step 7 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent, save path $SEED_DIR, so it
-checks the files where they already are instead of downloading them.
+seed: step 6 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent with SEED_DIR, as qBittorrent sees
+it, as the save path, so it checks the files where they already are instead of downloading them.
 
 DRAFT. Writes only to qBittorrent (via its Web API) and SCRATCH_DIR.
 
-    06-seed.py
+    05-seed.py
 
-Needs 05-make-torrent's completion file, and refuses to run twice (lib/workflow.py).
+Needs 04-make-torrent's completion file, and refuses to run twice (lib/workflow.py).
 
-Adds $SCRATCH_DIR/<ID>.torrent to qBittorrent with save path $SEED_DIR and automatic torrent management off, so
-qBittorrent uses $SEED_DIR/<ID>/ (already there from 04-load) rather than moving or re-downloading anything.
+Adds $SCRATCH_DIR/<ID>.torrent to qBittorrent with save path QBITTORRENT_SAVE_PATH (SEED_DIR as qBittorrent sees
+it; SEED_DIR itself if not set) and automatic torrent management off, so qBittorrent uses $SEED_DIR/<ID>/ (already
+there from 03-load) rather than moving or re-downloading anything.
 Waits for qBittorrent to report the torrent, then triggers a recheck (qBittorrent doesn't always check a torrent
 added from existing files without being asked).
 
 Environment (or torrents.env, see lib/workflow.py):
-    SCRATCH_DIR, QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
+    SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
+    QBITTORRENT_SAVE_PATH   optional: SEED_DIR as qBittorrent sees it, if different (e.g. qBittorrent in Docker)
 """
 
 import os
@@ -29,6 +31,7 @@ from workflow import (  # noqa: E402
     fail,
     fmt_duration,
     ok,
+    qbittorrent_save_path,
     qbittorrent_settings,
     section,
 )
@@ -62,9 +65,10 @@ def main():
     section("Add torrent")
     if not os.path.isfile(torrent_path):
         fail(f"Torrent not found: {torrent_path}")
-    print(f"Adding {torrent_path}, save path {workflow.seed_dir}")
+    save_path = qbittorrent_save_path(workflow.seed_dir)
+    print(f"Adding {torrent_path}, save path {save_path}")
     try:
-        client.add_torrent_file(torrent_path, workflow.seed_dir)
+        client.add_torrent_file(torrent_path, save_path)
     except QbittorrentError as e:
         fail(f"Adding the torrent failed: {e}")
 
@@ -75,9 +79,9 @@ def main():
 
     section("Recheck")
     client.recheck(v1_hash)
-    print("Recheck triggered. Run 07-check-seed once it reaches 100%.")
+    print("Recheck triggered. Run 06-check-seed once it reaches 100%.")
 
-    workflow.complete(STEP, torrent_id, {"info_hash": v1_hash, "save_path": workflow.seed_dir})
+    workflow.complete(STEP, torrent_id, {"info_hash": v1_hash, "save_path": save_path})
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     ok(f"Seed OK for {torrent_id}")
 

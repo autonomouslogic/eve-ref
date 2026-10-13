@@ -19,7 +19,12 @@ Checks:
 - SCRATCH_DIR and SEED_DIR are separate;
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable;
-- the tools later steps need: libtorrent 2.x, the tracker list, aria2c (07-check-seed's test download).
+- the tools later steps need: libtorrent 2.x, aria2c (06-check-seed's test download);
+- the tracker lists make-torrent downloads (lib/trackers.py) are reachable, each has UDP or HTTP(S) trackers, and
+  together they have at least MIN_TRACKERS;
+- LOCAL_COPY_DIR, if set, is a readable folder laid out like the bucket (index.json at the top), apart from
+  SCRATCH_DIR and SEED_DIR;
+- qBittorrent's Web API answers at QBITTORRENT_URL with the configured login, and runs libtorrent 2.x.
 """
 
 import json
@@ -39,13 +44,17 @@ from workflow import (  # noqa: E402
     is_inside,
     join,
     load_env,
+    local_copy_dir,
     ok,
+    qbittorrent_save_path,
+    qbittorrent_settings,
     section,
     start_log,
 )
+from qbittorrent import Client, QbittorrentError  # noqa: E402
+from trackers import MIN_TRACKERS, TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
 STEP = "preflight"
-TRACKERS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "trackers.txt")
 DEEP_ARCHIVE_DIR = "deep-archive"
 
 
@@ -103,12 +112,19 @@ def main():
             checks.fail("SCRATCH_DIR and SEED_DIR must not be inside each other")
         else:
             print("SCRATCH_DIR and SEED_DIR are separate")
+    check_local_copy(checks, scratch, seed)
 
     section("Tools")
     check_tools(checks)
 
+    section("Trackers")
+    check_trackers(checks)
+
     section("Remote")
     check_remote(checks)
+
+    section("qBittorrent")
+    check_qbittorrent(checks, seed)
 
     if checks.failed:
         fail(f"Preflight found {checks.failed} problem{'s' if checks.failed != 1 else ''}, aborting")
@@ -138,6 +154,49 @@ def prepare_dir(name):
     if not os.access(path, os.W_OK | os.X_OK):
         return None, False, f"{name} is not writable: {path}"
     return path, created, None
+
+
+def check_local_copy(checks, scratch, seed):
+    """LOCAL_COPY_DIR, if set: a folder laid out like the bucket (index.json at the top), apart from the other two."""
+    local = local_copy_dir()
+    if local is None:
+        print("LOCAL_COPY_DIR: not set, load downloads everything from the bucket")
+        return
+    if not os.path.isdir(local):
+        checks.fail(f"LOCAL_COPY_DIR is not a directory: {local}")
+        return
+    if not os.access(local, os.R_OK | os.X_OK):
+        checks.fail(f"LOCAL_COPY_DIR is not readable: {local}")
+        return
+    if not os.path.isfile(os.path.join(local, "index.json")):
+        checks.fail(f"LOCAL_COPY_DIR has no index.json at the top: {local} isn't laid out like the bucket")
+        return
+    for name, path in (("SCRATCH_DIR", scratch), ("SEED_DIR", seed)):
+        if path and (is_inside(local, path) or is_inside(path, local)):
+            checks.fail(f"LOCAL_COPY_DIR and {name} must not be inside each other")
+            return
+    print(f"LOCAL_COPY_DIR: {local}, load copies matching files from it")
+
+
+def check_qbittorrent(checks, seed):
+    """qBittorrent's Web API answers with the configured login, and runs libtorrent 2.x (needed to seed v2)."""
+    if not os.environ.get("QBITTORRENT_URL", "").strip():
+        checks.fail("QBITTORRENT_URL is not set (environment or torrents.env)")
+        return
+    url, username, password = qbittorrent_settings()
+    try:
+        client = Client(url, username, password)
+        version = client.version()
+        build = client.build_info()
+    except (QbittorrentError, ValueError) as e:
+        checks.fail(f"Can't use qBittorrent's Web API at {url}: {e}")
+        return
+    libtorrent = str(build.get("libtorrent", ""))
+    print(f"{url}: qBittorrent {version}, libtorrent {libtorrent}")
+    if not libtorrent.split(".")[0].isdigit() or int(libtorrent.split(".")[0]) < 2:
+        checks.fail(f"qBittorrent must run libtorrent 2.x to seed hybrid v1+v2 torrents, found {libtorrent!r}")
+    if seed:
+        print(f"Save path for new torrents: {qbittorrent_save_path(seed)} (QBITTORRENT_SAVE_PATH, or SEED_DIR)")
 
 
 def run_rclone(*args):
@@ -170,19 +229,22 @@ def check_tools(checks):
         checks.fail("Missing required tool: libtorrent Python bindings (needed by make-torrent)")
     aria2c = subprocess.run(["aria2c", "--version"], capture_output=True, text=True) if shutil.which("aria2c") else None
     if aria2c is None or aria2c.returncode != 0:
-        checks.fail("Missing required tool: aria2c (needed by 07-check-seed's test download)")
+        checks.fail("Missing required tool: aria2c (needed by 06-check-seed's test download)")
     else:
         print(aria2c.stdout.splitlines()[0] if aria2c.stdout else "aria2c")
-    path = os.path.realpath(TRACKERS_FILE)
-    if not os.path.isfile(path):
-        checks.fail(f"Tracker list not found: {path}")
+
+
+def check_trackers(checks):
+    """The tracker lists make-torrent downloads are reachable and give enough trackers today (lib/trackers.py)."""
+    try:
+        lists = fetch_tracker_lists()
+        trackers, counts = combine([(name, text) for name, _, text in lists])
+    except TrackersError as e:
+        checks.fail(f"{e} (make-torrent would fail)")
         return
-    with open(path, encoding="utf-8") as f:
-        trackers = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
-    if not trackers:
-        checks.fail(f"No trackers in {path}")
-    else:
-        print(f"{len(trackers)} trackers in {path}")
+    for name, usable, _ in counts:
+        print(f"{name}: {usable} UDP or HTTP(S) trackers")
+    print(f"{len(trackers)} trackers together (at least {MIN_TRACKERS} needed)")
 
 
 def check_remote(checks):

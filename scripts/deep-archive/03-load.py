@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-load: step 5 of the EVE Ref Deep Archive workflow. Downloads exactly the files find selected from the data site's
-bucket into the torrent's content folder, SEED_DIR/<ID>/, keeping each file's modification time, checks the result,
-and computes the SHA-256 manifest the rest of the workflow is built on.
+load: step 4 of the EVE Ref Deep Archive workflow. Copies exactly the files find selected into the torrent's content
+folder, SEED_DIR/<ID>/, from the local copy (LOCAL_COPY_DIR, optional) where it has them and from the data site's
+bucket otherwise, keeping each file's modification time. Then checks the result and computes the SHA-256 manifest the
+rest of the workflow is built on.
 
-DRAFT. Reads the bucket; writes only to SEED_DIR/<ID>/ and SCRATCH_DIR.
+DRAFT. Reads the bucket and the local copy; writes only to SEED_DIR/<ID>/ and SCRATCH_DIR.
 
-    04-load.py
+    03-load.py
 
 Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
 
@@ -15,29 +16,36 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
 2. Compare it with the content folder, if it exists from an earlier attempt: files already there with the listed size
    and modification time are kept, and rclone skips them. Anything in the folder that isn't in the selection aborts
    the step before downloading: it needs looking at by hand.
-3. Check there's room in SEED_DIR for what's left to download.
-4. rclone copy --files-from-raw from the bucket into SEED_DIR/<ID>/. rclone keeps the modification times, skips files
-   already there, and checks each download's SHA-1 where B2 has one.
-5. Walk the content folder again and check every listed file is on disk with the listed size and modification time,
+3. Check there's room in SEED_DIR for what's left to copy.
+4. If LOCAL_COPY_DIR is set: take the files still to copy that are there with the selected size and modification
+   time, rclone check them against the bucket (SHA-1, where B2 has one; size only where it doesn't), and rclone copy
+   --files-from-raw those that pass into SEED_DIR/<ID>/. Every other file is listed and left for the download.
+5. rclone copy --files-from-raw the rest from the bucket into SEED_DIR/<ID>/. rclone keeps the modification times,
+   skips files already there, and checks each download's SHA-1 where B2 has one.
+6. Walk the content folder again and check every listed file is on disk with the listed size and modification time,
    and nothing else is. Any problem aborts the step without a completion file; running it again carries on where it
    stopped.
-6. Read every selected file once, computing its SHA-256 and, for .bz2 and .gz files, testing that the compressed
+7. Read every selected file once, computing its SHA-256 and, for .bz2 and .gz files, testing that the compressed
    stream decompresses cleanly (tolerating concatenated streams). An archive test failure is reported but doesn't
    fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
    in NOTES.md before going on.
-7. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 05-make-torrent and
-   09-check-before-delete use it.
+8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 04-make-torrent and
+   08-check-before-delete use it.
 
 Writes, in SCRATCH_DIR:
 
     load/
-      files-from.txt       the selected paths, one per line: rclone's --files-from-raw list
-    manifest.json          the selection plus a SHA-256 for every file (torrent_id, generated_at, files)
-    04-load.done           completion file
+      local-candidates.txt  the paths rclone check checks in the local copy (rclone's --files-from-raw list)
+      local-check.txt       rclone check's --combined result: "= path" for a match
+      local-files-from.txt  the paths copied from the local copy
+      files-from.txt        the paths downloaded from the bucket
+    manifest.json           the selection plus a SHA-256 for every file (torrent_id, generated_at, files)
+    03-load.done            completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR
     DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY   the bucket and B2 key (lib/workflow.py)
+    LOCAL_COPY_DIR   optional: a local copy of the data site, laid out like the bucket
 
 Needs rclone.
 """
@@ -51,6 +59,7 @@ import shutil
 import sys
 import time
 import zlib
+from stat import S_ISREG
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
@@ -62,6 +71,7 @@ from workflow import (  # noqa: E402
     fmt_bytes,
     fmt_count,
     fmt_duration,
+    local_copy_dir,
     ok,
     rclone_run,
     section,
@@ -80,6 +90,14 @@ CHUNK_SIZE = 4 * MIB
 PROGRESS_INTERVAL = 30  # seconds
 
 LOG_SAMPLE = 20
+
+# rclone check --combined: the first character of each line, for the files that don't match.
+CHECK_STATUS = {
+    "*": "different content from the bucket",
+    "+": "not on the bucket",
+    "-": "not in the local copy",
+    "!": "error while checking",
+}
 
 
 class Selected:
@@ -102,8 +120,14 @@ def main():
     find_dir = os.path.join(workflow.scratch_dir, "find")
     content_dir = os.path.join(workflow.seed_dir, torrent_id)
 
+    local_dir = local_copy_dir()
+
     section("Settings")
     print(f"Source: {remote}")
+    if local_dir is not None:
+        if not os.path.isdir(local_dir):
+            fail(f"LOCAL_COPY_DIR does not exist: {local_dir}")
+        print(f"Local copy, tried first: {local_dir}")
     print(f"Content folder: {content_dir}")
 
     section("Selection")
@@ -130,36 +154,37 @@ def main():
         to_copy = files
     to_copy_bytes = sum(f.size for f in to_copy)
     free = shutil.disk_usage(workflow.seed_dir).free
-    print(f"To download: {fmt_count(len(to_copy))} files ({fmt_bytes(to_copy_bytes)}), {fmt_bytes(free)} free")
+    print(f"To copy: {fmt_count(len(to_copy))} files ({fmt_bytes(to_copy_bytes)}), {fmt_bytes(free)} free")
     if to_copy_bytes > free:
-        fail(f"Not enough free space in SEED_DIR: {fmt_bytes(to_copy_bytes)} to download, {fmt_bytes(free)} free")
+        fail(f"Not enough free space in SEED_DIR: {fmt_bytes(to_copy_bytes)} to copy, {fmt_bytes(free)} free")
 
-    if to_copy:
+    load_dir = os.path.join(workflow.scratch_dir, "load")
+    from_local = []
+    if local_dir is not None and to_copy:
+        section("Local copy")
+        os.makedirs(load_dir, exist_ok=True)
+        from_local = check_local_copy(local_dir, to_copy, remote, load_dir)
+        if from_local:
+            os.makedirs(content_dir, exist_ok=True)
+            files_from = write_files_from(os.path.join(load_dir, "local-files-from.txt"), from_local)
+            print(f"rclone copy {local_dir} -> {content_dir}, {TRANSFERS} transfers, list in {files_from}")
+            copy_started = time.monotonic()
+            rclone_copy(local_dir, content_dir, files_from)
+            print(f"rclone finished in {fmt_duration(time.monotonic() - copy_started)}")
+    from_local_paths = {f.path for f in from_local}
+    to_download = [f for f in to_copy if f.path not in from_local_paths]
+
+    if to_download:
         section("Download")
         os.makedirs(content_dir, exist_ok=True)
-        load_dir = os.path.join(workflow.scratch_dir, "load")
         os.makedirs(load_dir, exist_ok=True)
-        files_from = os.path.join(load_dir, "files-from.txt")
-        with open(files_from, "w", encoding="utf-8") as f:
-            f.writelines(o.path + "\n" for o in files)
-        print(f"rclone copy {remote} -> {content_dir}, {TRANSFERS} transfers, list in {files_from}")
-        download_started = time.monotonic()
-        rclone_run(
-            "copy",
-            remote,
-            content_dir,
-            "--files-from-raw",
-            files_from,
-            "--transfers",
-            str(TRANSFERS),
-            "--checkers",
-            str(CHECKERS),
-            "--stats",
-            STATS_INTERVAL,
-            "--stats-one-line",
-            "--stats-log-level",
-            "NOTICE",
+        files_from = write_files_from(os.path.join(load_dir, "files-from.txt"), to_download)
+        print(
+            f"rclone copy {remote} -> {content_dir}: {fmt_count(len(to_download))} files "
+            f"({fmt_bytes(sum(f.size for f in to_download))}), {TRANSFERS} transfers, list in {files_from}"
         )
+        download_started = time.monotonic()
+        rclone_copy(remote, content_dir, files_from)
         print(f"rclone finished in {fmt_duration(time.monotonic() - download_started)}")
 
     section("Result")
@@ -227,12 +252,113 @@ def main():
             "manifest": manifest_path,
             "files": len(files),
             "bytes": total,
-            "downloaded_files": len(to_copy),
+            "local_copy_files": len(from_local),
+            "downloaded_files": len(to_download),
             "archive_test_failures": len(archive_failures),
         },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     ok(f"Load OK for {torrent_id}")
+
+
+def check_local_copy(local_dir, files, remote, load_dir):
+    """
+    The files to copy from the local copy instead of the bucket: those there with the selected size and modification
+    time, whose content rclone check confirms against the bucket's SHA-1 (where B2 has one). Every other file is left
+    for the download.
+    """
+    candidates = []
+    missing = []
+    different = []
+    for f in files:
+        try:
+            stat = os.lstat(os.path.join(local_dir, f.path))
+        except FileNotFoundError:
+            missing.append(f.path)
+            continue
+        if not S_ISREG(stat.st_mode):
+            different.append(f"{f.path}: not a regular file")
+        elif stat.st_size != f.size:
+            different.append(f"{f.path}: {fmt_count(stat.st_size)} bytes, selected {fmt_count(f.size)}")
+        elif int(stat.st_mtime) != f.mtime:
+            different.append(f"{f.path}: modified {iso(stat.st_mtime)}, selected {iso(f.mtime)}")
+        else:
+            candidates.append(f)
+    print(
+        f"{fmt_count(len(candidates))} files there with the selected size and modification time, "
+        f"{fmt_count(len(missing))} missing, {fmt_count(len(different))} different"
+    )
+    if different:
+        report_problems("files in the local copy that differ from the selection, downloaded instead", different)
+    if not candidates:
+        return []
+
+    candidates_from = write_files_from(os.path.join(load_dir, "local-candidates.txt"), candidates)
+    combined = os.path.join(load_dir, "local-check.txt")
+    print(f"rclone check {local_dir} against {remote}, list in {candidates_from}")
+    check_started = time.monotonic()
+    code = rclone_run(
+        "check",
+        local_dir,
+        remote,
+        "--one-way",
+        "--files-from-raw",
+        candidates_from,
+        "--combined",
+        combined,
+        "--checkers",
+        str(CHECKERS),
+        check=False,
+    )
+    print(f"rclone finished in {fmt_duration(time.monotonic() - check_started)}")
+    status = {}
+    if os.path.isfile(combined):
+        with open(combined, encoding="utf-8") as f:
+            for line in f:
+                line = line.rstrip("\n")
+                if len(line) > 2 and line[1] == " ":
+                    status[line[2:]] = line[0]
+    verified = []
+    rejected = []
+    for f in candidates:
+        state = status.get(f.path)
+        if state == "=":
+            verified.append(f)
+        else:
+            rejected.append(f"{f.path}: {CHECK_STATUS.get(state, 'not checked')}")
+    if code != 0 and not rejected:
+        fail(f"rclone check failed with exit code {code}, but reported no differences")
+    if rejected:
+        report_problems("files in the local copy that failed rclone check, downloaded instead", rejected)
+    print(f"From the local copy: {fmt_count(len(verified))} files ({fmt_bytes(sum(f.size for f in verified))})")
+    return verified
+
+
+def write_files_from(path, files):
+    """Writes an rclone --files-from-raw list of the files' paths, and returns its path."""
+    with open(path, "w", encoding="utf-8") as f:
+        f.writelines(o.path + "\n" for o in files)
+    return path
+
+
+def rclone_copy(source, content_dir, files_from):
+    """rclone copy of exactly the listed files, keeping modification times and skipping files already there."""
+    rclone_run(
+        "copy",
+        source,
+        content_dir,
+        "--files-from-raw",
+        files_from,
+        "--transfers",
+        str(TRANSFERS),
+        "--checkers",
+        str(CHECKERS),
+        "--stats",
+        STATS_INTERVAL,
+        "--stats-one-line",
+        "--stats-log-level",
+        "NOTICE",
+    )
 
 
 def read_selection(path, find_done):

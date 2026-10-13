@@ -1,6 +1,6 @@
 """
 qbittorrent: a tiny client for qBittorrent's Web API (https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API),
-stdlib only (urllib + http.cookiejar), for 06-seed and 07-check-seed.
+stdlib only (urllib + http.cookiejar), for 00-preflight, 05-seed and 06-check-seed.
 """
 
 import http.cookiejar
@@ -43,6 +43,10 @@ class Client:
 
     def version(self):
         return self._request("GET", "/api/v2/app/version")
+
+    def build_info(self):
+        """Versions qBittorrent was built with: qt, libtorrent, boost, openssl, bitness."""
+        return json.loads(self._request("GET", "/api/v2/app/buildInfo"))
 
     def add_torrent_file(self, torrent_path, save_path, category=None):
         """Adds a .torrent by multipart upload, with autoTMM off so save_path is used (checks the files in place)."""

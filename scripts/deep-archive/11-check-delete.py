@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-check-delete: step 13 of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
-listing of the bucket -- never trusting 11-delete's own result.
+check-delete: step 12 of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
+listing of the bucket -- never trusting 10-delete's own result.
 
 DRAFT. Read-only on the bucket.
 
-    12-check-delete.py
+    11-check-delete.py
 
-Needs 11-delete's completion file, and refuses to run twice (lib/workflow.py).
+Needs 10-delete's completion file, and refuses to run twice (lib/workflow.py).
 
 - Every path in deleted.jsonl (data and index cleanup) is gone from a fresh listing.
 - Every path that failed the pre-delete check (delete-set.json's "failed" list) is still there, untouched.
