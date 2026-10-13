@@ -238,6 +238,11 @@ write-stall timeout (step 12a) is only the backstop for dead streams.
 - B2 may throttle a single IP at high concurrency. That surfaces as 429/503 and is mapped by step 7.
 
 ### Rate limiting (per client IP)
+
+> **Implemented, with these changes from the text below:** a token is charged only when a request actually calls `getObject`
+> on B2 (inside `DataProxyHandler.getUncached`), not per request. `headObject`, HEAD-cache/404-cache hits, 304/412 answers and
+> rejected paths are free. The client IP is `CF-Connecting-IP`, then the first `X-Forwarded-For` value, then the network peer
+> (invalid IP literals are skipped), so a missing header no longer skips limiting. Defaults: burst 30, 1/s.
 Token bucket per client IP, checked before any upstream call, so a limited request costs no B2 transaction. The
 client IP comes from one fixed header, a constant in `ClientIps` (not configurable; `CF-Connecting-IP` as the
 placeholder until the real name is confirmed). When the header is absent, blank or not a valid IP literal, the IP is
