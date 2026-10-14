@@ -13,7 +13,6 @@ import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
-import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
@@ -29,12 +28,10 @@ import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -42,9 +39,9 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
@@ -52,7 +49,7 @@ import tools.jackson.databind.json.JsonMapper;
  */
 @Log4j2
 public class PublishRefData implements Command {
-	private static final int UPLOAD_CONCURRENCY = 32;
+	private final int uploadConcurrency = Configs.REF_DATA_UPLOAD_CONCURRENCY.getRequired();
 
 	@Inject
 	@Named("refdata")
@@ -120,7 +117,7 @@ public class PublishRefData implements Command {
 	private RefDataMeta currentMeta;
 	private MVStore dataStore;
 	private MVStore fileStore;
-	private Map<String, JsonNode> fileMap;
+	private MVMap<String, byte[]> fileMap;
 	private ReferenceEntry metaEntry;
 
 	private final Duration cacheTime = Configs.REFERENCE_DATA_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -183,15 +180,20 @@ public class PublishRefData implements Command {
 		return !currentMeta.equals(latestMeta);
 	}
 
-	private Single<Map<String, ListedS3Object>> listBucketContents() {
+	private Single<Map<String, String>> listBucketContents() {
 		return Single.defer(() -> {
 			log.info("Listing existing contents");
-			var objects = s3Adapter.listObjects(refDataUrl, true, s3Client);
-			var filtered = objects.stream()
-					.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
-					.collect(Collectors.toMap(o -> o.getUrl().getPath(), Function.identity()));
-			log.info("Listed {} objects", filtered.size());
-			return Single.just(filtered);
+			// Only the path and ETag of each object are kept: holding the full ListedS3Object (and the SDK
+			// response pages it's created from) for every object in the bucket is too expensive in memory
+			// for a bucket this size.
+			var existing = new HashMap<String, String>();
+			s3Adapter.listObjects(refDataUrl, true, s3Client, obj -> {
+				if (!obj.getUrl().getPath().endsWith("index.html")) {
+					existing.put(obj.getUrl().getPath(), obj.getEtag());
+				}
+			});
+			log.info("Listed {} objects", existing.size());
+			return Single.just(existing);
 		});
 	}
 
@@ -200,7 +202,10 @@ public class PublishRefData implements Command {
 			log.trace("Init MVStore");
 			dataStore = mvStoreUtil.createTempStore("ref-data-data");
 			fileStore = mvStoreUtil.createTempStore("ref-data-files");
-			fileMap = mvStoreUtil.openJsonMap(fileStore, "files", String.class);
+			// Stored as raw bytes, not via openJsonMap: the content is already serialized JSON bytes, and
+			// going through a JsonNode round trip on the way in and out would just add another full copy of
+			// every file's tree to the heap for no benefit.
+			fileMap = fileStore.openMap("files");
 		});
 	}
 
@@ -219,9 +224,10 @@ public class PublishRefData implements Command {
 					if (entry.getType().equals("meta")) {
 						metaEntry = entry;
 					} else {
-						mvStoreUtil
-								.openJsonMap(dataStore, entry.getType(), Long.class)
-								.put(entry.getId(), jsonMapper.readTree(entry.getContent()));
+						// entry.getContent() is already serialized JSON bytes (see RefDataUtil.createEntry),
+						// so it's stored as-is rather than round-tripping through a JsonNode tree just to
+						// re-serialize it straight back to the same bytes.
+						dataStore.<Long, byte[]>openMap(entry.getType()).put(entry.getId(), entry.getContent());
 					}
 				}));
 	}
@@ -253,47 +259,65 @@ public class PublishRefData implements Command {
 								.setDataStore(dataStore)
 								.render())
 				.flatMapCompletable(entry -> Completable.fromAction(() -> {
-					fileMap.put(entry.getLeft(), entry.getRight());
+					// Serialized to bytes immediately: fileMap holds raw JSON bytes, not JsonNode trees, so
+					// a rendered file's tree is garbage-collectable as soon as it's written here instead of
+					// staying live (duplicated as both a tree and bytes) until upload time.
+					fileMap.put(entry.getLeft(), jsonMapper.writeValueAsBytes(entry.getRight()));
 				})));
 	}
 
-	private Completable uploadFiles(Map<String, ListedS3Object> existing) {
+	private Completable uploadFiles(Map<String, String> existing) {
 		return Completable.fromAction(() -> {
 					log.info("Evaluating {} files for upload", fileMap.size());
 					var reporter = new ProgressReporter(getName(), fileMap.size(), Duration.ofMinutes(1));
 					reporter.start();
 					var skipped = new AtomicInteger();
 					var uploaded = new AtomicInteger();
+					// The pipeline below is lazy end to end (an Iterator, not a List): entries are only
+					// serialized into ReferenceEntry/byte[] form as VirtualThreads.runAll pulls them, one per
+					// free upload slot, so at most uploadConcurrency files' worth of bytes are ever resident
+					// at once instead of every changed file in the dataset.
 					var entries = fileMap.entrySet().stream()
 							.filter(entry -> !entry.getKey().equals(metaEntry.getPath()))
 							.peek(entry -> reporter.increment())
-							.map(entry -> refDataUtil.createEntryForPath(
-									entry.getKey(), jsonMapper.writeValueAsBytes(entry.getValue())))
+							.map(entry -> refDataUtil.createEntryForPath(entry.getKey(), entry.getValue()))
 							.filter(entry -> filterExisting(skipped, existing, entry))
-							.toList();
+							.iterator();
 					VirtualThreads.checkIsVirtual();
-					VirtualThreads.callAll(
-							entries.iterator(),
+					// commons-java < 1.11.3 drained this overload's iterator into an ArrayList<Runnable> up
+					// front - one closure per file, each capturing its full ReferenceEntry/byte[] content -
+					// before running anything, which defeated the laziness above just as completely as the
+					// original .toList() did. 1.11.3 fixed it to pull lazily; see commons-java#111.
+					VirtualThreads.runAll(
+							entries,
 							entry -> {
 								uploaded.incrementAndGet();
 								uploadFile(entry).blockingAwait();
-								return null;
 							},
-							UPLOAD_CONCURRENCY);
+							uploadConcurrency);
 					log.info("Uploaded {} entries", uploaded.get());
 					log.info("Skipped {} entries", skipped.get());
 				})
 				.andThen(Completable.defer(() -> {
-					existing.remove(metaEntry.getPath());
-					return deleteRemaining(new ArrayList<>(existing.keySet()));
+					// existing is keyed by full bucket path (e.g. "base/meta"), but metaEntry.getPath() is
+					// the unprefixed render path (e.g. "meta"). Removing the latter from `existing` was a
+					// no-op, which left the meta file in `remaining` and deleted it from the bucket whenever
+					// its rendered bytes happened to still match the existing ETag (uploadMetaFile would
+					// then skip re-uploading it, believing nothing changed) - most visible on a forced
+					// republish of otherwise-unchanged data. The correct full path is excluded from the
+					// *copy* passed to deleteRemaining, not from `existing` itself: uploadMetaFile still
+					// needs to find it there to do its own ETag comparison afterwards.
+					var metaPath = refDataUrl.getPath() + metaEntry.getPath();
+					var remaining = new ArrayList<>(existing.keySet());
+					remaining.remove(metaPath);
+					return deleteRemaining(remaining);
 				}))
 				.andThen(Completable.defer(() -> uploadMetaFile(existing)));
 	}
 
-	private Completable uploadMetaFile(Map<String, ListedS3Object> existing) {
+	private Completable uploadMetaFile(Map<String, String> existing) {
 		return Completable.defer(() -> {
-			var entry = refDataUtil.createEntryForPath(
-					metaEntry.getPath(), jsonMapper.writeValueAsBytes(fileMap.get(metaEntry.getPath())));
+			var entry = refDataUtil.createEntryForPath(metaEntry.getPath(), fileMap.get(metaEntry.getPath()));
 			if (!filterExisting(new AtomicInteger(), existing, entry)) {
 				log.info("Meta file unchanged, skipping upload");
 				return Completable.complete();
@@ -326,13 +350,9 @@ public class PublishRefData implements Command {
 	}
 
 	private boolean filterExisting(
-			@NonNull AtomicInteger skipped,
-			@NonNull Map<String, ListedS3Object> existing,
-			@NonNull ReferenceEntry entry) {
-		var existingHash =
-				Optional.ofNullable(existing.get(entry.getPath())).flatMap(e -> Optional.ofNullable(e.getEtag()));
-		existing.remove(entry.getPath());
-		if (existingHash.isPresent() && existingHash.get().equals(entry.getMd5Hex())) {
+			@NonNull AtomicInteger skipped, @NonNull Map<String, String> existing, @NonNull ReferenceEntry entry) {
+		var existingEtag = existing.remove(entry.getPath());
+		if (existingEtag != null && existingEtag.equals(entry.getMd5Hex())) {
 			skipped.incrementAndGet();
 			return false;
 		}
@@ -343,7 +363,8 @@ public class PublishRefData implements Command {
 		return Completable.fromAction(() -> {
 			discordNotifier.notifyDiscord(String.format(
 					"Reference data published - SDE: %s, Hoboleaks: %s)",
-					latestMeta.getSde().getVersion(), latestMeta.getHoboleaks().getVersion()));
+					currentMeta.getSde().getVersion(),
+					currentMeta.getHoboleaks().getVersion()));
 		});
 	}
 
@@ -359,7 +380,7 @@ public class PublishRefData implements Command {
 						s3Adapter.deleteObject(delete, s3Client);
 						return null;
 					},
-					UPLOAD_CONCURRENCY);
+					uploadConcurrency);
 			log.info("Deleted {} entries", remaining.size());
 		});
 	}

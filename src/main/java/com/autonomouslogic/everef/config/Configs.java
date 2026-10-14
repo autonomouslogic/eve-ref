@@ -586,6 +586,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Number of ref data files to upload or delete concurrently when publishing.
+	 */
+	public static final Config<Integer> REF_DATA_UPLOAD_CONCURRENCY = Config.<Integer>builder()
+			.name("REF_DATA_UPLOAD_CONCURRENCY")
+			.defaultValue(8)
+			.type(Integer.class)
+			.build();
+
+	/**
 	 * The JDBC URL for the database.
 	 */
 	public static final Config<String> DATABASE_URL =

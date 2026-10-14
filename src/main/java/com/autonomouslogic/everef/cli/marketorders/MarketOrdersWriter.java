@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class MarketOrdersWriter {
 
 	@Setter
 	private Map<Long, JsonNode> marketOrdersStore;
+
+	@Setter
+	private Map<Long, OrderSortKey> sortKeysStore;
 
 	@Inject
 	protected MarketOrdersWriter() {}
@@ -41,34 +45,28 @@ public class MarketOrdersWriter {
 		return compressed;
 	}
 
+	/**
+	 * Sorts purely off the in-memory {@link #sortKeysStore}, avoiding deserializing the full
+	 * orders (held in an MVStore) just to compare them.
+	 */
 	private List<Long> prepareSortedIds() {
 		log.debug("Preparing sorted IDs.");
 		var start = Instant.now();
 
-		var ids = new ArrayList<>(marketOrdersStore.keySet());
+		var ids = new ArrayList<>(sortKeysStore.keySet());
 		ids.sort(Ordering.compound(List.of(
-				ordering("region_id"),
-				ordering("type_id"),
-				ordering("is_buy_order"),
-				ordering("system_id"),
-				ordering("order_id"))));
+				ordering(OrderSortKey::regionId),
+				ordering(OrderSortKey::typeId),
+				ordering(OrderSortKey::isBuyOrder),
+				ordering(OrderSortKey::systemId),
+				ordering(OrderSortKey::orderId))));
 
 		var time = Duration.between(start, Instant.now());
 		log.info(String.format("Sorted IDs prepared in %s", time));
 		return ids;
 	}
 
-	private Ordering<Long> ordering(String field) {
-		return Ordering.natural().nullsLast().onResultOf(id -> {
-			var node = marketOrdersStore.get(id);
-			if (!node.has(field)) {
-				return null;
-			}
-			var value = node.get(field);
-			if (value.isBoolean()) {
-				return value.asBoolean() ? 1L : 0L;
-			}
-			return value.asLong();
-		});
+	private Ordering<Long> ordering(Function<OrderSortKey, Long> extractor) {
+		return Ordering.natural().nullsLast().onResultOf(id -> extractor.apply(sortKeysStore.get(id)));
 	}
 }
