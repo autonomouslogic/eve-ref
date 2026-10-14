@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.cli.dataserver;
 
+import static org.apache.logging.log4j.LogManager.*;
+
 import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
@@ -21,14 +23,14 @@ import jakarta.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Streaming proxy for data.everef.net, backed directly by B2. See data-server-plan.md for the full design.
  */
 @Log4j2
 public class DataServer implements Command {
-	private static final org.apache.logging.log4j.Logger directLog =
-			org.apache.logging.log4j.LogManager.getLogger("dataserver.access");
+	private static final Logger directLog = getLogger("dataserver.access");
 
 	private final int port = Configs.HTTP_PORT.getRequired();
 

@@ -713,3 +713,12 @@ task api(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task dataServer(type: JavaExec) {
+	group "application"
+	args "data-server"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}

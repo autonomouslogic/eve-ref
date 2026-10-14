@@ -115,7 +115,7 @@ public class DataProxyHandler implements Handler {
 				method,
 				req.path().rawPath(),
 				fullUrl(req),
-				clientIp(req),
+				ClientIps.fromRequest(req),
 				req.headers().first(HeaderNames.USER_AGENT).orElse(null),
 				req.headers().first(HeaderNames.REFERER).orElse(null));
 		try {
@@ -127,13 +127,7 @@ public class DataProxyHandler implements Handler {
 
 	private void handle(ServerRequest req, ServerResponse res, String method, AccessLog access) throws Exception {
 		if (!method.equals("GET") && !method.equals("HEAD")) {
-			sendPlain(
-					res,
-					method,
-					Status.create(405, "Method Not Allowed"),
-					"Method not allowed\n",
-					"Allow",
-					"GET, HEAD");
+			sendPlain(res, method, Status.METHOD_NOT_ALLOWED_405, "Method not allowed\n", "Allow", "GET, HEAD");
 			access.outcome = "ok";
 			return;
 		}
@@ -144,7 +138,7 @@ public class DataProxyHandler implements Handler {
 		}
 		var keyOpt = KeyResolver.resolve(req.path().rawPath());
 		if (keyOpt.isEmpty()) {
-			sendPlain(res, method, Status.create(400, "Bad Request"), "Bad request\n");
+			sendPlain(res, method, Status.BAD_REQUEST_400, "Bad request\n");
 			access.outcome = "ok";
 			return;
 		}
@@ -153,7 +147,7 @@ public class DataProxyHandler implements Handler {
 		} catch (UpstreamRequestException e) {
 			// Every upstream call happens before any response bytes are written, so a 502 can still be sent.
 			captureSentry(req, res, "Upstream request failed", e.url, null, null, e.getCause());
-			sendPlain(res, method, Status.create(502, "Bad Gateway"), "Bad gateway\n");
+			sendPlain(res, method, Status.BAD_GATEWAY_502, "Bad gateway\n");
 			access.outcome = "ok";
 		} catch (RateLimitedException e) {
 			sendRateLimited(req, res, method, e.retryAfterSeconds);
@@ -167,14 +161,6 @@ public class DataProxyHandler implements Handler {
 	private static String fullUrl(ServerRequest req) {
 		var path = req.path().rawPath();
 		return req.prologue().hasQuery() ? path + "?" + req.query().rawValue() : path;
-	}
-
-	/** CF-Connecting-IP, then X-Forwarded-For, then the network peer. Also the rate limiting key. */
-	private static String clientIp(ServerRequest req) {
-		return ClientIps.resolve(
-				req.headers().first(HeaderNames.create("CF-Connecting-IP")).orElse(null),
-				req.headers().first(HeaderNames.X_FORWARDED_FOR).orElse(null),
-				req.remotePeer().host());
 	}
 
 	private void proxy(ServerRequest req, ServerResponse res, String method, String key, AccessLog access)

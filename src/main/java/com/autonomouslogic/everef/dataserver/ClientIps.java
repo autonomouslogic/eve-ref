@@ -1,6 +1,9 @@
 package com.autonomouslogic.everef.dataserver;
 
 import com.google.common.net.InetAddresses;
+import io.helidon.http.HeaderName;
+import io.helidon.http.HeaderNames;
+import io.helidon.webserver.http.ServerRequest;
 import java.net.Inet6Address;
 import java.util.Optional;
 
@@ -9,7 +12,17 @@ import java.util.Optional;
  * {@code X-Forwarded-For}, then the network peer address. A header value that isn't an IP literal is skipped.
  */
 public final class ClientIps {
+	private static final HeaderName CF_CONNECTING_IP = HeaderNames.create("CF-Connecting-IP");
+
 	private ClientIps() {}
+
+	/** CF-Connecting-IP, then X-Forwarded-For, then the network peer. Also the rate limiting key. */
+	public static String fromRequest(ServerRequest req) {
+		return resolve(
+				req.headers().first(CF_CONNECTING_IP).orElse(null),
+				req.headers().first(HeaderNames.X_FORWARDED_FOR).orElse(null),
+				req.remotePeer().host());
+	}
 
 	public static String resolve(String cfConnectingIp, String forwardedFor, String remoteAddress) {
 		return firstIp(cfConnectingIp).or(() -> firstIp(forwardedFor)).orElse(remoteAddress);
