@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.82.3](https://github.com/autonomouslogic/eve-ref/compare/2.82.2...2.82.3) (2026-10-14)
+
+
+### Bug Fixes
+
+* Market order memory optimisation ([#1141](https://github.com/autonomouslogic/eve-ref/issues/1141)) ([ead6f47](https://github.com/autonomouslogic/eve-ref/commit/ead6f470a01e4606a54d7b341c327b167b2bb73b))
+* Publish ref data memory optimisation ([#1140](https://github.com/autonomouslogic/eve-ref/issues/1140)) ([443295a](https://github.com/autonomouslogic/eve-ref/commit/443295a576669e26397ab8602caae23291deded5))
+
 ## [2.82.2](https://github.com/autonomouslogic/eve-ref/compare/2.82.1...2.82.2) (2026-10-13)
 
 
