@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -146,20 +147,27 @@ public class SyncFuzzworkOrdersets implements Command {
 	}
 
 	/**
-	 * Only ordersets after the latest existing ID in the main archive are synced. Old ordersets get moved off the
-	 * data site into the deep archive, and must not be downloaded again. Backfills are ignored entirely.
+	 * Ordersets are synced by comparing Fuzzwork's listing against the IDs on the main archive: anything at or above
+	 * the lowest existing ID, and not already present, is synced. Gaps are filled, so a download that failed
+	 * mid-run is retried on the next run. IDs below the lowest existing one are never synced: once the deep archive
+	 * deletes old ordersets off the data site, the lowest remaining ID moves up and those IDs must not come back.
+	 * Backfills are ignored entirely, both as existing files and as a floor: they have no year folder and may be
+	 * archived before or after the dated ordersets (PLAN 2.18), and Fuzzwork's listing starts well above their ID
+	 * range anyway.
 	 */
 	private Flowable<FuzzworkFile> getFilesToSync() {
 		return scanExistingFiles()
 				.toList()
 				.flatMapPublisher(existing -> {
-					var latest = existing.stream().mapToLong(Long::longValue).max();
-					if (latest.isEmpty()) {
+					var lowest = existing.stream().mapToLong(Long::longValue).min();
+					if (lowest.isEmpty()) {
 						return Flowable.error(new RuntimeException(
 								"No existing ordersets found in the main archive, refusing to sync everything"));
 					}
-					log.info("Latest existing orderset ID: {}", latest.getAsLong());
-					return scanFuzzworkFiles().filter(file -> file.getId() > latest.getAsLong());
+					var existingIds = new HashSet<>(existing);
+					log.info("Lowest existing orderset ID: {}", lowest.getAsLong());
+					return scanFuzzworkFiles()
+							.filter(file -> file.getId() >= lowest.getAsLong() && !existingIds.contains(file.getId()));
 				})
 				.sorted(Ordering.natural().onResultOf(FuzzworkFile::getId));
 	}

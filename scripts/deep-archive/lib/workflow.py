@@ -55,6 +55,13 @@ REMOTE_NAME = "everef"
 # etc.), linked from the docs and downloaded by URL; it's small enough to keep on HTTP.
 TORRENT_EXCLUDE = ["market-history", "killmails", "ccp"]
 
+# A path's year folder, for classify_path: the first 4-digit 19xx/20xx directory.
+YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
+
+# Dataset folder suffixes stripped by classify_path: "history" (e.g. market-orders/history) and "backfills"
+# (e.g. fuzzwork/ordersets/backfills) aren't their own datasets.
+DATASET_SUFFIXES = {"history", "backfills"}
+
 # Files modified less than this many years before today are never selected (01-find).
 MIN_AGE_YEARS = 2
 
@@ -71,6 +78,17 @@ DEEP_ARCHIVE_DIR = "deep-archive"
 # Cache-Control max-age for feed.xml and torrents.json (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
+
+# A torrent's comment (PLAN 2.4), built by render_comment and read back by 07-publish's read_torrent. {id} is the
+# torrent name.
+COMMENT_TEMPLATE = """EVE Ref Deep Archive: {id}
+Data from {years}. Datasets: {datasets}.
+What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
+File list: https://data.everef.net/deep-archive/{id}.txt"""
+COMMENT_RE = re.compile(r"^Data from (.+)\. Datasets: (.+)\.$", re.MULTILINE)
+
+# Longest "Datasets: ..." text in a comment before it's truncated (render_comment).
+DATASETS_MAX_LENGTH = 200
 
 # The workflow's steps, in order (README), numbered by their place here. Each scripted step's script is named after
 # its number and name, e.g. 01-find.py. Manual steps (MANUAL_STEPS) are numbered too, but have no script and no
@@ -495,3 +513,64 @@ def parse_modtime(value):
     zone = "+00:00" if zone == "Z" else zone
     parsed = datetime.datetime.fromisoformat(seconds + zone)
     return parsed.timestamp() + (int(fraction[:9].ljust(9, "0")) / 1e9 if fraction else 0)
+
+
+def iso(timestamp):
+    """A POSIX timestamp as files.jsonl/manifest.json record it: YYYY-MM-DDTHH:MM:SSZ, whole seconds, UTC."""
+    return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def parse_iso(value):
+    """The inverse of iso(): YYYY-MM-DDTHH:MM:SSZ as a POSIX timestamp."""
+    parsed = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+    return int(parsed.replace(tzinfo=datetime.timezone.utc).timestamp())
+
+
+def classify_path(path):
+    """
+    (year, dataset) for a site path (file name included, as files.jsonl and the manifest record it):
+    - year: the path's first YYYY directory (YEAR_DIR_RE), as an int; None if there isn't one. Callers that need a
+      fallback (01-find's "(no year folder)" flag, create_torrent's modification-year guess) check for None
+      themselves.
+    - dataset: the directories before that year folder, "/"-joined, with a trailing "history" or "backfills"
+      (DATASET_SUFFIXES) removed; the first three directories if there's no year folder. "" at the site root (never
+      reached: root-level files are skipped before classification) or directly under a year folder.
+    Used by 01-find's and 08-check-before-delete's dataset breakdowns, and by 04-make-torrent's and
+    create_torrent's "Datasets: ..." comment (render_comment), so a torrent's comment always groups paths the same
+    way the find report that selected them did.
+    """
+    dirs = path.split("/")[:-1]
+    year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)
+    if year_index is None:
+        year, dataset_parts = None, dirs[:3]
+    else:
+        year, dataset_parts = int(dirs[year_index]), dirs[:year_index]
+    while len(dataset_parts) > 1 and dataset_parts[-1] in DATASET_SUFFIXES:
+        dataset_parts = dataset_parts[:-1]
+    return year, "/".join(dataset_parts)
+
+
+def render_comment(torrent_id, years, datasets):
+    """The torrent's comment (PLAN 2.4, COMMENT_TEMPLATE) from the years and dataset names it holds (classify_path)."""
+    if not years:
+        years_text = "unknown years"
+    elif min(years) == max(years):
+        years_text = str(min(years))
+    else:
+        years_text = f"{min(years)}–{max(years)}"
+    datasets_text = ", ".join(sorted(datasets)) or "none"
+    if len(datasets_text) > DATASETS_MAX_LENGTH:
+        datasets_text = datasets_text[:DATASETS_MAX_LENGTH].rsplit(", ", 1)[0] + ", ..."
+    return COMMENT_TEMPLATE.format(id=torrent_id, years=years_text, datasets=datasets_text)
+
+
+def read_listing_gz(path):
+    """The paths in a gzip jsonl listing written by 01-find's write_listing (find/listing.jsonl.gz)."""
+    import gzip
+
+    paths = set()
+    with gzip.open(path, "rt", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                paths.add(json.loads(line)["path"])
+    return paths

@@ -92,6 +92,7 @@ from workflow import (  # noqa: E402
     TORRENT_ID_PREFIX,
     TORRENT_ID_RE,
     Workflow,
+    classify_path,
     data_remote,
     error,
     fail,
@@ -100,6 +101,7 @@ from workflow import (  # noqa: E402
     fmt_count,
     fmt_duration,
     fmt_size,
+    iso,
     join,
     lsjson,
     ok,
@@ -112,7 +114,6 @@ STEP = "find"
 INDEX_JSON = "index.json"
 IGNORED_NAMES = {"index.html"}
 LATEST_RE = re.compile(r"-latest\.")
-YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 NAME_DATE_RE = re.compile(r"(?<![0-9])([0-9]{4})-([0-9]{2})-([0-9]{2})(?![0-9])")
 NAME_YEAR_RE = re.compile(r"(?<![0-9])([0-9]{4})(?![0-9])")
 # Earlier numbers in a file name aren't years: EVE Online was released in 2003.
@@ -507,19 +508,16 @@ def add(counter, size):
 
 
 def dataset_of(path):
-    """The path before the year folder, without a trailing history; or the first three folders if there's no year."""
-    dirs = path.split("/")[:-1]
-    year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)
-    if year_index is None:
-        return "/".join(dirs[:3]) + " (no year folder)"
-    dataset_parts = dirs[:year_index]
-    if dataset_parts and dataset_parts[-1] == "history":
-        dataset_parts = dataset_parts[:-1]
-    return "/".join(dataset_parts) or "(root)"
+    """The path's dataset (classify_path), flagged when it has no year folder."""
+    year, dataset = classify_path(path)
+    if year is None:
+        return f"{dataset} (no year folder)"
+    return dataset or "(root)"
 
 
 def path_year(path):
-    return next((d for d in path.split("/")[:-1] if YEAR_DIR_RE.match(d)), "(none)")
+    year, _ = classify_path(path)
+    return str(year) if year is not None else "(none)"
 
 
 def partial_index_dirs(listing, selected):
@@ -809,10 +807,6 @@ def render_log(scan, data):
 def write_text(path, text):
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
-
-
-def iso(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 if __name__ == "__main__":

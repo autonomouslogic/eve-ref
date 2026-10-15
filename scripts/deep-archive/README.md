@@ -29,8 +29,16 @@ path.
 ## Tests
 
 `make test-deep-archive` (from the repo root) runs the unit tests in `tests/`: how `01-find` dates files from their
-names, what it skips, how published torrents and `index.json` files are handled, and how it chooses the cutoff.
-Standard library only; it uses your `python3`, or Docker if there isn't one.
+names, what it skips, how published torrents and `index.json` files are handled, and how it chooses the cutoff; the
+shared dataset/year classification and torrent comment (`lib/workflow.py`'s `classify_path`/`render_comment`), used by
+`01-find`, `04-make-torrent`, `08-check-before-delete` and `create_torrent.py` so their dataset breakdowns and the
+torrent's own comment always agree; the `.torrent` size estimate (`lib/torrent_size.py`), including a real torrent
+built with libtorrent and compared against the estimate for the same files; `07-publish`'s feed and catalogue
+building, round-tripped through its own checks; and `11-check-delete`'s checks, including that nothing outside the
+confirmed delete set went missing. Standard library only, with one exception: the real-torrent-size and feed-building
+tests need the libtorrent Python bindings (like the scripts they test) and are skipped, not failed, without them. Uses
+your `python3`, or Docker if there isn't one; the Docker image doesn't have libtorrent, so those tests are skipped
+there.
 
 ## Procedure
 
@@ -174,8 +182,10 @@ permanent.
 ```
 ./11-check-delete.py
 ```
-- Every file in the delete set is gone, no folder holds only index files, and nothing else changed (files that
-  failed the check in step 08 are still there).
+- Every file in the delete set is gone, no folder holds only index files, and nothing else changed: files that
+  failed the check in step 08 are still there, and so is every other path that was on the bucket when `01-find` ran
+  (step 08's pre-delete check already covers the delete set itself; this is what would catch `10-delete` deleting,
+  or anything else removing, a path outside it). New uploads since `01-find` ran are fine; they're not checked.
 
 ### 12: Full DataIndex (manual)
 ```
@@ -254,7 +264,7 @@ scripts/deep-archive/
   torrents.env.example             # copy to torrents.env (not committed)
   00-preflight.py  01-find.py  …   # the steps
   create_torrent.py                # experiment: measure .torrent sizes; becomes 04-make-torrent
-  lib/workflow.py                  # shared: settings, size limits, completion files, output
+  lib/workflow.py                  # shared: settings, size limits, completion files, output, dataset/date helpers
   lib/trackers.py                  # downloads the tracker lists (00-preflight, 04-make-torrent)
   lib/torrent_size.py              # .torrent size estimate from paths and sizes, for 01-find's cutoff
   tests/                           # unit tests: make test-deep-archive (from the repo root)

@@ -31,7 +31,6 @@ Needs rclone.
 """
 
 import argparse
-import datetime
 import json
 import os
 import sys
@@ -47,8 +46,10 @@ from workflow import (  # noqa: E402
     fmt_bytes,
     fmt_count,
     fmt_duration,
+    iso,
     lsjson,
     ok,
+    parse_iso,
     rclone,
     rclone_run,
     section,
@@ -214,15 +215,6 @@ def append_deleted(path, files, kind):
     with open(path, "a", encoding="utf-8") as f:
         for item in files:
             f.write(json.dumps({**item, "kind": kind}) + "\n")
-
-
-def parse_iso(value):
-    parsed = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
-    return int(parsed.replace(tzinfo=datetime.timezone.utc).timestamp())
-
-
-def iso(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 if __name__ == "__main__":

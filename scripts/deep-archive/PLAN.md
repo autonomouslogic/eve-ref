@@ -829,14 +829,17 @@ Must be handled **before** deleting the affected datasets:
 The sync commands must never fetch data the archival process removed. The change must be **deployed before the
 first deletion** of `fuzzwork/` data (README, "Setup"). Tests first (repo convention).
 
-**`SyncFuzzworkOrdersets`, decided: cutoff at the lowest ID on the data site.** Reopened (2026-10-12): the code now
-syncs only IDs above the latest ID on the site, without filling gaps (open question 16). The rest of this section
-describes the lowest-ID rule.
+**`SyncFuzzworkOrdersets`, decided (2026-10-14): cutoff at the lowest ID on the data site, gaps above it filled.**
+Reopened 2026-10-12, when the code briefly synced only IDs above the latest one on the site without filling gaps;
+back to the lowest-ID rule described below (open question 16).
 
 - It decides what to sync by **sequence ID**, comparing Fuzzwork's listing with the IDs found on the data site. The
   year of an orderset is only known after downloading it, so a date cutoff would mean re-downloading every archived
   orderset on every run.
-- New rule: skip any Fuzzwork ID **below the lowest ID currently on the data site**. Gaps above it are still filled.
+- Skip any Fuzzwork ID **below the lowest ID currently on the data site**; sync any ID at or above it that isn't
+  already present, gaps included. A download that fails mid-run (`CONCURRENCY`, 4 at a time) is retried on the next
+  run instead of leaving a permanent gap; an ID the archival process already deleted is never retried, since it's
+  below the lowest remaining ID.
 - **Count only the dated layout** (`fuzzwork/ordersets/YYYY/…`), not `backfills/`. The backfills (IDs 21000–59999)
   have no year folder and may be archived before or after the dated ordersets (by upload date, 2.2), and Fuzzwork's
   listing starts at 90019 anyway. If the backfills counted while still on the site, the lowest ID would be 21000
@@ -1022,7 +1025,7 @@ Decided so far: one torrent per workflow, as big as the size limits allow (2.1, 
 (a `.torrent` estimate of at most 10 MB, `MAX_BYTES` 1 TiB, 32 MiB pieces); selection by date (the earliest of the
 modification date and dates in the file name, 2.2) with a 2-year minimum age;
 torrent IDs from the cutoff date; exclusions `market-history`, `killmails` and `ccp`; Fuzzwork in scope with a sync
-cutoff (lowest or latest ID: reopened, question 16); a README inside the torrent; hybrid v1+v2; no
+cutoff (lowest ID, gaps filled: 2.18, question 16); a README inside the torrent; hybrid v1+v2; no
 notice period and no announcements; deletion last; no MD5 matching; no Cloudflare
 purge; `DataCrawler` fails on missing indexes; a manual process with numbered scripts and completion files in
 `deep-archive/`; the data bucket is reached only through rclone with one B2 key, soft deletes only (2.21); no
@@ -1063,13 +1066,12 @@ Still open:
     `10-delete` (2.14 doesn't rely on it).
 15. Timing against the storage migration: run the first workflows before, after, or as part of it? Archiving first
     means ~4 TiB less to migrate; migrating first means the process runs on the final storage.
-16. **Fuzzwork sync: lowest ID with gap filling (2.18 as decided) or latest ID without?** The code now syncs only IDs
-    above the latest one on the site. Risk: it downloads 4 ordersets at a time, so if one fails while a later one
-    uploads, the next run starts after the later one and the failed orderset is never fetched. A permanent gap, from
-    a network blip. The lowest-ID rule already follows the archive (deletes take the oldest files, so the lowest ID
-    moves up); latest-ID only helps if archiving could delete a range while keeping older ordersets. If latest-ID
-    stays, sync one orderset at a time so a failure stops the run before anything later is uploaded. 2.18 needs
-    updating either way.
+16. ~~Fuzzwork sync: lowest ID with gap filling (2.18 as decided) or latest ID without?~~ **Decided (2026-10-14):
+    lowest ID, gaps filled.** A brief attempt at latest-ID-only (no gap filling) risked a permanent gap: it
+    downloads 4 ordersets at a time (`CONCURRENCY`), so a failure on one while a later one uploads would mean the
+    next run starts after the later one and never retries the failed one. The lowest-ID rule already follows the
+    archive (deletes take the oldest files, so the lowest remaining ID moves up and anything below it is never
+    retried), and fills gaps above it, so a failed download is simply retried on the next run.
 17. **4-digit IDs read as years (2.2).** Any 4-digit number from 2003 on in a file name dates the file 31 December of
     that "year", possibly much too early. Fuzzwork IDs are clear (backfills 21000–59999, live from 90019); other
     datasets aren't checked. The first real run's `find.log` ("dated by a year in the name") answers it; if IDs show

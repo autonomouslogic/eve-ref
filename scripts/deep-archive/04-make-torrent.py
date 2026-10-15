@@ -38,7 +38,6 @@ Needs libtorrent 2.x, and HTTPS access to raw.githubusercontent.com for the trac
 
 import json
 import os
-import re
 import signal
 import sys
 import time
@@ -50,6 +49,7 @@ from workflow import (  # noqa: E402
     TORRENT_EXCLUDE,
     TORRENT_ID_PREFIX,
     Workflow,
+    classify_path,
     error,
     fail,
     file_list_problems,
@@ -57,22 +57,15 @@ from workflow import (  # noqa: E402
     fmt_count,
     fmt_duration,
     ok,
+    render_comment,
     section,
 )
 from trackers import TRACKER_SOURCES, TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
 STEP = "make-torrent"
 README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "README-template.txt")
-YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
-DATASET_SUFFIXES = {"history", "backfills"}
-DATASETS_MAX_LENGTH = 200
 CREATOR = "EVE Ref"
 LOG_SAMPLE = 20
-
-COMMENT_TEMPLATE = """EVE Ref Deep Archive: {id}
-Data from {years}. Datasets: {datasets}.
-What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
-File list: https://data.everef.net/deep-archive/{id}.txt"""
 
 
 def main():
@@ -286,37 +279,16 @@ def read_manifest(path, torrent_id):
 
 
 def classify_all(files):
-    """Distinct years and dataset folders across the manifest paths (PLAN 2.4's comment)."""
+    """Distinct years and dataset folders across the manifest paths (classify_path, PLAN 2.4's comment)."""
     years = set()
     datasets = set()
     for path in files:
-        dirs = path.split("/")[:-1]
-        if not dirs:
-            continue
-        year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)
-        if year_index is None:
-            dataset = dirs[:3]
-        else:
-            years.add(int(dirs[year_index]))
-            dataset = dirs[:year_index]
-        while len(dataset) > 1 and dataset[-1] in DATASET_SUFFIXES:
-            dataset = dataset[:-1]
+        year, dataset = classify_path(path)
+        if year is not None:
+            years.add(year)
         if dataset:
-            datasets.add("/".join(dataset))
+            datasets.add(dataset)
     return years, datasets
-
-
-def render_comment(torrent_id, years, datasets):
-    if not years:
-        years_text = "unknown years"
-    elif min(years) == max(years):
-        years_text = str(min(years))
-    else:
-        years_text = f"{min(years)}–{max(years)}"
-    datasets_text = ", ".join(sorted(datasets)) or "none"
-    if len(datasets_text) > DATASETS_MAX_LENGTH:
-        datasets_text = datasets_text[:DATASETS_MAX_LENGTH].rsplit(", ", 1)[0] + ", ..."
-    return COMMENT_TEMPLATE.format(id=torrent_id, years=years_text, datasets=datasets_text)
 
 
 def write_readme(path, torrent_id, files, years, datasets):

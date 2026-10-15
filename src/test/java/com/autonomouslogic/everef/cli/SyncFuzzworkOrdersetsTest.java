@@ -72,7 +72,7 @@ public class SyncFuzzworkOrdersetsTest {
 
 	@Test
 	@SneakyThrows
-	void shouldOnlySyncOrdersetsAfterLatestExistingId() {
+	void shouldOnlySyncOrdersetsAtOrAboveLowestExistingId() {
 		existingPaths.add("fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-10.csv.gz");
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
 		fuzzworkIds.addAll(List.of(9L, 10L, 50L, 100L, 101L));
@@ -87,18 +87,36 @@ public class SyncFuzzworkOrdersetsTest {
 
 	@Test
 	@SneakyThrows
-	void shouldNotSyncGapsBeforeLatestExistingId() {
+	void shouldFillGapsAboveLowestExistingId() {
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-102-2026-01-01_01-00-00.csv.gz");
 		fuzzworkIds.addAll(List.of(100L, 101L, 102L, 103L, 104L));
 
 		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
 
-		assertEquals(List.of(103L, 104L), downloadedIds.stream().sorted().toList());
+		assertEquals(List.of(101L, 103L, 104L), downloadedIds.stream().sorted().toList());
 		assertEquals(
 				List.of(
+						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz",
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-103-2026-01-02_12-00-00.csv.gz",
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-104-2026-01-02_12-00-00.csv.gz"),
+				uploadedOrdersets());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotRetryIdsBelowLowestExistingId() {
+		// IDs 1-99 were archived into a torrent and deleted from the main archive (PLAN 2.18): the lowest
+		// remaining ID is 100, and Fuzzwork's listing still has 50 from before it was archived. It must stay
+		// deleted, not be re-downloaded.
+		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
+		fuzzworkIds.addAll(List.of(50L, 100L, 101L));
+
+		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
+
+		assertEquals(List.of(101L), downloadedIds);
+		assertEquals(
+				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
 	}
 

@@ -24,7 +24,6 @@ import argparse
 import datetime
 import math
 import os
-import re
 import signal
 import sys
 import time
@@ -34,26 +33,19 @@ import libtorrent as lt
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
     PIECE_SIZE,
+    classify_path,
     fail,
     fmt_bytes,
     fmt_count,
     fmt_duration,
     load_env,
     ok,
+    render_comment,
     section,
 )
 from trackers import TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
-YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
-DATASET_SUFFIXES = {"history", "backfills"}
-DATASETS_MAX_LENGTH = 200
 CREATOR = "EVE Ref"
-
-# PLAN 2.4. {ID} is the torrent name.
-COMMENT_TEMPLATE = """EVE Ref Deep Archive: {id}
-Data from {years}. Datasets: {datasets}.
-What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
-File list: https://data.everef.net/deep-archive/{id}.txt"""
 
 
 def main():
@@ -170,37 +162,18 @@ def add_files(source, name):
 
 def classify(path, mtime, years, datasets):
     """
-    Year: the first YYYY directory, or the modification year without one. Dataset: the directories before the year
-    (or the first three without one), minus a trailing history/backfills. Root-level files (the README) count
-    for neither.
+    Year and dataset for a path (classify_path), falling back to the modification year when there's no year
+    folder. Root-level files (the README) count for neither.
     """
-    dirs = path.split("/")[:-1]
-    if not dirs:
-        return
-    year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)
-    if year_index is None:
+    year, dataset = classify_path(path)
+    if year is None:
+        if "/" not in path:
+            return
         years.add(datetime.datetime.fromtimestamp(mtime, datetime.timezone.utc).year)
-        dataset = dirs[:3]
     else:
-        years.add(int(dirs[year_index]))
-        dataset = dirs[:year_index]
-    while len(dataset) > 1 and dataset[-1] in DATASET_SUFFIXES:
-        dataset = dataset[:-1]
+        years.add(year)
     if dataset:
-        datasets.add("/".join(dataset))
-
-
-def render_comment(name, years, datasets):
-    if not years:
-        years_text = "unknown years"
-    elif min(years) == max(years):
-        years_text = str(min(years))
-    else:
-        years_text = f"{min(years)}–{max(years)}"
-    datasets_text = ", ".join(sorted(datasets)) or "none"
-    if len(datasets_text) > DATASETS_MAX_LENGTH:
-        datasets_text = datasets_text[:DATASETS_MAX_LENGTH].rsplit(", ", 1)[0] + ", ..."
-    return COMMENT_TEMPLATE.format(id=name, years=years_text, datasets=datasets_text)
+        datasets.add(dataset)
 
 
 def set_fake_hashes(ct, piece_size):

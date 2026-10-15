@@ -42,7 +42,6 @@ import datetime
 import difflib
 import json
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -56,6 +55,7 @@ import libtorrent as lt
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
+    COMMENT_RE,
     DATA_BASE_URL,
     DEEP_ARCHIVE_DIR,
     FEED_CACHE_MAX_AGE_SECONDS,
@@ -77,7 +77,6 @@ STEP = "publish"
 # Magnet links carry the first trackers of the torrent's own list (ngosang's ranked best first, lib/trackers.py), to
 # keep them short.
 MAGNET_TRACKERS = 10
-COMMENT_RE = re.compile(r"^Data from (.+)\. Datasets: (.+)\.$", re.MULTILINE)
 
 UPLOADS = (
     ("{id}.torrent", "application/x-bittorrent"),

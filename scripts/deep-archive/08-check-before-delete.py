@@ -31,10 +31,8 @@ Environment (or torrents.env, see lib/workflow.py):
 Needs rclone and libtorrent 2.x.
 """
 
-import datetime
 import json
 import os
-import re
 import sys
 import time
 import urllib.error
@@ -48,15 +46,18 @@ from qbittorrent import Client, QbittorrentError  # noqa: E402
 from workflow import (  # noqa: E402
     DEEP_ARCHIVE_DIR,
     Workflow,
+    classify_path,
     data_remote,
     error,
     fail,
     fmt_bytes,
     fmt_count,
     fmt_duration,
+    iso,
     join,
     lsjson,
     ok,
+    parse_iso,
     qbittorrent_settings,
     rclone,
     section,
@@ -64,7 +65,6 @@ from workflow import (  # noqa: E402
 
 STEP = "check-before-delete"
 DOCS_PAGE = "https://docs.everef.net/datasets/deep-archive.html"
-YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 LOG_SAMPLE = 20
 
 
@@ -214,11 +214,6 @@ def read_selection(path):
     return selection
 
 
-def parse_iso(value):
-    parsed = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
-    return int(parsed.replace(tzinfo=datetime.timezone.utc).timestamp())
-
-
 def build_delete_set(data_paths, manifest, selection, fresh):
     confirmed = []
     failed = []
@@ -242,18 +237,10 @@ def build_delete_set(data_paths, manifest, selection, fresh):
 
 
 def dataset_of(path):
-    dirs = path.split("/")[:-1]
-    year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)
-    if year_index is None:
-        return "/".join(dirs[:3]) + " (no year folder)"
-    dataset_parts = dirs[:year_index]
-    if dataset_parts and dataset_parts[-1] == "history":
-        dataset_parts = dataset_parts[:-1]
-    return "/".join(dataset_parts) or "(root)"
-
-
-def iso(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    year, dataset = classify_path(path)
+    if year is None:
+        return f"{dataset} (no year folder)"
+    return dataset or "(root)"
 
 
 if __name__ == "__main__":

@@ -71,8 +71,10 @@ from workflow import (  # noqa: E402
     fmt_bytes,
     fmt_count,
     fmt_duration,
+    iso,
     local_copy_dir,
     ok,
+    parse_iso,
     rclone_run,
     section,
     site_path_problem,
@@ -400,12 +402,6 @@ def read_selection(path, find_done):
     return files
 
 
-def parse_iso(value):
-    """files.jsonl's last_modified, YYYY-MM-DDTHH:MM:SSZ, as a POSIX timestamp."""
-    parsed = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
-    return int(parsed.replace(tzinfo=datetime.timezone.utc).timestamp())
-
-
 class State:
     def __init__(self):
         self.matching = set()  # paths on disk with the listed size and modification time
@@ -517,10 +513,6 @@ def report_problems(title, items):
     error(f"{title}: {fmt_count(len(items))}, e.g.")
     for item in items[:LOG_SAMPLE]:
         error(f"  {item}")
-
-
-def iso(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 if __name__ == "__main__":
