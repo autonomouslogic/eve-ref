@@ -46,7 +46,6 @@ dependencies {
 	implementation project(":database")
 	implementation "com.google.dagger:dagger:2.60.1"
 	implementation "com.google.guava:guava:33.7.1-jre"
-	implementation "com.bucket4j:bucket4j_jdk17-core:8.21.0"
 	implementation "org.apache.logging.log4j:log4j-api:2.26.1"
 	implementation "org.apache.logging.log4j:log4j-core:2.26.1"
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.26.1"

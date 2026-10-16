@@ -688,52 +688,6 @@ public class Configs {
 			.build();
 
 	/**
-	 * Whether the data-server command rate limits clients per IP. Only requests that fetch an object from B2 (getObject)
-	 * cost a token; headObject calls are free.
-	 */
-	public static final Config<Boolean> DATA_SERVER_RATE_LIMIT_ENABLED = Config.<Boolean>builder()
-			.name("DATA_SERVER_RATE_LIMIT_ENABLED")
-			.defaultValue(true)
-			.type(Boolean.class)
-			.build();
-
-	/**
-	 * Per-IP rate limit bucket size: how many objects a client can fetch from B2 in a burst.
-	 */
-	public static final Config<Integer> DATA_SERVER_RATE_LIMIT_BURST = Config.<Integer>builder()
-			.name("DATA_SERVER_RATE_LIMIT_BURST")
-			.defaultValue(30)
-			.type(Integer.class)
-			.build();
-
-	/**
-	 * Per-IP rate limit sustained rate, in objects fetched from B2 per second.
-	 */
-	public static final Config<Double> DATA_SERVER_RATE_LIMIT_PER_S = Config.<Double>builder()
-			.name("DATA_SERVER_RATE_LIMIT_PER_S")
-			.defaultValue(1.0)
-			.type(Double.class)
-			.build();
-
-	/**
-	 * Maximum number of client IPs the rate limiter tracks at once.
-	 */
-	public static final Config<Integer> DATA_SERVER_RATE_LIMIT_MAX_CLIENTS = Config.<Integer>builder()
-			.name("DATA_SERVER_RATE_LIMIT_MAX_CLIENTS")
-			.defaultValue(100_000)
-			.type(Integer.class)
-			.build();
-
-	/**
-	 * Comma-separated client IPs that are never rate limited, such as health checks and our own jobs.
-	 */
-	public static final Config<String> DATA_SERVER_RATE_LIMIT_ALLOWLIST = Config.<String>builder()
-			.name("DATA_SERVER_RATE_LIMIT_ALLOWLIST")
-			.defaultValue("")
-			.type(String.class)
-			.build();
-
-	/**
 	 * How long the data-server command caches successful HEAD results from the data bucket.
 	 * Set to zero to disable.
 	 */

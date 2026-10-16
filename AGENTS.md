@@ -104,10 +104,9 @@ reading env vars ad hoc.
 - `dataserver/`: the `data-server` command runs a separate **Helidon** webserver that streams
   data.everef.net straight through from B2 (replacing the old Cloudflare Worker), with RFC 9110
   conditional-request handling, a write-stall watchdog for dead streams, and the `data` S3 client (bucket from `DATA_PATH`).
-  Per-IP rate limiting (Bucket4j, `ClientRateLimiter`): only `getObject` calls to B2 cost a token; `headObject`, cached answers
-  and 304/412 responses are free. Client IP is `CF-Connecting-IP`, then `X-Forwarded-For`, then the network peer; IPv6 is keyed on
-  its /64. Limited requests get 429 + `Retry-After`, as the `data/rate-limited.pug` page for browsers. Config: `DATA_SERVER_RATE_LIMIT_*`.
-  See `data-server-plan.md` for the full design.
+  Client IP (for access logging) is resolved via `CF-Connecting-IP`, then `X-Forwarded-For`, then the network peer.
+  Request rate limiting is handled by a proxy in front of this service, not here. See `data-server-plan.md` for the
+  full design.
 - Jackson is the serialization workhorse (JSON/YAML/CSV). Note the build pins **two** Jackson lines:
   Jackson 3 (`tools.jackson.*`) as primary, and Jackson 2 (`com.fasterxml.jackson.*`) kept only for
   swagger-core and the dynamo-mapper — keep imports on the right one.

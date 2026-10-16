@@ -4,7 +4,6 @@ import com.google.common.net.InetAddresses;
 import io.helidon.http.HeaderName;
 import io.helidon.http.HeaderNames;
 import io.helidon.webserver.http.ServerRequest;
-import java.net.Inet6Address;
 import java.util.Optional;
 
 /**
@@ -16,7 +15,7 @@ public final class ClientIps {
 
 	private ClientIps() {}
 
-	/** CF-Connecting-IP, then X-Forwarded-For, then the network peer. Also the rate limiting key. */
+	/** CF-Connecting-IP, then X-Forwarded-For, then the network peer. */
 	public static String fromRequest(ServerRequest req) {
 		return resolve(
 				req.headers().first(CF_CONNECTING_IP).orElse(null),
@@ -35,28 +34,5 @@ public final class ClientIps {
 		}
 		var first = headerValue.split(",", 2)[0].trim();
 		return InetAddresses.isInetAddress(first) ? Optional.of(first) : Optional.empty();
-	}
-
-	/**
-	 * The key a client is rate limited under. IPv6 addresses are reduced to their /64 so one host can't rotate through
-	 * its address block. Anything that isn't an IP literal is used as is.
-	 */
-	public static String rateLimitKey(String ip) {
-		if (ip == null || !InetAddresses.isInetAddress(ip)) {
-			return ip;
-		}
-		var address = InetAddresses.forString(ip);
-		if (address instanceof Inet6Address v6) {
-			var bytes = v6.getAddress();
-			for (int i = 8; i < bytes.length; i++) {
-				bytes[i] = 0;
-			}
-			try {
-				return InetAddresses.toAddrString(java.net.InetAddress.getByAddress(bytes)) + "/64";
-			} catch (java.net.UnknownHostException e) {
-				throw new IllegalStateException(e);
-			}
-		}
-		return InetAddresses.toAddrString(address);
 	}
 }

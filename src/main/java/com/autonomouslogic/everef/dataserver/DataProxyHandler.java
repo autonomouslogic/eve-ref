@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.dataserver;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.pug.PugHelper;
 import com.autonomouslogic.everef.s3.S3HeaderNames;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -66,8 +65,6 @@ public class DataProxyHandler implements Handler {
 
 	private final S3AsyncClient client;
 	private final StallWatchdog watchdog;
-	private final ClientRateLimiter rateLimiter;
-	private final PugHelper pugHelper;
 	private final String version;
 	private final String bucket;
 	private final String prefix;
@@ -83,16 +80,9 @@ public class DataProxyHandler implements Handler {
 	private final Cache<String, UpstreamStatusException> notFoundCache;
 
 	@Inject
-	protected DataProxyHandler(
-			@Named("data") S3AsyncClient client,
-			StallWatchdog watchdog,
-			UrlParser urlParser,
-			ClientRateLimiter rateLimiter,
-			PugHelper pugHelper) {
+	protected DataProxyHandler(@Named("data") S3AsyncClient client, StallWatchdog watchdog, UrlParser urlParser) {
 		this.client = client;
 		this.watchdog = watchdog;
-		this.rateLimiter = rateLimiter;
-		this.pugHelper = pugHelper;
 		this.version = Configs.EVE_REF_VERSION.getRequired();
 		var dataPath = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		this.bucket = dataPath.getBucket();
@@ -149,11 +139,6 @@ public class DataProxyHandler implements Handler {
 			captureSentry(req, res, "Upstream request failed", e.url, null, null, e.getCause());
 			sendPlain(res, method, Status.BAD_GATEWAY_502, "Bad gateway\n");
 			access.outcome = "ok";
-		} catch (RateLimitedException e) {
-			sendRateLimited(req, res, method, e.retryAfterSeconds);
-			// The GET was refused before it was made.
-			access.upstreamCalls = access.upstreamCalls.equals("GET") ? "NONE" : "HEAD";
-			access.outcome = "rate_limited";
 		}
 	}
 
@@ -367,11 +352,6 @@ public class DataProxyHandler implements Handler {
 	private UpstreamBody getUncached(String key, String versionId, AccessLog access)
 			throws UpstreamRequestException, UpstreamStatusException {
 		var url = s3Url(key, versionId);
-		// Only a getObject costs a token. headObject calls and cached answers are free.
-		var limit = rateLimiter.tryConsume(access.clientIp);
-		if (!limit.allowed()) {
-			throw new RateLimitedException(limit.retryAfterSeconds());
-		}
 		var request = GetObjectRequest.builder()
 				.bucket(bucket)
 				.key(key)
@@ -673,29 +653,6 @@ public class DataProxyHandler implements Handler {
 		sendBody(res, method, status, body);
 	}
 
-	private void sendRateLimited(ServerRequest req, ServerResponse res, String method, long retryAfterSeconds) {
-		res.header("Accept-Ranges", "none");
-		res.header("Server", "eve-ref/" + version);
-		res.header("Cache-Control", "no-store");
-		res.header("Retry-After", String.valueOf(retryAfterSeconds));
-		var wantsHtml = req.headers().first(HeaderNames.ACCEPT).orElse("").contains("text/html");
-		if (!wantsHtml) {
-			sendBody(res, method, Status.create(429, "Too Many Requests"), "Too many requests\n");
-			return;
-		}
-		var html = pugHelper.renderTemplate(
-				"data/rate-limited.pug",
-				Map.of("pageTitle", "Too many requests", "retryAfterSeconds", retryAfterSeconds));
-		res.header("Content-Type", "text/html; charset=utf-8");
-		res.status(Status.create(429, "Too Many Requests"));
-		if (method.equals("HEAD")) {
-			res.contentLength(html.length);
-			res.send();
-		} else {
-			res.send(html);
-		}
-	}
-
 	private void sendBody(ServerResponse res, String method, Status status, String body) {
 		res.header("Content-Type", "text/plain");
 		res.status(status);
@@ -768,18 +725,6 @@ public class DataProxyHandler implements Handler {
 		@Override
 		public void close() throws IOException {
 			stream.close();
-		}
-	}
-
-	/**
-	 * The client is out of rate limit tokens, so no object was fetched from upstream.
-	 */
-	private static class RateLimitedException extends RuntimeException {
-		final long retryAfterSeconds;
-
-		RateLimitedException(long retryAfterSeconds) {
-			super("Rate limited", null, false, false);
-			this.retryAfterSeconds = retryAfterSeconds;
 		}
 	}
 
