@@ -14,7 +14,6 @@ import lombok.extern.log4j.Log4j2;
  * Cuts off response streams that have made no write progress for {@code DATA_SERVER_WRITE_STALL_TIMEOUT}, so a
  * client that stops reading can't hold a virtual thread, buffers and an upstream connection forever. A slow
  * client that keeps reading, however long the download takes, is never cut off: only lack of progress counts.
- * See data-server-plan.md step 12a.
  */
 @Singleton
 @Log4j2

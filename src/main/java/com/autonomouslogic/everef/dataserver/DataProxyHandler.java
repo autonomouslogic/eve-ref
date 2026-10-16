@@ -46,7 +46,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * Handles GET and HEAD requests for the data-server command, streaming objects straight through from B2 using the
- * data S3 client. See data-server-plan.md for the full design this follows step by step.
+ * data S3 client.
  */
 @Singleton
 @Log4j2

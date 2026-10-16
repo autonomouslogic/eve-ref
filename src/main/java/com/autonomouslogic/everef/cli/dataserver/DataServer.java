@@ -26,7 +26,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Streaming proxy for data.everef.net, backed directly by B2. See data-server-plan.md for the full design.
+ * Streaming proxy for data.everef.net, backed directly by B2.
  */
 @Log4j2
 public class DataServer implements Command {

@@ -8,8 +8,8 @@ import java.util.List;
  * unconditional response would be 2xx (the caller handles the §13.2.1 "resource doesn't exist" case before
  * reaching here, since a missing file must stay 404 even with {@code If-Match: *}).
  *
- * <p>{@code Range} / {@code If-Range} are never passed in: they're ignored entirely (data-server-plan.md
- * step 4), so §13.2.2 step 5 never applies.
+ * <p>{@code Range} / {@code If-Range} are never passed in: they're ignored entirely, so §13.2.2 step 5
+ * never applies.
  */
 public class Preconditions {
 	private Preconditions() {}

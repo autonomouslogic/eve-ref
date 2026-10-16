@@ -105,8 +105,7 @@ reading env vars ad hoc.
   data.everef.net straight through from B2 (replacing the old Cloudflare Worker), with RFC 9110
   conditional-request handling, a write-stall watchdog for dead streams, and the `data` S3 client (bucket from `DATA_PATH`).
   Client IP (for access logging) is resolved via `CF-Connecting-IP`, then `X-Forwarded-For`, then the network peer.
-  Request rate limiting is handled by a proxy in front of this service, not here. See `data-server-plan.md` for the
-  full design.
+  Request rate limiting is handled by a proxy in front of this service, not here.
 - Jackson is the serialization workhorse (JSON/YAML/CSV). Note the build pins **two** Jackson lines:
   Jackson 3 (`tools.jackson.*`) as primary, and Jackson 2 (`com.fasterxml.jackson.*`) kept only for
   swagger-core and the dynamo-mapper — keep imports on the right one.

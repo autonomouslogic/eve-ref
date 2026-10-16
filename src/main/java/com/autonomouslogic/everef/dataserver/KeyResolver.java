@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Resolves a client's raw, undecoded request path into a B2 object key, or rejects it as a bad request.
  * Kept separate from {@code DataProxyHandler} so the path-safety and key-encoding logic can be unit tested
- * without HTTP. See data-server-plan.md step 3.
+ * without HTTP.
  */
 public class KeyResolver {
 	/**

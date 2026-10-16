@@ -33,8 +33,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 /**
  * Proves that many concurrent slow readers don't become a capacity problem: a fast request stays fast while
- * hundreds of other streams are open, and the stall watchdog cleans every stream up once readers stop. See
- * data-server-plan.md, "Concurrency and slow readers".
+ * hundreds of other streams are open, and the stall watchdog cleans every stream up once readers stop.
  */
 @Tag("slow")
 @SetEnvironmentVariable(key = "HTTP_PORT", value = "" + DataServerConcurrencyTest.DATA_SERVER_TEST_PORT)
