@@ -38,7 +38,7 @@ publish = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publish)  # also needs libtorrent, already checked above
 
 
-def entry(id_, pub_date, v1_hash="a" * 40, v2_hash="b" * 64, files=2, size=1000, years="2020–2021", datasets="a, b"):
+def entry(id_, pub_date, v1_hash="a" * 40, v2_hash="b" * 64, files=2, size=1000):
     return {
         "id": id_,
         "torrent_bytes": 12345,
@@ -47,8 +47,6 @@ def entry(id_, pub_date, v1_hash="a" * 40, v2_hash="b" * 64, files=2, size=1000,
         "pub_date": pub_date,
         "files": files,
         "bytes": size,
-        "years": years,
-        "datasets": datasets,
         "comment": render_comment(id_, {2020, 2021}, {"a", "b"}),
         "trackers": ["udp://tracker.example.com:1337/announce"],
     }
@@ -210,8 +208,6 @@ class ReadTorrentTest(unittest.TestCase):
         self.assertEqual(result["v1_info_hash"], str(ti.info_hashes().v1))
         self.assertEqual(result["files"], 1)  # the README isn't counted
         self.assertEqual(result["bytes"], 100)
-        self.assertEqual(result["years"], "2020–2021")
-        self.assertEqual(result["datasets"], "a, b")
         self.assertEqual(result["trackers"], ["udp://tracker.example.com:1337/announce"])
 
     def test_rejects_a_name_that_is_not_a_torrent_id(self):

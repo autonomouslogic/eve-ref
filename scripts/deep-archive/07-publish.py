@@ -14,7 +14,7 @@ Needs 06-check-seed's completion file, and refuses to run twice (lib/workflow.py
    published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
 2. Rebuild everef-deep-archive.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth (PLAN 2.5). Each torrent
-   is read with libtorrent: name (the ID), creation date, comment (years/datasets, PLAN 2.4), v1/v2 info-hashes, data
+   is read with libtorrent: name (the ID), creation date, v1/v2 info-hashes, data
    file count and bytes (the README excluded), trackers. Magnet links carry the torrent's first MAGNET_TRACKERS
    trackers; newest first.
 3. Show the diff against what's published, and ask. Before uploading, save the published everef-deep-archive.xml to
@@ -54,7 +54,6 @@ import libtorrent as lt
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
-    COMMENT_RE,
     DATA_BASE_URL,
     DEEP_ARCHIVE_DIR,
     FEED_CACHE_MAX_AGE_SECONDS,
@@ -64,7 +63,6 @@ from workflow import (  # noqa: E402
     error,
     fail,
     fmt_bytes,
-    fmt_count,
     fmt_duration,
     join,
     ok,
@@ -250,8 +248,6 @@ def read_torrent(deep_archive, tmp_dir, name):
             continue
         files += 1
         data_bytes += storage.file_size(i)
-    match = COMMENT_RE.search(ti.comment() or "")
-    years, datasets = (match.group(1), match.group(2)) if match else ("unknown years", "none")
     return {
         "id": torrent_id,
         "torrent_bytes": size,
@@ -260,8 +256,6 @@ def read_torrent(deep_archive, tmp_dir, name):
         "pub_date": datetime.datetime.fromtimestamp(ti.creation_date(), datetime.timezone.utc),
         "files": files,
         "bytes": data_bytes,
-        "years": years,
-        "datasets": datasets,
         "comment": ti.comment() or "",
         "trackers": [t.url for t in sorted(ti.trackers(), key=lambda t: t.tier)],
     }
@@ -275,17 +269,15 @@ def build_feed(entries):
     items = []
     for e in sorted(entries, key=lambda e: e["pub_date"], reverse=True):
         magnet = build_magnet(e["id"], e["v1_info_hash"], e["v2_info_hash"], e["trackers"][:MAGNET_TRACKERS])
+        torrent_link = xml_escape.escape(torrent_url(e["id"], "torrent"))
         items.append(
             f"""    <item>
       <title>{xml_escape.escape(e['id'])}</title>
-      <link>{xml_escape.escape(torrent_url(e['id'], 'torrent'))}</link>
+      <link>{torrent_link}</link>
       <guid isPermaLink="false">{e['v1_info_hash']}</guid>
       <pubDate>{e['pub_date'].strftime('%a, %d %b %Y %H:%M:%S GMT')}</pubDate>
-      <description>{xml_escape.escape(
-          f"EVE Ref Deep Archive, {fmt_bytes(e['bytes'])}, {fmt_count(e['files'])} files. "
-          f"Datasets: {e['datasets']}. File list: {torrent_url(e['id'], 'txt')}"
-      )}</description>
-      <enclosure url="{xml_escape.escape(torrent_url(e['id'], 'torrent'))}" length="{e['torrent_bytes']}"
+      <description>{xml_escape.escape(f"EVE Ref Deep Archive: {e['id']}")}</description>
+      <enclosure url="{torrent_link}" length="{e['torrent_bytes']}"
                  type="application/x-bittorrent"/>
       <torrent:infoHash>{e['v1_info_hash']}</torrent:infoHash>
       <torrent:magnetURI><![CDATA[{magnet}]]></torrent:magnetURI>
@@ -296,7 +288,7 @@ def build_feed(entries):
 <rss version="2.0" xmlns:torrent="http://xmlns.ezrss.it/0.1/">
   <channel>
     <title>EVE Ref Deep Archive</title>
-    <link>{DATA_BASE_URL.rstrip('/')}/{DEEP_ARCHIVE_DIR}/</link>
+    <link>https://docs.everef.net/datasets/deep-archive.html</link>
     <description>Archived datasets from data.everef.net</description>
 {chr(10).join(items)}
   </channel>
