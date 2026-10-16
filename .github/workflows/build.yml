@@ -53,3 +53,12 @@ jobs:
 
       - name: Build
         run: make build-ui
+  DeepArchive:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Test
+        run: make test-deep-archive

@@ -65,6 +65,7 @@ module.exports = {
             'datasets/',
             'datasets/downloading-datasets',
             'datasets/history-rollups',
+            'datasets/deep-archive',
             'datasets/csm',
             'datasets/fuzzwork-ordersets',
             'datasets/hoboleaks-sde',
