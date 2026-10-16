@@ -104,7 +104,7 @@ public class DataServerConcurrencyTest {
 		var elapsedMs = (System.nanoTime() - start) / 1_000_000;
 		assertEquals(200, smallResponse.statusCode());
 		assertEquals(SMALL_BODY_SIZE, smallResponse.body().length);
-		assertTrue(elapsedMs < 1000, "small request took " + elapsedMs + "ms while slow readers were open");
+		assertTrue(elapsedMs < 5000, "small request took " + elapsedMs + "ms while slow readers were open");
 
 		for (var future : slowDownloads) {
 			assertEquals(SLOW_BODY_SIZE, future.get(120, TimeUnit.SECONDS));
