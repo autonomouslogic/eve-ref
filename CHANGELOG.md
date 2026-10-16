@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.83.0](https://github.com/autonomouslogic/eve-ref/compare/2.82.3...2.83.0) (2026-10-16)
+
+
+### Features
+
+* Data server ([#1137](https://github.com/autonomouslogic/eve-ref/issues/1137)) ([bc79820](https://github.com/autonomouslogic/eve-ref/commit/bc798200679c10ec7678cff53be3246563697253))
+
 ## [2.82.3](https://github.com/autonomouslogic/eve-ref/compare/2.82.2...2.82.3) (2026-10-14)
 
 
