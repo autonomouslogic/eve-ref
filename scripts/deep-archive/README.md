@@ -33,7 +33,7 @@ names, what it skips, how published torrents and `index.json` files are handled,
 shared dataset/year classification and torrent comment (`lib/workflow.py`'s `classify_path`/`render_comment`), used by
 `01-find`, `04-make-torrent`, `08-check-before-delete` and `create_torrent.py` so their dataset breakdowns and the
 torrent's own comment always agree; the `.torrent` size estimate (`lib/torrent_size.py`), including a real torrent
-built with libtorrent and compared against the estimate for the same files; `07-publish`'s feed and catalogue
+built with libtorrent and compared against the estimate for the same files; `07-publish`'s feed
 building, round-tripped through its own checks; and `11-check-delete`'s checks, including that nothing outside the
 confirmed delete set went missing. Standard library only, with one exception: the real-torrent-size and feed-building
 tests need the libtorrent Python bindings (like the scripts they test) and are skipped, not failed, without them. Uses
@@ -142,12 +142,12 @@ Review notes, R16).
 ```
 Shows the targets and asks first, then uploads `<ID>.torrent` and `<ID>.txt` to the bucket's `deep-archive/`. Never
 overwrites (a file already published by an earlier attempt must be identical, and is skipped). Then rebuilds
-`everef-deep-archive.xml` and `torrents.json` from the published torrents, shows the difference, asks again, saves the published
-`everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads both. Last, checks all four over HTTPS,
+`everef-deep-archive.xml` from the published torrents, shows the difference, asks again, saves the published
+`everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it. Last, checks all three over HTTPS,
 retrying for a few minutes while Cloudflare still serves the old feed.
-- The only difference in the feed and catalogue is the new `<ID>`.
+- The only difference in the feed is the new `<ID>`.
 - The `.torrent` and `.txt` are served from `https://data.everef.net/deep-archive/` with the right Content-Type and
-  content; the feed is valid RSS and has `<ID>` with the right info-hash, and so does `torrents.json`.
+  content; the feed is valid RSS and has `<ID>` with the right info-hash.
 
 On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up.
 

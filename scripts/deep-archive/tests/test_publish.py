@@ -1,12 +1,12 @@
 """
-Tests for 07-publish.py's feed and catalogue code: building everef-deep-archive.xml and torrents.json from a torrent's info
-(build_feed, build_catalogue, build_magnet, torrent_url), reading a torrent's fields back out of a real .torrent
+Tests for 07-publish.py's feed code: building everef-deep-archive.xml from a torrent's info
+(build_feed, build_magnet, torrent_url), reading a torrent's fields back out of a real .torrent
 (read_torrent), and the diff shown before publishing (print_diff). No network, no rclone: read_torrent's one rclone
 call is replaced with a local file copy.
 
-These close the loop end to end: build_feed/build_catalogue's output is fed back into check_feed_item and
-check_catalogue_entry, the same functions 07-publish uses after publishing to check what data.everef.net actually
-serves, so a mismatch between building and checking the feed fails here instead of after publishing it live.
+These close the loop end to end: build_feed's output is fed back into check_feed_item, the same function
+07-publish uses after publishing to check what data.everef.net actually serves, so a mismatch between
+building and checking the feed fails here instead of after publishing it live.
 
 Needs the libtorrent Python bindings, like 07-publish.py itself; skipped (not failed) if they aren't installed.
 
@@ -17,7 +17,6 @@ import contextlib
 import datetime
 import importlib.util
 import io
-import json
 import os
 import shutil
 import sys
@@ -84,38 +83,6 @@ class TorrentUrlTest(unittest.TestCase):
             publish.torrent_url("everef-deep-archive-2024-01-01", "txt"),
             "https://data.everef.net/deep-archive/everef-deep-archive-2024-01-01.txt",
         )
-
-
-class BuildCatalogueTest(unittest.TestCase):
-    def test_round_trips_through_check_catalogue_entry(self):
-        entries = [entry("everef-deep-archive-2024-01-01", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
-        body = publish.build_catalogue(entries).encode("utf-8")
-        problems = quietly(
-            publish.check_catalogue_entry, body, "everef-deep-archive-2024-01-01", entries[0]["v1_info_hash"], entries[0]["v2_info_hash"]
-        )
-        self.assertEqual(problems, [])
-
-    def test_catches_a_mismatched_hash(self):
-        entries = [entry("id", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
-        body = publish.build_catalogue(entries).encode("utf-8")
-        problems = quietly(publish.check_catalogue_entry, body, "id", "c" * 40, entries[0]["v2_info_hash"])
-        self.assertTrue(any("v1_info_hash" in p for p in problems))
-
-    def test_missing_entry(self):
-        entries = [entry("id", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
-        body = publish.build_catalogue(entries).encode("utf-8")
-        problems = quietly(publish.check_catalogue_entry, body, "other-id", "a" * 40, "b" * 64)
-        self.assertTrue(any("no entry" in p for p in problems))
-
-    def test_preserves_the_given_order(self):
-        # publish_feed sorts entries by id before calling build_catalogue; build_catalogue itself doesn't reorder.
-        entries = [
-            entry("everef-deep-archive-2024-01-01", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc)),
-            entry("everef-deep-archive-2024-02-01", datetime.datetime(2024, 2, 2, tzinfo=datetime.timezone.utc)),
-        ]
-        catalogue = json.loads(publish.build_catalogue(entries))
-        ids = [t["id"] for t in catalogue["torrents"]]
-        self.assertEqual(ids, [e["id"] for e in entries])
 
 
 class BuildFeedTest(unittest.TestCase):

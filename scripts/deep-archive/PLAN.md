@@ -445,13 +445,12 @@ Sources: [mktorrent](https://github.com/pobrn/mktorrent) (source code and releas
 ### 2.5 Files on data.everef.net
 
 Everything published for the Deep Archive lives in one folder, **`deep-archive/`**, at the root of the data site
-(`https://data.everef.net/deep-archive/`): the torrents, their file lists, the RSS feed and the catalogue. (The
+(`https://data.everef.net/deep-archive/`): the torrents, their file lists and the RSS feed. (The
 folder with the same name in this repo holds the scripts and operator docs; it isn't published.)
 
 ```
 deep-archive/                       # at the root of data.everef.net
   everef-deep-archive.xml                          # RSS: all torrents
-  torrents.json                     # catalogue of all torrents (NOT index.json: DataIndex owns that name)
   everef-deep-archive-2023-04-11.torrent
   everef-deep-archive-2023-04-11.txt      # every data file in the torrent, one site path per line
   everef-deep-archive-2024-02-20.torrent
@@ -461,7 +460,7 @@ deep-archive/                       # at the root of data.everef.net
 
 - **"Already archived" is decided per file:** `01-find` downloads every published `<ID>.txt` (a `.txt` whose name
   isn't a torrent ID is ignored) and skips the paths whose version a torrent already holds (2.2).
-- `torrents.json` and the feed are **regenerated in full** from the `.torrent` files in `deep-archive/` each time, never
+- The feed is **regenerated in full** from the `.torrent` files in `deep-archive/` each time, never
   edited by appending. The bucket's `deep-archive/` stays the single source of truth.
   - Publication date comes from the torrent's `creation date` field.
 
@@ -619,7 +618,7 @@ after that is checked against that list, never against "whatever is in the direc
 | Make torrent | Python `libtorrent` 2.x (hybrid v1+v2); alternatives in 2.4 "Creating the torrent". Not `mktorrent` (v1 only). | Mature library, same as qBittorrent. Don't write a torrent creator. |
 | Seed | `qBittorrent-nox` in Docker, through its Web API | Headless and scriptable, and it's what most feed subscribers use. |
 | Upload | `rclone copyto` into the bucket's `deep-archive/`, with Content-Type and Cache-Control (no overwrite), then checking over HTTPS | Same metadata as the Java uploads (`S3Util`). |
-| Feed + catalogue | Python: list the bucket's `deep-archive/` and fetch each `.torrent` with rclone, write `torrents.json` and the feed | Rebuilds from the storage every time. |
+| Feed | Python: list the bucket's `deep-archive/` and fetch each `.torrent` with rclone, write the feed | Rebuilds from the storage every time. |
 | Delete | `rclone delete --files-from` with the explicit list (never by prefix), soft deletes only | Precise and auditable. |
 | Index pages | Existing `data-index` command, full run | Reuse. |
 
@@ -872,8 +871,6 @@ torrent.
 
 - **The docs site** explains the archive rules and links the torrents (4.2). It's set up once, before the first
   deletion.
-- Optional: enhance `DataIndex` to read `deep-archive/torrents.json` and render an "Archived data" note on each
-  dataset's index page (e.g. "Older files: see the Deep Archive"), linking to the torrents and their `.txt` lists.
 
 ### 2.21 Storage access: rclone only
 
@@ -901,7 +898,7 @@ read, write and backup remotes. All dropped.)
   (2.14). On B2 it's the upload time, unless the uploader set `src_last_modified_millis` (check on real files).
 - **Content-Type and Cache-Control** go on the files at upload, like `S3Util` does today: `.torrent` →
   `application/x-bittorrent`, `.txt` → `text/plain; charset=utf-8`, `everef-deep-archive.xml` → `application/rss+xml` with a short
-  max-age, `torrents.json` → short max-age. With rclone that's `--header-upload`; **check B2 honours both headers**
+  max-age. With rclone that's `--header-upload`; **check B2 honours both headers**
   through rclone before `07-publish` is written.
 - The writing steps only ever touch paths from an explicit list (or `deep-archive/`).
 
@@ -1151,8 +1148,7 @@ step and were dropped with it (2.11).
 - **R19. The feed backup is deleted with the scratch directory.** `07-publish` saves the published `everef-deep-archive.xml` to
   `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, which goes when `$SCRATCH_DIR` is deleted at the end of the
   workflow. Enough to undo a bad rebuild during the workflow; for a longer history, keep it somewhere that persists
-  (e.g. next to `LOG.md`). `torrents.json` is rebuilt too but not backed up; it can always
-  be rebuilt from the published `.torrent` files, and so can `everef-deep-archive.xml`.
+  (e.g. next to `LOG.md`). `everef-deep-archive.xml` can always be rebuilt from the published `.torrent` files.
 - **R20. Two confirmations, one step.** It asks before uploading the `.torrent`/`.txt` and again before replacing the
   feed. If it fails between the two, rerunning skips the already-published, identical `.torrent`/`.txt`; a
   different one stops it (never overwritten).
