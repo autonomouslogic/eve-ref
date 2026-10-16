@@ -3,7 +3,7 @@
 The [Deep Archive](https://data.everef.net/deep-archive) moves old data off-site and into torrent archives.
 Hosting all EVE Online data on [data.everef.net](https://data.everef.net/) forever isn't sustainable.
 
-**To help hose the data**, add [the RSS feed](https://data.everef.net/deep-archive/everef-deep-archive.xml) to your torrent client.
+**To help host it**, add [the RSS feed](https://data.everef.net/deep-archive/everef-deep-archive.xml) to your torrent client.
 
 ## Structure
 Each archive is one torrent file, named `everef-deep-archive-YYYY-MM-DD.torrent`.
@@ -27,5 +27,5 @@ The torrent and its seeders become their only remaining source.
 
 ## The RSS Feed
 Archiving is done on an ad-hoc basis.
-Whenever a new archive has been prepared, it will be added to **[`everef-deep-archive.xml`](https://data.everef.net/deep-archive/everef-deep-archive.xml)**.
-To make sure you have a copy of all the data, simply add that feed to you BitTorrent client and it will sync it automatically.
+Whenever a new archive has been prepared, it will be added to [everef-deep-archive.xml](https://data.everef.net/deep-archive/everef-deep-archive.xml).
+To make sure you have a copy of all the data, simply add that feed to your BitTorrent client to sync it automatically. 
