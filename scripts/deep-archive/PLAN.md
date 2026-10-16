@@ -43,7 +43,7 @@ Related work in progress (as of 2026-10-11):
   script and no completion file), and every script renumbered. Then `check-seed`, the manual "check the trackers
   from outside" step and `test-download` were merged into `06-check-seed`: qBittorrent's Web API plus an aria2c
   download of the README from the `.torrent` (no magnet link). Then `upload-torrent`, `check-upload`,
-  `build-feed` and `check-feed` were merged into `07-publish`, which also saves the published `feed.xml` to
+  `build-feed` and `check-feed` were merged into `07-publish`, which also saves the published `everef-deep-archive.xml` to
   `$SCRATCH_DIR/feed-backup/` before replacing it. Then `check-docs` was removed, and then the Glacier backup
   with its four steps and the restore drill (2.11). Steps 00-18 now, 11 of them scripted. Open points from this
   round: section 7, "Review notes".
@@ -450,7 +450,7 @@ folder with the same name in this repo holds the scripts and operator docs; it i
 
 ```
 deep-archive/                       # at the root of data.everef.net
-  feed.xml                          # RSS: all torrents
+  everef-deep-archive.xml                          # RSS: all torrents
   torrents.json                     # catalogue of all torrents (NOT index.json: DataIndex owns that name)
   everef-deep-archive-2023-04-11.torrent
   everef-deep-archive-2023-04-11.txt      # every data file in the torrent, one site path per line
@@ -900,7 +900,7 @@ read, write and backup remotes. All dropped.)
 - **The modification date is rclone's `ModTime`** everywhere: selection (2.2), load (file mtimes), pre-delete check
   (2.14). On B2 it's the upload time, unless the uploader set `src_last_modified_millis` (check on real files).
 - **Content-Type and Cache-Control** go on the files at upload, like `S3Util` does today: `.torrent` →
-  `application/x-bittorrent`, `.txt` → `text/plain; charset=utf-8`, `feed.xml` → `application/rss+xml` with a short
+  `application/x-bittorrent`, `.txt` → `text/plain; charset=utf-8`, `everef-deep-archive.xml` → `application/rss+xml` with a short
   max-age, `torrents.json` → short max-age. With rclone that's `--header-upload`; **check B2 honours both headers**
   through rclone before `07-publish` is written.
 - The writing steps only ever touch paths from an explicit list (or `deep-archive/`).
@@ -968,7 +968,7 @@ The live list of torrents is the `deep-archive/` directory and the feed.
    no fixed date. Until a file is archived, it stays on data.everef.net. Subscribe to the feed to be notified of new
    torrents.
 5. **How to use them.**
-   - Links: [`deep-archive/`](https://data.everef.net/deep-archive/) directory and the RSS feed `feed.xml`.
+   - Links: [`deep-archive/`](https://data.everef.net/deep-archive/) directory and the RSS feed `everef-deep-archive.xml`.
    - **Finding specific data:** every torrent has a matching `.txt` listing every file. Search them, then add the
      torrent and select only the files you need.
    - **Getting the site layout:** content layout "Don't create subfolder" (qBittorrent) puts files in the same
@@ -1148,16 +1148,16 @@ step and were dropped with it (2.11).
 
 **Publish (`07-publish`, merged 2026-10-12)**
 
-- **R19. The feed backup is deleted with the scratch directory.** `07-publish` saves the published `feed.xml` to
+- **R19. The feed backup is deleted with the scratch directory.** `07-publish` saves the published `everef-deep-archive.xml` to
   `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, which goes when `$SCRATCH_DIR` is deleted at the end of the
   workflow. Enough to undo a bad rebuild during the workflow; for a longer history, keep it somewhere that persists
   (e.g. next to `LOG.md`). `torrents.json` is rebuilt too but not backed up; it can always
-  be rebuilt from the published `.torrent` files, and so can `feed.xml`.
+  be rebuilt from the published `.torrent` files, and so can `everef-deep-archive.xml`.
 - **R20. Two confirmations, one step.** It asks before uploading the `.torrent`/`.txt` and again before replacing the
   feed. If it fails between the two, rerunning skips the already-published, identical `.torrent`/`.txt`; a
   different one stops it (never overwritten).
 - **R21. Checks retry for the Cloudflare cache.** The HTTPS checks retry for up to `FEED_CACHE_MAX_AGE_SECONDS` + 60
-  seconds, because Cloudflare may serve the old `feed.xml` (or a cached 404 for the new `.torrent`) right after the
+  seconds, because Cloudflare may serve the old `everef-deep-archive.xml` (or a cached 404 for the new `.torrent`) right after the
   upload. A real problem therefore takes a few minutes to report.
 
 **Docs (removed 2026-10-12)**

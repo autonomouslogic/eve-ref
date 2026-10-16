@@ -1,5 +1,5 @@
 """
-Tests for 07-publish.py's feed and catalogue code: building feed.xml and torrents.json from a torrent's info
+Tests for 07-publish.py's feed and catalogue code: building everef-deep-archive.xml and torrents.json from a torrent's info
 (build_feed, build_catalogue, build_magnet, torrent_url), reading a torrent's fields back out of a real .torrent
 (read_torrent), and the diff shown before publishing (print_diff). No network, no rclone: read_torrent's one rclone
 call is replaced with a local file copy.
@@ -257,20 +257,20 @@ class PrintDiffTest(unittest.TestCase):
     def test_no_change(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            publish.print_diff("same\n", "same\n", "feed.xml")
-        self.assertIn("No change to feed.xml", out.getvalue())
+            publish.print_diff("same\n", "same\n", "everef-deep-archive.xml")
+        self.assertIn("No change to everef-deep-archive.xml", out.getvalue())
 
     def test_shows_a_diff(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            publish.print_diff("old\n", "new\n", "feed.xml")
+            publish.print_diff("old\n", "new\n", "everef-deep-archive.xml")
         self.assertIn("-old", out.getvalue())
         self.assertIn("+new", out.getvalue())
 
     def test_first_publish_has_no_old_text(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            publish.print_diff(None, "new\n", "feed.xml")
+            publish.print_diff(None, "new\n", "everef-deep-archive.xml")
         self.assertIn("+new", out.getvalue())
 
 

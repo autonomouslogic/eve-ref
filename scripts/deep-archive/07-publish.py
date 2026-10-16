@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 publish: step 8 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent and <ID>.txt to the bucket's
-deep-archive/, rebuilds feed.xml and torrents.json from every published .torrent, and checks what data.everef.net
+deep-archive/, rebuilds everef-deep-archive.xml and torrents.json from every published .torrent, and checks what data.everef.net
 serves for all four.
 
 DRAFT. Shows the targets and asks before each upload (lib/workflow.py, "Show, then ask"). Writes to the data bucket.
@@ -12,15 +12,15 @@ Needs 06-check-seed's completion file, and refuses to run twice (lib/workflow.py
 
 1. Upload <ID>.torrent and <ID>.txt to deep-archive/ with the right Content-Type. Never overwrites: a file already
    published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
-2. Rebuild torrents.json (the catalogue) and feed.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
+2. Rebuild torrents.json (the catalogue) and everef-deep-archive.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth (PLAN 2.5). Each torrent
    is read with libtorrent: name (the ID), creation date, comment (years/datasets, PLAN 2.4), v1/v2 info-hashes, data
    file count and bytes (the README excluded), trackers. Magnet links carry the torrent's first MAGNET_TRACKERS
    trackers; newest first.
-3. Show the diff against what's published, and ask. Before uploading, save the published feed.xml to
+3. Show the diff against what's published, and ask. Before uploading, save the published everef-deep-archive.xml to
    SCRATCH_DIR/feed-backup/feed-<UTC time>.xml.
 4. Check over HTTPS, never trusting the uploads' own result: <ID>.torrent and <ID>.txt return 200 with the right
-   Content-Type and exactly the local bytes; feed.xml is served as application/rss+xml, is valid XML and has an
+   Content-Type and exactly the local bytes; everef-deep-archive.xml is served as application/rss+xml, is valid XML and has an
    <item> with this torrent's v1 info-hash as its <guid>; torrents.json is served as application/json, is valid JSON
    and lists this torrent with the right v1/v2 info-hashes (04-make-torrent). Cloudflare may serve the old feed for
    up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
@@ -29,7 +29,7 @@ On the first workflow, also add the feed to a qBittorrent RSS reader and check t
 
 Writes, in SCRATCH_DIR:
 
-    feed-backup/feed-<UTC time>.xml   the feed.xml published before this run (none on the first workflow)
+    feed-backup/feed-<UTC time>.xml   the everef-deep-archive.xml published before this run (none on the first workflow)
     07-publish.done                   completion file
 
 Environment (or torrents.env, see lib/workflow.py):
@@ -84,7 +84,7 @@ UPLOADS = (
 )
 
 # The HTTPS checks retry until they pass or this many seconds have gone by: long enough for Cloudflare's copy of the
-# old feed.xml to expire.
+# old everef-deep-archive.xml to expire.
 CHECK_TIMEOUT = FEED_CACHE_MAX_AGE_SECONDS + 60
 CHECK_INTERVAL = 15  # seconds
 
@@ -165,7 +165,7 @@ def rclone_cat_bytes(remote_path):
     return result.stdout
 
 
-# Rebuild and upload feed.xml and torrents.json.
+# Rebuild and upload everef-deep-archive.xml and torrents.json.
 
 
 def publish_feed(workflow, torrent_id, deep_archive):
@@ -194,9 +194,9 @@ def publish_feed(workflow, torrent_id, deep_archive):
     old_json = fetch_existing(deep_archive, "torrents.json")
     print_diff(old_json, torrents_json, "torrents.json")
 
-    section("Feed: diff of feed.xml")
-    old_xml = fetch_existing(deep_archive, "feed.xml")
-    print_diff(old_xml, feed_xml, "feed.xml")
+    section("Feed: diff of everef-deep-archive.xml")
+    old_xml = fetch_existing(deep_archive, "everef-deep-archive.xml")
+    print_diff(old_xml, feed_xml, "everef-deep-archive.xml")
 
     typed = input(f"Type {torrent_id} to publish the feed and catalogue: ")
     if typed.strip() != torrent_id:
@@ -207,14 +207,14 @@ def publish_feed(workflow, torrent_id, deep_archive):
 
     section("Feed: uploading")
     upload_text(workflow.scratch_dir, deep_archive, "torrents.json", torrents_json, "application/json")
-    upload_text(workflow.scratch_dir, deep_archive, "feed.xml", feed_xml, "application/rss+xml")
+    upload_text(workflow.scratch_dir, deep_archive, "everef-deep-archive.xml", feed_xml, "application/rss+xml")
     return len(entries), feed_backup
 
 
 def backup_feed(scratch_dir, old_xml):
-    """Saves the published feed.xml as SCRATCH_DIR/feed-backup/feed-<UTC time>.xml. Returns its path, or None."""
+    """Saves the published everef-deep-archive.xml as SCRATCH_DIR/feed-backup/feed-<UTC time>.xml. Returns its path, or None."""
     if old_xml is None:
-        print("No feed.xml published yet: nothing to back up")
+        print("No everef-deep-archive.xml published yet: nothing to back up")
         return None
     backup_dir = os.path.join(scratch_dir, "feed-backup")
     os.makedirs(backup_dir, exist_ok=True)
@@ -222,7 +222,7 @@ def backup_feed(scratch_dir, old_xml):
     path = os.path.join(backup_dir, f"feed-{stamp}.xml")
     with open(path, "w", encoding="utf-8") as f:
         f.write(old_xml)
-    print(f"Saved the published feed.xml to {path}")
+    print(f"Saved the published everef-deep-archive.xml to {path}")
     return path
 
 
@@ -392,8 +392,8 @@ def check_published(workflow, torrent_id, v1_hash, v2_hash):
         for name_fmt, content_type in UPLOADS:
             name = name_fmt.format(id=torrent_id)
             problems += check_file(f"{base}/{name}", os.path.join(workflow.scratch_dir, name), content_type)
-        status, headers, body = fetch(f"{base}/feed.xml")
-        problems += check_status(status, headers, body, "feed.xml", "application/rss+xml")
+        status, headers, body = fetch(f"{base}/everef-deep-archive.xml")
+        problems += check_status(status, headers, body, "everef-deep-archive.xml", "application/rss+xml")
         if body:
             problems += check_feed_item(body, torrent_id, v1_hash)
         status, headers, body = fetch(f"{base}/torrents.json")
@@ -447,10 +447,10 @@ def check_feed_item(body, torrent_id, v1_hash):
     try:
         root = ET.fromstring(body)
     except ET.ParseError as e:
-        return [f"feed.xml: not valid XML: {e}"]
+        return [f"everef-deep-archive.xml: not valid XML: {e}"]
     guids = {item.findtext("guid") for item in root.iter("item")}
     if v1_hash not in guids:
-        return [f"feed.xml: no <item> with guid {v1_hash} ({torrent_id})"]
+        return [f"everef-deep-archive.xml: no <item> with guid {v1_hash} ({torrent_id})"]
     print(f"  <item> with guid {v1_hash} found")
     return []
 

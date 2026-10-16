@@ -75,7 +75,7 @@ TORRENT_ID_RE = re.compile(r"^everef-deep-archive-\d{4}-\d{2}-\d{2}$")
 # The site folder holding the published torrents and their file lists (PLAN 2.5).
 DEEP_ARCHIVE_DIR = "deep-archive"
 
-# Cache-Control max-age for feed.xml and torrents.json (PLAN 2.7, 2.21): short, like DataIndex's index pages
+# Cache-Control max-age for everef-deep-archive.xml and torrents.json (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
 

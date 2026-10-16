@@ -142,8 +142,8 @@ Review notes, R16).
 ```
 Shows the targets and asks first, then uploads `<ID>.torrent` and `<ID>.txt` to the bucket's `deep-archive/`. Never
 overwrites (a file already published by an earlier attempt must be identical, and is skipped). Then rebuilds
-`feed.xml` and `torrents.json` from the published torrents, shows the difference, asks again, saves the published
-`feed.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads both. Last, checks all four over HTTPS,
+`everef-deep-archive.xml` and `torrents.json` from the published torrents, shows the difference, asks again, saves the published
+`everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads both. Last, checks all four over HTTPS,
 retrying for a few minutes while Cloudflare still serves the old feed.
 - The only difference in the feed and catalogue is the new `<ID>`.
 - The `.torrent` and `.txt` are served from `https://data.everef.net/deep-archive/` with the right Content-Type and
@@ -276,7 +276,7 @@ $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
   manifest.json                    # selection + SHA-256 (03-load)
   <ID>.torrent  <ID>.txt
   trackers/                        # 04-make-torrent: each tracker list as downloaded, and trackers.txt (the union)
-  feed-backup/                     # 07-publish: the feed.xml it replaced
+  feed-backup/                     # 07-publish: the everef-deep-archive.xml it replaced
   deleted.jsonl
   log/<NN>-<step>-<UTC time>.log   # everything each run of a step printed
 
