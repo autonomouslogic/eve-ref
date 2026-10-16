@@ -1227,4 +1227,17 @@ public class DataServerTest {
 			}
 		}
 	}
+
+	@Nested
+	class Compression {
+		@Test
+		void shouldNotCompressResponseOnTheRealServer() throws Exception {
+			upstream.enqueue(fileResponse().build());
+			var res = send("GET", "/file.txt", "Accept-Encoding", "gzip");
+			assertEquals(200, res.statusCode());
+			assertTrue(res.headers().firstValue("Content-Encoding").isEmpty());
+			assertArrayEquals("hello world".getBytes(StandardCharsets.UTF_8), res.body());
+			assertEquals("11", res.headers().firstValue("Content-Length").orElse(null));
+		}
+	}
 }
