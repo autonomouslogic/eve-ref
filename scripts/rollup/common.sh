@@ -7,35 +7,12 @@ set -euo pipefail
 ROLLUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STEP="$(basename "$0" .sh)"
 
-STEP_ORDER=(00-preflight 01-list 02-download 03-prepare 04-archive 05-upload 06-delete 07-complete)
+# 00-advise isn't here: it takes no <archive> <year> and doesn't source common.sh, so it writes
+# no marker and isn't gated into this chain.
+STEP_ORDER=(01-preflight 02-list 03-download 04-prepare 05-archive 06-upload 07-delete 08-complete)
 
-ROLLUP_SCOPE=(
-	incursions
-	skinr-listings
-	skinr-details
-	sovereignty-*
-	industry-*
-	system-jumps
-	system-kills
-	warzone*
-	insurance-prices
-	universe-structures
-	faction-warfare-*
-	military-campaigns
-	markets-prices
-	freelance-jobs
-	structures
-)
-
-in_rollup_scope() {
-	local archive="$1" pattern
-	for pattern in "${ROLLUP_SCOPE[@]}"; do
-		if [[ "$archive" == $pattern ]]; then
-			return 0
-		fi
-	done
-	return 1
-}
+# shellcheck disable=SC1091
+source "$ROLLUP_DIR/scope.sh"
 
 if [[ $# -ne 2 ]]; then
 	echo "🔴 usage: $(basename "$0") <archive> <year>" >&2

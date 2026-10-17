@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 8: recheck the archive and empty year dir, print a summary, write COMPLETE.
-# Usage: ./07-complete.sh <archive> <year>
+# Usage: ./08-complete.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 

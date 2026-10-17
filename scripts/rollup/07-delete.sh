@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 7: dry-run preview, typed confirmation, rclone delete, verify the year dir is gone.
-# Usage: ./06-delete.sh <archive> <year>
+# Usage: ./07-delete.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 

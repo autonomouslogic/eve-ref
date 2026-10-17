@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 4: build stage/ from download/, drop index.html, decompress, hash-verify against the originals.
-# Usage: ./03-prepare.sh <archive> <year>
+# Usage: ./04-prepare.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 

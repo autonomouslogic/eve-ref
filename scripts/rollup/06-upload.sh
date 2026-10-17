@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 6: upload the archive, verify via B2 (rclone) and the public URL.
-# Usage: ./05-upload.sh <archive> <year>
+# Usage: ./06-upload.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 

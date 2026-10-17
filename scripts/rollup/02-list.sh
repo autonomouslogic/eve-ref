@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 2: list the remote year dir, check for anomalies, report what's there.
-# Usage: ./01-list.sh <archive> <year>
+# Usage: ./02-list.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 

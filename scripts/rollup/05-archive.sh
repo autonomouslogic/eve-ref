@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 5: build the tar.xz archive from stage/, verify headers, order, mtimes and contents.
-# Usage: ./04-archive.sh <archive> <year>
+# Usage: ./05-archive.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 

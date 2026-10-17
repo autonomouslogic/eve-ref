@@ -7,7 +7,7 @@ into a single archive:
 <archive>/history/<year>/...   ->   <archive>/history/<archive>-<year>.tar.xz
 ```
 
-> **Status:** `00-preflight.sh` through `07-complete.sh` are all written.
+> **Status:** `00-advise.sh` through `08-complete.sh` are all written.
 > Development notes are in [NOTES.md](NOTES.md).
 
 ## Archive format (2023 onward)
@@ -46,8 +46,11 @@ against this bucket. Deletes must stay soft, so the bucket lifecycle rules provi
 
 ## Procedure
 
-All scripts take `<archive> <year>`, e.g. `./01-list.sh incursions 2023`. Run the steps in order and **read
-each summary before continuing**.
+Step 1, `00-advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset at the bucket
+root, run once to decide which `<archive> <year>` to feed into every later step. It prints each dataset's
+`history/<year>` folders in ascending order, flagging each finished year as `already archived` or
+`candidate`; pick the oldest candidate. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions
+2023`. Run the steps in order and **read each summary before continuing**.
 
 Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs
 and the completion markers. The scripts never clear it. Remove it yourself once the rollup is `COMPLETE` and the
@@ -55,19 +58,20 @@ and the completion markers. The scripts never clear it. Remove it yourself once 
 
 If a step fails partway, remove its partial output and rerun it. Download and delete can simply be rerun.
 
-| Step | Script            | Changes remote?      | Check before moving on                                        |
-|------|-------------------|----------------------|---------------------------------------------------------------|
-| 1    | `00-preflight.sh` | no                   | Tools OK, archive not already on the remote                   |
-| 2    | `01-list.sh`      | no                   | File counts, days covered, gaps, no anomalies, enough space in the scratch root |
-| 3    | `02-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
-| 4    | `03-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
-| 5    | `04-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
-| 6    | `05-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
-| 7    | `06-delete.sh`    | **hides year dir**   | Remaining files all in the listing, dry-run count matches. Typed `<archive>-<year>` confirmation |
-| 8    | `07-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
+| Step | Script           | Changes remote?      | Check before moving on                                        |
+|------|------------------|-----------------------|---------------------------------------------------------------|
+| 1    | `00-advise.sh`    | no                   | Which dataset/year to roll up next (no args; scans all datasets) |
+| 2    | `01-preflight.sh` | no                   | Tools OK, archive not already on the remote                   |
+| 3    | `02-list.sh`      | no                   | File counts, days covered, gaps, no anomalies, enough space in the scratch root |
+| 4    | `03-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
+| 5    | `04-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
+| 6    | `05-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
+| 7    | `06-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
+| 8    | `07-delete.sh`    | **hides year dir**   | Remaining files all in the listing, dry-run count matches. Typed `<archive>-<year>` confirmation |
+| 9    | `08-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
 
-Steps 1-6 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (6).
-Step 7 is the only destructive step. It is a soft delete, which can be undone within the 2-day bucket lifecycle
+Steps 1-7 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (7).
+Step 8 is the only destructive step. It is a soft delete, which can be undone within the 2-day bucket lifecycle
 window.
 
 The scripts don't touch index pages. `<archive>/history/index.json` picks up the archive at the dataset's next
@@ -87,7 +91,7 @@ Each step writes `<step>.done` in the scratch dir when all of its checks pass. A
 
 ## Known gaps
 
-- **No `Cache-Control` header on the archive.** `05-upload.sh` uploads with plain `rclone copyto --immutable`,
+- **No `Cache-Control` header on the archive.** `06-upload.sh` uploads with plain `rclone copyto --immutable`,
   no `--header-upload`. Confirmed on the first real run (`incursions 2023`): rclone's native `b2:` backend
   doesn't forward `--header-upload` values to B2 at all (its `Update()` builds a fixed header set and ignores
   it), so the archive's public response has no `Cache-Control`. Fixing this would mean either switching the

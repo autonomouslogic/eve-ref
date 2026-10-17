@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 3: download the remote year dir, verify against listing.json.
-# Usage: ./02-download.sh <archive> <year>
+# Usage: ./03-download.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
