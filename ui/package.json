@@ -35,7 +35,7 @@
   },
   "overrides": {
     "proxy-agent": "6.5.0",
-    "concurrently": "9.2.4"
+    "concurrently": "10.0.6"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.3.1",
