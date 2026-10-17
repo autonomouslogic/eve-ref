@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Step 8: recheck the archive and empty year dir, print a summary, write COMPLETE.
-# Usage: ./07-complete.sh <archive> <year>
+# Usage: ./08-complete.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
-echo "## 🔵 Rechecking the remote archive"
+echo "🔵 Rechecking the remote archive"
 ARCHIVE_SHA1="$(cut -d' ' -f1 "$SCRATCH/archive.sha1")"
 ARCHIVE_SHA256="$(cut -d' ' -f1 "$SCRATCH/archive.sha256")"
 ARCHIVE_BYTES="$(stat -c%s "$SCRATCH/$ARCHIVE_NAME")"
@@ -20,7 +20,7 @@ if [[ "$REMOTE_ARCHIVE_SHA1" != "$ARCHIVE_SHA1" ]]; then
 fi
 echo "$ARCHIVE_NAME is present on the remote with unchanged SHA-1"
 
-echo "## 🔵 Rechecking the year dir is still empty"
+echo "🔵 Rechecking the year dir is still empty"
 REMAINING="$(rclone lsf -R --fast-list "$REMOTE/$YEAR_PATH" 2>/dev/null || true)"
 if [[ -n "$REMAINING" ]]; then
 	echo "🔴 Files have reappeared under $REMOTE/$YEAR_PATH (likely a scheduled data-index run re-uploading" \
@@ -32,7 +32,7 @@ echo "$REMOTE/$YEAR_PATH is still empty"
 
 DATA_FILE_COUNT="$(jq '[.[] | select(.Path | test("index\\.html$") | not)] | length' "$SCRATCH/listing.json")"
 
-echo "## 🔵 Summary"
+echo "🔵 Summary"
 echo "archive:          $ARCHIVE"
 echo "year:             $YEAR"
 echo "data file count:  $DATA_FILE_COUNT"
@@ -49,4 +49,6 @@ mark_done \
 	"archive_sha256=$ARCHIVE_SHA256"
 
 echo "✅ Rollup COMPLETE for $ARCHIVE $YEAR"
+echo "🔵 Regenerate the index files for $ARCHIVE/history (run from the repo root, with the data S3 endpoint/profile env from local.env)"
+echo "DATA_PATH=s3://$ROLLUP_BUCKET/ DATA_INDEX_PREFIX=$ARCHIVE/history DATA_INDEX_RECURSIVE=false ./gradlew dataIndex"
 echo "Clear $SCRATCH once the 2-day lifecycle undo window has passed."

@@ -5,7 +5,7 @@ procedure table in sync with the scripts whenever a step is added or changed.
 
 ## Scope
 
-A dataset is in scope (`ROLLUP_SCOPE` in `common.sh`) only if it has a `history/<year>/<date>/` layout with
+A dataset is in scope (`ROLLUP_SCOPE` in `lib/scope.sh`, shared by `common.sh` and `advise.sh`) only if it has a `history/<year>/<date>/` layout with
 `.json.bz2` (or `.vN.json.bz2`) files, and **nothing in the code reads its history back**. Before adding one,
 check its layout on the data site and grep `src/main` for consumers of its `ArchivePathFactories` constant.
 
@@ -37,12 +37,12 @@ The format in README must stay stable, so archives from different years extract 
 ## Index pages
 
 The scripts never run `data-index`. A scheduled `data-index` run that listed the bucket before the delete can
-re-upload `<year>/index.{html,json}` afterwards. `07-complete.sh` checks for this.
+re-upload `<year>/index.{html,json}` afterwards. `08-complete.sh` checks for this.
 
 ## Scale
 
 Decompressed years can be several GB (e.g. `skinr-listings`), so the scratch root must be disk-backed.
-`01-list.sh` estimates the needed space from a sampled bz2 ratio.
+`02-list.sh` estimates the needed space from a sampled bz2 ratio.
 
 ## Possible follow-ups
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Step 1: config, tools, remote access, year dir present, archive absent.
-# Free space is checked in 01-list.sh, off the listing it already has to fetch there.
-# Usage: ./00-preflight.sh <archive> <year>
+# Step 2: config, tools, remote access, year dir present, archive absent.
+# Free space is checked in 02-list.sh, off the listing it already has to fetch there.
+# Usage: ./01-preflight.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
-echo "## 🔵 Tools"
+echo "🔵 Tools"
 for tool in rclone tar xz bzip2 jq sha256sum sha1sum curl wget find sort flock shuf; do
 	if ! command -v "$tool" >/dev/null 2>&1; then
 		echo "🔴 Missing required tool: $tool" >&2
@@ -20,7 +20,7 @@ rclone version | head -n1
 tar --version | head -n1
 echo "All required tools present"
 
-echo "## 🔵 Remote layout"
+echo "🔵 Remote layout"
 REMOTE_HISTORY_LISTING="$(rclone lsf "$REMOTE/$ARCHIVE/history/")"
 if ! grep -qx "$YEAR/" <<<"$REMOTE_HISTORY_LISTING"; then
 	echo "🔴 Remote year dir not found: $REMOTE/$YEAR_PATH" >&2
