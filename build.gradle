@@ -111,7 +111,7 @@ dependencies {
 	implementation "org.postgresql:postgresql:42.7.13"
 
 	// Helidon
-	implementation "io.helidon.webserver:helidon-webserver:4.5.4"
+	implementation "io.helidon.webserver:helidon-webserver:27.0.0"
 	implementation "io.helidon.logging:helidon-logging-slf4j:4.5.4"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.60.1"
