@@ -9,6 +9,8 @@ ROLLUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
 source "$ROLLUP_DIR/scope.sh"
 
+echo "# 🚀 00-advise"
+
 ROLLUP_ENV="$ROLLUP_DIR/rollup.env"
 if [[ ! -f "$ROLLUP_ENV" ]]; then
 	echo "🔴 missing $ROLLUP_ENV (copy rollup.env.sample to rollup.env and fill it in)" >&2
@@ -68,8 +70,8 @@ for entry in $ALL_ENTRIES; do
 	done <<<"$YEARS"
 
 	echo "## 🔵 $dataset"
-	echo "  candidates: ${candidates[*]:-none}"
-	echo "  already archived: ${archived[*]:-none}"
+	echo "  candidates 👉 ${candidates[*]:-none}"
+	echo "  archived ✅ ${archived[*]:-none}"
 
 	if [[ ${#candidates[@]} -gt 0 ]] && { [[ -z "$OLDEST_YEAR" ]] || [[ "${candidates[0]}" -lt "$OLDEST_YEAR" ]]; }; then
 		OLDEST_YEAR="${candidates[0]}"
@@ -78,7 +80,9 @@ for entry in $ALL_ENTRIES; do
 done
 
 if [[ -n "$OLDEST_YEAR" ]]; then
-	echo "✅ Done. Oldest candidate: $OLDEST_DATASET $OLDEST_YEAR. Run 01-preflight.sh $OLDEST_DATASET $OLDEST_YEAR."
+	echo "✅ Done"
+	echo "Oldest candidate: $OLDEST_DATASET $OLDEST_YEAR"
+	echo "Next command: ./01-preflight.sh $OLDEST_DATASET $OLDEST_YEAR"
 else
-	echo "✅ Done. No candidates."
+	echo "✅ Done, no candidates."
 fi
