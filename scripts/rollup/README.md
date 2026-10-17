@@ -48,8 +48,8 @@ against this bucket. Deletes must stay soft, so the bucket lifecycle rules provi
 
 Step 1, `00-advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset at the bucket
 root, run once to decide which `<archive> <year>` to feed into every later step. It prints each dataset's
-`history/<year>` folders in ascending order, flagging each finished year as `already archived` or
-`candidate`; pick the oldest candidate. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions
+finished `history/<year>` folders as two lines, `candidates:` and `already archived:` (current year
+ignored), then ends with the oldest candidate overall as `<archive> <year>`. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions
 2023`. Run the steps in order and **read each summary before continuing**.
 
 Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs

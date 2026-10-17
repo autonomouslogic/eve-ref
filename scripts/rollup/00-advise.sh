@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Advisory, read-only: scans every in-scope dataset at the bucket root and lists each one's
-# yearly history/ folders in ascending order, flagging which are already archived vs. rollup
-# candidates. Doesn't take <archive> <year> and doesn't use common.sh's lock/scratch/step-marker
+# Advisory, read-only: scans every in-scope dataset at the bucket root and prints each one's
+# yearly history/ folders on two lines (rollup candidates, already archived), ascending and
+# excluding the current year. Doesn't take <archive> <year> and doesn't use common.sh's lock/scratch/step-marker
 # machinery, since it looks across all datasets rather than running one rollup.
 # Usage: ./00-advise.sh
 set -euo pipefail
@@ -39,6 +39,8 @@ CURRENT_UTC_YEAR="$(TZ=UTC date +%Y)"
 
 echo "## 🔵 Scanning bucket root"
 ALL_ENTRIES="$(rclone lsf "$REMOTE/")"
+OLDEST_YEAR=""
+OLDEST_DATASET=""
 
 for entry in $ALL_ENTRIES; do
 	dataset="${entry%/}"
@@ -52,18 +54,31 @@ for entry in $ALL_ENTRIES; do
 		continue
 	fi
 
-	echo "## 🔵 $dataset"
+	candidates=()
+	archived=()
 	while IFS= read -r year; do
 		if [[ "$year" -ge "$CURRENT_UTC_YEAR" ]]; then
-			echo "  $year  current/unfinished"
 			continue
 		fi
 		if grep -qx "${dataset}-${year}.tar.xz" <<<"$HISTORY_LISTING"; then
-			echo "  $year  already archived"
+			archived+=("$year")
 		else
-			echo "  $year  candidate"
+			candidates+=("$year")
 		fi
 	done <<<"$YEARS"
+
+	echo "## 🔵 $dataset"
+	echo "  candidates: ${candidates[*]:-none}"
+	echo "  already archived: ${archived[*]:-none}"
+
+	if [[ ${#candidates[@]} -gt 0 ]] && { [[ -z "$OLDEST_YEAR" ]] || [[ "${candidates[0]}" -lt "$OLDEST_YEAR" ]]; }; then
+		OLDEST_YEAR="${candidates[0]}"
+		OLDEST_DATASET="$dataset"
+	fi
 done
 
-echo "✅ Done. Pick the oldest 'candidate' year for a dataset and run 01-preflight.sh <archive> <year>."
+if [[ -n "$OLDEST_YEAR" ]]; then
+	echo "✅ Done. Oldest candidate: $OLDEST_DATASET $OLDEST_YEAR. Run 01-preflight.sh $OLDEST_DATASET $OLDEST_YEAR."
+else
+	echo "✅ Done. No candidates."
+fi
