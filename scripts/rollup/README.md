@@ -39,6 +39,9 @@ unsorted). It stays as is.
    gitignored by `scripts/rollup/.gitignore`. Every script reads its configuration from this file and nowhere else:
    - the rclone remote `everef` (native `b2` backend, `hard_delete=false`), defined purely through
      `RCLONE_CONFIG_EVEREF_*` variables. Your own `rclone.conf` is ignored;
+   - `LOCAL_COPY_DIR`, optional: a local copy of the data site, laid out like the bucket. `03-download.sh` seeds
+     `download/` from it as a faster way to get files it already has. It is never trusted: the download still runs
+     against the remote with `--checksum`, and every check after it runs as usual;
    - `ROLLUP_SCRATCH_ROOT`, the scratch root. For big datasets, point it at a disk, not a tmpfs.
 
 Never run `rclone purge`, `rclone cleanup`, `rclone backend cleanup-hidden` or anything with `--b2-hard-delete`

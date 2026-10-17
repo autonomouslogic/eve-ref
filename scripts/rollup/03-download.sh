@@ -1,14 +1,46 @@
 #!/usr/bin/env bash
-# Step 3: download the remote year dir, verify against listing.json.
+# Step 3: download the remote year dir, verify against listing.json. Always loads from the remote; LOCAL_COPY_DIR, if
+# set, only seeds the download dir first (see below).
 # Usage: ./03-download.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
 DOWNLOAD_DIR="$SCRATCH/download/$YEAR_PATH"
 
+# Optional LOCAL_COPY_DIR: a local copy of the data site, laid out like the bucket. Used only as a faster way to
+# get files we already have, and never trusted. Files there with the listed size and mtime are copied into the
+# download dir first. The download below then still runs in full against the remote with --checksum, which
+# compares SHA-1s instead of size and mtime and replaces any seeded file that differs. The checks after it run
+# as usual. Without LOCAL_COPY_DIR, this does nothing.
+CHECKSUM_FLAG=()
+if [[ -n "${LOCAL_COPY_DIR:-}" ]]; then
+	echo "🔵 Seeding from the local copy (unverified)"
+	LOCAL_YEAR_DIR="$LOCAL_COPY_DIR/$YEAR_PATH"
+	if [[ ! -d "$LOCAL_YEAR_DIR" ]]; then
+		echo "$LOCAL_YEAR_DIR not found, downloading everything"
+	else
+		SEED_DIR="$SCRATCH/seed"
+		rm -rf "$SEED_DIR"
+		mkdir -p "$SEED_DIR" "$DOWNLOAD_DIR"
+		jq -r '.[] | [.Path, (.Size | tostring), (.ModTime | sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601 | tostring)] | @tsv' \
+			"$SCRATCH/listing.json" | sort >"$SEED_DIR/expected.tsv"
+		find "$LOCAL_YEAR_DIR" -type f -printf '%P\t%s\t%Ts\n' | sort >"$SEED_DIR/local.tsv"
+		comm -12 "$SEED_DIR/expected.tsv" "$SEED_DIR/local.tsv" | cut -f1 >"$SEED_DIR/files-from.txt"
+		SEED_COUNT="$(wc -l <"$SEED_DIR/files-from.txt")"
+		echo "$SEED_COUNT of $(wc -l <"$SEED_DIR/expected.tsv") listed files in $LOCAL_YEAR_DIR have the listed size and mtime"
+		if [[ "$SEED_COUNT" -gt 0 ]]; then
+			rclone copy -v --transfers=8 --checkers=16 --files-from-raw "$SEED_DIR/files-from.txt" \
+				"$LOCAL_YEAR_DIR" "$DOWNLOAD_DIR"
+			echo "Seeded $SEED_COUNT files"
+		fi
+	fi
+	# Also covers a rerun after an earlier seed: whatever is in the download dir may have come from the local copy.
+	CHECKSUM_FLAG=(--checksum)
+fi
+
 echo "🔵 Download"
 mkdir -p "$DOWNLOAD_DIR"
-rclone copy -v --bwlimit 20M --fast-list --transfers=8 --checkers=2 --max-backlog 1000000 \
+rclone copy -v ${CHECKSUM_FLAG[@]+"${CHECKSUM_FLAG[@]}"} --bwlimit 20M --fast-list --transfers=8 --checkers=2 --max-backlog 1000000 \
   "$REMOTE/$YEAR_PATH" "$DOWNLOAD_DIR"
 echo "rclone copy done"
 
