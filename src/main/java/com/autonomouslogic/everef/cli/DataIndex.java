@@ -69,7 +69,7 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-	private boolean recursive = true;
+	private boolean recursive = Configs.DATA_INDEX_RECURSIVE.getRequired();
 
 	@Setter
 	@Getter

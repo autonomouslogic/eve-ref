@@ -11,9 +11,10 @@ PUBLIC_ARCHIVE_URL="$PUBLIC_BASE_URL/$ARCHIVE/history/$ARCHIVE_NAME"
 LOCAL_SHA1="$(cut -d' ' -f1 "$SCRATCH/archive.sha1")"
 LOCAL_SHA256="$(cut -d' ' -f1 "$SCRATCH/archive.sha256")"
 LOCAL_BYTES="$(stat -c%s "$ARCHIVE_PATH")"
-EXPECTED_MODTIME="${YEAR}-12-31T23:59:59Z"
+# The archive keeps the mtime it was built with. The upload must preserve it.
+EXPECTED_MODTIME="$(date -u -d "@$(stat -c%Y "$ARCHIVE_PATH")" +%Y-%m-%dT%H:%M:%SZ)"
 
-echo "## 🔵 Checking for an existing remote object"
+echo "🔵 Checking for an existing remote object"
 EXISTING_JSON="$(rclone lsjson --hash "$REMOTE/$ARCHIVE/history/" | jq --arg n "$ARCHIVE_NAME" '[.[] | select(.Name == $n)] | .[0] // null')"
 if [[ "$EXISTING_JSON" != "null" ]]; then
 	EXISTING_SHA1="$(jq -r '.Hashes.sha1 // ""' <<<"$EXISTING_JSON")"
@@ -23,12 +24,12 @@ if [[ "$EXISTING_JSON" != "null" ]]; then
 	fi
 	echo "Remote already has $ARCHIVE_NAME with matching SHA-1, skipping upload"
 else
-	echo "## 🔵 Uploading"
+	echo "🔵 Uploading"
 	rclone copyto --immutable "$ARCHIVE_PATH" "$REMOTE_ARCHIVE_PATH"
 	echo "Uploaded $ARCHIVE_PATH to $REMOTE_ARCHIVE_PATH"
 fi
 
-echo "## 🔵 Checking the remote object"
+echo "🔵 Checking the remote object"
 REMOTE_JSON="$(rclone lsjson --hash "$REMOTE/$ARCHIVE/history/" | jq --arg n "$ARCHIVE_NAME" '[.[] | select(.Name == $n)] | .[0] // null')"
 if [[ "$REMOTE_JSON" == "null" ]]; then
 	echo "🔴 $ARCHIVE_NAME not found on the remote after upload" >&2
@@ -53,7 +54,7 @@ if [[ "$REMOTE_MODTIME" != "$EXPECTED_MODTIME" ]]; then
 fi
 echo "Remote object OK: size $REMOTE_SIZE, SHA-1 $REMOTE_SHA1, ModTime $REMOTE_MODTIME"
 
-echo "## 🔵 Checking the public URL"
+echo "🔵 Checking the public URL"
 # The public URL can take a few seconds to become servable right after an upload, so retry.
 STATUS_LINE=""
 for attempt in 1 2 3 4 5 6; do
@@ -95,7 +96,7 @@ if [[ "$SRC_LAST_MODIFIED_MILLIS" != "$EXPECTED_MILLIS" ]]; then
 fi
 echo "Public headers OK: 200, content-length $CONTENT_LENGTH, last-modified '$LAST_MODIFIED'"
 
-echo "## 🔵 Downloading the public copy"
+echo "🔵 Downloading the public copy"
 mkdir -p "$SCRATCH/verify/public"
 VERIFY_PATH="$SCRATCH/verify/public/$ARCHIVE_NAME"
 if ! wget -nv -O "$VERIFY_PATH" "$PUBLIC_ARCHIVE_URL"; then

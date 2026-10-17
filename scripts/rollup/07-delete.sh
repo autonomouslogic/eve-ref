@@ -24,7 +24,7 @@ list_remaining() {
 
 # A rerun after a partial delete, or after a later check failed, finds fewer files than
 # listing.json. That's fine, as long as every remaining file is one from listing.json.
-echo "## 🔵 Checking what's left against the listing"
+echo "🔵 Checking what's left against the listing"
 REMAINING="$(list_remaining)"
 REMAINING_COUNT="$(grep -c . <<<"$REMAINING" || true)"
 UNKNOWN="$(comm -23 <(sort <<<"$REMAINING") <(jq -r '.[].Path' "$SCRATCH/listing.json" | sort))"
@@ -38,7 +38,7 @@ echo "$REMAINING_COUNT of $TOTAL_COUNT files from listing.json are left, no unkn
 if [[ "$REMAINING_COUNT" -eq 0 ]]; then
 	echo "Nothing left to delete (an earlier run already deleted everything), going straight to the checks"
 else
-	echo "## 🔵 Dry-run preview"
+	echo "🔵 Dry-run preview"
 	DRY_RUN_OUTPUT="$(rclone delete --dry-run --fast-list "$REMOTE/$YEAR_PATH" 2>&1)" || true
 	echo "$DRY_RUN_OUTPUT"
 	DRY_RUN_COUNT="$(grep -c 'Skipped delete' <<<"$DRY_RUN_OUTPUT" || true)"
@@ -48,7 +48,7 @@ else
 	fi
 	echo "Dry-run would delete $DRY_RUN_COUNT files, matches what's left"
 
-	echo "## 🔵 Confirmation"
+	echo "🔵 Confirmation"
 	echo "About to permanently hide $REMAINING_COUNT files under $REMOTE/$YEAR_PATH"
 	echo "(soft delete: hidden versions are kept for 2 days by the bucket lifecycle rules)"
 	read -r -p "Type '$ARCHIVE-$YEAR' to confirm: " CONFIRM
@@ -57,12 +57,12 @@ else
 		exit 1
 	fi
 
-	echo "## 🔵 Deleting"
+	echo "🔵 Deleting"
 	rclone delete -v --fast-list --max-delete "$REMAINING_COUNT" "$REMOTE/$YEAR_PATH"
 	echo "rclone delete done"
 fi
 
-echo "## 🔵 Checking the year dir is empty"
+echo "🔵 Checking the year dir is empty"
 REMAINING="$(list_remaining)"
 if [[ -n "$REMAINING" ]]; then
 	echo "🔴 Files remain under $REMOTE/$YEAR_PATH:" >&2
@@ -72,7 +72,7 @@ fi
 echo "$REMOTE/$YEAR_PATH is empty"
 
 SAMPLE_SIZE=10
-echo "## 🔵 Checking $SAMPLE_SIZE random old public URLs are gone"
+echo "🔵 Checking $SAMPLE_SIZE random old public URLs are gone"
 SAMPLE_PATHS="$(jq -r '.[].Path' "$SCRATCH/listing.json" | shuf -n "$SAMPLE_SIZE")"
 while IFS= read -r path; do
 	url="$PUBLIC_BASE_URL/$ARCHIVE/history/$YEAR/$path"
@@ -92,7 +92,7 @@ while IFS= read -r path; do
 	echo "404 confirmed: $url"
 done <<<"$SAMPLE_PATHS"
 
-echo "## 🔵 Checking the archive is still present, unchanged"
+echo "🔵 Checking the archive is still present, unchanged"
 ARCHIVE_SHA1="$(cut -d' ' -f1 "$SCRATCH/archive.sha1")"
 REMOTE_ARCHIVE_JSON="$(rclone lsjson --hash "$REMOTE/$ARCHIVE/history/" | jq --arg n "$ARCHIVE_NAME" '[.[] | select(.Name == $n)] | .[0] // null')"
 if [[ "$REMOTE_ARCHIVE_JSON" == "null" ]]; then

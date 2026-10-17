@@ -5,7 +5,7 @@
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
-echo "## 🔵 Tools"
+echo "🔵 Tools"
 for tool in rclone tar xz bzip2 jq sha256sum sha1sum curl wget find sort flock shuf; do
 	if ! command -v "$tool" >/dev/null 2>&1; then
 		echo "🔴 Missing required tool: $tool" >&2
@@ -20,7 +20,7 @@ rclone version | head -n1
 tar --version | head -n1
 echo "All required tools present"
 
-echo "## 🔵 Remote layout"
+echo "🔵 Remote layout"
 REMOTE_HISTORY_LISTING="$(rclone lsf "$REMOTE/$ARCHIVE/history/")"
 if ! grep -qx "$YEAR/" <<<"$REMOTE_HISTORY_LISTING"; then
 	echo "🔴 Remote year dir not found: $REMOTE/$YEAR_PATH" >&2

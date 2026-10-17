@@ -119,7 +119,7 @@ done
 LOG_FILE="$SCRATCH/log/${STEP}-$(date -u +%Y%m%dT%H%M%SZ).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "# 🚀 $STEP: $ARCHIVE $YEAR"
+echo "🚀 $STEP: $ARCHIVE $YEAR"
 
 # Call once all of a step's verifications have passed. Extra args are recorded as key facts
 # alongside the UTC completion timestamp.

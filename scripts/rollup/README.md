@@ -20,7 +20,7 @@ into a single archive:
   kept, because they hold what `data-index` worked out about each file. Their entries still name the original
   `.json.bz2` files. `index.html` files are dropped.
 - Compressed with `tar -J` defaults (xz preset `-6`).
-- The archive's own mtime is `<year>-12-31T23:59:59Z`. No `Cache-Control` header is set (see "Known gaps"
+- The archive's own mtime is its build time, nothing custom. No `Cache-Control` header is set (see "Known gaps"
   below).
 
 `incursions-2022.tar.xz` was made by hand before this format existed (no `history/` in its paths, owner names,

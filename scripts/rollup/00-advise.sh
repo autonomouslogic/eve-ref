@@ -9,7 +9,7 @@ ROLLUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
 source "$ROLLUP_DIR/scope.sh"
 
-echo "# 🚀 00-advise"
+echo "🚀 00-advise"
 
 ROLLUP_ENV="$ROLLUP_DIR/rollup.env"
 if [[ ! -f "$ROLLUP_ENV" ]]; then
@@ -39,7 +39,7 @@ export TZ=UTC LC_ALL=C
 REMOTE="everef:${ROLLUP_BUCKET}"
 CURRENT_UTC_YEAR="$(TZ=UTC date +%Y)"
 
-echo "## 🔵 Scanning bucket root"
+echo "🔵 Scanning bucket root"
 ALL_ENTRIES="$(rclone lsf "$REMOTE/")"
 OLDEST_YEAR=""
 OLDEST_DATASET=""
@@ -69,7 +69,7 @@ for entry in $ALL_ENTRIES; do
 		fi
 	done <<<"$YEARS"
 
-	echo "## 🔵 $dataset"
+	echo "🔵 $dataset"
 	echo "  candidates 👉 ${candidates[*]:-none}"
 	echo "  archived ✅ ${archived[*]:-none}"
 

@@ -14,7 +14,7 @@ if [[ -e "$ARCHIVE_PATH" ]]; then
 fi
 rm -f "$ARCHIVE_TMP"
 
-echo "## 🔵 Building archive"
+echo "🔵 Building archive"
 (
 	cd "$STAGE_ROOT"
 	find "$YEAR_PATH" -type f -print0 \
@@ -24,14 +24,13 @@ echo "## 🔵 Building archive"
 			-cJf "$ARCHIVE_TMP"
 )
 mv "$ARCHIVE_TMP" "$ARCHIVE_PATH"
-touch -d "${YEAR}-12-31T23:59:59Z" "$ARCHIVE_PATH"
 echo "Built $ARCHIVE_PATH"
 
-echo "## 🔵 Checking xz integrity"
+echo "🔵 Checking xz integrity"
 xz -t "$ARCHIVE_PATH"
 echo "xz -t passed"
 
-echo "## 🔵 Checking headers and order"
+echo "🔵 Checking headers and order"
 TAR_LISTING="$(tar -tvf "$ARCHIVE_PATH" --full-time)"
 
 BAD_MODE="$(awk '$1 != "-rw-r--r--"' <<<"$TAR_LISTING")"
@@ -62,7 +61,7 @@ if [[ "$TAR_COUNT" -ne "$STAGE_FILE_COUNT" ]]; then
 fi
 echo "All $TAR_COUNT entries are regular files, mode -rw-r--r--, owner 0/0, sorted order"
 
-echo "## 🔵 Checking names, sizes and mtimes against stage"
+echo "🔵 Checking names, sizes and mtimes against stage"
 TAR_TSV="$(awk '{print $6"\t"$3"\t"$4" "$5}' <<<"$TAR_LISTING")"
 STAGE_TSV="$(
 	cd "$STAGE_ROOT"
@@ -80,7 +79,7 @@ if [[ -n "$TSV_DIFF" ]]; then
 fi
 echo "Names, sizes and mtimes match stage exactly"
 
-echo "## 🔵 Checking contents hash-match the originals"
+echo "🔵 Checking contents hash-match the originals"
 tar -xJf "$ARCHIVE_PATH" \
 	--to-command='printf "%s  %s\n" "$(sha256sum | cut -d" " -f1)" "$TAR_FILENAME"' \
 	>"$SCRATCH/archive-contents.sha256"
@@ -92,7 +91,7 @@ if [[ -n "$CONTENTS_DIFF" ]]; then
 fi
 echo "archive-contents.sha256 matches $ARCHIVE-$YEAR.sha256"
 
-echo "## 🔵 Writing archive checksums"
+echo "🔵 Writing archive checksums"
 sha256sum "$ARCHIVE_PATH" | awk -v n="$ARCHIVE_NAME" '{print $1"  "n}' >"$SCRATCH/archive.sha256"
 sha1sum "$ARCHIVE_PATH" | awk -v n="$ARCHIVE_NAME" '{print $1"  "n}' >"$SCRATCH/archive.sha1"
 ARCHIVE_BYTES="$(stat -c%s "$ARCHIVE_PATH")"
