@@ -59,6 +59,43 @@ public class MVStoreTest {
 		assertEquals(obj1, map.remove("a"));
 	}
 
+	/**
+	 * Reproduces the intermittent <code>MVStoreException: Chunk N not found</code> seen in
+	 * <code>ScrapeMarketHistory.uploadArchive</code>.
+	 *
+	 * <p>Production sequence: many entries are overwritten (leaving dead pages), then a long-lived
+	 * cursor iterates a map while the store's background thread compacts. With
+	 * <code>setVersionsToKeep(0)</code> and the retention window expired, compaction reclaims chunks
+	 * still referenced by the open cursor. The retention time is set to zero here to avoid having to
+	 * run the test for 45+ seconds; compaction is invoked explicitly instead of waiting for the
+	 * background housekeeping to simulate it happening mid-iteration.
+	 */
+	@Test
+	void shouldNotFailIterationWhileStoreCompacts() {
+		store.setRetentionTime(0);
+		var items = 20_000;
+		var payload = "x".repeat(1000);
+		for (int i = 0; i < items; i++) {
+			map.put(Integer.toString(i), jsonMapper.createObjectNode().put("v", payload + i));
+		}
+		// Overwrite everything to create dead pages, making chunks eligible for compaction.
+		for (int i = 0; i < items; i++) {
+			map.put(Integer.toString(i), jsonMapper.createObjectNode().put("v", i + payload));
+		}
+		store.commit();
+		var iterated = 0;
+		for (var it = map.entrySet().iterator(); it.hasNext(); ) {
+			it.next();
+			iterated++;
+			if (iterated % 1000 == 0) {
+				// Simulates the background housekeeping running while the cursor is open.
+				store.commit();
+				store.compact(95, 16 * 1024 * 1024);
+			}
+		}
+		assertEquals(items, iterated);
+	}
+
 	@Test
 	void shouldHandleModifications() {
 		var rng = new Random();
