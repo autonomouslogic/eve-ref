@@ -7,7 +7,7 @@ into a single archive:
 <archive>/history/<year>/...   ->   <archive>/history/<archive>-<year>.tar.xz
 ```
 
-> **Status:** `00-advise.sh` through `08-complete.sh` are all written.
+> **Status:** `advise.sh` through `08-complete.sh` are all written.
 > Development notes are in [NOTES.md](NOTES.md).
 
 ## Archive format (2023 onward)
@@ -49,7 +49,7 @@ against this bucket. Deletes must stay soft, so the bucket lifecycle rules provi
 
 ## Procedure
 
-Step 1, `00-advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset at the bucket
+Step 1, `advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset at the bucket
 root, run once to decide which `<archive> <year>` to feed into every later step. It prints each dataset's
 finished `history/<year>` folders as two lines, `candidates:` and `already archived:` (current year
 ignored), then ends with the oldest candidate overall as `<archive> <year>`. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions
@@ -59,11 +59,16 @@ Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, t
 and the completion markers. The scripts never clear it. Remove it yourself once the rollup is `COMPLETE` and the
 2-day undo window has passed: until then, `download/` is the only local copy of the original files.
 
+`rollup.sh <archive> <year>` runs steps 2-9 in order and stops at the first failure. Steps with a `.done` marker are
+skipped, so rerunning resumes where it stopped. It does not pause between steps, so the "read each summary" advice
+below applies to the logs afterwards, and `07-delete.sh` still asks for its typed confirmation. Run the steps by
+hand when you want to check each summary before moving on.
+
 If a step fails partway, remove its partial output and rerun it. Download and delete can simply be rerun.
 
 | Step | Script           | Changes remote?      | Check before moving on                                        |
 |------|------------------|-----------------------|---------------------------------------------------------------|
-| 1    | `00-advise.sh`    | no                   | Which dataset/year to roll up next (no args; scans all datasets) |
+| 1    | `advise.sh`    | no                   | Which dataset/year to roll up next (no args; scans all datasets) |
 | 2    | `01-preflight.sh` | no                   | Tools OK, archive not already on the remote                   |
 | 3    | `02-list.sh`      | no                   | File counts, days covered, gaps, no anomalies, enough space in the scratch root |
 | 4    | `03-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |

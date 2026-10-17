@@ -5,7 +5,7 @@ procedure table in sync with the scripts whenever a step is added or changed.
 
 ## Scope
 
-A dataset is in scope (`ROLLUP_SCOPE` in `scope.sh`, shared by `common.sh` and `advise.sh`) only if it has a `history/<year>/<date>/` layout with
+A dataset is in scope (`ROLLUP_SCOPE` in `lib/scope.sh`, shared by `common.sh` and `advise.sh`) only if it has a `history/<year>/<date>/` layout with
 `.json.bz2` (or `.vN.json.bz2`) files, and **nothing in the code reads its history back**. Before adding one,
 check its layout on the data site and grep `src/main` for consumers of its `ArchivePathFactories` constant.
 

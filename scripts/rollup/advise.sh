@@ -3,13 +3,13 @@
 # yearly history/ folders on two lines (rollup candidates, already archived), ascending and
 # excluding the current year. Doesn't take <archive> <year> and doesn't use common.sh's lock/scratch/step-marker
 # machinery, since it looks across all datasets rather than running one rollup.
-# Usage: ./00-advise.sh
+# Usage: ./advise.sh
 set -euo pipefail
 ROLLUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
-source "$ROLLUP_DIR/scope.sh"
+source "$ROLLUP_DIR/lib/scope.sh"
 
-echo "🚀 00-advise"
+echo "🚀 advise"
 
 ROLLUP_ENV="$ROLLUP_DIR/rollup.env"
 if [[ ! -f "$ROLLUP_ENV" ]]; then

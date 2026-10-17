@@ -7,12 +7,12 @@ set -euo pipefail
 ROLLUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STEP="$(basename "$0" .sh)"
 
-# 00-advise isn't here: it takes no <archive> <year> and doesn't source common.sh, so it writes
+# advise isn't here: it takes no <archive> <year> and doesn't source common.sh, so it writes
 # no marker and isn't gated into this chain.
 STEP_ORDER=(01-preflight 02-list 03-download 04-prepare 05-archive 06-upload 07-delete 08-complete)
 
 # shellcheck disable=SC1091
-source "$ROLLUP_DIR/scope.sh"
+source "$ROLLUP_DIR/lib/scope.sh"
 
 if [[ $# -ne 2 ]]; then
 	echo "🔴 usage: $(basename "$0") <archive> <year>" >&2

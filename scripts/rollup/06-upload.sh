@@ -80,7 +80,8 @@ LAST_MODIFIED="$(header_value 'last-modified')"
 SRC_LAST_MODIFIED_MILLIS="$(header_value 'x-amz-meta-src_last_modified_millis')"
 
 EXPECTED_LAST_MODIFIED="$(date -u -d "$EXPECTED_MODTIME" +'%a, %d %b %Y %H:%M:%S GMT')"
-EXPECTED_MILLIS="$(($(date -u -d "$EXPECTED_MODTIME" +%s) * 1000))"
+# rclone stores the archive's full mtime, sub-second part included, truncated to milliseconds.
+EXPECTED_MILLIS="$(date -u -r "$ARCHIVE_PATH" +%s%3N)"
 
 if [[ "$CONTENT_LENGTH" != "$LOCAL_BYTES" ]]; then
 	echo "🔴 content-length $CONTENT_LENGTH does not match local size $LOCAL_BYTES" >&2
