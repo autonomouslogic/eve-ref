@@ -20,6 +20,9 @@ const localePath = useLocalePath();
 					<InternalLink to="/categories">Categories</InternalLink>
 				</span>
 				<span>
+					<InternalLink to="/regions">Regions</InternalLink>
+				</span>
+				<span>
 					<InternalLink to="/market-groups">Market Groups</InternalLink>
 				</span>
 				<span>
