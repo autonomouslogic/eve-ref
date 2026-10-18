@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.83.1](https://github.com/autonomouslogic/eve-ref/compare/2.83.0...2.83.1) (2026-10-18)
+
+
+### Bug Fixes
+
+* Remove data server from [#1137](https://github.com/autonomouslogic/eve-ref/issues/1137) bc79820 ([#1143](https://github.com/autonomouslogic/eve-ref/issues/1143)) ([12f289d](https://github.com/autonomouslogic/eve-ref/commit/12f289debd5c0bdebd42179c3303a8cd987655a6))
+
+
+### Miscellaneous Chores
+
+* Advise script on rollup and other changes ([#1142](https://github.com/autonomouslogic/eve-ref/issues/1142)) ([d0beaaa](https://github.com/autonomouslogic/eve-ref/commit/d0beaaaedad4ddaa98e6618e6eaf6ce0f3dc1e6b))
+
 ## [2.83.0](https://github.com/autonomouslogic/eve-ref/compare/2.82.3...2.83.0) (2026-10-16)
 
 
