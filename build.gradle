@@ -121,7 +121,6 @@ dependencies {
 	testImplementation "org.junit-pioneer:junit-pioneer:2.3.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.23.0"
 	testImplementation "com.squareup.okhttp3:mockwebserver:5.5.0"
-	testImplementation "com.squareup.okhttp3:mockwebserver3:5.5.0"
 }
 
 task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
@@ -300,9 +299,7 @@ test {
 	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/db/database-test;AUTO_SERVER=TRUE"
 	jvmArgs "-client", "-XX:+UseG1GC", "-Xmx8g", "-Dorg.jooq.no-logo=true", "-Dorg.jooq.no-tips=true"
 
-	useJUnitPlatform {
-		excludeTags "slow"
-	}
+	useJUnitPlatform()
 	testLogging {
 		events = [ "FAILED", "PASSED", "SKIPPED" ]
 		showExceptions = true
@@ -312,28 +309,6 @@ test {
 		showStackTraces = true
 	}
 	// https://junit-pioneer.org/docs/environment-variables/#warnings-for-reflective-access
-	jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
-}
-
-// Dedicated task for slow data-server tests that need a small, fixed heap to prove constant memory use while
-// streaming. Excluded from the default `test` task above.
-task slowTest(type: Test) {
-	environment "LOG_LEVEL", "trace"
-	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/db/database-test;AUTO_SERVER=TRUE"
-	maxHeapSize = "256m"
-	jvmArgs "-client", "-XX:+UseG1GC", "-Dorg.jooq.no-logo=true", "-Dorg.jooq.no-tips=true"
-
-	testClassesDirs = sourceSets.test.output.classesDirs
-	classpath = sourceSets.test.runtimeClasspath
-
-	useJUnitPlatform {
-		includeTags "slow"
-	}
-	testLogging {
-		events = [ "FAILED", "PASSED", "SKIPPED" ]
-		showExceptions = true
-		exceptionFormat = "FULL"
-	}
 	jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
@@ -707,15 +682,6 @@ task generateKeyPair(type: JavaExec) {
 task api(type: JavaExec) {
 	group "application"
 	args "api"
-	environment envProperties
-
-	classpath = sourceSets.main.runtimeClasspath
-	mainClass = mainClassName
-}
-
-task dataServer(type: JavaExec) {
-	group "application"
-	args "data-server"
 	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath

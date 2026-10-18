@@ -48,9 +48,6 @@ dist: generate-database
 test-java: generate-database
 	./gradlew test --stacktrace
 
-slow-test-java: generate-database
-	./gradlew slowTest --stacktrace
-
 test-ui:
 	cd ui ; npm run test
 

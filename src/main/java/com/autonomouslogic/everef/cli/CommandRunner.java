@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.api.ApiRunner;
 import com.autonomouslogic.everef.cli.basiclogin.BasicLogin;
-import com.autonomouslogic.everef.cli.dataserver.DataServer;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
 import com.autonomouslogic.everef.cli.decorator.SentryDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
@@ -85,9 +84,6 @@ public class CommandRunner {
 
 	@Inject
 	protected Provider<ApiRunner> apiRunnerProvider;
-
-	@Inject
-	protected Provider<DataServer> dataServerProvider;
 
 	@Inject
 	protected Provider<SyncStaticData> updateStaticDataProvider;
@@ -245,8 +241,6 @@ public class CommandRunner {
 				return scrapeMarketsPricesProvider.get();
 			case "api":
 				return apiRunnerProvider.get();
-			case "data-server":
-				return dataServerProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}
