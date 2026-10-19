@@ -45,8 +45,9 @@ public class DataCrawler {
 	private List<DataUrl> crawl(DataUrl url) {
 		try (var response = okHttpWrapper.get(url.toString())) {
 			if (response.code() != 200) {
-				log.warn("Failed fetching {} - code: {}", url, response.code());
-				return List.of();
+				// A partial crawl would make missing files look absent, and callers re-fetch what they think is
+				// missing.
+				throw new RuntimeException(String.format("Failed fetching %s - code: %s", url, response.code()));
 			}
 			var html = response.body().string();
 			return parseEntries(html, url).stream()
