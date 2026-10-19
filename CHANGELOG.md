@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.83.2](https://github.com/autonomouslogic/eve-ref/compare/2.83.1...2.83.2) (2026-10-19)
+
+
+### Bug Fixes
+
+* Never resync fuzzwork ordersets below the lowest archived id ([#1145](https://github.com/autonomouslogic/eve-ref/issues/1145)) ([0066b73](https://github.com/autonomouslogic/eve-ref/commit/0066b7391daf73c5aa885b24105515123b1ba9b1))
+
+
+### Documentation
+
+* Updated download docs ([#1144](https://github.com/autonomouslogic/eve-ref/issues/1144)) ([8db8f37](https://github.com/autonomouslogic/eve-ref/commit/8db8f371f4a52941061462051159239a486e1229))
+
 ## [2.83.1](https://github.com/autonomouslogic/eve-ref/compare/2.83.0...2.83.1) (2026-10-18)
 
 
