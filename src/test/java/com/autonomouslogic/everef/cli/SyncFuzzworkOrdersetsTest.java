@@ -9,7 +9,9 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -49,7 +51,8 @@ public class SyncFuzzworkOrdersetsTest {
 	MockWebServer server;
 	List<String> existingPaths;
 	List<Long> fuzzworkIds;
-	List<Long> downloadedIds;
+	Set<Long> unavailableIds;
+	List<Long> requestedIds;
 
 	@BeforeEach
 	@SneakyThrows
@@ -58,7 +61,8 @@ public class SyncFuzzworkOrdersetsTest {
 
 		existingPaths = new ArrayList<>();
 		fuzzworkIds = new ArrayList<>();
-		downloadedIds = Collections.synchronizedList(new ArrayList<>());
+		unavailableIds = new HashSet<>();
+		requestedIds = Collections.synchronizedList(new ArrayList<>());
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
 		server.start(TestDataUtil.TEST_PORT);
@@ -74,13 +78,15 @@ public class SyncFuzzworkOrdersetsTest {
 	@SneakyThrows
 	void shouldOnlySyncOrdersetsAtOrAboveLowestExistingId() {
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
-		fuzzworkIds.addAll(List.of(9L, 10L, 50L, 100L, 101L));
+		fuzzworkIds.addAll(List.of(9L, 10L, 50L, 100L, 101L, 102L));
 
 		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
 
-		assertEquals(List.of(101L), downloadedIds);
+		assertEquals(List.of(101L, 102L), requestedIds);
 		assertEquals(
-				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz"),
+				List.of(
+						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz",
+						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-102-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
 	}
 
@@ -93,7 +99,7 @@ public class SyncFuzzworkOrdersetsTest {
 
 		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
 
-		assertEquals(List.of(101L, 103L, 104L), downloadedIds.stream().sorted().toList());
+		assertEquals(List.of(101L, 103L, 104L), requestedIds.stream().sorted().toList());
 		assertEquals(
 				List.of(
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz",
@@ -111,7 +117,7 @@ public class SyncFuzzworkOrdersetsTest {
 
 		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
 
-		assertEquals(List.of(101L), downloadedIds);
+		assertEquals(List.of(101L), requestedIds);
 		assertEquals(
 				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
@@ -125,8 +131,25 @@ public class SyncFuzzworkOrdersetsTest {
 
 		assertThrows(Exception.class, () -> VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run));
 
-		assertEquals(List.of(), downloadedIds);
+		assertEquals(List.of(), requestedIds);
 		assertEquals(List.of(), uploadedOrdersets());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldRequestButNotUploadUnavailableOrdersets() {
+		// Fuzzwork lists an orderset but 404s on download (not actually available yet / no new data since the
+		// last conditional check). It must still be requested every run, but never uploaded.
+		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
+		fuzzworkIds.addAll(List.of(100L, 101L, 102L));
+		unavailableIds.add(101L);
+
+		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
+
+		assertEquals(List.of(101L, 102L), requestedIds.stream().sorted().toList());
+		assertEquals(
+				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-102-2026-01-02_12-00-00.csv.gz"),
+				uploadedOrdersets());
 	}
 
 	private List<String> uploadedOrdersets() {
@@ -191,7 +214,10 @@ public class SyncFuzzworkOrdersetsTest {
 			var matcher = ORDERSET_DOWNLOAD.matcher(path);
 			if (matcher.matches()) {
 				var id = Long.parseLong(matcher.group(1));
-				downloadedIds.add(id);
+				requestedIds.add(id);
+				if (unavailableIds.contains(id)) {
+					return new MockResponse().setResponseCode(404);
+				}
 				return new MockResponse()
 						.setResponseCode(200)
 						.setHeader("Last-Modified", "Fri, 02 Jan 2026 12:00:00 GMT")
