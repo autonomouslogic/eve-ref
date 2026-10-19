@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.ScrapeFreelanceJobsTest;
 import com.autonomouslogic.everef.cli.ScrapeMilitaryCampaignsTest;
 import com.autonomouslogic.everef.cli.ScrapeSkinrTest;
+import com.autonomouslogic.everef.cli.SyncFuzzworkOrdersetsTest;
 import com.autonomouslogic.everef.cli.SyncMerTest;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
@@ -122,6 +123,8 @@ public interface TestComponent {
 	void inject(ScrapeSkinrTest test);
 
 	void inject(ScrapeMilitaryCampaignsTest test);
+
+	void inject(SyncFuzzworkOrdersetsTest test);
 
 	void inject(SyncMerTest test);
 
