@@ -37,12 +37,7 @@ public class S3Module {
 		if (dataClient != null) {
 			return dataClient;
 		}
-		// The data server holds one upstream connection per open download, so this must cover its request limit.
-		return createClient(
-				credentialsProvider,
-				region,
-				Configs.DATA_S3_ENDPOINT_URL,
-				Math.max(256, Configs.DATA_SERVER_MAX_CONCURRENCY.getRequired()));
+		return createClient(credentialsProvider, region, Configs.DATA_S3_ENDPOINT_URL);
 	}
 
 	@Provides
@@ -54,7 +49,7 @@ public class S3Module {
 		if (referenceDataClient != null) {
 			return referenceDataClient;
 		}
-		return createClient(credentialsProvider, region, Configs.REFERENCE_DATA_S3_ENDPOINT_URL, 256);
+		return createClient(credentialsProvider, region, Configs.REFERENCE_DATA_S3_ENDPOINT_URL);
 	}
 
 	@Provides
@@ -66,17 +61,13 @@ public class S3Module {
 		if (staticClient != null) {
 			return staticClient;
 		}
-		return createClient(credentialsProvider, region, Configs.STATIC_S3_ENDPOINT_URL, 256);
+		return createClient(credentialsProvider, region, Configs.STATIC_S3_ENDPOINT_URL);
 	}
 
 	private static S3AsyncClient createClient(
-			AwsCredentialsProvider credentialsProvider,
-			Optional<Region> region,
-			Config<String> endpointUrl,
-			int maxConcurrency)
+			AwsCredentialsProvider credentialsProvider, Optional<Region> region, Config<String> endpointUrl)
 			throws URISyntaxException {
-		var httpClient =
-				NettyNioAsyncHttpClient.builder().maxConcurrency(maxConcurrency).build();
+		var httpClient = NettyNioAsyncHttpClient.builder().maxConcurrency(256).build();
 		var client =
 				S3AsyncClient.builder().credentialsProvider(credentialsProvider).httpClient(httpClient);
 		region.ifPresent(client::region);

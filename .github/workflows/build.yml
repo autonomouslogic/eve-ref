@@ -18,9 +18,6 @@ jobs:
       - name: Test
         run: make test-java
 
-      - name: Slow tests
-        run: make slow-test-java
-
       - name: Code Coverage
         run: ./gradlew jacocoTestReport --stacktrace
 

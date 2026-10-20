@@ -8,10 +8,8 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.ScrapeFreelanceJobsTest;
 import com.autonomouslogic.everef.cli.ScrapeMilitaryCampaignsTest;
 import com.autonomouslogic.everef.cli.ScrapeSkinrTest;
+import com.autonomouslogic.everef.cli.SyncFuzzworkOrdersetsTest;
 import com.autonomouslogic.everef.cli.SyncMerTest;
-import com.autonomouslogic.everef.cli.dataserver.DataServerConcurrencyTest;
-import com.autonomouslogic.everef.cli.dataserver.DataServerLargeStreamTest;
-import com.autonomouslogic.everef.cli.dataserver.DataServerTest;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
 import com.autonomouslogic.everef.cli.flyway.FlywayMigrateTest;
@@ -78,12 +76,6 @@ public interface TestComponent {
 
 	void inject(DataIndexTest test);
 
-	void inject(DataServerConcurrencyTest test);
-
-	void inject(DataServerLargeStreamTest test);
-
-	void inject(DataServerTest test);
-
 	void inject(DbAdapterTest test);
 
 	void inject(EsiHelperTest test);
@@ -131,6 +123,8 @@ public interface TestComponent {
 	void inject(ScrapeSkinrTest test);
 
 	void inject(ScrapeMilitaryCampaignsTest test);
+
+	void inject(SyncFuzzworkOrdersetsTest test);
 
 	void inject(SyncMerTest test);
 
