@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Runs every rollup step for one archive and year, in order, stopping at the first one that fails.
 # Steps that already have a .done marker are skipped, so rerunning after a failure resumes where it stopped.
-# 07-delete.sh still asks for its typed confirmation: this script doesn't bypass any step's own prompts.
 # Usage: ./rollup.sh <archive> <year>
 set -euo pipefail
 

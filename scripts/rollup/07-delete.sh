@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Step 7: dry-run preview, typed confirmation, rclone delete, verify the year dir is gone.
+# Step 7: dry-run preview, rclone delete, verify the year dir is gone.
 # Usage: ./07-delete.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
@@ -48,16 +48,9 @@ else
 	fi
 	echo "Dry-run would delete $DRY_RUN_COUNT files, matches what's left"
 
-	echo "🔵 Confirmation"
-	echo "About to permanently hide $REMAINING_COUNT files under $REMOTE/$YEAR_PATH"
-	echo "(soft delete: hidden versions are kept for 2 days by the bucket lifecycle rules)"
-	read -r -p "Type '$ARCHIVE-$YEAR' to confirm: " CONFIRM
-	if [[ "$CONFIRM" != "$ARCHIVE-$YEAR" ]]; then
-		echo "🔴 Confirmation did not match '$ARCHIVE-$YEAR', aborting" >&2
-		exit 1
-	fi
-
 	echo "🔵 Deleting"
+	echo "Hiding $REMAINING_COUNT files under $REMOTE/$YEAR_PATH"
+	echo "(soft delete: hidden versions are kept for 2 days by the bucket lifecycle rules)"
 	rclone delete -v --fast-list --max-delete "$REMAINING_COUNT" "$REMOTE/$YEAR_PATH"
 	echo "rclone delete done"
 fi

@@ -1,20 +1,30 @@
 # Rollup scope. Sourced by common.sh and advise.sh. See NOTES.md, "Scope".
 ROLLUP_SCOPE=(
-	incursions
-	skinr-listings
-	skinr-details
-	sovereignty-*
-	industry-*
-	system-jumps
-	system-kills
-	warzone*
-	insurance-prices
-	universe-structures
-	faction-warfare-*
-	military-campaigns
-	markets-prices
-	freelance-jobs
-	structures
+  faction-warfare-leaderboards
+  faction-warfare-leaderboards-characters
+  faction-warfare-leaderboards-corporations
+  faction-warfare-stats
+  faction-warfare-systems
+  faction-warfare-wars
+  freelance-jobs
+  industry-facilities
+  industry-systems
+  insurance-prices
+  markets-prices
+  military-campaigns
+  shadow-war-arc-goals
+  skinr-details
+  skinr-listings
+  sovereignty-campaigns
+  sovereignty-map
+  sovereignty-structures
+  structures
+  system-jumps
+  system-kills
+  universe-structures
+  warzone
+  warzone-insurgency
+  warzone-leaderboard
 )
 
 in_rollup_scope() {

@@ -61,7 +61,7 @@ and the completion markers. The scripts never clear it. Remove it yourself once 
 
 `rollup.sh <archive> <year>` runs steps 2-9 in order and stops at the first failure. Steps with a `.done` marker are
 skipped, so rerunning resumes where it stopped. It does not pause between steps, so the "read each summary" advice
-below applies to the logs afterwards, and `07-delete.sh` still asks for its typed confirmation. Run the steps by
+below applies to the logs afterwards, and `07-delete.sh` deletes without asking. Run the steps by
 hand when you want to check each summary before moving on.
 
 If a step fails partway, remove its partial output and rerun it. Download and delete can simply be rerun.
@@ -75,7 +75,7 @@ If a step fails partway, remove its partial output and rerun it. Download and de
 | 5    | `04-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
 | 6    | `05-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
 | 7    | `06-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
-| 8    | `07-delete.sh`    | **hides year dir**   | Remaining files all in the listing, dry-run count matches. Typed `<archive>-<year>` confirmation |
+| 8    | `07-delete.sh`    | **hides year dir**   | Remaining files all in the listing, dry-run count matches. No manual confirmation |
 | 9    | `08-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
 
 Steps 1-7 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (7).
