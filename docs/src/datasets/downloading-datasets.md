@@ -9,7 +9,7 @@ A special header is returned, `x-bz-info-src_last_modified_millis`, which contai
 This is available on both HEAD and GET requests.
 
 ## Changelog
-- **2026-10-20 08:21 UTC**: `data.everef.net` stopped returning `last-modified` and `etag` headers.
+- **2026-10-20 23:21 UTC**: `data.everef.net` stopped returning `last-modified` and `etag` headers.
   Conditional requests and timestamp-based comparisons no longer work; use size-based
   comparisons instead. Exposed `x-bz-info-src_last_modified_millis`.
 
