@@ -75,6 +75,7 @@ import tools.jackson.databind.json.JsonMapper;
 @Log4j2
 public class RefDataUtil {
 	@Inject
+	@Named("data")
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject

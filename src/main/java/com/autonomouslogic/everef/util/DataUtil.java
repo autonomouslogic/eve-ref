@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
@@ -39,6 +40,7 @@ public class DataUtil {
 	protected TempFiles tempFiles;
 
 	@Inject
+	@Named("data")
 	protected OkHttpWrapper okHttpWrapper;
 
 	private URI dataBaseUrl;

@@ -63,6 +63,17 @@ public class TestOkHttpModule {
 				.build();
 	}
 
+	@Provides
+	@Singleton
+	@Named("data")
+	public OkHttpClient dataHttpClient(UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
+		return new OkHttpModule()
+				.dataHttpClient(userAgentInterceptor, loggingInterceptor)
+				.newBuilder()
+				.addInterceptor(new NonLocalhostBlockingInterceptor())
+				.build();
+	}
+
 	private class NonLocalhostBlockingInterceptor implements Interceptor {
 		@Override
 		public okhttp3.Response intercept(Chain chain) throws java.io.IOException {
@@ -86,6 +97,13 @@ public class TestOkHttpModule {
 	@Named("esi")
 	public OkHttpWrapper esiMainWrapper(@Named("esi") OkHttpClient client) {
 		return new OkHttpModule().esiMainWrapper(client);
+	}
+
+	@Provides
+	@Singleton
+	@Named("data")
+	public OkHttpWrapper dataWrapper(@Named("data") OkHttpClient client) {
+		return new OkHttpModule().dataWrapper(client);
 	}
 
 	@Provides

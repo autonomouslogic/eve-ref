@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.inject;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.http.BasePathInterceptor;
 import com.autonomouslogic.everef.http.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.http.EsiMarketHistoryRateLimitExceededInterceptor;
 import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
@@ -63,14 +64,14 @@ public class OkHttpModule {
 			SocketErrorRetryInterceptor socketErrorRetryInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor,
 			LoggingInterceptor loggingInterceptor) {
-		var builder = new OkHttpClient.Builder()
+		return baseBuilder()
 				.addInterceptor(userAgentInterceptor)
 				.addInterceptor(socketErrorRetryInterceptor)
 				.addInterceptor(limitExceededInterceptor)
 				.addInterceptor(loggingInterceptor)
-				.addNetworkInterceptor(rateLimitInterceptor);
-		builder = configure(builder, cache);
-		return builder.build();
+				.addNetworkInterceptor(rateLimitInterceptor)
+				.cache(cache)
+				.build();
 	}
 
 	@Provides
@@ -85,26 +86,51 @@ public class OkHttpModule {
 	@Singleton
 	public OkHttpClient mainHttpClient(
 			Cache cache, UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
-		var builder =
-				new OkHttpClient.Builder().addInterceptor(userAgentInterceptor).addInterceptor(loggingInterceptor);
-		builder = configure(builder, cache);
-		return builder.build();
-	}
-
-	private OkHttpClient.Builder configure(OkHttpClient.Builder builder, Cache cache) {
-		return builder.retryOnConnectionFailure(true)
-				.followRedirects(true)
-				.followSslRedirects(true)
-				.connectTimeout(Duration.ofSeconds(5))
-				.readTimeout(Duration.ofSeconds(60))
-				.writeTimeout(Duration.ofSeconds(5))
-				.callTimeout(Duration.ofSeconds(120))
-				.cache(cache);
+		return baseBuilder()
+				.addInterceptor(userAgentInterceptor)
+				.addInterceptor(loggingInterceptor)
+				.cache(cache)
+				.build();
 	}
 
 	@Provides
 	@Singleton
 	public OkHttpWrapper mainWrapper(OkHttpClient client) {
+		return new OkHttpWrapper(client);
+	}
+
+	@Provides
+	@Singleton
+	@Named("data")
+	public OkHttpClient dataHttpClient(UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
+		// No disk cache: the data site is expected to stop sending Last-Modified/ETag headers, which would
+		// leave OkHttp's cache doing unpredictable heuristic freshness instead of real revalidation.
+		return baseBuilder()
+				.addInterceptor(userAgentInterceptor)
+				.addInterceptor(loggingInterceptor)
+				.addInterceptor(new BasePathInterceptor(Configs.DATA_BASE_URL.getRequired()))
+				.build();
+	}
+
+	/**
+	 * Shared base settings (timeouts, redirects, retries) for every OkHttpClient built by this module.
+	 * Callers add their own interceptors and cache on top.
+	 */
+	private OkHttpClient.Builder baseBuilder() {
+		return new OkHttpClient.Builder()
+				.retryOnConnectionFailure(true)
+				.followRedirects(true)
+				.followSslRedirects(true)
+				.connectTimeout(Duration.ofSeconds(5))
+				.readTimeout(Duration.ofSeconds(60))
+				.writeTimeout(Duration.ofSeconds(5))
+				.callTimeout(Duration.ofSeconds(120));
+	}
+
+	@Provides
+	@Singleton
+	@Named("data")
+	public OkHttpWrapper dataWrapper(@Named("data") OkHttpClient client) {
 		return new OkHttpWrapper(client);
 	}
 
