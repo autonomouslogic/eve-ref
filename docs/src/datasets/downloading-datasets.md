@@ -5,10 +5,13 @@ The current host does not charge for bandwidth, so knock yourself out.
 `data.everef.net` does not return `last-modified` or `etag` headers, so conditional requests based on those headers do not work.
 Use `content-length`/file size instead to avoid downloading the same data multiple times.
 
+A special header is returned, `x-bz-info-src_last_modified_millis`, which contains the millisecond UNIX timestamp of the true file modification time.
+This is available on both HEAD and GET requests.
+
 ## Changelog
-- **2026-10-20**: `data.everef.net` stopped returning `last-modified` and `etag` headers.
+- **2026-10-20 08:21 UTC**: `data.everef.net` stopped returning `last-modified` and `etag` headers.
   Conditional requests and timestamp-based comparisons no longer work; use size-based
-  comparisons instead.
+  comparisons instead. Exposed `x-bz-info-src_last_modified_millis`.
 
 ## Download with rclone
 The preferred method to download the data is with [rclone](https://rclone.org/) as it supports multiple concurrent downloads.
