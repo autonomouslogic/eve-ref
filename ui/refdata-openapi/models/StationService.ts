@@ -20,6 +20,12 @@ import { exists, mapValues } from '../runtime';
  */
 export interface StationService {
     /**
+     * The key is the language code.
+     * @type {{ [key: string]: string; }}
+     * @memberof StationService
+     */
+    description?: { [key: string]: string; };
+    /**
      * 
      * @type {number}
      * @memberof StationService
@@ -52,6 +58,7 @@ export function StationServiceFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'serviceId': !exists(json, 'service_id') ? undefined : json['service_id'],
         'serviceName': !exists(json, 'service_name') ? undefined : json['service_name'],
     };
@@ -66,6 +73,7 @@ export function StationServiceToJSON(value?: StationService | null): any {
     }
     return {
         
+        'description': value.description,
         'service_id': value.serviceId,
         'service_name': value.serviceName,
     };

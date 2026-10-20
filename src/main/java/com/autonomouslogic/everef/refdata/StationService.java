@@ -20,4 +20,8 @@ public class StationService {
 
 	@JsonProperty
 	Map<String, String> serviceName;
+
+	@JsonProperty
+	@Schema(description = "The key is the language code.")
+	Map<String, String> description;
 }
