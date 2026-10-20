@@ -46,6 +46,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -457,6 +458,39 @@ public class PublishRefDataTest {
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of(), putKeys);
 		assertEquals(List.of(), deleteKeys);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotifyDiscord() {
+		meta = RefDataMeta.builder()
+				.buildTime(Instant.parse("2021-01-01T00:00:00Z"))
+				.sde(RefDataMetaFileInfo.builder().sha256("abc").version(101L).build())
+				.esi(RefDataMetaFileInfo.builder().sha256("def").build())
+				.hoboleaks(RefDataMetaFileInfo.builder()
+						.sha256("ghi")
+						.version(102L)
+						.build())
+				.build();
+
+		refDataFile = mockScrapeBuilder.createTestRefdata(RefDataMeta.builder()
+				.buildTime(Instant.parse("2022-01-01T00:00:00Z"))
+				.sde(RefDataMetaFileInfo.builder().sha256("abc").version(201L).build())
+				.esi(RefDataMetaFileInfo.builder().sha256("def2").build())
+				.hoboleaks(RefDataMetaFileInfo.builder()
+						.sha256("ghi2")
+						.version(202L)
+						.build())
+				.build());
+
+		var spyNotifier = Mockito.spy(publishRefData.discordNotifier);
+		publishRefData.discordNotifier = spyNotifier;
+
+		VirtualThreads.onVirtualThread(publishRefData::run);
+
+		var captor = ArgumentCaptor.forClass(String.class);
+		Mockito.verify(spyNotifier).notifyDiscord(captor.capture());
+		assertEquals("Reference data published - SDE: 201, Hoboleaks: 202)", captor.getValue());
 	}
 
 	@Test
