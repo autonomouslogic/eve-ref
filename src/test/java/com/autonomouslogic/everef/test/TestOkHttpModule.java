@@ -66,7 +66,8 @@ public class TestOkHttpModule {
 	@Provides
 	@Singleton
 	@Named("data")
-	public OkHttpClient dataHttpClient(UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
+	public OkHttpClient dataHttpClient(
+			UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
 		return new OkHttpModule()
 				.dataHttpClient(userAgentInterceptor, loggingInterceptor)
 				.newBuilder()

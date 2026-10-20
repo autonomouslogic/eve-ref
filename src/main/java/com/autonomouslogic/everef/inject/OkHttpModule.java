@@ -102,7 +102,8 @@ public class OkHttpModule {
 	@Provides
 	@Singleton
 	@Named("data")
-	public OkHttpClient dataHttpClient(UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
+	public OkHttpClient dataHttpClient(
+			UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
 		// No disk cache: the data site is expected to stop sending Last-Modified/ETag headers, which would
 		// leave OkHttp's cache doing unpredictable heuristic freshness instead of real revalidation.
 		return baseBuilder()

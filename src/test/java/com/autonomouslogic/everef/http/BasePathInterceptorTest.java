@@ -79,7 +79,8 @@ public class BasePathInterceptorTest {
 	void refusesSiblingPathThatOnlySharesAPrefix() {
 		var client = clientFor("/data");
 		var request = new Request.Builder().url(server.url("/data-other")).build();
-		var thrown = assertThrows(IOException.class, () -> client.newCall(request).execute());
+		var thrown =
+				assertThrows(IOException.class, () -> client.newCall(request).execute());
 		assertEquals(true, thrown.getMessage().contains("Refusing request"));
 	}
 
