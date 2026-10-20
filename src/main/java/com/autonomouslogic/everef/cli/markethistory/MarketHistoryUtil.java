@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +31,7 @@ public class MarketHistoryUtil {
 	protected TempFiles tempFiles;
 
 	@Inject
+	@Named("data")
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
