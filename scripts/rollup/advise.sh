@@ -68,7 +68,7 @@ if [[ ${#CANDIDATES[@]} -eq 0 ]]; then
 	echo "✅ Done, no candidates."
 else
 	while read -r year dataset; do
-		echo "./scripts/rollup/rollup.sh $dataset $year"
+		echo "./scripts/rollup/rollup.sh $dataset $year &&"
 	done <<<"$(printf '%s\n' "${CANDIDATES[@]}" | sort -n)"
 	echo "✅ Done"
 
