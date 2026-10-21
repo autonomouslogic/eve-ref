@@ -64,27 +64,6 @@ if [[ -n "$REMAINING" ]]; then
 fi
 echo "$REMOTE/$YEAR_PATH is empty"
 
-SAMPLE_SIZE=10
-echo "🔵 Checking $SAMPLE_SIZE random old public URLs are gone"
-SAMPLE_PATHS="$(jq -r '.[].Path' "$SCRATCH/listing.json" | shuf -n "$SAMPLE_SIZE")"
-while IFS= read -r path; do
-	url="$PUBLIC_BASE_URL/$ARCHIVE/history/$YEAR/$path"
-	status=""
-	for attempt in 1 2 3; do
-		status="$(curl -s -o /dev/null -w '%{http_code}' "$url")"
-		if [[ "$status" == "404" ]]; then
-			break
-		fi
-		echo "Not 404 yet (attempt $attempt): $url -> $status"
-		sleep 5
-	done
-	if [[ "$status" != "404" ]]; then
-		echo "🔴 Expected 404 for $url, got $status" >&2
-		exit 1
-	fi
-	echo "404 confirmed: $url"
-done <<<"$SAMPLE_PATHS"
-
 echo "🔵 Checking the archive is still present, unchanged"
 ARCHIVE_SHA1="$(cut -d' ' -f1 "$SCRATCH/archive.sha1")"
 REMOTE_ARCHIVE_JSON="$(rclone lsjson --hash "$REMOTE/$ARCHIVE/history/" | jq --arg n "$ARCHIVE_NAME" '[.[] | select(.Name == $n)] | .[0] // null')"

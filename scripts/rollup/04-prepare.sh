@@ -85,7 +85,18 @@ echo "🔵 Checking JSON validity"
 # input_filename prints the file each value ended in, which must equal the file list in order.
 if ! find "$STAGE_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n500 bash -c \
 	'out="$(jq -r input_filename "$@")" && diff <(printf "%s\n" "$out") <(printf "%s\n" "$@") >&2' bash; then
-	echo "🔴 JSON check failed: invalid JSON, or files not holding exactly one JSON value (diff above)" >&2
+	echo "🔴 JSON check failed (diff above): invalid JSON, or files not holding exactly one JSON value" >&2
+	echo "🔵 Checking each file individually to find which ones are bad" >&2
+	find "$STAGE_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n1 bash -c '
+		f="$1"
+		out="$(jq -c . "$f" 2>&1)"
+		rc=$?
+		if [[ "$rc" -ne 0 ]]; then
+			printf "🔴 %s: invalid JSON: %s\n" "$f" "$out" >&2
+		elif [[ "$(wc -l <<<"$out")" -ne 1 ]]; then
+			printf "🔴 %s: holds %s JSON values, expected exactly one\n" "$f" "$(wc -l <<<"$out")" >&2
+		fi
+	' bash
 	exit 1
 fi
 echo "Every file holds exactly one valid JSON value"
