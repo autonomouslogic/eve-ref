@@ -245,4 +245,12 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   `<dataset>-<year>.tar.xz`, `<dataset>-<year>.sha256`, `archive.sha256`, `archive.sha1`
   in the scratch dir for manual review; upload is a separate manual step by the user.
 - Not yet run against any real archive — needs a dry run per dataset/year before trust.
+- **Leftover-file mtimes**: preserved via the live day `index.json`'s `last_modified`
+  metadata field (`touch -d` after decompression) — the same field rollup's own mtime
+  check (`04-prepare.sh`) trusts, not anything derived from JSON content. Missing/null
+  `last_modified` aborts the run rather than silently falling back to download time.
+  Old-archive-derived files keep whatever mtime the old `.tar.bz2` stored (its own
+  build-day mtime per the inspection findings, not the true snapshot time) — this
+  script doesn't change that, since snapshot time is only ever recoverable from the
+  filename for those, not a trustworthy embedded mtime.
 

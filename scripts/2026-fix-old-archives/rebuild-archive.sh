@@ -168,13 +168,17 @@ else
 		mkdir -p "$day_dir"
 		DAY_INDEX_URL="$PUBLIC_BASE_URL/$DATASET/history/$YEAR/$day/index.json"
 		DAY_INDEX_JSON="$(curl -fsS -m 60 --retry 5 "$DAY_INDEX_URL")"
-		FILE_URLS="$(jq -r '(.files // [])[] | select(.name | endswith("index.html") | not) | .url' <<<"$DAY_INDEX_JSON")"
-		if [[ -z "$FILE_URLS" ]]; then
+		FILE_ROWS="$(jq -r '(.files // [])[] | select(.name | endswith("index.html") | not) | [.url, .last_modified] | @tsv' <<<"$DAY_INDEX_JSON")"
+		if [[ -z "$FILE_ROWS" ]]; then
 			echo "🔴 no data files listed for $DATASET history/$YEAR/$day" >&2
 			exit 1
 		fi
-		while IFS= read -r url; do
+		while IFS=$'\t' read -r url last_modified; do
 			[[ -z "$url" ]] && continue
+			if [[ -z "$last_modified" || "$last_modified" == "null" ]]; then
+				echo "🔴 no last_modified metadata for $url — cannot preserve its file time" >&2
+				exit 1
+			fi
 			bz2_name="$(basename "$url")"
 			json_name="${bz2_name%.bz2}"
 			if [[ "$json_name" == "$bz2_name" ]]; then
@@ -195,8 +199,12 @@ else
 				exit 1
 			fi
 			bunzip2 "$bz2_path"
+			# last_modified is remote metadata (same field rollup's own mtime check trusts),
+			# not derived from the JSON content, and not something touch -d can get wrong
+			# silently: a bad timestamp string makes touch fail, which aborts the script.
+			touch -d "$last_modified" "$day_dir/$json_name"
 			STAGED_FROM_LIVE=$((STAGED_FROM_LIVE + 1))
-		done <<<"$FILE_URLS"
+		done <<<"$FILE_ROWS"
 	done <<<"$DAYS"
 	echo "Staged $STAGED_FROM_LIVE files from the live history/$YEAR/ leftover"
 fi
