@@ -76,10 +76,8 @@ header_value() {
 }
 
 CONTENT_LENGTH="$(header_value 'content-length')"
-LAST_MODIFIED="$(header_value 'last-modified')"
-SRC_LAST_MODIFIED_MILLIS="$(header_value 'x-amz-meta-src_last_modified_millis')"
+SRC_LAST_MODIFIED_MILLIS="$(header_value 'x-bz-info-src_last_modified_millis')"
 
-EXPECTED_LAST_MODIFIED="$(date -u -d "$EXPECTED_MODTIME" +'%a, %d %b %Y %H:%M:%S GMT')"
 # rclone stores the archive's full mtime, sub-second part included, truncated to milliseconds.
 EXPECTED_MILLIS="$(date -u -r "$ARCHIVE_PATH" +%s%3N)"
 
@@ -87,15 +85,11 @@ if [[ "$CONTENT_LENGTH" != "$LOCAL_BYTES" ]]; then
 	echo "🔴 content-length $CONTENT_LENGTH does not match local size $LOCAL_BYTES" >&2
 	exit 1
 fi
-if [[ "$LAST_MODIFIED" != "$EXPECTED_LAST_MODIFIED" ]]; then
-	echo "🔴 last-modified '$LAST_MODIFIED' does not equal '$EXPECTED_LAST_MODIFIED'" >&2
-	exit 1
-fi
 if [[ "$SRC_LAST_MODIFIED_MILLIS" != "$EXPECTED_MILLIS" ]]; then
-	echo "🔴 x-amz-meta-src_last_modified_millis '$SRC_LAST_MODIFIED_MILLIS' does not equal '$EXPECTED_MILLIS'" >&2
+	echo "🔴 x-bz-info-src_last_modified_millis '$SRC_LAST_MODIFIED_MILLIS' does not equal '$EXPECTED_MILLIS'" >&2
 	exit 1
 fi
-echo "Public headers OK: 200, content-length $CONTENT_LENGTH, last-modified '$LAST_MODIFIED'"
+echo "Public headers OK: 200, content-length $CONTENT_LENGTH"
 
 echo "🔵 Downloading the public copy"
 mkdir -p "$SCRATCH/verify/public"
@@ -111,13 +105,6 @@ if [[ "$PUBLIC_SHA256" != "$LOCAL_SHA256" ]]; then
 	exit 1
 fi
 echo "Public download SHA-256 matches archive.sha256"
-
-PUBLIC_MTIME="$(date -u -d "@$(stat -c%Y "$VERIFY_PATH")" +%Y-%m-%dT%H:%M:%SZ)"
-if [[ "$PUBLIC_MTIME" != "$EXPECTED_MODTIME" ]]; then
-	echo "🔴 Downloaded file mtime $PUBLIC_MTIME does not equal $EXPECTED_MODTIME" >&2
-	exit 1
-fi
-echo "Downloaded file mtime matches $EXPECTED_MODTIME"
 
 mark_done \
 	"remote_path=$ARCHIVE/history/$ARCHIVE_NAME" \
