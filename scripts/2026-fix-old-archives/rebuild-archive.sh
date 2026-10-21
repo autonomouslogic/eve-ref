@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Rebuilds one old pre-2023 <dataset>-<year>.tar.bz2 archive (from data.everef.net) into a
 # .tar.xz archive matching the exact format scripts/rollup/05-archive.sh produces: GNU tar,
-# --owner=0 --group=0 --numeric-owner --mode='a=r,u+w', LC_ALL=C sorted entries, xz -6.
+# --owner=0 --group=0 --numeric-owner --mode='a=r,u+w', LC_ALL=C sorted entries, xz -6. Old
+# archive files are also renamed from their old internal scheme (e.g.
+# sovereigntycampaigns_2019-01-01T00:20:09.json) to the current convention
+# (<dataset>-<date>_<HH-MM-SS>.json) to match live/rollup naming.
 #
 # If a live history/<year>/ directory still exists on the remote for this dataset (the old
 # "2022 archive built by mistake, raw data never deleted" problem), its files are merged in too
@@ -118,22 +121,24 @@ mkdir -p "$STAGE_YEAR_DIR"
 STAGED_FROM_OLD=0
 while IFS= read -r -d '' f; do
 	name="$(basename "$f")"
-	if [[ ! "$name" =~ _([0-9]{4}-[0-9]{2}-[0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.json$ ]]; then
-		echo "🔴 could not extract a date from filename: $name" >&2
+	if [[ ! "$name" =~ _([0-9]{4}-[0-9]{2}-[0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\.json$ ]]; then
+		echo "🔴 could not extract a date/time from filename: $name" >&2
 		exit 1
 	fi
 	date="${BASH_REMATCH[1]}"
+	time="${BASH_REMATCH[2]}-${BASH_REMATCH[3]}-${BASH_REMATCH[4]}"
 	if [[ "${date:0:4}" != "$YEAR" ]]; then
 		echo "🔴 file date $date does not belong to year $YEAR: $name" >&2
 		exit 1
 	fi
+	new_name="${DATASET}-${date}_${time}.json"
 	day_dir="$STAGE_YEAR_DIR/$date"
 	mkdir -p "$day_dir"
-	if [[ -e "$day_dir/$name" ]]; then
-		echo "🔴 duplicate file would overwrite staged data: $day_dir/$name" >&2
+	if [[ -e "$day_dir/$new_name" ]]; then
+		echo "🔴 duplicate file would overwrite staged data: $day_dir/$new_name" >&2
 		exit 1
 	fi
-	mv "$f" "$day_dir/$name"
+	mv "$f" "$day_dir/$new_name"
 	STAGED_FROM_OLD=$((STAGED_FROM_OLD + 1))
 done < <(find "$SCRATCH/old/$TOP_DIR" -maxdepth 1 -type f -name '*.json' -print0)
 if [[ "$STAGED_FROM_OLD" -ne "$OLD_FILE_COUNT" ]]; then

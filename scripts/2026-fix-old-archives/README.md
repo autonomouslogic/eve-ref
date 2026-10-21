@@ -197,9 +197,10 @@ sovereignty-structures, system-jumps, system-kills) share the same migration sha
 - Old internal naming has no hyphen between dataset-name words
   (`sovereigntystructures_...`, `systemcost_...`, `universe_system_kills_...`) and
   files are uncompressed; current live/rollup format uses hyphenated names with
-  per-file `.json.bz2` or `.json` (post `04-prepare.sh` decompression) — so the
-  conversion script should decide once whether to preserve old internal naming/format
-  as historical record or normalize to current convention.
+  per-file `.json.bz2` or `.json` (post `04-prepare.sh` decompression). Decision:
+  `rebuild-archive.sh` renames old-archive files to the current convention
+  (`<dataset>-<date>_<HH-MM-SS>.json`) rather than preserving the old scheme — see
+  "Script: rebuild-archive.sh" below.
 - Every "year" archive is **partial** in some way (gaps, half-years, short stubs) —
   never assume 365/366 complete days.
 - Every dataset flagged with the "2022 leftover" problem (industry-systems,
@@ -222,7 +223,9 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   layout is exactly one `<dataset>-<year>/` dir of flat `.json` files (aborts on
   anything else), extracts, and buckets each file into `stage/<dataset>/history/<year>/<date>/`
   by the date embedded in its filename (aborts if a filename doesn't match, or its date
-  isn't in `<year>`).
+  isn't in `<year>`). Each file is also renamed from its old internal scheme
+  (`sovereigntycampaigns_2019-01-01T00:20:09.json`) to the current convention
+  (`sovereignty-campaigns-2019-01-01_00-20-09.json`), matching what live/rollup produces.
 - Checks `https://data.everef.net/<dataset>/history/<year>/index.json`. 404 → no
   merge needed (e.g. system-jumps, or any non-2022 year). 200 → downloads each live
   day's files, `bzip2 -t` checks and decompresses each, stages them into the same
