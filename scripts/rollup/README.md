@@ -49,11 +49,16 @@ against this bucket. Deletes must stay soft, so the bucket lifecycle rules provi
 
 ## Procedure
 
-Step 1, `advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset at the bucket
-root, run once to decide which `<archive> <year>` to feed into every later step. It prints each dataset's
-finished `history/<year>` folders as two lines, `candidates:` and `already archived:` (current year
-ignored), then ends with the oldest candidate overall as `<archive> <year>`. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions
-2023`. Run the steps in order and **read each summary before continuing**.
+Step 1, `advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset, run once to
+decide which `<archive> <year>` to feed into every later step. For every rollup candidate (a finished
+`history/<year>` not yet archived) it prints a ready-to-run `./scripts/rollup/rollup.sh <archive> <year>`
+line, oldest year first, plus warnings for anything that looks off (a year dir still present alongside its
+archive, or an archive that isn't `.tar.xz`). It reads each dataset's public `history/index.json` over
+plain HTTP (e.g. https://data.everef.net/system-kills/history/index.json), so it needs no credentials and
+no `rollup.env`. If candidates are found and `DISCORD_URL` is set, it posts a notice there too. Runs
+monthly via the `Rollup Check` GitHub Actions workflow; it can also be run manually (`workflow_dispatch`)
+or locally, with no setup. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions 2023`. Run the
+steps in order and **read each summary before continuing**.
 
 Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs
 and the completion markers. The scripts never clear it. Remove it yourself once the rollup is `COMPLETE` and the

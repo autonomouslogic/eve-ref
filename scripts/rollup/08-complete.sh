@@ -49,6 +49,22 @@ mark_done \
 	"archive_sha256=$ARCHIVE_SHA256"
 
 echo "✅ Rollup COMPLETE for $ARCHIVE $YEAR"
-echo "🔵 Regenerate the index files for $ARCHIVE/history (run from the repo root, with the data S3 endpoint/profile env from local.env)"
-echo "DATA_PATH=s3://$ROLLUP_BUCKET/ DATA_INDEX_PREFIX=$ARCHIVE/history DATA_INDEX_RECURSIVE=false ./gradlew dataIndex"
+
+REPO_ROOT="$(cd "$ROLLUP_DIR/../.." && pwd)"
+DATA_INDEX_CMD="DATA_PATH=s3://$ROLLUP_BUCKET/ DATA_INDEX_PREFIX=$ARCHIVE/history DATA_INDEX_RECURSIVE=false ./gradlew dataIndex"
+
+if [[ -f "$REPO_ROOT/build.gradle" && -f "$REPO_ROOT/gradlew" ]]; then
+	echo "🔵 Regenerating the index files for $ARCHIVE/history"
+	DATA_INDEX_LOG="$SCRATCH/log/data-index-$(date -u +%Y%m%dT%H%M%SZ).log"
+	if (cd "$REPO_ROOT" && eval "$DATA_INDEX_CMD") >"$DATA_INDEX_LOG" 2>&1; then
+		echo "Index files regenerated, log: $DATA_INDEX_LOG"
+	else
+		echo "🔴 dataIndex failed, see $DATA_INDEX_LOG" >&2
+		exit 1
+	fi
+else
+	echo "🔵 Regenerate the index files for $ARCHIVE/history (run from the repo root, with the data S3 endpoint/profile env from local.env)"
+	echo "$DATA_INDEX_CMD"
+fi
+
 echo "Clear $SCRATCH once the 2-day lifecycle undo window has passed."
