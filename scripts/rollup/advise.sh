@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Advisory, read-only: scans every in-scope dataset and prints each one's yearly history/
-# folders on two lines (rollup candidates, already archived), ascending and excluding the
-# current year. Doesn't take <archive> <year> and doesn't use common.sh's lock/scratch/step-marker
+# Advisory, read-only: scans every in-scope dataset and prints a ./rollup.sh <archive> <year>
+# command for every rollup candidate (a finished history/<year> not yet archived), oldest year
+# first. Doesn't take <archive> <year> and doesn't use common.sh's lock/scratch/step-marker
 # machinery, since it looks across all datasets rather than running one rollup.
 #
 # Reads each dataset's public history/index.json over plain HTTP (e.g.
@@ -30,52 +30,53 @@ http_history_listing() {
 	jq -r '((.directories // [])[].name | . + "/"), (.files // [])[].name' <<<"$index_json" 2>/dev/null || true
 }
 
-echo "🔵 Scanning $PUBLIC_BASE_URL"
-
-OLDEST_YEAR=""
-OLDEST_DATASET=""
+CANDIDATES=()
 
 for dataset in "${ROLLUP_SCOPE[@]}"; do
 	HISTORY_LISTING="$(http_history_listing "$dataset")"
-	# A rolled-up year's directory is gone, so years also come from existing archive files,
-	# not just from year directories.
-	YEARS="$(
-		{
-			grep -oE '^[0-9]{4}/$' <<<"$HISTORY_LISTING" | tr -d '/'
-			grep -oE "^${dataset}-[0-9]{4}\.(tar\.xz|tar\.bz2)$" <<<"$HISTORY_LISTING" | grep -oE '[0-9]{4}'
-		} | sort -nu || true
-	)"
-	if [[ -z "$YEARS" ]]; then
+
+	while IFS= read -r archive; do
+		[[ -z "$archive" ]] && continue
+		if [[ "$archive" != *.tar.xz ]]; then
+			# The archive format (sorted paths, decompressed files, owner-free headers) is
+			# only guaranteed from 05-archive.sh onward; anything else is a pre-2023 archive
+			# made by hand or by an older process, not something rollup.sh itself would produce.
+			echo "⚠️ $dataset: $archive is not a .tar.xz archive" >&2
+		fi
+	done <<<"$(grep -oE "^${dataset}-[0-9]{4}\.(tar\.xz|tar\.bz2)$" <<<"$HISTORY_LISTING" || true)"
+
+	DIR_YEARS="$(grep -oE '^[0-9]{4}/$' <<<"$HISTORY_LISTING" | tr -d '/' | sort -nu || true)"
+	if [[ -z "$DIR_YEARS" ]]; then
 		continue
 	fi
 
-	candidates=()
-	archived=()
 	while IFS= read -r year; do
 		if [[ "$year" -ge "$CURRENT_UTC_YEAR" ]]; then
 			continue
 		fi
 		if grep -qxE "${dataset}-${year}\.(tar\.xz|tar\.bz2)" <<<"$HISTORY_LISTING"; then
-			archived+=("$year")
+			# Both the year dir and its archive exist: 07-delete.sh should have hidden the dir
+			# once 06-upload.sh succeeded, so something was left half-done.
+			echo "⚠️ $dataset $year: history/$year/ still exists alongside its archive" >&2
 		else
-			candidates+=("$year")
+			CANDIDATES+=("$year $dataset")
 		fi
-	done <<<"$YEARS"
-
-	echo "🔵 $dataset"
-	echo "  candidates 👉 ${candidates[*]:-none}"
-	echo "  archived ✅ ${archived[*]:-none}"
-
-	if [[ ${#candidates[@]} -gt 0 ]] && { [[ -z "$OLDEST_YEAR" ]] || [[ "${candidates[0]}" -lt "$OLDEST_YEAR" ]]; }; then
-		OLDEST_YEAR="${candidates[0]}"
-		OLDEST_DATASET="$dataset"
-	fi
+	done <<<"$DIR_YEARS"
 done
 
-if [[ -n "$OLDEST_YEAR" ]]; then
-	echo "✅ Done"
-	echo "Oldest candidate: $OLDEST_DATASET $OLDEST_YEAR"
-	echo "Next command: ./rollup.sh $OLDEST_DATASET $OLDEST_YEAR"
-else
+if [[ ${#CANDIDATES[@]} -eq 0 ]]; then
 	echo "✅ Done, no candidates."
+else
+	while read -r year dataset; do
+		echo ">_ ./scripts/rollup/rollup.sh $dataset $year"
+	done <<<"$(printf '%s\n' "${CANDIDATES[@]}" | sort -n)"
+	echo "✅ Done"
+
+	if [[ -n "${DISCORD_URL:-}" ]]; then
+		curl -fsS -m 10 --retry 5 -o /dev/null \
+			-X POST -H "Content-Type: application/json" \
+			--data '{"content": "Datasets ready for rollup. Run `./scripts/rollup/advise.sh`"}' \
+			"$DISCORD_URL"
+		echo "✉️ Discord notification sent"
+	fi
 fi

@@ -2,9 +2,8 @@ name: Rollup Check
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 14 * *"
-env:
-  DEV_NOTICES_DISCORD_WEBHOOK_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
+    - cron: "15 18 14 * *"
+
 jobs:
   check-ready:
     name: Check Ready
@@ -15,9 +14,6 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Check
-        run: |
-          ./scripts/rollup/check-ready.sh || \
-            curl -fsS -m 10 --retry 5 -o /dev/null \
-              -X POST -H "Content-Type: application/json" \
-              --data '{"content": "A dataset has a finished history year ready to roll up. Run ./scripts/rollup/advise.sh"}' \
-              "$DEV_NOTICES_DISCORD_WEBHOOK_URL"
+        env:
+          DISCORD_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
+        run: ./scripts/rollup/advise.sh
