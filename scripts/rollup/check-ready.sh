@@ -26,7 +26,7 @@ for dataset in "${ROLLUP_SCOPE[@]}"; do
 		continue
 	fi
 
-	YEARS="$(jq -r '.directories[].name | select(test("^[0-9]{4}$"))' <<<"$INDEX_JSON" | sort -n)"
+	YEARS="$(jq -r '(.directories // [])[].name | select(test("^[0-9]{4}$"))' <<<"$INDEX_JSON" | sort -n)"
 	if [[ -z "$YEARS" ]]; then
 		continue
 	fi
@@ -35,7 +35,8 @@ for dataset in "${ROLLUP_SCOPE[@]}"; do
 		if [[ "$year" -ge "$CURRENT_UTC_YEAR" ]]; then
 			continue
 		fi
-		if ! jq -e --arg name "${dataset}-${year}.tar.xz" '.files[] | select(.name == $name)' <<<"$INDEX_JSON" >/dev/null; then
+		if ! jq -e --arg xz "${dataset}-${year}.tar.xz" --arg bz2 "${dataset}-${year}.tar.bz2" \
+			'(.files // [])[] | select(.name == $xz or .name == $bz2)' <<<"$INDEX_JSON" >/dev/null; then
 			echo "🔵 Ready: $dataset $year"
 			if [[ -n "${DATA_CHECKS_HEALTHCHECK_URL:-}" ]]; then
 				echo "🔵 Pinging healthcheck"

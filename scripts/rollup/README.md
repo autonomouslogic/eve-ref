@@ -49,10 +49,12 @@ against this bucket. Deletes must stay soft, so the bucket lifecycle rules provi
 
 ## Procedure
 
-Step 1, `advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset at the bucket
-root, run once to decide which `<archive> <year>` to feed into every later step. It prints each dataset's
-finished `history/<year>` folders as two lines, `candidates:` and `already archived:` (current year
-ignored), then ends with the oldest candidate overall as `<archive> <year>`. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions
+Step 1, `advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset, run once to
+decide which `<archive> <year>` to feed into every later step. It prints each dataset's finished
+`history/<year>` folders as two lines, `candidates:` and `already archived:` (current year ignored), then
+ends with the oldest candidate overall as `<archive> <year>`. It reads each dataset's public
+`history/index.json` over plain HTTP (e.g. https://data.everef.net/system-kills/history/index.json), so it
+needs no credentials and no `rollup.env`. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions
 2023`. Run the steps in order and **read each summary before continuing**.
 
 `check-ready.sh` is a lighter, no-args sibling of `advise.sh`: it reads each in-scope dataset's public
