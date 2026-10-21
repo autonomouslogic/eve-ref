@@ -2,6 +2,8 @@
 
 [data.everef.net/structures/](https://data.everef.net/structures/) contains scrapes of the structures ESI endpoints.
 
+Since 2026-04-27, the v1 scrape moved to [/universe-structures](https://data.everef.net/universe-structures/).
+
 These are:
 * `/universe/structures/`
 * `/universe/structures/{structure_id}/`
