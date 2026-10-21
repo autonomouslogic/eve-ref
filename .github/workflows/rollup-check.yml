@@ -3,7 +3,8 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "15 18 14 * *"
-
+env:
+  DISCORD_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
 jobs:
   check-ready:
     name: Check Ready
@@ -12,8 +13,5 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Check
-        env:
-          DISCORD_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
         run: ./scripts/rollup/advise.sh
