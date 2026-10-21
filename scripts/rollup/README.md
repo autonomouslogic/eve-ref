@@ -60,6 +60,14 @@ monthly via the `Rollup Check` GitHub Actions workflow; it can also be run manua
 or locally, with no setup. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions 2023`. Run the
 steps in order and **read each summary before continuing**.
 
+`check-ready.sh` is a lighter, no-args sibling of `advise.sh`: it reads each in-scope dataset's public
+`history/index.json` (e.g. https://data.everef.net/system-kills/history/index.json) instead of listing the
+bucket, so it needs no credentials and no `rollup.env`. It stops at the first candidate found (doesn't scan
+every dataset), exiting non-zero so a caller can chain a notification off it, and pings
+`DATA_CHECKS_HEALTHCHECK_URL` too if that env var is set. Runs monthly via the `Rollup Check` GitHub Actions
+workflow, which posts to Discord on a non-zero exit; it can also be run manually (`workflow_dispatch`) or
+locally, with no setup.
+
 Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs
 and the completion markers. The scripts never clear it. Remove it yourself once the rollup is `COMPLETE` and the
 2-day undo window has passed: until then, `download/` is the only local copy of the original files.
