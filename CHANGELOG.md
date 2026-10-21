@@ -1,5 +1,29 @@
 EVE Ref Changelog
 
+## [2.83.3](https://github.com/autonomouslogic/eve-ref/compare/2.83.2...2.83.3) (2026-10-21)
+
+
+### Bug Fixes
+
+* Add dedicated no-cache OkHttp client with for data site requests ([#1146](https://github.com/autonomouslogic/eve-ref/issues/1146)) ([c06e7c5](https://github.com/autonomouslogic/eve-ref/commit/c06e7c58e3253b9fc35e611164c7f2f28d521871))
+* Fixed Discord notification for PublishRefData ([#1147](https://github.com/autonomouslogic/eve-ref/issues/1147)) ([bff460d](https://github.com/autonomouslogic/eve-ref/commit/bff460d6c87dbd3884c5d2c3a6b55b1be5e59250))
+* Updated ref data models ([d8c7d9b](https://github.com/autonomouslogic/eve-ref/commit/d8c7d9b824429119a5eb9d03df19fa91e69d7c74))
+
+
+### Documentation
+
+* Apparently, I can't do maths ([586905e](https://github.com/autonomouslogic/eve-ref/commit/586905e3af0eb6da78aad4f90a7fb4efff73fa6b))
+* Structures ([1e70bb2](https://github.com/autonomouslogic/eve-ref/commit/1e70bb29cac1be653e7cd7ee62306aaefcdff9c6))
+* Updated downloading-datasets.md ([17e5a09](https://github.com/autonomouslogic/eve-ref/commit/17e5a09ecea51c8a68c7f84cb03849284d4da4b9))
+
+
+### Miscellaneous Chores
+
+* Fix rollup-check.yml ([d6280e7](https://github.com/autonomouslogic/eve-ref/commit/d6280e775e288b4ebf583ebc6a6470d943fbd09e))
+* Rollup check ([#1149](https://github.com/autonomouslogic/eve-ref/issues/1149)) ([527711f](https://github.com/autonomouslogic/eve-ref/commit/527711fd91d295f358d6dd14d7592615b5c3e1cf))
+* Rollup script updates ([ba42c4c](https://github.com/autonomouslogic/eve-ref/commit/ba42c4cfc43435ff34b596a70a57579e4f10a744))
+* Rollup updates ([1b3a23f](https://github.com/autonomouslogic/eve-ref/commit/1b3a23f0320f28d32f9e399d2d649677d2f8f153))
+
 ## [2.83.2](https://github.com/autonomouslogic/eve-ref/compare/2.83.1...2.83.2) (2026-10-19)
 
 
