@@ -195,7 +195,15 @@ echo "🔵 Removing saved error responses"
 # whole body is one of these known responses are removed (moved to removed/ for review). Any other
 # HTML file, or any other {"error": ...} object, aborts the run so it can be reviewed first.
 ERROR_PAGE_TITLES=("502 Bad Gateway" "504 Gateway Time-out")
-ERROR_JSON_BODIES=('{"error":"Not found"}' '{"error":"No reply within 10 seconds"}')
+ERROR_JSON_BODIES=(
+	'{"error":"Not found"}'
+	'{"error":"No reply within 10 seconds"}'
+	'{"error":"Timeout contacting tranquility","timeout":10}'
+	'{"error":"The datasource tranquility is temporarily unavailable"}'
+	'{"error":"timeout contacting endpoint"}'
+	"{\"error\":\"This software has exceeded the error limit for ESI. If you are a user, please contact the maintainer of this software. If you are a developer/maintainer, please make a greater effort in the future to receive valid responses. For tips on how, come have a chat with us in #esi on tweetfleet slack. If you're not on tweetfleet slack yet, you can get an invite here -> https://www.fuzzwork.co.uk/tweetfleet-slack-invites/\"}"
+	"{\"error\":\"You have been banned from using ESI. Please come chat with us in #esi on tweetfleet slack and we can work to avoid this situation in the future. If you're not on tweetfleet slack yet, you can get an invite here -> https://www.fuzzwork.co.uk/tweetfleet-slack-invites/\"}"
+)
 REMOVED_DIR="$SCRATCH/removed"
 REMOVED_LIST="$SCRATCH/removed.tsv"
 mkdir -p "$REMOVED_DIR"

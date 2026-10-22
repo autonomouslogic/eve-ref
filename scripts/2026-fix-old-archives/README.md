@@ -238,15 +238,14 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   snapshot. Before staging, old-archive files whose whole body is a known error response are
   moved to `removed/` and listed in `removed.tsv`, so they're left out of the new archive:
   nginx `502 Bad Gateway` / `504 Gateway Time-out` pages (matched on `<html>` start plus the
-  exact `<title>` and `<h1>`), and the JSON bodies `{"error":"Not found"}` and
-  `{"error":"No reply within 10 seconds"}` (compared after `jq -c`, so spacing doesn't matter).
-  Any other HTML file or `{"error": ...}` object aborts the run and lists the file, so a new
-  kind of error body is reviewed and added to `ERROR_PAGE_TITLES`/`ERROR_JSON_BODIES` by hand,
-  never removed by guess. Bodies seen in a sample of archives and **not yet on the list**:
+  exact `<title>` and `<h1>`), and these JSON bodies, compared in full after `jq -c` (so
+  spacing doesn't matter): `{"error":"Not found"}`, `{"error":"No reply within 10 seconds"}`,
   `{"error":"Timeout contacting tranquility","timeout":10}`,
   `{"error":"The datasource tranquility is temporarily unavailable"}`,
-  `{"error":"timeout contacting endpoint"}`, the ESI "exceeded the error limit" message, and
-  the ESI "You have been banned" message.
+  `{"error":"timeout contacting endpoint"}`, and the full ESI "exceeded the error limit" and
+  "You have been banned" messages (exact text in `ERROR_JSON_BODIES`). Any other HTML file or
+  `{"error": ...}` object aborts the run and lists the file, so a new kind of error body is
+  reviewed and added to `ERROR_PAGE_TITLES`/`ERROR_JSON_BODIES` by hand, never removed by guess.
 - Checks `https://data.everef.net/<dataset>/history/<year>/index.json`. 404 → no
   merge needed (e.g. any non-2022 year). 200 → live leftover, handled strictly, since
   whatever is recorded here is what later gets deleted from the remote. Any of these
