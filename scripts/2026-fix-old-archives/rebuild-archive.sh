@@ -138,7 +138,13 @@ while IFS= read -r -d '' f; do
 		echo "🔴 duplicate file would overwrite staged data: $day_dir/$new_name" >&2
 		exit 1
 	fi
+	old_mtime="$(stat -c %Y "$f")"
 	mv "$f" "$day_dir/$new_name"
+	new_mtime="$(stat -c %Y "$day_dir/$new_name")"
+	if [[ "$old_mtime" != "$new_mtime" ]]; then
+		echo "🔴 mtime changed on rename: $name -> $new_name ($old_mtime != $new_mtime)" >&2
+		exit 1
+	fi
 	STAGED_FROM_OLD=$((STAGED_FROM_OLD + 1))
 done < <(find "$SCRATCH/old/$TOP_DIR" -maxdepth 1 -type f -name '*.json' -print0)
 if [[ "$STAGED_FROM_OLD" -ne "$OLD_FILE_COUNT" ]]; then
