@@ -227,9 +227,12 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
 
 - Downloads the old `<dataset>-<year>.tar.bz2`, checks its size and MD5 against the
   `size`/`etag` in `<dataset>/history/index.json` (data-index's `etag` is the object's MD5,
-  confirmed on real downloads up to 271 MB), `bzip2 -t` checks it, validates its
-  layout is exactly one `<dataset>-<year>/` dir of flat `.json` files (aborts on
-  anything else), extracts, and buckets each file into `stage/<dataset>/history/<year>/<date>/`
+  confirmed on real downloads up to 271 MB), extracts it (a corrupt bzip2 stream is caught
+  by `tar -xjf` itself, so there's no separate `bzip2 -t` step), checks the extracted
+  filesystem layout is exactly one `<dataset>-<year>/` dir of flat `.json` files (aborts on
+  anything else — only one `tar` pass over the archive this way, instead of a separate
+  listing pass before extraction), and copies each file into
+  `stage/<dataset>/history/<year>/<date>/`
   by the date embedded in its filename (aborts if a filename doesn't match, or its date
   isn't in `<year>`). Each file is also renamed from its old internal scheme
   (`sovereigntycampaigns_2019-01-01T00:20:09.json`) to the current convention

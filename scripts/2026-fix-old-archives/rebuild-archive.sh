@@ -159,36 +159,40 @@ fi
 verify_download "$OLD_ARCHIVE_PATH" "$OLD_ARCHIVE_SIZE" "$OLD_ARCHIVE_ETAG"
 echo "Old archive matches history/index.json (size $OLD_ARCHIVE_SIZE, MD5 $OLD_ARCHIVE_ETAG)"
 
-echo "🔵 Checking bzip2 integrity"
-if ! bzip2 -t "$OLD_ARCHIVE_PATH"; then
-	echo "🔴 bzip2 integrity check failed: $OLD_ARCHIVE_PATH" >&2
-	exit 1
-fi
-echo "bzip2 -t passed"
+echo "🔵 Extracting old archive"
+tar -xjf "$OLD_ARCHIVE_PATH" -C "$SCRATCH/old" --no-same-owner
+echo "Extracted to $SCRATCH/old"
 
 echo "🔵 Checking old archive layout"
-OLD_LISTING="$(tar -tjf "$OLD_ARCHIVE_PATH")"
-TOP_DIR="${DATASET}-${YEAR}/"
-if [[ "$(head -n1 <<<"$OLD_LISTING")" != "$TOP_DIR" ]]; then
-	echo "🔴 expected first/only top-level entry to be $TOP_DIR" >&2
+TOP_DIR="${DATASET}-${YEAR}"
+if [[ ! -d "$SCRATCH/old/$TOP_DIR" ]]; then
+	echo "🔴 expected old archive to extract to exactly one top-level dir: $TOP_DIR/" >&2
 	exit 1
 fi
-BAD_ENTRIES="$(grep -vE "^${TOP_DIR}[^/]+\.json\$" <<<"$OLD_LISTING" | grep -vx "$TOP_DIR" || true)"
+EXTRA_TOP_ENTRIES="$(find "$SCRATCH/old" -mindepth 1 -maxdepth 1 -not -name "$TOP_DIR")"
+if [[ -n "$EXTRA_TOP_ENTRIES" ]]; then
+	echo "🔴 unexpected top-level entries in old archive (want only $TOP_DIR/):" >&2
+	echo "$EXTRA_TOP_ENTRIES" >&2
+	exit 1
+fi
+NESTED_ENTRIES="$(find "$SCRATCH/old/$TOP_DIR" -mindepth 2)"
+if [[ -n "$NESTED_ENTRIES" ]]; then
+	echo "🔴 unexpected nested entries in old archive (expected flat files under $TOP_DIR/):" >&2
+	echo "$NESTED_ENTRIES" >&2
+	exit 1
+fi
+BAD_ENTRIES="$(find "$SCRATCH/old/$TOP_DIR" -mindepth 1 -maxdepth 1 -not \( -type f -name '*.json' \))"
 if [[ -n "$BAD_ENTRIES" ]]; then
-	echo "🔴 unexpected entries in old archive (not $TOP_DIR<file>.json):" >&2
+	echo "🔴 unexpected entries in old archive (not $TOP_DIR/<file>.json):" >&2
 	echo "$BAD_ENTRIES" >&2
 	exit 1
 fi
-OLD_FILE_COUNT="$(grep -cE "^${TOP_DIR}[^/]+\.json\$" <<<"$OLD_LISTING")"
+OLD_FILE_COUNT="$(find "$SCRATCH/old/$TOP_DIR" -maxdepth 1 -type f -name '*.json' | wc -l)"
 if [[ "$OLD_FILE_COUNT" -eq 0 ]]; then
 	echo "🔴 old archive has no data files" >&2
 	exit 1
 fi
-echo "Old archive layout OK: $OLD_FILE_COUNT files under $TOP_DIR"
-
-echo "🔵 Extracting old archive"
-tar -xjf "$OLD_ARCHIVE_PATH" -C "$SCRATCH/old" --no-same-owner
-echo "Extracted to $SCRATCH/old"
+echo "Old archive layout OK: $OLD_FILE_COUNT files under $TOP_DIR/"
 
 echo "🔵 Removing saved error responses"
 # The old scraper sometimes saved an HTTP error response in place of a snapshot. Only files whose
@@ -280,7 +284,7 @@ while IFS= read -r -d '' f; do
 		exit 1
 	fi
 	old_mtime="$(stat -c %Y "$f")"
-	mv "$f" "$day_dir/$new_name"
+	cp -p "$f" "$day_dir/$new_name"
 	new_mtime="$(stat -c %Y "$day_dir/$new_name")"
 	if [[ "$old_mtime" != "$new_mtime" ]]; then
 		echo "🔴 mtime changed on rename: $name -> $new_name ($old_mtime != $new_mtime)" >&2
@@ -543,11 +547,8 @@ echo "Wrote archive.sha256, archive.sha1"
 
 echo "✅ rebuild-archive OK for $DATASET $YEAR"
 echo "Result: $NEW_ARCHIVE_PATH"
-echo "Removed error responses: $REMOVED_FROM_OLD (see removed.tsv)"
 if [[ -n "$DAYS" ]]; then
 	echo "Live leftover: $STAGED_FROM_LIVE files archived, listed in live-files.tsv and live-files.txt."
 	echo "When clearing history/$YEAR/, delete only the files in live-files.txt, never the whole dir"
 	echo "(see README.md, \"Clearing a live leftover\")."
 fi
-echo "This script never uploads or touches the remote — review the archive and checksums in"
-echo "$SCRATCH, then upload $NEW_ARCHIVE_NAME yourself."
