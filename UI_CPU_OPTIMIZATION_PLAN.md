@@ -119,6 +119,8 @@ Repo changes:
 
 **Follow-up (2026-10-22): added `immutable` to the header** (`public, max-age=5, s-maxage=3600, immutable`), trying to address invocation count not dropping. Caveat: `immutable` is a browser hint (skips revalidation on back/forward nav, honored mainly by Firefox on reload) — it isn't a signal Cloudflare's edge cache-eligibility reads. If invocations still don't drop after this, the likely cause is still the dashboard Cache Rule (not yet created/matching), not the response header.
 
+**Confirmed (2026-10-22): Pages Functions request count has not dropped since deploy.** Consistent with the cause above — a `Cache-Control` header is necessary but not sufficient; without a live zone Cache Rule marking the route eligible for cache, Cloudflare has no reason to serve from edge, so every request still reaches the Function regardless of the header. Next step is to verify/create the dashboard Cache Rule (Phase 2 "Dashboard configuration" step 2) before drawing conclusions about the header changes.
+
 Dashboard configuration (manual; record it in `AGENTS.md`):
 1. Caching → Tiered Cache → Smart Tiered Cache Topology: on (free). With one upper tier in front of the Pages origin, each URL renders roughly once per hour globally instead of once per data center.
 2. Cache Rule "SSR HTML":
