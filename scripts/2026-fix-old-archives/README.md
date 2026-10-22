@@ -32,7 +32,10 @@ future records, not a permanent doc.
 ## Problems found (data.everef.net audit, 2026-10-21)
 
 Affected datasets: `industry-systems`, `sovereignty-campaigns`, `sovereignty-map`,
-`sovereignty-structures`, `system-kills` (likely more not yet logged).
+`sovereignty-structures`, `system-jumps`, `system-kills` (likely more not yet logged).
+`system-jumps` was missing from the first version of this list, but it has both problems
+too (in rollup scope, live `history/2022/` still present alongside `system-jumps-2022.tar.bz2`,
+checked 2026-10-22).
 
 - **Wrong format**: 2017/2018/2019/2021/2022 archives are `.tar.bz2`, not `.tar.xz`. Old
   rollup (pre-`scripts/rollup` rewrite) must have used bzip2, no migration done since.
@@ -125,7 +128,7 @@ Affected datasets: `industry-systems`, `sovereignty-campaigns`, `sovereignty-map
 - Single top-level dir per archive (`system-jumps-<year>/`, `system-kills-<year>/`),
   flat files inside, **plain uncompressed JSON**, named
   `universe_system_jumps_<ISO8601>.json` / `universe_system_kills_<ISO8601>.json` (old
-  scheme, no hyphen — unlike live `system-jumps-2022-12-16_16-15-23.json.bz2`).
+  scheme, no hyphen — unlike live `system-jumps-2022-12-16_16-15-16.json.bz2`).
   Content: JSON arrays, jumps `{"system_id":N,"ship_jumps":N}`, kills
   `{"system_id":N,"ship_kills":N,"npc_kills":N,"pod_kills":N}`.
 - No manifest/checksum/index bundled in any archive.
@@ -138,6 +141,11 @@ Affected datasets: `industry-systems`, `sovereignty-campaigns`, `sovereignty-map
   15:45:05 (old naming, uncompressed); live `history/2022/` covers 2022-12-16 16:15:23
   through 2022-12-31 (new naming, bz2'd per-file). 30-min gap, no overlap/duplication.
   Merge logic must handle both naming/compression schemes.
+- **system-jumps 2022 archive vs. live `history/2022/`**: same pattern as system-kills.
+  Archive ends at `2022-12-16_15-45-03`; live `history/2022/` has 16 day dirs
+  (2022-12-16 through 2022-12-31, 369 files) starting at `2022-12-16_16-15-16`. No
+  overlap. Checked by a `rebuild-archive.sh system-jumps 2022` run (2026-10-22), not by
+  hand like the other datasets.
 - Inspection artifacts left at `/tmp/inspect-system-jumps/` and `/tmp/inspect-system-kills/`.
 
 ### industry-systems (2017/2018/2019/2021/2022)
@@ -203,15 +211,13 @@ sovereignty-structures, system-jumps, system-kills) share the same migration sha
   "Script: rebuild-archive.sh" below.
 - Every "year" archive is **partial** in some way (gaps, half-years, short stubs) —
   never assume 365/366 complete days.
-- Every dataset flagged with the "2022 leftover" problem (industry-systems,
-  sovereignty-campaigns, sovereignty-map, sovereignty-structures, system-kills) shows
-  the **same clean, contiguous, non-overlapping split**: the old `*-2022.tar.bz2`
-  archive covers Jan 1 up to some hour on Dec 16, and live `history/2022/` picks up
-  within ~30-90 min after that and runs through Dec 31. No dedup needed — merging is
-  concatenation across the naming/compression boundary.
-- system-jumps was *not* flagged for a 2022 leftover (its delete step apparently
-  completed cleanly) — no live `history/2022/` data to merge for it, just the
-  `.tar.bz2` → `.tar.xz` reformat.
+- All 6 datasets have the "2022 leftover" problem (industry-systems,
+  sovereignty-campaigns, sovereignty-map, sovereignty-structures, system-jumps,
+  system-kills), and all show the **same clean, contiguous, non-overlapping split**: the
+  old `*-2022.tar.bz2` archive covers Jan 1 up to some hour on Dec 16, and live
+  `history/2022/` picks up within ~30-90 min after that and runs through Dec 31. No dedup
+  needed — merging is concatenation across the naming/compression boundary. When
+  clearing `history/2022/` afterwards, include system-jumps.
 
 ## Script: rebuild-archive.sh
 
@@ -219,25 +225,63 @@ sovereignty-structures, system-jumps, system-kills) share the same migration sha
 grouping needed; the only real variable across datasets was internal filename prefix,
 handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
 
-- Downloads the old `<dataset>-<year>.tar.bz2`, `bzip2 -t` checks it, validates its
+- Downloads the old `<dataset>-<year>.tar.bz2`, checks its size and MD5 against the
+  `size`/`etag` in `<dataset>/history/index.json` (data-index's `etag` is the object's MD5,
+  confirmed on real downloads up to 271 MB), `bzip2 -t` checks it, validates its
   layout is exactly one `<dataset>-<year>/` dir of flat `.json` files (aborts on
   anything else), extracts, and buckets each file into `stage/<dataset>/history/<year>/<date>/`
   by the date embedded in its filename (aborts if a filename doesn't match, or its date
   isn't in `<year>`). Each file is also renamed from its old internal scheme
   (`sovereigntycampaigns_2019-01-01T00:20:09.json`) to the current convention
   (`sovereignty-campaigns-2019-01-01_00-20-09.json`), matching what live/rollup produces.
+- **Saved error responses**: the old scraper sometimes wrote an HTTP error body in place of a
+  snapshot. Before staging, old-archive files whose whole body is a known error response are
+  moved to `removed/` and listed in `removed.tsv`, so they're left out of the new archive:
+  nginx `502 Bad Gateway` / `504 Gateway Time-out` pages (matched on `<html>` start plus the
+  exact `<title>` and `<h1>`), and the JSON bodies `{"error":"Not found"}` and
+  `{"error":"No reply within 10 seconds"}` (compared after `jq -c`, so spacing doesn't matter).
+  Any other HTML file or `{"error": ...}` object aborts the run and lists the file, so a new
+  kind of error body is reviewed and added to `ERROR_PAGE_TITLES`/`ERROR_JSON_BODIES` by hand,
+  never removed by guess. Bodies seen in a sample of archives and **not yet on the list**:
+  `{"error":"Timeout contacting tranquility","timeout":10}`,
+  `{"error":"The datasource tranquility is temporarily unavailable"}`,
+  `{"error":"timeout contacting endpoint"}`, the ESI "exceeded the error limit" message, and
+  the ESI "You have been banned" message.
 - Checks `https://data.everef.net/<dataset>/history/<year>/index.json`. 404 → no
-  merge needed (e.g. system-jumps, or any non-2022 year). 200 → downloads each live
-  day's files, `bzip2 -t` checks and decompresses each, stages them into the same
-  date-bucketed tree — aborts if a live file would collide with an old-archive file
-  (overlap was checked and ruled out by hand for every flagged dataset; a collision
-  here means something changed and needs human eyes, not silent resolution).
+  merge needed (e.g. any non-2022 year). 200 → live leftover, handled strictly, since
+  whatever is recorded here is what later gets deleted from the remote. Any of these
+  aborts the run:
+  - **Listing**: the year index or a day index has the wrong `path`; files directly
+    under `history/<year>/`; a day dir that isn't a real `<year>-MM-DD` date, or is
+    listed twice; subdirectories inside a day; a file name not matching
+    `<dataset>-<day>_HH-MM-SS[.vN].json.bz2` for its own day (same rule as
+    `scripts/rollup/02-list.sh`); a `url` that isn't exactly the file's path on
+    data.everef.net; missing or malformed `size`, `etag` or `last_modified`.
+  - **Downloads**: size or MD5 not matching the listing, or `bzip2 -t` failing.
+  - **Overlap**: a live file that doesn't sort after the last old-archive file (names are
+    `<dataset>-<date>_<HH-MM-SS>`, so this is a time order check), or that would
+    overwrite a staged file. Overlap was ruled out beforehand for every affected dataset
+    (by hand, and for system-jumps by a script run), so this means something changed.
+  - **Archive**: any live file missing from the new archive, or with a different sha256
+    than when it was staged.
+  - **Listing changed**: the year and day indexes are fetched again at the end of the run
+    and compared to the ones used (entries sorted, so only real changes count).
+- **Live leftover record**, written to the scratch dir:
+  - `live-files.tsv`: one row per live file, tab-separated: remote path (from the bucket
+    root), size, MD5, SHA-1 (both of the `.json.bz2` as stored on the remote),
+    `last_modified`, path in the new archive, sha256 (of the decompressed file).
+  - `live-files.txt`: just the remote paths, for `rclone --files-from-raw`.
+  - `live/`: the year and day `index.json` files exactly as served, `live-recheck/` the
+    end-of-run re-fetch, `history-index.json` the dataset's history index.
 - Validates every staged file holds exactly one JSON value, hashes the stage
   (`sha256sum`), then builds the `.tar.xz` with the **exact** `tar`/`xz` invocation
   `scripts/rollup/05-archive.sh` uses (`--owner=0 --group=0 --numeric-owner
   --mode='a=r,u+w'`, `LC_ALL=C` sorted entries, `-cJf`), and runs the same
   verification suite: `xz -t`, mode/owner/sort checks, entry count, and a full
-  content-hash re-extraction against the stage manifest.
+  content-hash re-extraction against the stage manifest. Pins the environment the same
+  way as `scripts/rollup/common.sh` (`TZ=UTC`, `LC_ALL=C`, and `TAR_OPTIONS`, `XZ_OPT`,
+  `XZ_DEFAULTS`, `BZIP`, `BZIP2` cleared), so an operator's shell settings can't change
+  the tar format or xz preset.
 - Logging mirrors `scripts/rollup`'s format exactly (🚀/🔵/✅/🔴, tee'd to a log file
   under the scratch dir). Any failed check logs to stderr and `exit 1`s immediately —
   no partial/silent continuation.
@@ -246,8 +290,10 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   `scripts/rollup`'s scratch/lock, no interference with live rollups.
 - **Never uploads, deletes, or writes to the remote.** Leaves
   `<dataset>-<year>.tar.xz`, `<dataset>-<year>.sha256`, `archive.sha256`, `archive.sha1`
-  in the scratch dir for manual review; upload is a separate manual step by the user.
-- Not yet run against any real archive — needs a dry run per dataset/year before trust.
+  (plus `removed.tsv`, and `live-files.tsv`/`live-files.txt` for a live leftover) in the
+  scratch dir for manual review; upload is a separate manual step by the user.
+- Test runs so far (2026-10-22) were on a sample of small archives only, not every
+  dataset/year — each run still needs its own review before upload.
 - **Leftover-file mtimes**: preserved via the live day `index.json`'s `last_modified`
   metadata field (`touch -d` after decompression) — the same field rollup's own mtime
   check (`04-prepare.sh`) trusts, not anything derived from JSON content. Missing/null
@@ -256,4 +302,30 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   build-day mtime per the inspection findings, not the true snapshot time) — this
   script doesn't change that, since snapshot time is only ever recoverable from the
   filename for those, not a trustworthy embedded mtime.
+
+## Clearing a live leftover
+
+Only after the new `.tar.xz` is uploaded and verified. Run from the run's scratch dir, with
+the rclone `everef` remote set up the same way as `scripts/rollup/common.sh` (env vars from
+`rollup.env`, `RCLONE_CONFIG=/dev/null`, `RCLONE_CONFIG_EVEREF_TYPE=b2`,
+`RCLONE_CONFIG_EVEREF_HARD_DELETE=false`), and `DATASET`, `YEAR`, `BUCKET` set.
+
+1. The remote year dir must hold exactly the archived files (path, size, SHA-1), apart
+   from `index.html`/`index.json`. This must print nothing:
+   ```bash
+   rclone lsjson -R --hash --files-only "everef:$BUCKET/$DATASET/history/$YEAR" \
+     | jq -r --arg p "$DATASET/history/$YEAR/" '.[]
+         | select(.Name | test("^index\\.(html|json)$") | not)
+         | [$p + .Path, .Size, .Hashes.sha1] | map(tostring) | @tsv' \
+     | LC_ALL=C sort \
+     | diff - <(cut -f1,2,4 live-files.tsv)
+   ```
+2. Delete only the listed files, dry run first, capped at the listed count:
+   ```bash
+   rclone delete "everef:$BUCKET" --files-from-raw live-files.txt \
+     --max-delete "$(wc -l <live-files.txt)" --dry-run
+   ```
+   then the same without `--dry-run`. Never delete the year dir as a whole: a file that
+   isn't in `live-files.txt` isn't in the archive, and must stay to be looked at.
+3. Only `index.html`/`index.json` files should remain under `history/$YEAR/`.
 
