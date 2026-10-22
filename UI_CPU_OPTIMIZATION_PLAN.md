@@ -115,6 +115,10 @@ Repo changes:
 3. Wrap the `MotdBanner` content in `<ClientOnly>`. It is time-based (hour-of-day rotation, date windows), so cached HTML would freeze it; client-only rendering also saves SSR work.
 4. Keep the query string in the cache key (Cloudflare's default). `SearchBar` pre-fills its input from `?query=` on every page, so ignoring the query would let one request inject text that others then see.
 
+**Status (2026-10-22): repo changes 1–4 deployed.** `curl` confirms `Cache-Control` now present on 200 HTML (`max-age` since adjusted to `5` on disk, `s-maxage=3600` unchanged) and no `Set-Cookie`. `cf-cache-status: DYNAMIC` still shows on repeat requests — expected at this point: the dashboard Cache Rule below has not been created yet, so the zone has nothing telling it the response is cache-eligible; the header alone does not cache a response. This step does not change per-request CPU or latency — it only removes Function invocations on a cache HIT, which only exist once the rule is live. The metric to watch going forward is Pages Functions invocation count and the zone cache hit ratio over the following days, not request latency.
+
+**Follow-up (2026-10-22): added `immutable` to the header** (`public, max-age=5, s-maxage=3600, immutable`), trying to address invocation count not dropping. Caveat: `immutable` is a browser hint (skips revalidation on back/forward nav, honored mainly by Firefox on reload) — it isn't a signal Cloudflare's edge cache-eligibility reads. If invocations still don't drop after this, the likely cause is still the dashboard Cache Rule (not yet created/matching), not the response header.
+
 Dashboard configuration (manual; record it in `AGENTS.md`):
 1. Caching → Tiered Cache → Smart Tiered Cache Topology: on (free). With one upper tier in front of the Pages origin, each URL renders roughly once per hour globally instead of once per data center.
 2. Cache Rule "SSR HTML":

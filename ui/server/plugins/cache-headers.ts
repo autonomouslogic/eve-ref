@@ -18,7 +18,7 @@ export default defineNitroPlugin((nitroApp) => {
 
 		response.headers = {
 			...response.headers,
-			'cache-control': 'public, max-age=5, s-maxage=3600',
+			'cache-control': 'public, max-age=5, s-maxage=3600, immutable',
 		};
 	});
 });
