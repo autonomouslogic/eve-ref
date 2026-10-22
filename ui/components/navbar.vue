@@ -54,7 +54,9 @@ const localePath = useLocalePath();
 		</span>
 	</div>
 
-	<MotdBanner/>
+	<ClientOnly>
+		<MotdBanner/>
+	</ClientOnly>
 </template>
 
 <style scoped>
