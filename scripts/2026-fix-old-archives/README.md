@@ -237,6 +237,10 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   isn't in `<year>`). Each file is also renamed from its old internal scheme
   (`sovereigntycampaigns_2019-01-01T00:20:09.json`) to the current convention
   (`sovereignty-campaigns-2019-01-01_00-20-09.json`), matching what live/rollup produces.
+  The copy itself is checked per file: mtime and sha256 of the source are taken before
+  `cp -p`, then re-checked against the copy right after — either mismatch aborts the run.
+  After the whole batch, `du -bs` on the old archive's extracted dir and on the staged
+  files so far must also agree, as a total-byte-count cross-check.
 - **Saved error responses**: the old scraper sometimes wrote an HTTP error body in place of a
   snapshot. Before staging, old-archive files whose whole body is a known error response are
   moved to `removed/` and listed in `removed.tsv`, so they're left out of the new archive:
@@ -279,8 +283,10 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   (`sha256sum`), then builds the `.tar.xz` with the **exact** `tar`/`xz` invocation
   `scripts/rollup/05-archive.sh` uses (`--owner=0 --group=0 --numeric-owner
   --mode='a=r,u+w'`, `LC_ALL=C` sorted entries, `-cJf`), and runs the same
-  verification suite: `xz -t`, mode/owner/sort checks, entry count, and a full
-  content-hash re-extraction against the stage manifest. Pins the environment the same
+  verification suite minus a separate `xz -t` (redundant here: `tar -tvf` already
+  decompresses the whole archive to list it, so a corrupt xz stream is caught there
+  instead): mode/owner/sort checks on the `tar -tvf` listing, entry count, and a full
+  content-hash re-extraction (`tar -xJf`) against the stage manifest. Pins the environment the same
   way as `scripts/rollup/common.sh` (`TZ=UTC`, `LC_ALL=C`, and `TAR_OPTIONS`, `XZ_OPT`,
   `XZ_DEFAULTS`, `BZIP`, `BZIP2` cleared), so an operator's shell settings can't change
   the tar format or xz preset.

@@ -42,7 +42,7 @@ if [[ ! "$YEAR" =~ ^20[0-9]{2}$ ]]; then
 	exit 1
 fi
 
-for tool in curl jq bzip2 tar xz sha256sum sha1sum md5sum find sort comm diff flock stat date; do
+for tool in curl jq bzip2 tar xz sha256sum sha1sum md5sum find sort comm diff flock stat date du; do
 	if ! command -v "$tool" >/dev/null 2>&1; then
 		echo "🔴 Missing required tool: $tool" >&2
 		exit 1
@@ -284,10 +284,16 @@ while IFS= read -r -d '' f; do
 		exit 1
 	fi
 	old_mtime="$(stat -c %Y "$f")"
+	old_sha256="$(sha256sum "$f" | cut -d' ' -f1)"
 	cp -p "$f" "$day_dir/$new_name"
 	new_mtime="$(stat -c %Y "$day_dir/$new_name")"
 	if [[ "$old_mtime" != "$new_mtime" ]]; then
 		echo "🔴 mtime changed on rename: $name -> $new_name ($old_mtime != $new_mtime)" >&2
+		exit 1
+	fi
+	new_sha256="$(sha256sum "$day_dir/$new_name" | cut -d' ' -f1)"
+	if [[ "$old_sha256" != "$new_sha256" ]]; then
+		echo "🔴 content changed on copy: $name -> $new_name ($old_sha256 != $new_sha256)" >&2
 		exit 1
 	fi
 	if [[ "$new_name" > "$OLD_LAST_NAME" ]]; then
@@ -300,6 +306,15 @@ if [[ $((STAGED_FROM_OLD + REMOVED_FROM_OLD)) -ne "$OLD_FILE_COUNT" ]]; then
 	exit 1
 fi
 echo "Staged $STAGED_FROM_OLD files from the old archive"
+
+echo "🔵 Checking total byte count matches between old archive and staged files"
+OLD_BYTES="$(du -bs "$SCRATCH/old/$TOP_DIR" | cut -f1)"
+STAGED_BYTES="$(du -bs "$STAGE_YEAR_DIR" | cut -f1)"
+if [[ "$OLD_BYTES" != "$STAGED_BYTES" ]]; then
+	echo "🔴 byte count mismatch: old archive files $OLD_BYTES bytes, staged files $STAGED_BYTES bytes" >&2
+	exit 1
+fi
+echo "Byte count matches: $STAGED_BYTES bytes"
 
 echo "🔵 Checking for a live history/$YEAR/ leftover on the remote"
 YEAR_INDEX_STATUS="$(curl -s -m 60 -o /dev/null -w '%{http_code}' "$YEAR_INDEX_URL" || true)"
@@ -469,10 +484,6 @@ echo "🔵 Building new archive"
 )
 mv "$NEW_ARCHIVE_TMP" "$NEW_ARCHIVE_PATH"
 echo "Built $NEW_ARCHIVE_PATH"
-
-echo "🔵 Checking xz integrity"
-xz -t "$NEW_ARCHIVE_PATH"
-echo "xz -t passed"
 
 echo "🔵 Checking headers and order"
 TAR_LISTING="$(tar -tvf "$NEW_ARCHIVE_PATH" --full-time)"
