@@ -2,7 +2,7 @@
 Tests for lib/workflow.py's shared helpers: dataset/year classification (classify_path), the torrent comment
 (render_comment), timestamp formatting (iso/parse_iso), and the file list format (file_list_problems,
 site_path_problem). These are shared by 01-find, 03-load, 04-make-torrent, 07-publish, 08-check-before-delete,
-10-delete and create_torrent, so a regression here would hit every one of them.
+09-delete and create_torrent, so a regression here would hit every one of them.
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """

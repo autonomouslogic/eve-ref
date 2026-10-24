@@ -14,7 +14,7 @@ Status: **draft for review**. Revised 2026-10-10:
 - The operator process is in [`README.md`](README.md); the separate runbook is gone.
 
 Related work in progress (as of 2026-10-11):
-- `./00-preflight.py` through `./14-check-site.py`: **drafts** of every step, with `lib/workflow.py` (settings,
+- `./00-preflight.py` through `./12-check-site.py`: **drafts** of every step, with `lib/workflow.py` (settings,
   size limits, completion files), `lib/torrent_size.py` (the `.torrent` estimate) and `lib/qbittorrent.py` (a
   stdlib-only Web API client for 06/07). Run directly with Python 3, rclone and libtorrent (no
   `run.sh`/Docker image yet). None has run against real data yet.
@@ -217,7 +217,7 @@ Inside a torrent, the `name` is the ID and file paths are the **full site paths*
 
 ```
 name:   everef-deep-archive-2023-04-11
-files:  everef-deep-archive-2023-04-11-README.txt      # what this is (2.6)
+files:  everef-deep-archive-2023-04-11-README.md       # what this is (2.6)
         market-orders/history/2023/2023-01-01/market-orders-2023-01-01_00-00-00.v3.csv.bz2
         public-contracts/history/2023/2023-01-01/public-contracts-2023-01-01_00-00-00.v2.tar.bz2
         ccp/sde/2022/...
@@ -492,7 +492,7 @@ For quick review and search without having to parse torrent files:
 The README ships **inside the torrent**, at the torrent root. It is **not** published separately on the data site.
 
 **Its name starts with the ID on purpose.** With "Don't create subfolder", root files from every torrent land in the
-same directory. A generic name like `README.txt` would collide.
+same directory. A generic name like `README.md` would collide.
 
 #### No checksum file (dropped 2026-10-12; revisit later)
 
@@ -511,9 +511,9 @@ decide before the first torrent is published. What's lost without it: `check-che
 against the manifest before the torrent was made; now nothing re-reads it independently before the torrent's piece
 hashes are computed (Review notes, R7).
 
-#### `<ID>-README.txt`
+#### `<ID>-README.md`
 
-Plain text, generated from a template in `deep-archive/`. Contents:
+Markdown, generated from a template in `deep-archive/`. Contents:
 
 1. What this is: an EVE Ref Deep Archive torrent, with data from data.everef.net modified up to the cutoff date in
    its ID.
@@ -632,7 +632,7 @@ moving on. The scripts support the human; they don't replace their judgement.
 
 - **One script, one step, numbered in order:** `./00-preflight.py`, `./01-find.py`, …
   (`STEPS` in `lib/workflow.py`). Scripts never call the next step. There is no "run everything" script. Manual steps
-  take a number in the same sequence (`02` review, `09` pause-jobs, …) without a script or completion file
+  take a number in the same sequence (`02` review, `11` data-index, …) without a script or completion file
   (`MANUAL_STEPS`).
 - **Settings in `torrents.env`** (`torrents.env.example`), read for anything the environment doesn't set:
   `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET`, the B2 key (`RCLONE_CONFIG_EVEREF_ACCOUNT`,
@@ -655,7 +655,7 @@ moving on. The scripts support the human; they don't replace their judgement.
   data.everef.net serves for what it uploaded. They re-read from disk or the site rather than trusting in-memory
   state, but they're no longer independent of the action (Review notes, R6).
 - **Show, then ask.** Any step that writes outside `$SCRATCH_DIR` and `$SEED_DIR` (the data bucket,
-  qBittorrent) first prints what it will do (counts, bytes, sample paths) and asks for confirmation. `10-delete`
+  qBittorrent) first prints what it will do (counts, bytes, sample paths) and asks for confirmation. `09-delete`
   needs the torrent ID typed back in, not just `y`.
 - **Resumable until complete.** A step that fails or is interrupted writes no completion file and can be run again;
   copies and uploads carry on where they stopped.
@@ -774,13 +774,14 @@ and testing.
 - Log every deleted path (with size and modification time) to `$SCRATCH_DIR/deleted.jsonl` for audit and rollback.
 - Folders are virtual on B2: they disappear with their last file. Index files left in emptied folders are removed
   right after the data (2.15).
-- **Pause jobs that crawl the data site** (`sync-fuzzwork-ordersets`, the market history scrape) from the delete
-  until the full `DataIndex` has finished (2.17).
+- **Jobs that crawl the data site** (`sync-fuzzwork-ordersets`, the market history scrape) may fail against stale
+  parent index pages between the delete and the full `DataIndex` run; left as-is, they recover on their next
+  scheduled run (2.17).
 
 ### 2.15 Stale index files after deletion
 
 `DataIndex` regenerates the parent directories correctly (the deleted year vanishes from them), but it **leaves the
-old `index.html`/`index.json` in every emptied directory**. So `10-delete` cleans them up, right after the data:
+old `index.html`/`index.json` in every emptied directory**. So `09-delete` cleans them up, right after the data:
 
 - It lists the bucket again, and checks every folder that held a deleted file, and each of its parent folders up to
   the site root, deepest first.
@@ -801,7 +802,7 @@ other deletes either. It's a Java change, and it needs care so it never deletes 
 Cloudflare can keep serving a deleted file from cache for up to 30 days. Index pages have a 2-minute max-age, so they
 update almost at once. That's accepted.
 
-`14-check-site` therefore checks **many** URLs, not one: a random sample of deleted files spread across datasets and
+`12-check-site` therefore checks **many** URLs, not one: a random sample of deleted files spread across datasets and
 months (e.g. 50), plus the `index.json` of emptied folders. Per URL:
 
 - `404`: pass.
@@ -816,7 +817,7 @@ Must be handled **before** deleting the affected datasets:
 |---|---|---|
 | `SyncFuzzworkOrdersets` | Re-syncs every orderset missing from the data site, so it **would re-upload the deleted files**. Fuzzwork's listing goes back a long way (IDs 90019–174817 on 2026-10-08). | ID cutoff (2.18). |
 | `SyncMer` | Rescans from `MER_FIRST_MONTH` if no MER files exist. | `ccp/` is never archived. |
-| `DataCrawler` | Today it logs and returns nothing when an index page is missing. Decision: make it **fail** instead (revert if it causes problems). Between the delete and the full `DataIndex`, parent indexes still link to removed directories, so crawling jobs will fail. | Pause crawling jobs during that window (2.14). |
+| `DataCrawler` | Today it logs and returns nothing when an index page is missing. Decision: make it **fail** instead (revert if it causes problems). Between the delete and the full `DataIndex`, parent indexes still link to removed directories, so crawling jobs will fail. | Accepted: left to fail and recover on their next scheduled run after `DataIndex` catches up (2.14). |
 | `ScrapeMarketHistory` / `import-market-history` | Re-read up to 450 days of `market-history/`, and the full history. | `market-history` is never archived. |
 | `HistoricalOrdersRegionTypeSource` | Reads the last 30 days of market orders (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`). | Safe with the 2-year minimum age. |
 | Docs examples | `downloading-datasets.md` uses `market-orders/history/2023/` as its example; `structures.md` links 2024 files. They'd 404. | Change the downloading example to `https://data.everef.net/market-history/2026/` (never deleted). Change the structures examples to recent files, or remove them. |
@@ -886,14 +887,14 @@ Revised 2026-10-10. The scripts reach the data bucket **only through rclone**, w
   root is `everef:$DATA_BUCKET`.
 
 One key means every step could write and delete. The safeguards are the steps themselves: only `07-publish` and
-`10-delete` write to the data bucket, only to explicit paths (or `deep-archive/`), after showing what they'll do and
+`09-delete` write to the data bucket, only to explicit paths (or `deep-archive/`), after showing what they'll do and
 asking. (The 2026-10-09 design used a filesystem mount; the first draft of this revision used boto3, then separate
 read, write and backup remotes. All dropped.)
 
 - **No mount, no public-HTTP crawl** for decisions. HTTPS against data.everef.net is only used to check what the site
-  serves (`07-publish`, `14-check-site`). The other remote API is qBittorrent.
+  serves (`07-publish`, `12-check-site`). The other remote API is qBittorrent.
 - **Listings are always fresh.** An rclone listing goes straight to the storage, so `01-find`,
-  `08-check-before-delete`, `10-delete` and `11-check-delete` see what EVE Ref's jobs wrote a moment ago.
+  `08-check-before-delete`, `09-delete` and `10-check-delete` see what EVE Ref's jobs wrote a moment ago.
 - **The modification date is rclone's `ModTime`** everywhere: selection (2.2), load (file mtimes), pre-delete check
   (2.14). On B2 it's the upload time, unless the uploader set `src_last_modified_millis` (check on real files).
 - **Content-Type and Cache-Control** go on the files at upload, like `S3Util` does today: `.torrent` →
@@ -906,9 +907,7 @@ read, write and backup remotes. All dropped.)
 `--fast-list` keeps it to that. Loading up to 1 TiB per torrent goes through B2's egress; check its pricing (egress to
 Cloudflare is free, direct egress has an allowance).
 
-**Dependencies outside this process.** `DataIndex` and the sync jobs use the same storage through `S3Util`. Don't
-start a workflow in the middle of the storage migration: the selection, the delete and the full `DataIndex` must all
-see the same storage.
+**Dependencies outside this process.** `DataIndex` and the sync jobs use the same storage through `S3Util`.
 
 ---
 
@@ -1039,11 +1038,14 @@ Still open:
 3. ~~Bundle format: ZIP64 store-only or tar?~~ **Decided: a single uncompressed tar per torrent** (not many ~50 GB
    ZIP64 parts): simpler, and the Internet-Archive-friendly ZIP format no longer matters since Internet Archive
    use is still undecided (open question 4 below).
-4. Internet Archive: use it at all? Is redistribution there allowed for CCP and Fuzzwork data? Item grouping?
+4. ~~Internet Archive: use it at all?~~ **Decided (2026-10-24): no.** BitTorrent plus the seeder host is the
+   distribution plan; IA would add open redistribution-rights questions for CCP and Fuzzwork data, and item
+   grouping, for unclear benefit.
 5. Seeder host: where is it, how much disk and upload, and does it have a redundant filesystem?
 6. How to test reachability from outside: `06-check-seed`'s aria2c download runs on the workflow host (Review
    notes, R16).
-7. Stale index cleanup: in the delete step (2.15a), in `DataIndex` (2.15b), or both?
+7. ~~Stale index cleanup: in the delete step (2.15a), in `DataIndex` (2.15b), or both?~~ **Decided (2026-10-24):
+   `DataIndex` (2.15b), run separately** (`./gradlew dataIndex`), not by the delete step itself.
 8. Add the `DataIndex` "Archived data" note (2.20)?
 9. **Small-snapshot datasets** (Appendix B): ~553,700 files (69 %) for ~6 GiB; at ~21,000 files per torrent they'd
    fill ~26 torrents with almost no data. Being addressed separately: a script that rolls whole years of small files
@@ -1053,27 +1055,23 @@ Still open:
     (2.13).
 11. ~~Trackers: add all from both lists, a curated set, or the core only?~~ **Decided (2026-10-12): the union of
     both "best" lists** (2.4 "Trackers"). Still open: refresh tracker lists in published `.torrent` files later?
-12. Torrent creation tool: Python `libtorrent` or the qBittorrent Web API creator (2.4 "Creating the torrent")?
-13. **Is deleting still worth it on the cheaper storage?** The saving is ~4 TiB at the new storage's price per month.
-    The cost is a seeder host with 4 TiB+ of redundant disk, operator time, and data that's only
-    available while someone seeds it. If the saving is small, a middle option is to publish torrents
-    (steps 00–07) without deleting: users get torrents, and nothing is removed. Decide once the new storage's pricing
-    is known.
+12. ~~Torrent creation tool: Python `libtorrent` or the qBittorrent Web API creator (2.4 "Creating the torrent")?~~
+    **Decided (2026-10-24): Python `libtorrent`** (already what `04-make-torrent.py` uses).
+13. ~~Is deleting still worth it on the cheaper storage?~~ **Decided (2026-10-24): yes, keep deleting** — the
+    saving still justifies the seeder-host cost and operator time.
 14. Does the new storage have soft delete, snapshots or versioning? If so, use it as an extra safety net around
-    `10-delete` (2.14 doesn't rely on it).
-15. Timing against the storage migration: run the first workflows before, after, or as part of it? Archiving first
-    means ~4 TiB less to migrate; migrating first means the process runs on the final storage.
-16. ~~Fuzzwork sync: lowest ID with gap filling (2.18 as decided) or latest ID without?~~ **Decided (2026-10-14):
+    `09-delete` (2.14 doesn't rely on it).
+15. ~~Fuzzwork sync: lowest ID with gap filling (2.18 as decided) or latest ID without?~~ **Decided (2026-10-14):
     lowest ID, gaps filled.** A brief attempt at latest-ID-only (no gap filling) risked a permanent gap: it
     downloads 4 ordersets at a time (`CONCURRENCY`), so a failure on one while a later one uploads would mean the
     next run starts after the later one and never retries the failed one. The lowest-ID rule already follows the
     archive (deletes take the oldest files, so the lowest remaining ID moves up and anything below it is never
     retried), and fills gaps above it, so a failed download is simply retried on the next run.
-17. **4-digit IDs read as years (2.2).** Any 4-digit number from 2003 on in a file name dates the file 31 December of
+16. **4-digit IDs read as years (2.2).** Any 4-digit number from 2003 on in a file name dates the file 31 December of
     that "year", possibly much too early. Fuzzwork IDs are clear (backfills 21000–59999, live from 90019); other
     datasets aren't checked. The first real run's `find.log` ("dated by a year in the name") answers it; if IDs show
     up, narrow the rule (e.g. only years next to a separator and no other digits, or per dataset).
-18. **Re-selection after a failed delete (2.2).** The published-torrent check compares the modification date, not
+17. **Re-selection after a failed delete (2.2).** The published-torrent check compares the modification date, not
     the file's date, so a re-uploaded file is never taken for the archived version. The cost: a file a torrent took
     by the date in its name, but modified after that torrent's cutoff, looks changed if its delete fails, and is
     selected again (a duplicate in the next torrent, flagged as changed). Acceptable, or record each file's
@@ -1170,8 +1168,8 @@ step and were dropped with it (2.11).
   else seeds it. Early on, most torrents will have no other seeders, so a lost or corrupted seed host loses that data
   for good (B2's soft-delete window aside). The egress cost that ruled Glacier out is only paid in a disaster (about
   $500 for everything); the risk it covered is paid in data. Worth deciding on one cheap second copy before the
-  first `10-delete`: an offline disk kept off site, a second seeder, or the Internet Archive (2.12). Appendix C's
-  monthly recheck and scrub matter more now; consider alerting on them.
+  first `09-delete`: an offline disk kept off site, a second seeder, or the Internet Archive (2.12). Appendix C's
+  monthly recheck matters more now; consider alerting on it.
 
 ## Appendix A: If archived data turns out to have changed
 

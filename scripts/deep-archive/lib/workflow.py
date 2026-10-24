@@ -103,20 +103,16 @@ STEPS = [
     "check-seed",
     "publish",
     "check-before-delete",
-    "pause-jobs",
     "delete",
     "check-delete",
     "data-index",
-    "resume-jobs",
     "check-site",
     "record",
     "delete-scratch",
 ]
 MANUAL_STEPS = {
     "review",
-    "pause-jobs",
     "data-index",
-    "resume-jobs",
     "record",
     "delete-scratch",
 }

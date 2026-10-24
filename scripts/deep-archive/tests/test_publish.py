@@ -180,13 +180,13 @@ class ReadTorrentTest(unittest.TestCase):
         os.makedirs(os.path.dirname(data_path))
         with open(data_path, "wb") as f:
             f.write(b"x" * 100)
-        readme_path = os.path.join(content_dir, f"{torrent_id}-README.txt")
+        readme_path = os.path.join(content_dir, f"{torrent_id}-README.md")
         with open(readme_path, "w", encoding="utf-8") as f:
             f.write("readme")
 
         fs = lt.file_storage()
         fs.add_file(f"{torrent_id}/a/file.bin", 100)
-        fs.add_file(f"{torrent_id}/{torrent_id}-README.txt", len(b"readme"))
+        fs.add_file(f"{torrent_id}/{torrent_id}-README.md", len(b"readme"))
         comment = render_comment(torrent_id, set(years), set(datasets))
         ct = lt.create_torrent(fs, 16 * 1024)
         ct.add_tracker("udp://tracker.example.com:1337/announce", 0)

@@ -3,28 +3,28 @@
 make-torrent: step 5 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
 v1+v2 .torrent and its file list, and checks both.
 
-DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.txt and SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
+DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.md and SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 
     04-make-torrent.py
 
 Needs 03-load's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece
 of every file (hours for a full torrent).
 
-1. Render README-template.md (ID, cutoff) into $SEED_DIR/<ID>/<ID>-README.txt.
+1. Render README-template.md (ID, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
 2. Download the tracker lists (lib/trackers.py): the union of both "best" lists, UDP and HTTP(S) only. Fails if a
    list can't be downloaded or has no usable trackers, or if the union has fewer than MIN_TRACKERS.
-3. Build the torrent from exactly the manifest's files plus the root README (<ID>-README.txt), sorted by path, with
+3. Build the torrent from exactly the manifest's files plus the root README (<ID>-README.md), sorted by path, with
    Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the downloaded trackers (one per tier, in order), the
    PLAN 2.4 comment (years and datasets from the manifest), creator "EVE Ref", no private flag, no web seed.
 4. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
 5. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
-   downloaded ones, one per tier, in order; the comment; files = the manifest plus <ID>-README.txt, bytes match; the
+   downloaded ones, one per tier, in order; the comment; files = the manifest plus <ID>-README.md, bytes match; the
    .txt passes file_list_problems, matches the manifest and has no market-history/, killmails/ or ccp/ paths. Prints the
    v1 and v2 info-hashes (copy them into NOTES.md) and records them in the completion file.
 
 Writes:
-    $SEED_DIR/<ID>/<ID>-README.txt
+    $SEED_DIR/<ID>/<ID>-README.md
     SCRATCH_DIR/<ID>.torrent
     SCRATCH_DIR/<ID>.txt
     SCRATCH_DIR/trackers/     each tracker list as downloaded (<name>.txt), and trackers.txt: the torrent's trackers
@@ -88,7 +88,7 @@ def main():
     print(f"{fmt_count(len(files))} files in {manifest_path}")
 
     section("README")
-    readme_name = f"{torrent_id}-README.txt"
+    readme_name = f"{torrent_id}-README.md"
     years, datasets = classify_all(files)
     write_readme(os.path.join(content_dir, readme_name), torrent_id)
     print(f"Written: {os.path.join(content_dir, readme_name)}")

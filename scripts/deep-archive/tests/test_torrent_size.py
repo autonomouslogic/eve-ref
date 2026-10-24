@@ -106,12 +106,12 @@ class RealTorrentTest(unittest.TestCase):
                     # Repeating, not random, content: piece hashing doesn't care, and it keeps the test fast and
                     # deterministic.
                     f.write((b"EVE Ref deep archive test data. " * (size // 32 + 1))[:size])
-            readme_path = os.path.join(content_dir, f"{name}-README.txt")
+            readme_path = os.path.join(content_dir, f"{name}-README.md")
             with open(readme_path, "wb") as f:
                 f.write(readme_bytes)
 
             fs = lt.file_storage()
-            for path in sorted(files) + [f"{name}-README.txt"]:
+            for path in sorted(files) + [f"{name}-README.md"]:
                 full = os.path.join(content_dir, path)
                 fs.add_file(f"{name}/{path}", os.path.getsize(full))
             ct = lt.create_torrent(fs, PIECE_SIZE)

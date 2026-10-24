@@ -23,6 +23,8 @@ Needs 06-check-seed's completion file, and refuses to run twice (lib/workflow.py
    Content-Type and exactly the local bytes; everef-deep-archive.xml is served as application/rss+xml, is valid XML and has an
    <item> with this torrent's v1 info-hash as its <guid>. Cloudflare may serve the old feed for
    up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
+5. Print this torrent's URL, v1 and v2 info-hashes, and full magnet link, for the next step (Record) to copy into
+   LOG.md and the docs site's deep-archive.md page.
 
 On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up (manual, README).
 
@@ -97,13 +99,29 @@ def main():
     v1_hash = make_torrent["v1_info_hash"]
 
     uploaded = upload_torrent(workflow, torrent_id, deep_archive)
-    torrents, feed_backup = publish_feed(workflow, torrent_id, deep_archive)
+    torrents, feed_backup, own_entry = publish_feed(workflow, torrent_id, deep_archive)
     check_published(workflow, torrent_id, v1_hash)
+
+    section("Torrent info")
+    magnet = build_magnet(
+        own_entry["id"], own_entry["v1_info_hash"], own_entry["v2_info_hash"], own_entry["trackers"][:MAGNET_TRACKERS]
+    )
+    print(f"URL: {torrent_url(torrent_id, 'torrent')}")
+    print(f"v1 info-hash: {own_entry['v1_info_hash']}")
+    print(f"v2 info-hash: {own_entry['v2_info_hash']}")
+    print(f"Magnet: {magnet}")
 
     workflow.complete(
         STEP,
         torrent_id,
-        {"uploaded": uploaded, "torrents_in_feed": torrents, "feed_backup": feed_backup},
+        {
+            "uploaded": uploaded,
+            "torrents_in_feed": torrents,
+            "feed_backup": feed_backup,
+            "v1_info_hash": own_entry["v1_info_hash"],
+            "v2_info_hash": own_entry["v2_info_hash"],
+            "magnet": magnet,
+        },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     ok(f"Publish OK for {torrent_id}")
@@ -166,7 +184,7 @@ def rclone_cat_bytes(remote_path):
 
 
 def publish_feed(workflow, torrent_id, deep_archive):
-    """Rebuilds the feed from the bucket and uploads it. Returns (torrent count, feed backup path)."""
+    """Rebuilds the feed from the bucket and uploads it. Returns (torrent count, feed backup path, this torrent's own feed entry)."""
     section("Feed: published torrents")
     names = list_torrents(deep_archive)
     if torrent_id not in [n[: -len(".torrent")] for n in names]:
@@ -184,6 +202,7 @@ def publish_feed(workflow, torrent_id, deep_archive):
     entries.sort(key=lambda e: e["id"])
     print(f"Read {len(entries)} torrents")
 
+    own_entry = next(e for e in entries if e["id"] == torrent_id)
     feed_xml = build_feed(entries)
 
     section("Feed: diff of everef-deep-archive.xml")
@@ -199,7 +218,7 @@ def publish_feed(workflow, torrent_id, deep_archive):
 
     section("Feed: uploading")
     upload_text(workflow.scratch_dir, deep_archive, "everef-deep-archive.xml", feed_xml, "application/rss+xml")
-    return len(entries), feed_backup
+    return len(entries), feed_backup, own_entry
 
 
 def backup_feed(scratch_dir, old_xml):
@@ -235,7 +254,7 @@ def read_torrent(deep_archive, tmp_dir, name):
         fail(f"{name}: torrent name {torrent_id!r} isn't a valid torrent ID")
     hashes = ti.info_hashes()
     storage = ti.files()
-    root_names = {f"{torrent_id}-README.txt"}
+    root_names = {f"{torrent_id}-README.md"}
     prefix = torrent_id + "/"
     files = 0
     data_bytes = 0

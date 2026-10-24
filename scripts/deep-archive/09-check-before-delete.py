@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-check-before-delete: step 9 of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
+check-before-delete: step 10 of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
 re-verifies the docs page and seeding, confirms the published torrent matches the local one, and builds the
 delete set from the torrent against a fresh listing of the bucket (PLAN 2.14).
 
 DRAFT. Read-only on the bucket and qBittorrent.
 
-    08-check-before-delete.py
+    09-check-before-delete.py
 
 Needs 07-publish's completion file, and refuses to run twice (lib/workflow.py).
 
@@ -17,12 +17,12 @@ A data file is in the delete set only if all of these hold:
   it was selected (01-find's files.jsonl).
 
 A file that fails stays on the site (Appendix E); it's listed and doesn't stop the step. Many failures point at a
-problem; look before going on (README, "08: Check before delete").
+problem; look before going on (README, "09: Check before delete").
 
 Writes, in SCRATCH_DIR:
 
     delete-set.json              torrent_id, confirmed files (path, size, last_modified), bytes, datasets, failed
-    08-check-before-delete.done  completion file
+    09-check-before-delete.done  completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY,
@@ -177,7 +177,7 @@ def check_published_torrent(workflow, remote, torrent_id):
             "something republished it differently"
         )
     print(f"Published torrent matches: v1 info-hash {published_v1_hash}")
-    root_names = {f"{torrent_id}-README.txt"}
+    root_names = {f"{torrent_id}-README.md"}
     prefix = torrent_id + "/"
     storage = ti.files()
     data_paths = set()

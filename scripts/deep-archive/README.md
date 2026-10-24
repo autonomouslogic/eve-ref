@@ -34,7 +34,7 @@ shared dataset/year classification and torrent comment (`lib/workflow.py`'s `cla
 `01-find`, `04-make-torrent`, `08-check-before-delete` and `create_torrent.py` so their dataset breakdowns and the
 torrent's own comment always agree; the `.torrent` size estimate (`lib/torrent_size.py`), including a real torrent
 built with libtorrent and compared against the estimate for the same files; `07-publish`'s feed
-building, round-tripped through its own checks; and `11-check-delete`'s checks, including that nothing outside the
+building, round-tripped through its own checks; and `10-check-delete`'s checks, including that nothing outside the
 confirmed delete set went missing. Standard library only, with one exception: the real-torrent-size and feed-building
 tests need the libtorrent Python bindings (like the scripts they test) and are skipped, not failed, without them. Uses
 your `python3`, or Docker if there isn't one; the Docker image doesn't have libtorrent, so those tests are skipped
@@ -45,9 +45,6 @@ there.
 Run each step in order, from `scripts/deep-archive/`. A step only starts once the previous one has completed, and it
 can't run twice (Appendix A). The bullets under a step are what must hold before moving on; if one doesn't, or
 anything else looks wrong, stop. Keep notes for the workflow in `$SCRATCH_DIR/NOTES.md`.
-
-Before starting: `$SCRATCH_DIR` is empty, `$SEED_DIR` was scrubbed or checked recently, and the storage migration
-isn't in progress (PLAN 2.21).
 
 ### 00: Preflight
 ```
@@ -103,11 +100,11 @@ different. Aborts before copying if the folder holds files that aren't selected,
 ```
 ./04-make-torrent.py
 ```
-Writes `<ID>-README.txt` into `$SEED_DIR/<ID>/`, downloads the tracker lists (ngosang's `trackers_best.txt` and
+Writes `<ID>-README.md` into `$SEED_DIR/<ID>/`, downloads the tracker lists (ngosang's `trackers_best.txt` and
 XIU2's `best.txt`; fails if either is unreachable or empty, or if they give fewer than 10 trackers together), makes
 `$SCRATCH_DIR/<ID>.torrent` (hybrid v1+v2, their union as trackers), and generates the file list
 `$SCRATCH_DIR/<ID>.txt` from it. Then reloads both from disk and checks them:
-- Files = the manifest plus `<ID>-README.txt`; bytes match.
+- Files = the manifest plus `<ID>-README.md`; bytes match.
 - Hybrid, `name` is `<ID>`, not private, no web seed; trackers one per tier; the comment is right.
 - The trackers in `$SCRATCH_DIR/trackers/trackers.txt` look sane (no surprising domains).
 - The `.txt` matches the torrent and passes `file_list_problems` (`lib/workflow.py`: full site paths,
@@ -149,9 +146,15 @@ retrying for a few minutes while Cloudflare still serves the old feed.
 - The `.torrent` and `.txt` are served from `https://data.everef.net/deep-archive/` with the right Content-Type and
   content; the feed is valid RSS and has `<ID>` with the right info-hash.
 
-On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up.
+### 08: Record (manual)
 
-### 08: Check before delete
+Add a line to `LOG.md`: ID, cutoff, files, bytes, the v1 and v2 info-hashes, and the published date, all printed by
+step 07. Commit it.
+
+Also add the torrent to the docs site's `deep-archive.md` page: its URL, v1 and v2 info-hashes, and full magnet
+link (all printed by step 07).
+
+### 09: Check before delete
 ```
 ./08-check-before-delete.py
 ```
@@ -162,14 +165,10 @@ On the first workflow, also add the feed to a qBittorrent RSS reader and check t
 - Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
 - Note the printed delete set: files, bytes, datasets.
 
-### 09: Pause crawling jobs (manual)
-
-Disable the scheduled `sync-fuzzwork-ordersets` and the market history scrape until the full `DataIndex` has run.
-
-### 10: Delete
+### 09: Delete
 ```
-./10-delete.py              # dry run
-./10-delete.py --execute    # type the torrent ID to confirm
+./09-delete.py              # dry run
+./09-delete.py --execute    # type the torrent ID to confirm
 ```
 - The dry run shows exactly the delete set from step 08.
 
@@ -178,39 +177,45 @@ prefix). Then it removes `index.html` and `index.json` from every folder the del
 and from parents left the same way, deepest first; never the site root or `deep-archive/` (PLAN 2.15). Treat it as
 permanent.
 
-### 11: Check delete
+Until the full `DataIndex` in the next step runs, parent index pages still link to the now-deleted files/folders:
+scheduled jobs that crawl the site (e.g. `sync-fuzzwork-ordersets`, the market history scrape) may fail against
+those stale links in the meantime. Left as-is; they recover on their next run after `DataIndex` catches up.
+
+### 10: Check delete
 ```
-./11-check-delete.py
+./10-check-delete.py
 ```
 - Every file in the delete set is gone, no folder holds only index files, and nothing else changed: files that
   failed the check in step 08 are still there, and so is every other path that was on the bucket when `01-find` ran
-  (step 08's pre-delete check already covers the delete set itself; this is what would catch `10-delete` deleting,
+  (step 08's pre-delete check already covers the delete set itself; this is what would catch `09-delete` deleting,
   or anything else removing, a path outside it). New uploads since `01-find` ran are fine; they're not checked.
 
-### 12: Full DataIndex (manual)
+### 11: Full DataIndex (manual)
+
+Also how stale index cleanup is handled (PLAN "Still open" #7): not by `09-delete` itself, but by the next full
+`DataIndex` run picking up the deletes.
 ```
 docker run --rm --env-file <production env> <eve-ref image> data-index
 ```
+Or, from a checkout with production settings in the environment:
+```
+./gradlew dataIndex
+```
 Leave `DATA_INDEX_PREFIX` unset.
 
-### 13: Resume crawling jobs (manual)
-
-Re-enable the jobs paused in step 09.
-- The next `sync-fuzzwork-ordersets` run succeeds and uploads nothing below its ID cutoff.
-
-### 14: Check site
+### 12: Check site
 ```
-./14-check-site.py
+./12-check-site.py
 ```
 - Every sampled deleted URL returns 404, or 200 from Cloudflare's cache (PLAN 2.16).
 - The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt` and the feed.
 
-### 15: Record (manual)
+### 13: Record (manual)
 
 Add a line to `LOG.md`: ID, cutoff, files, bytes, info-hashes, and the published, backed up and deleted dates.
 Commit it.
 
-### 16: Delete the scratch directory (manual)
+### 14: Delete the scratch directory (manual)
 
 Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 
@@ -282,7 +287,7 @@ $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
 
 $SEED_DIR/                         # kept; qBittorrent save path
   everef-deep-archive-2023-04-11/  # torrent content, exactly what the torrent describes
-    everef-deep-archive-2023-04-11-README.txt
+    everef-deep-archive-2023-04-11-README.md
     market-orders/history/2023/…
   everef-deep-archive-…/           # earlier torrents, still seeding
 ```
@@ -292,9 +297,7 @@ $SEED_DIR/                         # kept; qBittorrent save path
 ## Appendix C: Maintenance
 
 `$SEED_DIR` is EVE Ref's only copy of the archived data (there is no backup; PLAN 2.11). Check it regularly
-(e.g. monthly):
-- Force a recheck of every torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding.
-- The filesystem scrub (ZFS/RAID) is clean.
+(e.g. monthly): force a recheck of every torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding.
 
 If a recheck finds damage, let qBittorrent re-download the damaged pieces from other seeders. If there are none,
 the damaged files are lost.
@@ -326,7 +329,7 @@ If `08-check-before-delete` finds a file that changed after it was selected:
 | `05-seed` / `06-check-seed` | qBittorrent / throwaway aria2c download | none |
 | `07-publish` | **bucket `deep-archive/`**, `feed-backup/` | write |
 | `08-check-before-delete` | none | read |
-| `10-delete` / `11-check-delete` | **bucket data (permanent)** / none | write |
-| `14-check-site` | none | none |
+| `09-delete` / `10-check-delete` | **bucket data (permanent)** / none | write |
+| `12-check-site` | none | none |
 
 Every step also writes its completion file and its log in `$SCRATCH_DIR`.

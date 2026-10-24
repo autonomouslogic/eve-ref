@@ -17,7 +17,7 @@ qBittorrent (Web API):
 - At least one tracker reports as working.
 
 Test download (aria2c), only once qBittorrent checks out:
-- aria2c gets SCRATCH_DIR/<ID>.torrent (no magnet link) and downloads only <ID>-README.txt into a fresh folder,
+- aria2c gets SCRATCH_DIR/<ID>.torrent (no magnet link) and downloads only <ID>-README.md into a fresh folder,
   finding peers through the trackers and DHT. aria2c doesn't support BitTorrent v2, so it joins the hybrid
   torrent's v1 swarm; the README's index is taken from aria2c --show-files, where the v1 pad files count as files.
 - aria2c checks the piece hashes itself; the downloaded README must also be byte-identical to SEED_DIR's copy.
@@ -141,7 +141,7 @@ def test_download(workflow, torrent_id):
     directory's copy. Returns its size.
     """
     torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
-    readme_name = f"{torrent_id}-README.txt"
+    readme_name = f"{torrent_id}-README.md"
     seed_copy = os.path.join(workflow.seed_dir, torrent_id, readme_name)
     if not os.path.isfile(torrent_path):
         fail(f"Torrent not found: {torrent_path}")
