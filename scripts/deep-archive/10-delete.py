@@ -69,7 +69,7 @@ def main():
     if args.execute:
         workflow.begin(STEP)
     else:
-        print(f"# \U0001f680 (dry run) {STEP}: {torrent_id}")
+        print(f"\U0001f680 (dry run) {STEP}: {torrent_id}")
 
     section("Delete set")
     delete_set_path = os.path.join(workflow.scratch_dir, "delete-set.json")

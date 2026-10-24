@@ -688,7 +688,7 @@ moving on. The scripts support the human; they don't replace their judgement.
   needs the torrent ID typed back in, not just `y`.
 - **Resumable until complete.** A step that fails or is interrupted writes no completion file and can be run again;
   copies and uploads carry on where they stopped.
-- **Output like the roll-up scripts** (`lib/workflow.py`): `# 🚀 <step>: <ID>` once, `## 🔵 <section>` headings,
+- **Output like the roll-up scripts** (`lib/workflow.py`): `🚀 <step>: <ID>` once, `🔵 <section>` headings,
   plain lines for results, `🔴 <message>` on stderr for each problem (then exit 1), and `✅ <step> OK …` as the last
   line on success. Everything a step prints is also written to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
 - **Notes.** The operator keeps `$SCRATCH_DIR/NOTES.md` for notes on manual steps and decisions. It goes with the

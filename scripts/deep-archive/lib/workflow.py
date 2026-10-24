@@ -6,8 +6,8 @@ SCRATCH_DIR/<NN>-<step>.done, as the last thing it does. A step refuses to start
 exists (no accidental double execution), or if the previous step's doesn't. To redo a step on purpose, delete its
 completion file, and every later one, by hand.
 
-Output follows the roll-up scripts (scripts/rollup on the rollup-scripts branch): "# 🚀 <step>" once,
-"## 🔵 <section>" headings, plain lines for results, "🔴 <message>" on stderr for errors (then exit 1), and "✅ ..."
+Output follows the roll-up scripts (scripts/rollup on the rollup-scripts branch): "🚀 <step>" once,
+"🔵 <section>" headings, plain lines for results, "🔴 <message>" on stderr for errors (then exit 1), and "✅ ..."
 as the last line on success. Everything a step prints, stdout and stderr, is also written to
 SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log.
 
@@ -228,13 +228,13 @@ def start_log(scratch_dir, step, subject=None):
     log_file = open(path, "a", encoding="utf-8", buffering=1)
     sys.stdout = _Tee(sys.stdout, log_file)
     sys.stderr = _Tee(sys.stderr, log_file)
-    print(f"# 🚀 {step_name(step)}{': ' + subject if subject else ''}")
+    print(f"🚀 {step_name(step)}{': ' + subject if subject else ''}")
     return path
 
 
 def section(title):
     sys.stdout.flush()
-    print(f"## 🔵 {title}")
+    print(f"🔵 {title}")
 
 
 def error(message):

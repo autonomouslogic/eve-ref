@@ -83,7 +83,7 @@ def main():
         lock(scratch)
         start_log(scratch, STEP)
     else:
-        print(f"# 🚀 00-{STEP}")
+        print(f"🚀 00-{STEP}")
 
     section("Settings")
     print(f"Settings from {env_file}" if env_file else "Settings from the environment only (no torrents.env)")

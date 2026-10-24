@@ -255,7 +255,7 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 - **Redoing a completed step** is deliberate: delete its completion file and every later one by hand, and note why
   in `NOTES.md`. A step that failed wrote no completion file and can simply be run again; copies and uploads carry
   on where they stopped.
-- **Output, like the roll-up scripts:** `# 🚀 <step>: <ID>` once, `## 🔵 <section>` headings, plain lines for
+- **Output, like the roll-up scripts:** `🚀 <step>: <ID>` once, `🔵 <section>` headings, plain lines for
   results, `🔴 <message>` for each problem, and `✅ <step> OK …` as the last line on success. Everything is also
   written to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
 - **Show, then ask.** A step that writes outside `$SCRATCH_DIR` and `$SEED_DIR` (the bucket, qBittorrent)

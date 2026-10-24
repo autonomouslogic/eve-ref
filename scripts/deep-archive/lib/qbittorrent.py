@@ -13,13 +13,24 @@ class QbittorrentError(Exception):
     pass
 
 
+def without_default_port(url):
+    """
+    The URL without an explicit default port (:80 for http, :443 for https). urllib sends the port in the Host header
+    whenever the URL has one, and qBittorrent's host header validation rejects "example.lan:80" with 401.
+    """
+    parts = urllib.parse.urlsplit(url)
+    if (parts.scheme, parts.port) in (("http", 80), ("https", 443)):
+        parts = parts._replace(netloc=parts.netloc.rsplit(":", 1)[0])
+    return urllib.parse.urlunsplit(parts)
+
+
 class Client:
     def __init__(self, url, api_key):
         """
         Authenticates with the Web API key (qBittorrent 5.2+), sent as an Authorization: Bearer header on every
         request. No key sends no auth, for a Web API that bypasses it.
         """
-        self.url = url
+        self.url = without_default_port(url)
         self._auth_headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
 
     def _request(self, method, path, data=None, params=None, headers=None):
