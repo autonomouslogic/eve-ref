@@ -8,6 +8,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.Value;
@@ -23,6 +24,7 @@ public class DataCrawler {
 	protected UrlParser urlParser;
 
 	@Inject
+	@Named("data")
 	protected OkHttpWrapper okHttpWrapper;
 
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();

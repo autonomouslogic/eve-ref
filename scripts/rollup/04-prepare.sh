@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Step 4: build stage/ from download/, drop index.html, decompress, hash-verify against the originals.
-# Usage: ./03-prepare.sh <archive> <year>
+# Usage: ./04-prepare.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
@@ -13,12 +13,12 @@ if [[ -e "$STAGE_ROOT" ]]; then
 	exit 1
 fi
 
-echo "## 🔵 Copying to stage"
+echo "🔵 Copying to stage"
 mkdir -p "$(dirname "$STAGE_DIR")"
 cp -a "$DOWNLOAD_DIR" "$STAGE_DIR"
 echo "Copied $DOWNLOAD_DIR to $STAGE_DIR"
 
-echo "## 🔵 Removing index.html"
+echo "🔵 Removing index.html"
 TOTAL_COUNT="$(jq 'length' "$SCRATCH/listing.json")"
 INDEX_HTML_COUNT="$(jq '[.[] | select(.Path | test("index\\.html$"))] | length' "$SCRATCH/listing.json")"
 INDEX_JSON_COUNT="$(jq '[.[] | select(.Path | test("index\\.json$"))] | length' "$SCRATCH/listing.json")"
@@ -35,11 +35,11 @@ if [[ "$INDEX_HTML_DELETED" -ne "$INDEX_HTML_COUNT" ]]; then
 fi
 echo "Deleted $INDEX_HTML_DELETED index.html files"
 
-echo "## 🔵 Decompressing"
+echo "🔵 Decompressing"
 find "$STAGE_DIR" -name '*.bz2' -print0 | xargs -0 -P"$(nproc)" -n500 bunzip2
 echo "Decompressed all .bz2 files"
 
-echo "## 🔵 Checking file count"
+echo "🔵 Checking file count"
 STAGE_FILE_COUNT="$(find "$STAGE_DIR" -type f | wc -l)"
 EXPECTED_STAGE_COUNT=$((TOTAL_COUNT - INDEX_HTML_COUNT))
 if [[ "$STAGE_FILE_COUNT" -ne "$EXPECTED_STAGE_COUNT" ]]; then
@@ -48,14 +48,14 @@ if [[ "$STAGE_FILE_COUNT" -ne "$EXPECTED_STAGE_COUNT" ]]; then
 fi
 echo "Stage has $STAGE_FILE_COUNT files ($EXPECTED_STAGE_COUNT expected: data + index.json)"
 
-echo "## 🔵 Hashing"
+echo "🔵 Hashing"
 (
 	cd "$STAGE_ROOT"
 	find "$YEAR_PATH" -type f -exec sha256sum {} +
 ) | LC_ALL=C sort -k2 >"$SCRATCH/$ARCHIVE-$YEAR.sha256"
 echo "Wrote $ARCHIVE-$YEAR.sha256 ($STAGE_FILE_COUNT files)"
 
-echo "## 🔵 Checking mtimes"
+echo "🔵 Checking mtimes"
 STAGE_MTIME_TSV="$(
 	cd "$STAGE_DIR"
 	while IFS= read -r -d '' f; do
@@ -79,13 +79,24 @@ if [[ -n "$MTIME_DIFF" ]]; then
 fi
 echo "mtimes match listing.json for all $STAGE_FILE_COUNT files"
 
-echo "## 🔵 Checking JSON validity"
+echo "🔵 Checking JSON validity"
 # jq is run on 500 files at a time, but it reads them as one stream, so a truncated file could
 # join up with the next one and still parse. Each file must therefore end exactly one JSON value:
 # input_filename prints the file each value ended in, which must equal the file list in order.
 if ! find "$STAGE_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n500 bash -c \
 	'out="$(jq -r input_filename "$@")" && diff <(printf "%s\n" "$out") <(printf "%s\n" "$@") >&2' bash; then
-	echo "🔴 JSON check failed: invalid JSON, or files not holding exactly one JSON value (diff above)" >&2
+	echo "🔴 JSON check failed (diff above): invalid JSON, or files not holding exactly one JSON value" >&2
+	echo "🔵 Checking each file individually to find which ones are bad" >&2
+	find "$STAGE_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n1 bash -c '
+		f="$1"
+		out="$(jq -c . "$f" 2>&1)"
+		rc=$?
+		if [[ "$rc" -ne 0 ]]; then
+			printf "🔴 %s: invalid JSON: %s\n" "$f" "$out" >&2
+		elif [[ "$(wc -l <<<"$out")" -ne 1 ]]; then
+			printf "🔴 %s: holds %s JSON values, expected exactly one\n" "$f" "$(wc -l <<<"$out")" >&2
+		fi
+	' bash
 	exit 1
 fi
 echo "Every file holds exactly one valid JSON value"

@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.util;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
+import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -94,6 +95,15 @@ public class MockScrapeBuilder {
 	public File createTestRefdata() {
 		return createTestRefdata(RefDataMeta.builder()
 				.buildTime(Instant.parse("2000-01-02T03:04:05Z"))
+				.sde(RefDataMetaFileInfo.builder()
+						.sha256("sde-sha256")
+						.version(1L)
+						.build())
+				.esi(RefDataMetaFileInfo.builder().sha256("esi-sha256").build())
+				.hoboleaks(RefDataMetaFileInfo.builder()
+						.sha256("hoboleaks-sha256")
+						.version(1L)
+						.build())
 				.build());
 	}
 

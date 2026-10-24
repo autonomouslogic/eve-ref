@@ -34,7 +34,7 @@
     "@nuxtjs/google-adsense": "3.0.3"
   },
   "overrides": {
-    "proxy-agent": "6.5.0",
+    "proxy-agent": "8.0.2",
     "concurrently": "9.2.4"
   },
   "dependencies": {

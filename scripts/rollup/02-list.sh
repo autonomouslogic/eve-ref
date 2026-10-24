@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Step 2: list the remote year dir, check for anomalies, report what's there.
-# Usage: ./01-list.sh <archive> <year>
+# Usage: ./02-list.sh <archive> <year>
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh" "$@"
 
-echo "## 🔵 Listing"
+echo "🔵 Listing"
 rclone lsjson -R --hash --files-only --fast-list "$REMOTE/$YEAR_PATH" >"$SCRATCH/listing.json"
 
 TOTAL_COUNT="$(jq 'length' "$SCRATCH/listing.json")"
@@ -19,7 +19,7 @@ echo "Found $TOTAL_COUNT files"
 DATA_RE="^(?<dirdate>${YEAR}-[0-9]{2}-[0-9]{2})/${ARCHIVE}-(?<filedate>[0-9]{4}-[0-9]{2}-[0-9]{2})_(?<time>[0-9]{2}-[0-9]{2}-[0-9]{2})(\\.v[0-9]+)?\\.json\\.bz2\$"
 INDEX_RE="^((?<idxdate>${YEAR}-[0-9]{2}-[0-9]{2})/)?index\\.(html|json)\$"
 
-echo "## 🔵 Checking for anomalies"
+echo "🔵 Checking for anomalies"
 REPORT_JSON="$(jq \
 	--arg data_re "$DATA_RE" \
 	--arg index_re "$INDEX_RE" \
@@ -78,7 +78,7 @@ if [[ "$ANOMALY_COUNT" -gt 0 ]]; then
 	exit 1
 fi
 
-echo "## 🔵 Summary"
+echo "🔵 Summary"
 PRESENT_DAYS="$(jq -r '.day_counts | keys[]' <<<"$REPORT_JSON" | sort)"
 ALL_DAYS="$(
 	d="$YEAR-01-01"
@@ -111,7 +111,7 @@ fi
 echo "First timestamp: $FIRST_TIMESTAMP"
 echo "Last timestamp: $LAST_TIMESTAMP"
 
-echo "## 🔵 Free space"
+echo "🔵 Free space"
 # Reuses this listing instead of a separate "rclone size" / recursive "rclone lsf": the byte
 # counts are already in $REPORT_JSON. Only the one sample download below is extra remote traffic,
 # needed to estimate the bz2 decompression ratio.

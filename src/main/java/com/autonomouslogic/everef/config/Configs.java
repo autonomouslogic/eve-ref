@@ -252,6 +252,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Whether the data index recurses into subdirectories.
+	 */
+	public static final Config<Boolean> DATA_INDEX_RECURSIVE = Config.<Boolean>builder()
+			.name("DATA_INDEX_RECURSIVE")
+			.defaultValue(true)
+			.type(Boolean.class)
+			.build();
+
+	/**
 	 * The AWS region for the data site.
 	 * If not supplied, normal AWS SDK defaults will be used.
 	 */

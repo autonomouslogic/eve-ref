@@ -1,0 +1,17 @@
+name: Rollup Check
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 18 14 * *"
+env:
+  DISCORD_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
+jobs:
+  check-ready:
+    name: Check Ready
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Check
+        run: ./scripts/rollup/advise.sh

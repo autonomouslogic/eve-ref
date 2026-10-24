@@ -20,6 +20,12 @@ import { exists, mapValues } from '../runtime';
  */
 export interface NpcCorporationDivision {
     /**
+     * The key is the language code.
+     * @type {{ [key: string]: string; }}
+     * @memberof NpcCorporationDivision
+     */
+    description?: { [key: string]: string; };
+    /**
      * 
      * @type {string}
      * @memberof NpcCorporationDivision
@@ -70,6 +76,7 @@ export function NpcCorporationDivisionFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'displayName': !exists(json, 'display_name') ? undefined : json['display_name'],
         'divisionId': !exists(json, 'division_id') ? undefined : json['division_id'],
         'internalName': !exists(json, 'internal_name') ? undefined : json['internal_name'],
@@ -87,6 +94,7 @@ export function NpcCorporationDivisionToJSON(value?: NpcCorporationDivision | nu
     }
     return {
         
+        'description': value.description,
         'display_name': value.displayName,
         'division_id': value.divisionId,
         'internal_name': value.internalName,

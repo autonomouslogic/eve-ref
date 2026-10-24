@@ -31,4 +31,8 @@ public class NpcCorporationDivision {
 	@JsonProperty
 	@Schema(description = "The key is the language code.")
 	Map<String, String> leaderTypeName;
+
+	@JsonProperty
+	@Schema(description = "The key is the language code.")
+	Map<String, String> description;
 }
