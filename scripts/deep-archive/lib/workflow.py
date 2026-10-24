@@ -17,8 +17,8 @@ anything the environment doesn't set:
     SEED_DIR     torrent content, one folder per torrent ID, kept for seeding (qBittorrent save path)
     RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
                  the B2 key for the "everef" rclone remote; the rest of the remote is fixed here (RCLONE_FIXED)
-    QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
-                 qBittorrent's Web API (qbittorrent_settings)
+    QBITTORRENT_URL, QBITTORRENT_API_KEY
+                 qBittorrent's Web API and its API key (qBittorrent 5.2+, qbittorrent_settings)
     QBITTORRENT_SAVE_PATH  optional: SEED_DIR as qBittorrent sees it, if different (qbittorrent_save_path)
     DATA_BUCKET  the data site's bucket on B2; its root is the site root (data_remote)
     LOCAL_COPY_DIR  optional: a local copy of the data site, same layout as the bucket (local_copy_dir); load copies
@@ -171,11 +171,11 @@ MAX_TORRENT_BYTES = 10_000_000
 # qBittorrent's Web API (00-preflight, 05-seed, 06-check-seed). Torrents are added with save path
 # QBITTORRENT_SAVE_PATH (qbittorrent_save_path), SEED_DIR as qBittorrent sees it.
 def qbittorrent_settings():
-    """(url, username, password) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
+    """(url, api_key) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
     url = os.environ.get("QBITTORRENT_URL", "").strip().rstrip("/")
     if not url:
         fail("QBITTORRENT_URL is not set (environment or torrents.env)")
-    return url, os.environ.get("QBITTORRENT_USERNAME", ""), os.environ.get("QBITTORRENT_PASSWORD", "")
+    return url, os.environ.get("QBITTORRENT_API_KEY", "").strip()
 
 
 def qbittorrent_save_path(seed_dir):

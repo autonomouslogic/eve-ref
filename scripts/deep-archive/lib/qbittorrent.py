@@ -1,9 +1,8 @@
 """
 qbittorrent: a tiny client for qBittorrent's Web API (https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API),
-stdlib only (urllib + http.cookiejar), for 00-preflight, 05-seed and 06-check-seed.
+stdlib only (urllib), for 00-preflight, 05-seed and 06-check-seed.
 """
 
-import http.cookiejar
 import json
 import urllib.error
 import urllib.parse
@@ -15,26 +14,22 @@ class QbittorrentError(Exception):
 
 
 class Client:
-    def __init__(self, url, username, password):
+    def __init__(self, url, api_key):
+        """
+        Authenticates with the Web API key (qBittorrent 5.2+), sent as an Authorization: Bearer header on every
+        request. No key sends no auth, for a Web API that bypasses it.
+        """
         self.url = url
-        self._cookies = http.cookiejar.CookieJar()
-        self._opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self._cookies))
-        if username:
-            self._login(username, password)
-
-    def _login(self, username, password):
-        body = urllib.parse.urlencode({"username": username, "password": password}).encode()
-        text = self._request("POST", "/api/v2/auth/login", data=body)
-        if text.strip() != "Ok.":
-            raise QbittorrentError(f"Login failed: {text.strip()!r}")
+        self._auth_headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
 
     def _request(self, method, path, data=None, params=None, headers=None):
         url = self.url + path
         if params:
             url += "?" + urllib.parse.urlencode(params)
-        request = urllib.request.Request(url, data=data, method=method, headers=headers or {})
+        headers = {**self._auth_headers, **(headers or {})}
+        request = urllib.request.Request(url, data=data, method=method, headers=headers)
         try:
-            with self._opener.open(request, timeout=60) as response:
+            with urllib.request.urlopen(request, timeout=60) as response:
                 return response.read().decode("utf-8", errors="replace")
         except urllib.error.HTTPError as e:
             raise QbittorrentError(f"{method} {path} failed: HTTP {e.code} {e.read().decode(errors='replace')}")

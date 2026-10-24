@@ -20,7 +20,8 @@ A GitHub Actions workflow (`.github/workflows/deep-archive-reminder.yml`) pings 
 - A B2 key for the data bucket.
 - `SEED_DIR` on redundant storage (e.g. a ZFS mirror or RAID), with room for one more torrent (`MAX_BYTES` in
   `lib/workflow.py`). After deletion it's EVE Ref's only copy of the archived data (Appendix C).
-- qBittorrent-nox, for seeding, with its Web API reachable (`QBITTORRENT_URL`).
+- qBittorrent-nox 5.2 or later, for seeding, with its Web API reachable (`QBITTORRENT_URL`) and an API key
+  generated in the Web UI settings (`QBITTORRENT_API_KEY`).
 
 ## Setup
 
@@ -73,7 +74,7 @@ anything else looks wrong, stop. Keep notes for the workflow in `$SCRATCH_DIR/NO
 ```
 Checks the settings, both directories (created if missing; `SCRATCH_DIR` empty, room in `SEED_DIR`), rclone, the B2
 key and bucket, libtorrent, aria2c, the tracker lists (both download, at least 10 trackers together), `LOCAL_COPY_DIR`
-if set, and qBittorrent's Web API (reachable, the login works, libtorrent 2.x). Names any setting the environment
+if set, and qBittorrent's Web API (reachable, the API key works, libtorrent 2.x). Names any setting the environment
 overrides `torrents.env` with. Reports every problem, then aborts if there were any; a missing tool (rclone,
 libtorrent, aria2c) aborts right after the tool checks.
 
@@ -277,7 +278,7 @@ overrides.
 | `SEED_DIR` | Torrent content, one folder per torrent, kept for seeding. qBittorrent's save path (see `QBITTORRENT_SAVE_PATH`). |
 | `DATA_BUCKET` | The data site's bucket on B2. Its root is the site root. |
 | `RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY` | The B2 key for the `everef` rclone remote. |
-| `QBITTORRENT_URL`, `QBITTORRENT_USERNAME`, `QBITTORRENT_PASSWORD` | qBittorrent's Web API. |
+| `QBITTORRENT_URL`, `QBITTORRENT_API_KEY` | qBittorrent's Web API and its API key (qBittorrent 5.2+, generated in the Web UI settings). |
 | `QBITTORRENT_SAVE_PATH` | Optional. `SEED_DIR` as qBittorrent sees it, if different (qBittorrent in Docker, say). `05-seed` adds torrents with this save path; `SEED_DIR` if not set. |
 | `LOCAL_COPY_DIR` | Optional. A local copy of the data site, laid out like the bucket (`index.json` at the top). `03-load` copies the files it has with the selected size, modification time and SHA-1 instead of downloading them. |
 

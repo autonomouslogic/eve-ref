@@ -30,7 +30,7 @@ outside. If the seeder is on the same host, aria2c may have to reach qBittorrent
 If the recheck is still running, this fails with the current progress; run it again once it finishes.
 
 Environment (or torrents.env, see lib/workflow.py):
-    SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
+    SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_API_KEY
 
 Needs aria2c.
 """
@@ -73,9 +73,9 @@ def main():
     info_hash = seed_done["summary"]["info_hash"]
 
     section("qBittorrent")
-    url, username, password = qbittorrent_settings()
+    url, api_key = qbittorrent_settings()
     try:
-        client = Client(url, username, password)
+        client = Client(url, api_key)
     except QbittorrentError as e:
         fail(f"Can't reach qBittorrent at {url}: {e}")
 

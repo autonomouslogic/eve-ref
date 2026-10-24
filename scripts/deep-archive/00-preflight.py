@@ -21,11 +21,11 @@ Checks:
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable;
 - the other required tools: libtorrent 2.x, aria2c;
+- qBittorrent's Web API answers at QBITTORRENT_URL with QBITTORRENT_API_KEY, and runs libtorrent 2.x;
 - the tracker lists make-torrent downloads (lib/trackers.py) are reachable, each has UDP or HTTP(S) trackers, and
   together they have at least MIN_TRACKERS;
 - LOCAL_COPY_DIR, if set, is a readable folder laid out like the bucket (index.json at the top), apart from
-  SCRATCH_DIR and SEED_DIR;
-- qBittorrent's Web API answers at QBITTORRENT_URL with the configured login, and runs libtorrent 2.x.
+  SCRATCH_DIR and SEED_DIR.
 """
 
 import json
@@ -127,14 +127,15 @@ def main():
     if checks.failed > failed_before_tools:
         fail("Required tools are missing, aborting before the remaining checks")
 
+    # qBittorrent first: it answers much faster than the tracker lists and the bucket.
+    section("qBittorrent")
+    check_qbittorrent(checks, seed)
+
     section("Trackers")
     check_trackers(checks)
 
     section("Remote")
     check_remote(checks)
-
-    section("qBittorrent")
-    check_qbittorrent(checks, seed)
 
     if checks.failed:
         fail(f"Preflight found {checks.failed} problem{'s' if checks.failed != 1 else ''}, aborting")
@@ -189,13 +190,13 @@ def check_local_copy(checks, scratch, seed):
 
 
 def check_qbittorrent(checks, seed):
-    """qBittorrent's Web API answers with the configured login, and runs libtorrent 2.x (needed to seed v2)."""
+    """qBittorrent's Web API answers with the configured API key, and runs libtorrent 2.x (needed to seed v2)."""
     if not os.environ.get("QBITTORRENT_URL", "").strip():
         checks.fail("QBITTORRENT_URL is not set (environment or torrents.env)")
         return
-    url, username, password = qbittorrent_settings()
+    url, api_key = qbittorrent_settings()
     try:
-        client = Client(url, username, password)
+        client = Client(url, api_key)
         version = client.version()
         build = client.build_info()
     except (QbittorrentError, ValueError) as e:

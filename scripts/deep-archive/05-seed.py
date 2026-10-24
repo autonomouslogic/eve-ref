@@ -16,7 +16,7 @@ Waits for qBittorrent to report the torrent, then triggers a recheck (qBittorren
 added from existing files without being asked).
 
 Environment (or torrents.env, see lib/workflow.py):
-    SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
+    SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_API_KEY
     QBITTORRENT_SAVE_PATH   optional: SEED_DIR as qBittorrent sees it, if different (e.g. qBittorrent in Docker)
 """
 
@@ -51,9 +51,9 @@ def main():
     torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
 
     section("qBittorrent")
-    url, username, password = qbittorrent_settings()
+    url, api_key = qbittorrent_settings()
     try:
-        client = Client(url, username, password)
+        client = Client(url, api_key)
         version = client.version()
     except QbittorrentError as e:
         fail(f"Can't reach qBittorrent at {url}: {e}")

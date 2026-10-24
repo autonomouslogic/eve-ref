@@ -27,7 +27,7 @@ Writes, in SCRATCH_DIR:
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY,
-    QBITTORRENT_URL, QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD
+    QBITTORRENT_URL, QBITTORRENT_API_KEY
 
 Needs rclone and libtorrent 2.x.
 """
@@ -160,11 +160,11 @@ def docs_page_problems(text, torrent_id, v1_hash):
 
 
 def check_seeder(workflow, torrent_id):
-    url, username, password = qbittorrent_settings()
+    url, api_key = qbittorrent_settings()
     seed_done = workflow.read_done("seed")
     info_hash = seed_done["summary"]["info_hash"]
     try:
-        client = Client(url, username, password)
+        client = Client(url, api_key)
         info = client.info(info_hash)
     except QbittorrentError as e:
         fail(f"Can't reach qBittorrent: {e}")
