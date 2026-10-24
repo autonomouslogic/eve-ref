@@ -105,15 +105,15 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-  // Anniversary.
-  if (monthOfYear == 10) {
-    const years = date.getUTCFullYear() - 2017;
-    return {
-      text: `EVE Ref is celebrating ${years} years this month!`,
-      url: PATREON_URL,
-      urlText: "Support EVE Ref"
-    } as Motd;
-  }
+	// Anniversary.
+	if (monthOfYear == 10) {
+		const years = date.getUTCFullYear() - 2017;
+		return {
+			text: `EVE Ref is celebrating ${years} years this month!`,
+			url: PATREON_URL,
+			urlText: "Support EVE Ref"
+		} as Motd;
+	}
 
 	// Giveaway event.
 	if (time < new Date("2026-01-01T01:00:00Z").getTime()) {
