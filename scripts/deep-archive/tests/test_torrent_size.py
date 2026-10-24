@@ -95,7 +95,7 @@ class RealTorrentTest(unittest.TestCase):
         files: {relative path: size in bytes}. Returns (actual .torrent bytes, TorrentSize estimate for just the
         data files -- the same split 01-find/04-make-torrent use, where the README only counts via FIXED_BYTES).
         """
-        name = "everef-deep-archive-2024-01-01"
+        name = "everef-eve-online-deep-archive-2024-01-01"
         with tempfile.TemporaryDirectory() as parent:
             content_dir = os.path.join(parent, name)
             os.makedirs(content_dir)
@@ -120,10 +120,10 @@ class RealTorrentTest(unittest.TestCase):
             ):
                 ct.add_tracker(tracker, tier)
             ct.set_comment(
-                "EVE Ref Deep Archive: everef-deep-archive-2024-01-01\n"
+                "EVE Ref Deep Archive: everef-eve-online-deep-archive-2024-01-01\n"
                 "Data from 2020–2024. Datasets: a, b, c, e.\n"
                 "What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html\n"
-                "File list: https://data.everef.net/deep-archive/everef-deep-archive-2024-01-01.txt"
+                "File list: https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2024-01-01.txt"
             )
             ct.set_creator("EVE Ref")
             lt.set_piece_hashes(ct, parent)

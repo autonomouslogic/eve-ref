@@ -58,7 +58,7 @@ class BuildDeleteSetTest(unittest.TestCase):
 
 
 class DocsPageProblemsTest(unittest.TestCase):
-    ID = "everef-deep-archive-2024-01-01"
+    ID = "everef-eve-online-deep-archive-2024-01-01"
     V1 = "0123456789abcdef0123456789abcdef01234567"
 
     def test_lists_torrent(self):

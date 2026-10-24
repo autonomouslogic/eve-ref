@@ -1,7 +1,7 @@
 # EVE Ref Deep Archive
 
 Moves old data.everef.net data into torrents. One workflow makes one torrent: the oldest data not archived yet, as
-much as the size limits allow, named after the last date it covers (`everef-deep-archive-YYYY-MM-DD`).
+much as the size limits allow, named after the last date it covers (`everef-eve-online-deep-archive-YYYY-MM-DD`).
 It's then seeded, published, listed on the docs site, and deleted from the site.
 
 Status: **draft**. Every step 00-14 is numbered and every scripted one is written; none has run against real data yet.
@@ -314,10 +314,10 @@ $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
   log/.lock                        # held by the running step
 
 $SEED_DIR/                         # kept; qBittorrent save path
-  everef-deep-archive-2023-04-11/  # torrent content, exactly what the torrent describes
-    everef-deep-archive-2023-04-11-README.md
+  everef-eve-online-deep-archive-2023-04-11/  # torrent content, exactly what the torrent describes
+    everef-eve-online-deep-archive-2023-04-11-README.md
     market-orders/history/2023/…
-  everef-deep-archive-…/           # earlier torrents, still seeding
+  everef-eve-online-deep-archive-…/           # earlier torrents, still seeding
 ```
 
 `SCRATCH_DIR` and `SEED_DIR` must be separate, neither inside the other.

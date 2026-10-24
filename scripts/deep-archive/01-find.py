@@ -43,7 +43,7 @@ uploaded again after it was archived (it changed), so it's a candidate like any 
 The same path can be in several torrents, one version each. A file the torrent selected by a date in its name, but
 modified after the cutoff, looks changed too: if its delete didn't happen, it's selected again (flagged).
 
-The torrent ID is everef-deep-archive-YYYY-MM-DD, with the cutoff date. The torrent holds everything not yet archived
+The torrent ID is everef-eve-online-deep-archive-YYYY-MM-DD, with the cutoff date. The torrent holds everything not yet archived
 that was dated on or before that date. Writes, in SCRATCH_DIR:
 
     find/

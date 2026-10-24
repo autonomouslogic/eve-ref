@@ -147,7 +147,7 @@ class SkipReasonTest(unittest.TestCase):
         self.assertEqual(self.skip("market-orders/index.html"), ("ignored", "index.html files"))
 
     def test_deep_archive(self):
-        self.assertEqual(self.skip("deep-archive/everef-deep-archive-2023-04-11.txt"), ("excluded", "deep-archive"))
+        self.assertEqual(self.skip("deep-archive/everef-eve-online-deep-archive-2023-04-11.txt"), ("excluded", "deep-archive"))
 
     def test_latest_files(self):
         self.assertEqual(self.skip("market-orders/market-orders-latest.v3.csv.bz2"), ("ignored", "latest files"))
@@ -171,12 +171,12 @@ class SkipReasonTest(unittest.TestCase):
 
 class TorrentIdTest(unittest.TestCase):
     def test_cutoff(self):
-        self.assertEqual(find.torrent_cutoff("everef-deep-archive-2023-04-11"), date(2023, 4, 11))
+        self.assertEqual(find.torrent_cutoff("everef-eve-online-deep-archive-2023-04-11"), date(2023, 4, 11))
 
     def test_is_torrent_id(self):
-        self.assertTrue(find.is_torrent_id("everef-deep-archive-2023-04-11"))
-        self.assertFalse(find.is_torrent_id("everef-deep-archive-2023-02-30"))
-        self.assertFalse(find.is_torrent_id("everef-deep-archive-latest"))
+        self.assertTrue(find.is_torrent_id("everef-eve-online-deep-archive-2023-04-11"))
+        self.assertFalse(find.is_torrent_id("everef-eve-online-deep-archive-2023-02-30"))
+        self.assertFalse(find.is_torrent_id("everef-eve-online-deep-archive-latest"))
         self.assertFalse(find.is_torrent_id("feed"))
 
 
@@ -230,13 +230,13 @@ class ClassifyAllTest(unittest.TestCase):
         self.assertEqual(scan.empty, ["d/a.json"])
 
     def test_published_version_is_taken(self):
-        torrent_id = "everef-deep-archive-2023-04-11"
+        torrent_id = "everef-eve-online-deep-archive-2023-04-11"
         scan = self.classify([obj("d/a.json", size=7, modified=(2023, 4, 11))], {"d/a.json": torrent_id})
         self.assertEqual(scan.candidates, [])
         self.assertEqual(scan.taken[torrent_id], [1, 7])
 
     def test_file_changed_after_its_torrent_is_a_candidate_again(self):
-        torrent_id = "everef-deep-archive-2023-04-11"
+        torrent_id = "everef-eve-online-deep-archive-2023-04-11"
         scan = self.classify([obj("d/a.json", size=7, modified=(2023, 4, 12))], {"d/a.json": torrent_id})
         self.assertEqual([o.path for o in scan.candidates], ["d/a.json"])
         self.assertEqual(scan.changed[torrent_id], [1, 7])
@@ -244,13 +244,13 @@ class ClassifyAllTest(unittest.TestCase):
 
     def test_taken_is_by_modification_date_not_name_date(self):
         # Dated 2020 by its name, but uploaded again after the torrent's cutoff: changed.
-        torrent_id = "everef-deep-archive-2023-04-11"
+        torrent_id = "everef-eve-online-deep-archive-2023-04-11"
         scan = self.classify([obj("d/a-2020-01-01.json", modified=(2024, 1, 1))], {"d/a-2020-01-01.json": torrent_id})
         self.assertEqual([o.path for o in scan.candidates], ["d/a-2020-01-01.json"])
         self.assertEqual(scan.changed[torrent_id][0], 1)
 
     def test_published_index_json(self):
-        torrent_id = "everef-deep-archive-2023-04-11"
+        torrent_id = "everef-eve-online-deep-archive-2023-04-11"
         taken = {"d/index.json": torrent_id, "e/index.json": torrent_id}
         listing = [obj("d/index.json", modified=(2023, 1, 1)), obj("e/index.json", modified=(2024, 1, 1))]
         scan = self.classify(listing, taken)

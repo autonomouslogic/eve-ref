@@ -25,7 +25,7 @@ Revised 2026-10-10:
 
 - **One workflow, one torrent, as big as the size limits allow** (2.1, 2.8). `01-find` takes the oldest files not
   archived yet, by date (2.2), until the next date would go over a hard-coded file count or byte size. Torrent
-  IDs carry that cutoff date (`everef-deep-archive-YYYY-MM-DD`). There are no yearly torrents.
+  IDs carry that cutoff date (`everef-eve-online-deep-archive-YYYY-MM-DD`). There are no yearly torrents.
 - **The scripts reach the storage only through rclone** (2.21), with one B2 key. No AWS CLI or S3 library. The
   earlier filesystem-mount
   design (revision of 2026-10-09) is dropped.
@@ -101,7 +101,7 @@ after every step.
 Deletion is the only destructive step. After deletion, the copies of the data are the seed directory and whatever
 community seeders hold (no backup: 2.11).
 
-Dates and IDs in this document (`everef-deep-archive-2023-04-11`, …) are **examples**.
+Dates and IDs in this document (`everef-eve-online-deep-archive-2023-04-11`, …) are **examples**.
 
 ---
 
@@ -144,7 +144,7 @@ Dates and IDs in this document (`everef-deep-archive-2023-04-11`, …) are **exa
 
 - **Each torrent holds the oldest data not archived yet**, from **every** in-scope dataset, up to a cutoff date:
   everything dated (2.2) on or before that date that isn't in an earlier torrent (2.8). The torrent ID carries the date:
-  `everef-deep-archive-2023-04-11`.
+  `everef-eve-online-deep-archive-2023-04-11`.
 - The cutoff is chosen to make the torrent **as big as possible** within hard-coded limits on file count and bytes
   (2.8). Those limits come from what torrent clients accept (2.4 "Creating the torrent", Appendix B): a `.torrent`
   with hundreds of thousands of files is too big for libtorrent's defaults, and qBittorrent's WebUI hung on 43,620.
@@ -230,22 +230,22 @@ list, files inside the torrent, seed folder.
 
 | Case | ID |
 |---|---|
-| Normal | `everef-deep-archive-<cutoff date>`, e.g. `everef-deep-archive-2023-04-11` |
+| Normal | `everef-eve-online-deep-archive-<cutoff date>`, e.g. `everef-eve-online-deep-archive-2023-04-11` |
 
 Cutoffs only move forward (each torrent skips everything already published), so IDs sort in publication order.
 
 Inside a torrent, the `name` is the ID and file paths are the **full site paths**:
 
 ```
-name:   everef-deep-archive-2023-04-11
-files:  everef-deep-archive-2023-04-11-README.md       # what this is (2.6)
+name:   everef-eve-online-deep-archive-2023-04-11
+files:  everef-eve-online-deep-archive-2023-04-11-README.md       # what this is (2.6)
         market-orders/history/2023/2023-01-01/market-orders-2023-01-01_00-00-00.v3.csv.bz2
         public-contracts/history/2023/2023-01-01/public-contracts-2023-01-01_00-00-00.v2.tar.bz2
         ccp/sde/2022/...
         ...
 ```
 
-- By default a download lands in `everef-deep-archive-2023-04-11/market-orders/history/2023/…`. That's clear, and the
+- By default a download lands in `everef-eve-online-deep-archive-2023-04-11/market-orders/history/2023/…`. That's clear, and the
   torrents stay separate.
 - To get the **exact data.everef.net layout**, which is also what `rclone` produces, download with qBittorrent's
   content layout set to **"Don't create subfolder"** (or the equivalent in other clients). The root folder is then
@@ -274,10 +274,10 @@ files:  everef-deep-archive-2023-04-11-README.md       # what this is (2.6)
   ```
   Example:
   ```
-  EVE Ref Deep Archive: everef-deep-archive-2023-04-11
+  EVE Ref Deep Archive: everef-eve-online-deep-archive-2023-04-11
   Data from 2017–2023. Datasets: esi-scrape, fuzzwork/ordersets, market-orders, public-contracts, reference-data, ...
   What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
-  File list: https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.txt
+  File list: https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2023-04-11.txt
   ```
   - `{ID}` is the torrent ID (2.3), which is also the torrent's name.
   - `{YEARS}` comes from the **manifest**, not the ID: the distinct years of the data files (year folder in the
@@ -472,10 +472,10 @@ folder with the same name in this repo holds the scripts and operator docs; it i
 ```
 deep-archive/                       # at the root of data.everef.net
   everef-deep-archive.xml                          # RSS: all torrents
-  everef-deep-archive-2023-04-11.torrent
-  everef-deep-archive-2023-04-11.txt      # every data file in the torrent, one site path per line
-  everef-deep-archive-2024-02-20.torrent
-  everef-deep-archive-2024-02-20.txt
+  everef-eve-online-deep-archive-2023-04-11.torrent
+  everef-eve-online-deep-archive-2023-04-11.txt      # every data file in the torrent, one site path per line
+  everef-eve-online-deep-archive-2024-02-20.torrent
+  everef-eve-online-deep-archive-2024-02-20.txt
   ...
 ```
 
@@ -564,14 +564,14 @@ RSS 2.0, one `<item>` per torrent, compatible with qBittorrent's RSS auto-downlo
     <link>https://data.everef.net/deep-archive/</link>
     <description>Archived datasets from data.everef.net</description>
     <item>
-      <title>everef-deep-archive-2023-04-11</title>
-      <link>https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.torrent</link>
+      <title>everef-eve-online-deep-archive-2023-04-11</title>
+      <link>https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2023-04-11.torrent</link>
       <guid isPermaLink="false">INFOHASH_V1</guid>
       <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
       <description>EVE Ref Deep Archive, data modified up to 2023-04-11. 980 GB, 21,000 files.
         Datasets: market-orders, public-contracts, ...
-        File list: https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.txt</description>
-      <enclosure url="https://data.everef.net/deep-archive/everef-deep-archive-2023-04-11.torrent"
+        File list: https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2023-04-11.txt</description>
+      <enclosure url="https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2023-04-11.torrent"
                  length="TORRENT_FILE_SIZE" type="application/x-bittorrent"/>
       <torrent:infoHash>INFOHASH_V1</torrent:infoHash>
       <torrent:magnetURI><![CDATA[magnet:?xt=urn:btih:...]]></torrent:magnetURI>
@@ -608,7 +608,7 @@ after that is checked against that list, never against "whatever is in the direc
     - If neither is reached, the cutoff is the newest allowed date (and the report flags that the torrent could be
       bigger).
     - Then, if the selection holds less than `MIN_BYTES`, `01-find` fails: not enough data for a torrent yet.
-  - **Torrent ID** = `everef-deep-archive-<cutoff date>`: everything not yet archived, dated on or before that date.
+  - **Torrent ID** = `everef-eve-online-deep-archive-<cutoff date>`: everything not yet archived, dated on or before that date.
   - Output in `$SCRATCH_DIR/find/`: `files.jsonl` (path, size, last-modified, date, what dated it, URL),
     `listing.jsonl.gz` (the full listing the selection came from), `report.txt`, `summary.json`, `find.log`. The
     report breaks the selection down by what dated each file, date month, year folder in the path, and dataset, and
@@ -742,7 +742,7 @@ Researched 2026-10-08 (sources at the end of this section).
   which would need one item holding the whole torrent's files.
 - What does fit: **bundles** of a torrent's files (e.g. ~50 GB store-only ZIP64 parts, built from `$SEED_DIR`). About
   50 GB per bundle, grouped into items of at most ~500 GB
-  (e.g. items `everef-deep-archive-2023-04-11-part-001-010`), plus the metadata files. That gives:
+  (e.g. items `everef-eve-online-deep-archive-2023-04-11-part-001-010`), plus the metadata files. That gives:
   - a **second, free, off-site copy**, independent of the seed host: with no backup (2.11), the only one;
   - **public HTTP downloads** of the archived data, in bundle form, without any seeders;
   - possibly **single-file downloads** through ZIP "View contents" (needs testing on large ZIP64 files);
@@ -978,7 +978,7 @@ Explains the rules, and **lists every torrent** in a "Torrents" table (ID, v1 an
 newest first, added by step 08 of each workflow (4.3). The `deep-archive/` directory and the feed are the
 authoritative list.
 
-1. **What it is.** BitTorrent archives of data.everef.net datasets, `everef-deep-archive-YYYY-MM-DD.torrent`. Each one
+1. **What it is.** BitTorrent archives of data.everef.net datasets, `everef-eve-online-deep-archive-YYYY-MM-DD.torrent`. Each one
    holds the oldest data that wasn't in an earlier torrent, from every archived dataset, up to the date in its name,
    in the same paths as on the site. Each torrent is as big as client limits allow (up to ~21,000 files, 1 TiB).
 2. **Why they exist.** data.everef.net keeps growing (5.7 TB+). Old data is moved off the HTTP site to keep hosting

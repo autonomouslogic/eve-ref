@@ -72,9 +72,9 @@ MIN_AGE_YEARS = 2
 # Public URL of the data site.
 DATA_BASE_URL = "https://data.everef.net/"
 
-# Torrent IDs (PLAN 2.3): everef-deep-archive-<cutoff date>.
-TORRENT_ID_PREFIX = "everef-deep-archive-"
-TORRENT_ID_RE = re.compile(r"^everef-deep-archive-\d{4}-\d{2}-\d{2}$")
+# Torrent IDs (PLAN 2.3): everef-eve-online-deep-archive-<cutoff date>.
+TORRENT_ID_PREFIX = "everef-eve-online-deep-archive-"
+TORRENT_ID_RE = re.compile(r"^everef-eve-online-deep-archive-\d{4}-\d{2}-\d{2}$")
 
 # Cache-Control max-age for everef-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.

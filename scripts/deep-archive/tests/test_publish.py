@@ -74,12 +74,12 @@ class BuildMagnetTest(unittest.TestCase):
 class TorrentUrlTest(unittest.TestCase):
     def test_torrent_and_txt(self):
         self.assertEqual(
-            publish.torrent_url("everef-deep-archive-2024-01-01", "torrent"),
-            "https://data.everef.net/deep-archive/everef-deep-archive-2024-01-01.torrent",
+            publish.torrent_url("everef-eve-online-deep-archive-2024-01-01", "torrent"),
+            "https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2024-01-01.torrent",
         )
         self.assertEqual(
-            publish.torrent_url("everef-deep-archive-2024-01-01", "txt"),
-            "https://data.everef.net/deep-archive/everef-deep-archive-2024-01-01.txt",
+            publish.torrent_url("everef-eve-online-deep-archive-2024-01-01", "txt"),
+            "https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2024-01-01.txt",
         )
 
 
@@ -109,12 +109,12 @@ class BuildFeedTest(unittest.TestCase):
         # build_feed always rebuilds the whole feed from every published torrent (never incrementally), so "adding
         # an entry" is: call it again with the new torrent's entry included, and check the existing one is still
         # there, unchanged, alongside the new one.
-        existing = entry("everef-deep-archive-2024-01-01", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))
+        existing = entry("everef-eve-online-deep-archive-2024-01-01", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))
         before = ET.fromstring(publish.build_feed([existing]))
         self.assertEqual([item.findtext("title") for item in before.iter("item")], [existing["id"]])
 
         new = entry(
-            "everef-deep-archive-2024-06-01",
+            "everef-eve-online-deep-archive-2024-06-01",
             datetime.datetime(2024, 6, 2, tzinfo=datetime.timezone.utc),
             v1_hash="c" * 40,
             v2_hash="d" * 64,
@@ -199,7 +199,7 @@ class ReadTorrentTest(unittest.TestCase):
         return torrent_path, lt.torrent_info(torrent_path)
 
     def test_fields_extracted_from_a_real_torrent(self):
-        torrent_id = "everef-deep-archive-2024-01-01"
+        torrent_id = "everef-eve-online-deep-archive-2024-01-01"
         torrent_path, ti = self._make_torrent(torrent_id)
 
         result = quietly(publish.read_torrent, "deep_archive_remote", self.tmp, f"{torrent_id}.torrent")

@@ -73,9 +73,9 @@ class ClassifyPathTest(unittest.TestCase):
 
 class RenderCommentTest(unittest.TestCase):
     def test_single_year_and_datasets_sorted(self):
-        comment = render_comment("everef-deep-archive-2024-01-01", {2024}, {"b", "a"})
+        comment = render_comment("everef-eve-online-deep-archive-2024-01-01", {2024}, {"b", "a"})
         self.assertIn("Data from 2024. Datasets: a, b.", comment)
-        self.assertIn("everef-deep-archive-2024-01-01", comment)
+        self.assertIn("everef-eve-online-deep-archive-2024-01-01", comment)
 
     def test_year_range(self):
         comment = render_comment("id", {2022, 2020, 2021}, {"a"})
@@ -131,11 +131,11 @@ class FileListProblemsTest(unittest.TestCase):
         self.assertIn("site root", site_path_problem("a.txt"))
 
     def test_torrent_root_folder_prefix(self):
-        problem = site_path_problem("everef-deep-archive-2024-01-01/market-orders/a.csv")
+        problem = site_path_problem("everef-eve-online-deep-archive-2024-01-01/market-orders/a.csv")
         self.assertIn("torrent ID", problem)
 
     def test_deep_archive_path(self):
-        self.assertIn("deep-archive/", site_path_problem("deep-archive/everef-deep-archive-2024-01-01.torrent"))
+        self.assertIn("deep-archive/", site_path_problem("deep-archive/everef-eve-online-deep-archive-2024-01-01.torrent"))
 
     def test_dot_segment(self):
         self.assertIn("segment", site_path_problem("a/../b.txt"))
