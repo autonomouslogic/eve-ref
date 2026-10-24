@@ -10,7 +10,7 @@ DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.txt and SCRATCH_DIR/<ID>.torrent, SCRAT
 Needs 03-load's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece
 of every file (hours for a full torrent).
 
-1. Render README-template.txt (ID, cutoff, datasets) into $SEED_DIR/<ID>/<ID>-README.txt.
+1. Render README-template.md (ID, cutoff) into $SEED_DIR/<ID>/<ID>-README.txt.
 2. Download the tracker lists (lib/trackers.py): the union of both "best" lists, UDP and HTTP(S) only. Fails if a
    list can't be downloaded or has no usable trackers, or if the union has fewer than MIN_TRACKERS.
 3. Build the torrent from exactly the manifest's files plus the root README (<ID>-README.txt), sorted by path, with
@@ -63,7 +63,7 @@ from workflow import (  # noqa: E402
 from trackers import TRACKER_SOURCES, TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
 STEP = "make-torrent"
-README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "README-template.txt")
+README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "README-template.md")
 CREATOR = "EVE Ref"
 LOG_SAMPLE = 20
 
@@ -90,7 +90,7 @@ def main():
     section("README")
     readme_name = f"{torrent_id}-README.txt"
     years, datasets = classify_all(files)
-    write_readme(os.path.join(content_dir, readme_name), torrent_id, files, years, datasets)
+    write_readme(os.path.join(content_dir, readme_name), torrent_id)
     print(f"Written: {os.path.join(content_dir, readme_name)}")
 
     section("Trackers")
@@ -291,13 +291,13 @@ def classify_all(files):
     return years, datasets
 
 
-def write_readme(path, torrent_id, files, years, datasets):
+def write_readme(path, torrent_id):
     if not os.path.isfile(README_TEMPLATE):
         fail(f"README template not found: {README_TEMPLATE}")
     with open(README_TEMPLATE, encoding="utf-8") as f:
         template = f.read()
     cutoff = torrent_id[len(TORRENT_ID_PREFIX) :]
-    text = template.format(id=torrent_id, cutoff=cutoff, datasets=", ".join(sorted(datasets)) or "none")
+    text = template.format(id=torrent_id, cutoff=cutoff)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(text)

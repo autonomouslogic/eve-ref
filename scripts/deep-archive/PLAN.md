@@ -516,7 +516,7 @@ hashes are computed (Review notes, R7).
 Plain text, generated from a template in `deep-archive/`. Contents:
 
 1. What this is: an EVE Ref Deep Archive torrent, with data from data.everef.net modified up to the cutoff date in
-   its ID, plus the list of datasets.
+   its ID.
 2. Layout: paths match data.everef.net, plus the note about "Don't create subfolder".
 3. Links: docs page (docs.everef.net/datasets/deep-archive.html) and data.everef.net.
 4. A line saying the client verifies every piece, and v2 clients every file.
@@ -935,7 +935,7 @@ deep-archive/
   PLAN.md               # design decisions and reasoning; goes away once the process is settled
   LOG.md                # one line per published torrent
   torrents.env.example  # copy to torrents.env (not committed)
-  README-template.txt   # source for the README inside each torrent
+  README-template.md    # source for the README inside each torrent
   run.sh                # Docker wrapper (planned)
   Dockerfile            # (planned)
   00-preflight.py       # the workflow's steps: 00-preflight.py, 01-find.py, 03-load.py, ...
