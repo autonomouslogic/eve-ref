@@ -81,6 +81,7 @@ public class SyncFuzzworkOrdersetsTest {
 	@Test
 	@SneakyThrows
 	void shouldOnlySyncOrdersetsAtOrAboveLowestExistingId() {
+		existingPaths.add("fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-10.csv.gz");
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
 		fuzzworkIds.addAll(List.of(9L, 10L, 50L, 100L, 101L, 102L));
 
@@ -117,6 +118,31 @@ public class SyncFuzzworkOrdersetsTest {
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz",
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-103-2026-01-02_12-00-00.csv.gz",
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-104-2026-01-02_12-00-00.csv.gz"),
+				uploadedOrdersets());
+		assertEquals(
+				List.of(
+						"fuzzwork/index.json",
+						"fuzzwork/ordersets/2026/2026-01-02/index.json",
+						"fuzzwork/ordersets/2026/index.json",
+						"fuzzwork/ordersets/index.json",
+						"index.json"),
+				uploadedIndexes());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotRetryIdsBelowLowestExistingId() {
+		// IDs 1-99 were archived into a torrent and deleted from the main archive (PLAN 2.18): the lowest
+		// remaining ID is 100, and Fuzzwork's listing still has 50 from before it was archived. It must stay
+		// deleted, not be re-downloaded.
+		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
+		fuzzworkIds.addAll(List.of(50L, 100L, 101L));
+
+		VirtualThreads.onVirtualThread(syncFuzzworkOrdersets::run);
+
+		assertEquals(List.of(101L), requestedIds);
+		assertEquals(
+				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
 		assertEquals(
 				List.of(
