@@ -16,15 +16,15 @@ This is available on both HEAD and GET requests.
 ## Download with rclone
 The preferred method to download the data is with [rclone](https://rclone.org/) as it supports multiple concurrent downloads.
 
-As an example, to sync all market orders from 2023 using concurrent downloads, you can use the following command:
+As an example, to download all market orders from 2023 using concurrent downloads, you can use the following command:
 ```shell
-rclone sync -v --checkers 2 --transfers 2 --multi-thread-streams 0 --size-only --http-url https://data.everef.net :http:/market-orders/history/2023 pathtosync
+rclone copy -v --checkers 2 --transfers 2 --multi-thread-streams 0 --size-only --http-url https://data.everef.net :http:/market-orders/history/2023 pathtocopyto
 ```
 
 ## Download with rclone on Docker
-To sync data with `rclone` on Docker instead, use the following command:
+To download data with `rclone` on Docker instead, use the following command:
 ```shell
-docker run --rm -v $(pwd):/data -w /data rclone/rclone sync -v --checkers 2 --transfers 2 --multi-thread-streams 0 --size-only --http-url https://data.everef.net :http:/market-orders/history/2023 pathtosyncto
+docker run --rm -v $(pwd):/data -w /data rclone/rclone copy -v --checkers 2 --transfers 2 --multi-thread-streams 0 --size-only --http-url https://data.everef.net :http:/market-orders/history/2023 pathtocopyto
 ```
 
 ## Mount with rclone
