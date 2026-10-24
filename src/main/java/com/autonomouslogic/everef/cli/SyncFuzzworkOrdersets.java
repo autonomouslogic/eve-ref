@@ -16,12 +16,12 @@ import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -87,16 +87,17 @@ public class SyncFuzzworkOrdersets implements Command {
 	public void run() {
 		VirtualThreads.checkIsVirtual();
 		getFilesToSync()
-				.flatMapCompletable(
-						file -> downloadFile(file)
-								.flatMapCompletable(downloaded ->
-										Completable.concatArray(uploadFile(downloaded), deleteFile(downloaded))),
+				.flatMapMaybe(
+						file -> downloadFile(file).flatMap(downloaded -> uploadFile(downloaded)
+								.flatMapMaybe(
+										archivePath -> deleteFile(downloaded).andThen(Maybe.just(archivePath)))),
 						false,
 						CONCURRENCY)
-				.andThen(Completable.fromAction(() -> {
+				.toList()
+				.flatMapCompletable(archives -> {
 					log.info("File sync completed, running data index");
-				}))
-				.andThen(updateDataIndex())
+					return dataIndexHelper.updateIndex(archives);
+				})
 				.blockingAwait();
 	}
 
@@ -201,24 +202,14 @@ public class SyncFuzzworkOrdersets implements Command {
 				}));
 	}
 
-	private Completable uploadFile(FuzzworkFile fuzz) {
-		return Completable.fromAction(() -> {
+	private Single<S3Url> uploadFile(FuzzworkFile fuzz) {
+		return Single.fromCallable(() -> {
 			var relativePath = FUZZWORK_ORDERSET.createArchivePath(fuzz.getId(), fuzz.getLastModified());
 			var archivePath = dataPath.resolve(relativePath);
 			var archivePut = s3Util.putPublicObjectRequest(fuzz.getFile().length(), archivePath, archiveCacheTime);
 			log.info("Uploading orderset {} from {} to {}", fuzz.getId(), fuzz.getFile(), archivePath);
 			s3Adapter.putObject(archivePut, fuzz.getFile(), s3Client);
-		});
-	}
-
-	private Completable updateDataIndex() {
-		return Completable.defer(() -> {
-			var urls = List.of(0, 1).stream()
-					.map(i -> Instant.now().minus(Duration.ofDays(i)))
-					.map(FUZZWORK_ORDERSET::createArchivePath)
-					.map(dataPath::resolve)
-					.toList();
-			return dataIndexHelper.updateIndex(urls);
+			return archivePath;
 		});
 	}
 

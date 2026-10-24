@@ -7,6 +7,7 @@ import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.MockDataIndexHelperModule;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -57,7 +58,10 @@ public class SyncFuzzworkOrdersetsTest {
 	@BeforeEach
 	@SneakyThrows
 	void before() {
-		DaggerTestComponent.builder().build().inject(this);
+		DaggerTestComponent.builder()
+				.mockDataIndexHelperModule(new MockDataIndexHelperModule().setDefaultMock(false))
+				.build()
+				.inject(this);
 
 		existingPaths = new ArrayList<>();
 		fuzzworkIds = new ArrayList<>();
@@ -88,6 +92,14 @@ public class SyncFuzzworkOrdersetsTest {
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz",
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-102-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
+		assertEquals(
+				List.of(
+						"fuzzwork/index.json",
+						"fuzzwork/ordersets/2026/2026-01-02/index.json",
+						"fuzzwork/ordersets/2026/index.json",
+						"fuzzwork/ordersets/index.json",
+						"index.json"),
+				uploadedIndexes());
 	}
 
 	@Test
@@ -106,6 +118,14 @@ public class SyncFuzzworkOrdersetsTest {
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-103-2026-01-02_12-00-00.csv.gz",
 						"fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-104-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
+		assertEquals(
+				List.of(
+						"fuzzwork/index.json",
+						"fuzzwork/ordersets/2026/2026-01-02/index.json",
+						"fuzzwork/ordersets/2026/index.json",
+						"fuzzwork/ordersets/index.json",
+						"index.json"),
+				uploadedIndexes());
 	}
 
 	@Test
@@ -121,6 +141,14 @@ public class SyncFuzzworkOrdersetsTest {
 		assertEquals(
 				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-101-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
+		assertEquals(
+				List.of(
+						"fuzzwork/index.json",
+						"fuzzwork/ordersets/2026/2026-01-02/index.json",
+						"fuzzwork/ordersets/2026/index.json",
+						"fuzzwork/ordersets/index.json",
+						"index.json"),
+				uploadedIndexes());
 	}
 
 	@Test
@@ -133,6 +161,7 @@ public class SyncFuzzworkOrdersetsTest {
 
 		assertEquals(List.of(), requestedIds);
 		assertEquals(List.of(), uploadedOrdersets());
+		assertEquals(List.of(), uploadedIndexes());
 	}
 
 	@Test
@@ -150,11 +179,26 @@ public class SyncFuzzworkOrdersetsTest {
 		assertEquals(
 				List.of("fuzzwork/ordersets/2026/2026-01-02/fuzzwork-orderset-102-2026-01-02_12-00-00.csv.gz"),
 				uploadedOrdersets());
+		assertEquals(
+				List.of(
+						"fuzzwork/index.json",
+						"fuzzwork/ordersets/2026/2026-01-02/index.json",
+						"fuzzwork/ordersets/2026/index.json",
+						"fuzzwork/ordersets/index.json",
+						"index.json"),
+				uploadedIndexes());
 	}
 
 	private List<String> uploadedOrdersets() {
 		return mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
 				.filter(key -> key.endsWith(".csv.gz"))
+				.sorted()
+				.toList();
+	}
+
+	private List<String> uploadedIndexes() {
+		return mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
+				.filter(key -> key.endsWith("index.json"))
 				.sorted()
 				.toList();
 	}
