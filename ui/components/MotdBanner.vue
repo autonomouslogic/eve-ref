@@ -84,7 +84,7 @@ const motd = computed(() => {
 		const daysLeft = Math.floor(timeLeft / DAY);
 		const hoursLeft = Math.floor(timeLeft / HOUR);
 		const minutesLeft = Math.floor(timeLeft / MINUTE);
-		var msg = "Ariel Rin for CSM";
+		var msg = "CSM Voting Now Open";
 		if (hoursLeft < 8) {
 			if (minutesLeft < 60) {
 				msg = `CSM VOTING CLOSES IN ${minutesLeft} MINUTE${minutesLeft == 1 ? "" : "S"}`;
