@@ -132,7 +132,7 @@ class ObjTest(unittest.TestCase):
 
 
 class SkipReasonTest(unittest.TestCase):
-    EXCLUDES = ["market-history", "killmails", "ccp"]
+    EXCLUDES = find.TORRENT_EXCLUDE
 
     def skip(self, path):
         return find.skip_reason(path, self.EXCLUDES)
@@ -147,7 +147,7 @@ class SkipReasonTest(unittest.TestCase):
         self.assertEqual(self.skip("market-orders/index.html"), ("ignored", "index.html files"))
 
     def test_deep_archive(self):
-        self.assertEqual(self.skip("deep-archive/everef-deep-archive-2023-04-11.txt"), ("ignored", "deep-archive/"))
+        self.assertEqual(self.skip("deep-archive/everef-deep-archive-2023-04-11.txt"), ("excluded", "deep-archive"))
 
     def test_latest_files(self):
         self.assertEqual(self.skip("market-orders/market-orders-latest.v3.csv.bz2"), ("ignored", "latest files"))

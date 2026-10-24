@@ -182,9 +182,10 @@ A denylist, hard-coded in `lib/workflow.py` (`TORRENT_EXCLUDE`):
   history being on HTTP.)
 - `ccp/`. CCP's own data (SDE, MER, image export collections, CSM minutes, QENs, etc.): reference material linked
   from the docs and downloaded by URL, not scraped history. ~62 GiB, cheap to keep on HTTP (Appendix B).
+- `deep-archive/`. The published torrents and their file lists (`DEEP_ARCHIVE_DIR`).
 
-Also never included, from any dataset: `*-latest.*`, `index.html`, hidden files, files at the root of the site (e.g.
-`robots.txt`), and everything under `deep-archive/`.
+Also never included, from any dataset: `*-latest.*`, `index.html`, hidden files, and files at the root of the site
+(e.g. `robots.txt`).
 
 **`index.json` files are included with their folder:** a folder's `index.json` is selected whenever any file
 directly in that folder is, whatever its own modification date. It's never selected on its own date: `DataIndex`

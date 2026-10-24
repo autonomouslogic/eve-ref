@@ -50,10 +50,14 @@ RCLONE_FIXED = {
 # The rclone remote for the data site's bucket; the bucket itself is the DATA_BUCKET setting.
 REMOTE_NAME = "everef"
 
-# Datasets never archived (PLAN 2.2): paths from the site root. market-history and killmails work as databases, with
+# The site folder holding the published torrents and their file lists (PLAN 2.5).
+DEEP_ARCHIVE_DIR = "deep-archive"
+
+# Folders never archived (PLAN 2.2): paths from the site root. market-history and killmails work as databases, with
 # past files modified in place, which a torrent can't follow. ccp holds CCP's own data (SDE, MER, image collections,
-# etc.), linked from the docs and downloaded by URL; it's small enough to keep on HTTP.
-TORRENT_EXCLUDE = ["market-history", "killmails", "ccp"]
+# etc.), linked from the docs and downloaded by URL; it's small enough to keep on HTTP. deep-archive holds the
+# torrents themselves.
+TORRENT_EXCLUDE = ["market-history", "killmails", DEEP_ARCHIVE_DIR]
 
 # A path's year folder, for classify_path: the first 4-digit 19xx/20xx directory.
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
@@ -71,9 +75,6 @@ DATA_BASE_URL = "https://data.everef.net/"
 # Torrent IDs (PLAN 2.3): everef-deep-archive-<cutoff date>.
 TORRENT_ID_PREFIX = "everef-deep-archive-"
 TORRENT_ID_RE = re.compile(r"^everef-deep-archive-\d{4}-\d{2}-\d{2}$")
-
-# The site folder holding the published torrents and their file lists (PLAN 2.5).
-DEEP_ARCHIVE_DIR = "deep-archive"
 
 # Cache-Control max-age for everef-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.

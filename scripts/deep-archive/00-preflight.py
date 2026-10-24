@@ -36,6 +36,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
+    DEEP_ARCHIVE_DIR,
     ENV_OVERRIDES,
     MAX_BYTES,
     Workflow,
@@ -58,7 +59,6 @@ from qbittorrent import Client, QbittorrentError  # noqa: E402
 from trackers import MIN_TRACKERS, TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
 STEP = "preflight"
-DEEP_ARCHIVE_DIR = "deep-archive"
 
 
 class Checks:

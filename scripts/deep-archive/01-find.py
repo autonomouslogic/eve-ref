@@ -59,8 +59,7 @@ The torrent content folder, SEED_DIR/<ID>/, must not exist yet. find doesn't cre
 
 Skipped:
 - index.html files (index.json files are selected with their folder, see above);
-- datasets in TORRENT_EXCLUDE (lib/workflow.py), *-latest.* files, hidden files, files at the root of the site,
-  everything under deep-archive/;
+- folders in TORRENT_EXCLUDE (lib/workflow.py), *-latest.* files, hidden files, files at the root of the site;
 - files a published torrent already holds (see Published torrents above).
 
 Environment (or torrents.env, see lib/workflow.py):
@@ -193,7 +192,7 @@ def main():
     section("Settings")
     print(f"Source: {remote}")
     print(f"Seed dir: {workflow.seed_dir}")
-    print(f"Excluded datasets: {', '.join(excludes) or '(none)'}")
+    print(f"Excluded folders: {', '.join(excludes) or '(none)'}")
     print(
         f"Limits: .torrent {fmt_size(MAX_TORRENT_BYTES)}, data {fmt_bytes(MIN_BYTES)} to {fmt_bytes(MAX_BYTES)}, "
         f"nothing dated after {newest_allowed}"
@@ -423,8 +422,6 @@ def skip_reason(path, excludes):
     """(kind, label) if the path is never archived, else None."""
     parts = path.split("/")
     name = parts[-1]
-    if parts[0] == DEEP_ARCHIVE_DIR:
-        return ("ignored", f"{DEEP_ARCHIVE_DIR}/")
     if name in IGNORED_NAMES:
         return ("ignored", "index.html files")
     if LATEST_RE.search(name):
