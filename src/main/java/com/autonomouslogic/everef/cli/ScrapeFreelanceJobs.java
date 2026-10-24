@@ -58,6 +58,7 @@ public class ScrapeFreelanceJobs implements Command {
 	protected TempFiles tempFiles;
 
 	@Inject
+	@Named("data")
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Setter

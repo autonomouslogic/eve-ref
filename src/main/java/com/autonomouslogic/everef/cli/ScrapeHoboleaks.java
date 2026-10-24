@@ -50,6 +50,7 @@ public class ScrapeHoboleaks implements Command {
 	protected S3AsyncClient s3Client;
 
 	@Inject
+	@Named("data")
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject

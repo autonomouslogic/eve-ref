@@ -1,0 +1,112 @@
+# Yearly history rollups
+
+Manual workflow for collapsing one finished year of a dataset's history on [data.everef.net](https://data.everef.net/)
+into a single archive:
+
+```
+<archive>/history/<year>/...   ->   <archive>/history/<archive>-<year>.tar.xz
+```
+
+> **Status:** `advise.sh` through `08-complete.sh` are all written.
+> Development notes are in [NOTES.md](NOTES.md).
+
+## Archive format (2023 onward)
+
+- Paths exactly as on the data site: `<archive>/history/<year>/<YYYY-MM-DD>/<name>.json`. Extracting several
+  archives into one directory recreates the data site layout.
+- Regular files only, sorted by path. Headers carry only the name and mtime. Owner is `0/0` with no user or
+  group names, and mode is a fixed `0644`.
+- Data files are decompressed (no `.bz2`). Each file's mtime is its original upload time. `index.json` files are
+  kept, because they hold what `data-index` worked out about each file. Their entries still name the original
+  `.json.bz2` files. `index.html` files are dropped.
+- Compressed with `tar -J` defaults (xz preset `-6`).
+- The archive's own mtime is its build time, nothing custom. No `Cache-Control` header is set (see "Known gaps"
+  below).
+
+`incursions-2022.tar.xz` was made by hand before this format existed (no `history/` in its paths, owner names,
+unsorted). It stays as is.
+
+## When to roll up
+
+- Only **finished years**, never the current UTC year.
+- Only in-scope datasets (see NOTES.md, "Scope"). These are `.json.bz2` snapshot datasets whose history the
+  code never reads back.
+
+## Setup
+
+1. Install rclone.
+2. `cp scripts/rollup/rollup.env.sample scripts/rollup/rollup.env` and fill in the B2 key. `rollup.env` is
+   gitignored by `scripts/rollup/.gitignore`. Every script reads its configuration from this file and nowhere else:
+   - the rclone remote `everef` (native `b2` backend, `hard_delete=false`), defined purely through
+     `RCLONE_CONFIG_EVEREF_*` variables. Your own `rclone.conf` is ignored;
+   - `LOCAL_COPY_DIR`, optional: a local copy of the data site, laid out like the bucket. `03-download.sh` seeds
+     `download/` from it as a faster way to get files it already has. It is never trusted: the download still runs
+     against the remote with `--checksum`, and every check after it runs as usual;
+   - `ROLLUP_SCRATCH_ROOT`, the scratch root. For big datasets, point it at a disk, not a tmpfs.
+
+Never run `rclone purge`, `rclone cleanup`, `rclone backend cleanup-hidden` or anything with `--b2-hard-delete`
+against this bucket. Deletes must stay soft, so the bucket lifecycle rules provide the 2-day undo window.
+
+## Procedure
+
+Step 1, `advise.sh`, takes **no args** — it's a read-only scan of every in-scope dataset, run once to
+decide which `<archive> <year>` to feed into every later step. For every rollup candidate (a finished
+`history/<year>` not yet archived) it prints a ready-to-run `./scripts/rollup/rollup.sh <archive> <year>`
+line, oldest year first, plus warnings for anything that looks off (a year dir still present alongside its
+archive, or an archive that isn't `.tar.xz`). It reads each dataset's public `history/index.json` over
+plain HTTP (e.g. https://data.everef.net/system-kills/history/index.json), so it needs no credentials and
+no `rollup.env`. If candidates are found and `DISCORD_URL` is set, it posts a notice there too. Runs
+monthly via the `Rollup Check` GitHub Actions workflow; it can also be run manually (`workflow_dispatch`)
+or locally, with no setup. Steps 2-9 take `<archive> <year>`, e.g. `./02-list.sh incursions 2023`. Run the
+steps in order and **read each summary before continuing**.
+
+Scratch dir: `$ROLLUP_SCRATCH_ROOT/<archive>-<year>/`. It holds the downloads, the build, the checksums, the logs
+and the completion markers. The scripts never clear it. Remove it yourself once the rollup is `COMPLETE` and the
+2-day undo window has passed: until then, `download/` is the only local copy of the original files.
+
+`rollup.sh <archive> <year>` runs steps 2-9 in order and stops at the first failure. Steps with a `.done` marker are
+skipped, so rerunning resumes where it stopped. It does not pause between steps, so the "read each summary" advice
+below applies to the logs afterwards, and `07-delete.sh` deletes without asking. Run the steps by
+hand when you want to check each summary before moving on.
+
+If a step fails partway, remove its partial output and rerun it. Download and delete can simply be rerun.
+
+| Step | Script           | Changes remote?      | Check before moving on                                        |
+|------|------------------|-----------------------|---------------------------------------------------------------|
+| 1    | `advise.sh`    | no                   | Which dataset/year to roll up next (no args; scans all datasets) |
+| 2    | `01-preflight.sh` | no                   | Tools OK, archive not already on the remote                   |
+| 3    | `02-list.sh`      | no                   | File counts, days covered, gaps, no anomalies, enough space in the scratch root |
+| 4    | `03-download.sh`  | no                   | `rclone check` 0 differences. Sizes and mtimes match the listing |
+| 5    | `04-prepare.sh`   | no                   | Decompressed content hash-matches the originals. JSON valid   |
+| 6    | `05-archive.sh`   | no                   | Sorted, owner-free headers. Archive contents hash-match the originals |
+| 7    | `06-upload.sh`    | adds the archive     | B2 SHA-1, public URL headers, public download sha256          |
+| 8    | `07-delete.sh`    | **hides year dir**   | Remaining files all in the listing, dry-run count matches. No manual confirmation |
+| 9    | `08-complete.sh`  | no                   | Year dir still empty (no re-uploaded index files). Summary printed. `COMPLETE` written |
+
+Steps 1-7 are safe to abandon: nothing is removed from the remote, and the only addition is the archive (7).
+Step 8 is the only destructive step. It is a soft delete, which can be undone within the 2-day bucket lifecycle
+window.
+
+The scripts don't touch index pages. `<archive>/history/index.json` picks up the archive at the dataset's next
+scrape, or at the next scheduled `data-index` run for datasets that no longer scrape.
+
+## Appendix: locking and markers
+
+Implementation detail, not needed to run a rollup.
+
+Only one step runs at a time: each step locks `/tmp/everef-rollup.lock` and aborts if another step holds it.
+
+Each step writes `<step>.done` in the scratch dir when all of its checks pass. A step refuses to run if:
+
+- any earlier marker is missing;
+- its own marker already exists;
+- `COMPLETE` exists.
+
+## Known gaps
+
+- **No `Cache-Control` header on the archive.** `06-upload.sh` uploads with plain `rclone copyto --immutable`,
+  no `--header-upload`. Confirmed on the first real run (`incursions 2023`): rclone's native `b2:` backend
+  doesn't forward `--header-upload` values to B2 at all (its `Update()` builds a fixed header set and ignores
+  it), so the archive's public response has no `Cache-Control`. Fixing this would mean either switching the
+  rclone remote to B2's S3-compatible endpoint (where `--header-upload` is known to work) or setting a
+  bucket-level default Cache-Control policy in B2 directly; neither is done here yet.

@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -104,6 +105,11 @@ public class MockS3Adapter extends S3Adapter {
 			IOUtils.copy(in, out);
 		}
 		return GetObjectResponse.builder().build();
+	}
+
+	@Override
+	public void listObjects(S3Url url, boolean recursive, S3AsyncClient client, Consumer<ListedS3Object> consumer) {
+		listObjects(url, recursive, client).forEach(consumer);
 	}
 
 	@Override
@@ -189,6 +195,7 @@ public class MockS3Adapter extends S3Adapter {
 	public DeleteObjectResponse deleteObject(DeleteObjectRequest req, S3AsyncClient client) {
 		var entry = new Entry(req.bucket(), req.key(), client, null);
 		deleteKeys.add(entry);
+		data.remove(entry); // lastModified is excluded from Entry's equality, so this matches regardless.
 		return DeleteObjectResponse.builder().build();
 	}
 

@@ -46,6 +46,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -457,6 +458,62 @@ public class PublishRefDataTest {
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of(), putKeys);
 		assertEquals(List.of(), deleteKeys);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotifyDiscord() {
+		meta = RefDataMeta.builder()
+				.buildTime(Instant.parse("2021-01-01T00:00:00Z"))
+				.sde(RefDataMetaFileInfo.builder().sha256("abc").version(101L).build())
+				.esi(RefDataMetaFileInfo.builder().sha256("def").build())
+				.hoboleaks(RefDataMetaFileInfo.builder()
+						.sha256("ghi")
+						.version(102L)
+						.build())
+				.build();
+
+		refDataFile = mockScrapeBuilder.createTestRefdata(RefDataMeta.builder()
+				.buildTime(Instant.parse("2022-01-01T00:00:00Z"))
+				.sde(RefDataMetaFileInfo.builder().sha256("abc").version(201L).build())
+				.esi(RefDataMetaFileInfo.builder().sha256("def2").build())
+				.hoboleaks(RefDataMetaFileInfo.builder()
+						.sha256("ghi2")
+						.version(202L)
+						.build())
+				.build());
+
+		var spyNotifier = Mockito.spy(publishRefData.discordNotifier);
+		publishRefData.discordNotifier = spyNotifier;
+
+		VirtualThreads.onVirtualThread(publishRefData::run);
+
+		var captor = ArgumentCaptor.forClass(String.class);
+		Mockito.verify(spyNotifier).notifyDiscord(captor.capture());
+		assertEquals("Reference data published - SDE: 201, Hoboleaks: 202)", captor.getValue());
+	}
+
+	@Test
+	@SneakyThrows
+	@SetEnvironmentVariable(key = "FORCE_REF_DATA", value = "true")
+	void shouldNotReuploadUnchangedFilesWhenForced() {
+		var spyAdapter = Mockito.spy(mockS3Adapter);
+		publishRefData.s3Adapter = spyAdapter;
+
+		VirtualThreads.onVirtualThread(publishRefData::run);
+		Mockito.clearInvocations(spyAdapter);
+
+		// Forced, so shouldUpdate() returns true and the whole render/upload pipeline runs again, but
+		// nothing in the source data changed, so every rendered file's bytes (and hence MD5) should come out
+		// identical to what's already in the bucket. filterExisting should skip all of them.
+		VirtualThreads.onVirtualThread(publishRefData::run);
+
+		Mockito.verify(spyAdapter, Mockito.never()).putObject(any(), any(byte[].class), eq(s3));
+		// B2-style directory marker entries (created alongside every put, see MockS3Adapter.putDirectory)
+		// aren't part of the rendered file set, so they're always cleaned up on the following run; that's
+		// unrelated to this fix. Only object (non-directory-marker) deletes would indicate a real re-publish.
+		Mockito.verify(spyAdapter, Mockito.never())
+				.deleteObject(argThat(req -> req != null && !req.key().endsWith("/")), eq(s3));
 	}
 
 	@Test

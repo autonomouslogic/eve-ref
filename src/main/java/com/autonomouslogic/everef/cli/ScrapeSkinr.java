@@ -43,6 +43,7 @@ public class ScrapeSkinr implements Command {
 	protected EsiHelper esiHelper;
 
 	@Inject
+	@Named("data")
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject

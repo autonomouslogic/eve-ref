@@ -47,6 +47,9 @@ public class MarketOrderFetcher {
 	@Setter
 	private Map<Long, JsonNode> marketOrdersStore;
 
+	@Setter
+	private Map<Long, OrderSortKey> sortKeysStore;
+
 	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 
 	@Inject
@@ -109,7 +112,7 @@ public class MarketOrderFetcher {
 					})
 					.filter(order -> {
 						long id = order.get("order_id").asLong();
-						return !marketOrdersStore.containsKey(id);
+						return !sortKeysStore.containsKey(id);
 					})
 					.sequential();
 		});
@@ -160,7 +163,28 @@ public class MarketOrderFetcher {
 		return Completable.fromAction(() -> {
 			long id = order.get("order_id").asLong();
 			marketOrdersStore.put(id, order);
+			sortKeysStore.put(id, buildSortKey(order, id));
 		});
+	}
+
+	private OrderSortKey buildSortKey(ObjectNode order, long id) {
+		return new OrderSortKey(
+				fieldAsLong(order, "region_id"),
+				fieldAsLong(order, "type_id"),
+				fieldAsLong(order, "is_buy_order"),
+				fieldAsLong(order, "system_id"),
+				id);
+	}
+
+	private Long fieldAsLong(ObjectNode order, String field) {
+		if (!order.has(field)) {
+			return null;
+		}
+		var value = order.get(field);
+		if (value.isBoolean()) {
+			return value.asBoolean() ? 1L : 0L;
+		}
+		return value.asLong();
 	}
 
 	private void verifyOrderLocation(ObjectNode order) {

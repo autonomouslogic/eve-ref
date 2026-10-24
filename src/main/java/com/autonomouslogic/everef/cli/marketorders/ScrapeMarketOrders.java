@@ -5,19 +5,21 @@ import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MARKE
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
+import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import java.io.File;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import tools.jackson.databind.JsonNode;
 
@@ -45,8 +47,13 @@ public class ScrapeMarketOrders implements Command {
 	@Inject
 	protected EsiAuthHelper esiAuthHelper;
 
+	@Inject
+	protected MVStoreUtil mvStoreUtil;
+
 	private S3Url dataUrl;
+	private MVStore mvStore;
 	private Map<Long, JsonNode> marketOrdersStore;
+	private Map<Long, OrderSortKey> sortKeysStore;
 
 	@Setter
 	private ZonedDateTime scrapeTime;
@@ -64,12 +71,16 @@ public class ScrapeMarketOrders implements Command {
 	@SneakyThrows
 	@Override
 	public void run() {
-		initScrapeTime();
-		initStore();
-		initLogin();
-		fetchOrders();
-		var file = writeOrders();
-		uploadFile(file);
+		try {
+			initScrapeTime();
+			initStore();
+			initLogin();
+			fetchOrders();
+			var file = writeOrders();
+			uploadFile(file);
+		} finally {
+			closeMvStore();
+		}
 	}
 
 	private void initScrapeTime() {
@@ -79,9 +90,22 @@ public class ScrapeMarketOrders implements Command {
 	}
 
 	private void initStore() {
-		marketOrdersStore = new HashMap<>();
+		log.debug("Opening MVStore");
+		mvStore = mvStoreUtil.createTempStore("market-orders");
+		marketOrdersStore = mvStoreUtil.openJsonMap(mvStore, "market_orders", Long.class);
+		sortKeysStore = new ConcurrentHashMap<>();
 		marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
+		marketOrderFetcher.setSortKeysStore(sortKeysStore);
 		marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
+		marketOrdersWriter.setSortKeysStore(sortKeysStore);
+	}
+
+	private void closeMvStore() {
+		try {
+			mvStore.close();
+		} catch (Exception e) {
+			log.debug("Failed closing MVStore, ignoring");
+		}
 	}
 
 	private void initLogin() {
@@ -94,9 +118,9 @@ public class ScrapeMarketOrders implements Command {
 	}
 
 	private File writeOrders() {
-		marketOrdersStore.values().stream()
-				.filter(order -> order.get("region_id") == null)
-				.forEach(order -> log.info(order));
+		sortKeysStore.entrySet().stream()
+				.filter(e -> e.getValue().regionId() == null)
+				.forEach(e -> log.info(marketOrdersStore.get(e.getKey())));
 
 		log.info("Writing market orders");
 		return marketOrdersWriter.writeOrders();

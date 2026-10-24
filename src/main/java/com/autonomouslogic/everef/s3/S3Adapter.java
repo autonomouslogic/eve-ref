@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
@@ -48,18 +49,36 @@ public class S3Adapter {
 
 	@SneakyThrows
 	public List<ListedS3Object> listObjects(@NonNull S3Url url, boolean recursive, @NonNull S3AsyncClient client) {
+		var result = new ArrayList<ListedS3Object>();
+		listObjects(url, recursive, client, result::add);
+		return result;
+	}
+
+	/**
+	 * Lists objects, streaming each one to {@code consumer} as it's received instead of collecting them all
+	 * into a list. Use this for large buckets where holding every {@link ListedS3Object} (and the SDK response
+	 * pages they're created from) in memory at once would be too expensive.
+	 */
+	@SneakyThrows
+	public void listObjects(
+			@NonNull S3Url url,
+			boolean recursive,
+			@NonNull S3AsyncClient client,
+			@NonNull Consumer<ListedS3Object> consumer) {
 		var builder = ListObjectsV2Request.builder().bucket(url.getBucket()).prefix(url.getPath());
 		if (!recursive) {
 			builder = builder.delimiter("/");
 		}
-		return listObjects(builder.build(), client);
+		listObjects(builder.build(), client, consumer);
 	}
 
 	@SneakyThrows
-	private List<ListedS3Object> listObjects(@NonNull ListObjectsV2Request req, @NonNull S3AsyncClient client) {
+	private void listObjects(
+			@NonNull ListObjectsV2Request req,
+			@NonNull S3AsyncClient client,
+			@NonNull Consumer<ListedS3Object> consumer) {
 		var s3Url =
 				S3Url.builder().bucket(req.bucket()).path(req.prefix()).build().toString();
-		var result = new ArrayList<ListedS3Object>();
 		var latch = new CountDownLatch(1);
 		var errorRef = new AtomicReference<Exception>();
 
@@ -77,13 +96,13 @@ public class S3Adapter {
 				public void onNext(ListObjectsV2Response response) {
 					if (response.commonPrefixes() != null) {
 						for (var common : response.commonPrefixes()) {
-							result.add(ListedS3Object.create(common, req.bucket()));
+							consumer.accept(ListedS3Object.create(common, req.bucket()));
 						}
 					}
 					if (response.contents() != null) {
 						for (var obj : response.contents()) {
 							if (obj.size() != null && obj.size() > 0) {
-								result.add(ListedS3Object.create(obj, req.bucket()));
+								consumer.accept(ListedS3Object.create(obj, req.bucket()));
 							}
 						}
 					}
@@ -117,7 +136,6 @@ public class S3Adapter {
 			throw new RuntimeException(
 					String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()), e);
 		}
-		return result;
 	}
 
 	@SneakyThrows

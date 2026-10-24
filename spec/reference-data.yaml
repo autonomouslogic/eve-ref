@@ -2266,6 +2266,12 @@ components:
     NpcCorporationDivision:
       type: object
       properties:
+        description:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
         display_name:
           type: string
         division_id:
@@ -2795,6 +2801,12 @@ components:
     StationService:
       type: object
       properties:
+        description:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
         service_id:
           type: integer
           format: int64
