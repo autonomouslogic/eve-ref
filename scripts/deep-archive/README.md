@@ -74,7 +74,8 @@ anything else looks wrong, stop. Keep notes for the workflow in `$SCRATCH_DIR/NO
 Checks the settings, both directories (created if missing; `SCRATCH_DIR` empty, room in `SEED_DIR`), rclone, the B2
 key and bucket, libtorrent, aria2c, the tracker lists (both download, at least 10 trackers together), `LOCAL_COPY_DIR`
 if set, and qBittorrent's Web API (reachable, the login works, libtorrent 2.x). Names any setting the environment
-overrides `torrents.env` with. Reports every problem, then aborts if there were any.
+overrides `torrents.env` with. Reports every problem, then aborts if there were any; a missing tool (rclone,
+libtorrent, aria2c) aborts right after the tool checks.
 
 ### 01: Find
 ```

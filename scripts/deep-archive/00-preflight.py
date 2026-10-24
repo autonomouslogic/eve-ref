@@ -6,7 +6,8 @@ DRAFT. Read-only, apart from its own completion file.
 
     00-preflight.py
 
-Runs every check and reports each failure, then aborts if any failed. On success it writes
+Runs every check and reports each failure, then aborts if any failed; a missing tool aborts straight after the tool
+checks, since the later checks need them. On success it writes
 SCRATCH_DIR/00-preflight.done, which 01-find needs. It can't run twice in the same SCRATCH_DIR: the scratch
 directory must be empty.
 
@@ -19,7 +20,7 @@ Checks:
 - SCRATCH_DIR and SEED_DIR are separate;
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable;
-- the tools later steps need: libtorrent 2.x, aria2c (06-check-seed's test download);
+- the other required tools: libtorrent 2.x, aria2c;
 - the tracker lists make-torrent downloads (lib/trackers.py) are reachable, each has UDP or HTTP(S) trackers, and
   together they have at least MIN_TRACKERS;
 - LOCAL_COPY_DIR, if set, is a readable folder laid out like the bucket (index.json at the top), apart from
@@ -121,7 +122,10 @@ def main():
     check_local_copy(checks, scratch, seed)
 
     section("Tools")
+    failed_before_tools = checks.failed
     check_tools(checks)
+    if checks.failed > failed_before_tools:
+        fail("Required tools are missing, aborting before the remaining checks")
 
     section("Trackers")
     check_trackers(checks)
@@ -232,10 +236,10 @@ def check_tools(checks):
         else:
             print(f"libtorrent {version}")
     except ImportError:
-        checks.fail("Missing required tool: libtorrent Python bindings (needed by make-torrent)")
+        checks.fail("Missing required tool: libtorrent Python bindings")
     aria2c = subprocess.run(["aria2c", "--version"], capture_output=True, text=True) if shutil.which("aria2c") else None
     if aria2c is None or aria2c.returncode != 0:
-        checks.fail("Missing required tool: aria2c (needed by 06-check-seed's test download)")
+        checks.fail("Missing required tool: aria2c")
     else:
         print(aria2c.stdout.splitlines()[0] if aria2c.stdout else "aria2c")
 
