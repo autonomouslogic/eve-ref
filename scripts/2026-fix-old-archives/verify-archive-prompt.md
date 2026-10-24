@@ -1,14 +1,16 @@
-BASE_URL: https://data.everef.net/sovereignty-map/history/
+BASE_URL: https://data.everef.net/sovereignty-structures/history/
+YEARS: 2017-2022
 
-You are verifying converted data archives published under `BASE_URL` above. Everything you need is
-downloadable from there — you have no other context, so discover all of the following yourself
-rather than asking for it:
+You are verifying converted data archives published under `BASE_URL` above, restricted to the
+`YEARS` range given — ignore any year outside that range even if `index.json` lists it. Everything
+you need is downloadable from there — you have no other context, so discover all of the following
+yourself rather than asking for it:
 
 - Fetch `BASE_URL/index.json` to get the list of all `<name>-<year>.tar.bz2` **original** archives
   and their sizes/etags (MD5). The `<name>` prefix is whatever actually appears in that listing —
   don't assume it matches the last path segment of BASE_URL (e.g. a dataset served at
   `.../sovereignty-map/history/` might use archive names like `sovereigntymap-<year>.tar.bz2`).
-  Verify every archive this way — do not skip any year that's listed.
+  Verify every archive this way for each year within `YEARS` — skip years outside that range.
 - For each such year, the **converted** archive is expected at
   `BASE_URL/<name>-<year>.tar.xz`. If it's missing for a year that has a `.tar.bz2`, that itself is
   a finding — report it, don't skip the year.
@@ -19,8 +21,9 @@ rather than asking for it:
   download every file listed and treat it as a **live leftover file** (rule 4 below). Verify
   size/MD5 (etag) of every download against what the index.json says.
 
-Download everything over HTTP yourself; don't assume local files exist. Do this for every year
-found in `index.json` — produce one pass/fail verdict per year, plus an overall summary.
+Download everything over HTTP yourself; don't assume local files exist. Do this for every year in
+`YEARS` found in `index.json` — produce one pass/fail verdict per year, plus an overall summary. If
+a year in `YEARS` is missing from `index.json` entirely, report that too.
 
 Your job is to independently confirm each year's conversion was done correctly, with no data loss,
 no corruption, and no unauthorized changes. Do not assume the conversion is correct — re-derive
