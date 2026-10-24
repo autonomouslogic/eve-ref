@@ -6,7 +6,9 @@
 # sovereigntycampaigns_2019-01-01T00:20:09.json) to the current convention
 # (<dataset>-<date>_<HH-MM-SS>.json) to match live/rollup naming. Old archive files that are just a
 # saved HTTP error response (known bodies only, see ERROR_PAGE_TITLES/ERROR_JSON_BODIES) are left out
-# of the new archive and listed in removed.tsv.
+# of the new archive and listed in removed.tsv. So is any file — old-archive or live — that
+# fails to parse as exactly one JSON value (e.g. truncated mid-write); unlike a known error
+# response this needs no exact match, since a parse failure is unambiguous either way.
 #
 # If a live history/<year>/ directory still exists on the remote for this dataset (the old
 # "2022 archive built by mistake, raw data never deleted" problem), its files are merged in too
@@ -15,7 +17,9 @@
 # than being resolved automatically. The live listing is validated strictly, every download is
 # checked against the size and MD5 data-index recorded for it, and every live file that went
 # into the archive is recorded (live-files.tsv, live-files.txt) so clearing history/<year>/
-# afterwards can be limited to exactly those files.
+# afterwards can be limited to exactly those files. A live file with invalid JSON is the one
+# exception: it's removed and logged like the old-archive case, left out of those two files, and
+# so simply stays on the remote afterwards for manual review.
 #
 # This script only ever reads from data.everef.net and writes to its own scratch dir. It never
 # uploads, deletes, or touches the remote. Output: <dataset>-<year>.tar.xz plus checksums, left
@@ -215,13 +219,9 @@ mkdir -p "$REMOVED_DIR"
 REMOVED_FROM_OLD=0
 UNKNOWN_ERRORS=()
 while IFS= read -r -d '' f; do
-	first=""
-	IFS= read -r -n1 first <"$f" || true
-	if [[ "$first" != "<" && "$first" != "{" ]]; then
-		continue
-	fi
 	name="$(basename "$f")"
 	body="$(<"$f")"
+	first="${body:0:1}"
 	reason=""
 	if [[ "$first" == "<" ]]; then
 		for title in "${ERROR_PAGE_TITLES[@]}"; do
@@ -229,20 +229,34 @@ while IFS= read -r -d '' f; do
 				reason="error page: $title"
 			fi
 		done
-	else
-		compact="$(jq -c . <<<"$body" 2>/dev/null || true)"
-		for known in "${ERROR_JSON_BODIES[@]}"; do
-			if [[ "$compact" == "$known" ]]; then
-				reason="error response: $known"
-			fi
-		done
-		if [[ -z "$reason" ]] && ! jq -e 'type == "object" and has("error")' <<<"$body" >/dev/null 2>&1; then
+		if [[ -z "$reason" ]]; then
+			UNKNOWN_ERRORS+=("$name: $(head -c 300 <<<"$body" | tr '\n' ' ')")
 			continue
 		fi
-	fi
-	if [[ -z "$reason" ]]; then
-		UNKNOWN_ERRORS+=("$name: $(head -c 300 <<<"$body" | tr '\n' ' ')")
-		continue
+	else
+		# Every non-HTML file must parse as exactly one JSON value — a truncated or
+		# otherwise corrupt snapshot (e.g. a partial write, cut off mid-object) fails this
+		# regardless of its content, so it's always removed, not just on an exact body match.
+		if compact="$(jq -c . <<<"$body" 2>&1)"; then parse_rc=0; else parse_rc=$?; fi
+		if [[ "$parse_rc" -ne 0 ]]; then
+			reason="truncated/invalid JSON: $(head -c 200 <<<"$compact" | tr '\n' ' ')"
+			echo "⚠️ removed invalid JSON: $name ($reason)"
+		elif [[ "$(wc -l <<<"$compact")" -ne 1 ]]; then
+			reason="holds $(wc -l <<<"$compact") JSON values, expected exactly one"
+			echo "⚠️ removed invalid JSON: $name ($reason)"
+		elif jq -e 'type == "object" and has("error")' <<<"$compact" >/dev/null 2>&1; then
+			for known in "${ERROR_JSON_BODIES[@]}"; do
+				if [[ "$compact" == "$known" ]]; then
+					reason="error response: $known"
+				fi
+			done
+			if [[ -z "$reason" ]]; then
+				UNKNOWN_ERRORS+=("$name: $(head -c 300 <<<"$body" | tr '\n' ' ')")
+				continue
+			fi
+		else
+			continue
+		fi
 	fi
 	mv "$f" "$REMOVED_DIR/$name"
 	printf '%s\t%s\n' "$name" "$reason" >>"$REMOVED_LIST"
@@ -254,9 +268,6 @@ if [[ "${#UNKNOWN_ERRORS[@]}" -gt 0 ]]; then
 	exit 1
 fi
 echo "Removed $REMOVED_FROM_OLD saved error responses (moved to $REMOVED_DIR, listed in removed.tsv)"
-if [[ "$REMOVED_FROM_OLD" -gt 0 ]]; then
-	cut -f2 "$REMOVED_LIST" | sort | uniq -c
-fi
 
 echo "🔵 Staging old archive files by date"
 STAGE_YEAR_DIR="$SCRATCH/stage/$YEAR_PATH"
@@ -319,6 +330,7 @@ echo "Byte count matches: $STAGED_BYTES bytes"
 echo "🔵 Checking for a live history/$YEAR/ leftover on the remote"
 YEAR_INDEX_STATUS="$(curl -s -m 60 -o /dev/null -w '%{http_code}' "$YEAR_INDEX_URL" || true)"
 STAGED_FROM_LIVE=0
+REMOVED_FROM_LIVE=0
 DAYS=""
 if [[ "$YEAR_INDEX_STATUS" == "404" ]]; then
 	echo "No live history/$YEAR/ leftover (404) — nothing to merge"
@@ -417,6 +429,26 @@ else
 				exit 1
 			fi
 			bunzip2 "$bz2_path"
+			# Validate JSON right away, same as the old-archive files — a live snapshot that
+			# fails to parse is removed and logged individually here instead of reaching the
+			# stage dir, rather than relying on a later dedicated JSON-validity pass over
+			# everything staged. It's also left out of live-files.tsv/live-files.txt, so
+			# clearing history/<year>/ afterwards leaves it on the remote for manual review.
+			if compact="$(jq -c . "$day_dir/$json_name" 2>&1)"; then parse_rc=0; else parse_rc=$?; fi
+			if [[ "$parse_rc" -ne 0 ]]; then
+				reason="truncated/invalid JSON (live): $(head -c 200 <<<"$compact" | tr '\n' ' ')"
+			elif [[ "$(wc -l <<<"$compact")" -ne 1 ]]; then
+				reason="holds $(wc -l <<<"$compact") JSON values, expected exactly one (live)"
+			else
+				reason=""
+			fi
+			if [[ -n "$reason" ]]; then
+				mv "$day_dir/$json_name" "$REMOVED_DIR/$json_name"
+				printf '%s\t%s\n' "$json_name" "$reason" >>"$REMOVED_LIST"
+				echo "⚠️ removed invalid JSON: $json_name ($reason)"
+				REMOVED_FROM_LIVE=$((REMOVED_FROM_LIVE + 1))
+				continue
+			fi
 			# last_modified is remote metadata (same field rollup's own mtime check trusts),
 			# not derived from the JSON content, and its format was checked above.
 			touch -d "$last_modified" "$day_dir/$json_name"
@@ -434,6 +466,9 @@ else
 		exit 1
 	fi
 	echo "Staged $STAGED_FROM_LIVE files from the live history/$YEAR/ leftover, recorded in live-files.tsv"
+	if [[ "$REMOVED_FROM_LIVE" -gt 0 ]]; then
+		echo "Removed $REMOVED_FROM_LIVE invalid live files (moved to $REMOVED_DIR, listed in removed.tsv; left on the remote, not in live-files.tsv/.txt)"
+	fi
 	echo "Old archive ends at $OLD_LAST_NAME, live leftover starts at $(head -n1 "$LIVE_MANIFEST" | cut -f6 | xargs basename)"
 fi
 
@@ -443,25 +478,6 @@ if [[ "$STAGE_FILE_COUNT" -ne "$EXPECTED_STAGE_COUNT" ]]; then
 	echo "🔴 stage has $STAGE_FILE_COUNT files, expected $EXPECTED_STAGE_COUNT" >&2
 	exit 1
 fi
-
-echo "🔵 Checking JSON validity"
-if ! find "$STAGE_YEAR_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n500 bash -c \
-	'out="$(jq -r input_filename "$@")" && diff <(printf "%s\n" "$out") <(printf "%s\n" "$@") >&2' bash; then
-	echo "🔴 JSON check failed (diff above): invalid JSON, or files not holding exactly one JSON value" >&2
-	echo "🔵 Checking each file individually to find which ones are bad" >&2
-	find "$STAGE_YEAR_DIR" -type f -print0 | xargs -0 -P"$(nproc)" -n1 bash -c '
-		f="$1"
-		out="$(jq -c . "$f" 2>&1)"
-		rc=$?
-		if [[ "$rc" -ne 0 ]]; then
-			printf "🔴 %s: invalid JSON: %s\n" "$f" "$out" >&2
-		elif [[ "$(wc -l <<<"$out")" -ne 1 ]]; then
-			printf "🔴 %s: holds %s JSON values, expected exactly one\n" "$f" "$(wc -l <<<"$out")" >&2
-		fi
-	' bash
-	exit 1
-fi
-echo "Every file holds exactly one valid JSON value"
 
 echo "🔵 Hashing stage"
 (
@@ -558,8 +574,12 @@ echo "Wrote archive.sha256, archive.sha1"
 
 echo "✅ rebuild-archive OK for $DATASET $YEAR"
 echo "Result: $NEW_ARCHIVE_PATH"
+echo "Removed from old archive: $REMOVED_FROM_OLD (see removed.tsv)"
 if [[ -n "$DAYS" ]]; then
 	echo "Live leftover: $STAGED_FROM_LIVE files archived, listed in live-files.tsv and live-files.txt."
+	if [[ "$REMOVED_FROM_LIVE" -gt 0 ]]; then
+		echo "Removed from live leftover: $REMOVED_FROM_LIVE invalid files (see removed.tsv) — left on the remote, review by hand"
+	fi
 	echo "When clearing history/$YEAR/, delete only the files in live-files.txt, never the whole dir"
 	echo "(see README.md, \"Clearing a live leftover\")."
 fi

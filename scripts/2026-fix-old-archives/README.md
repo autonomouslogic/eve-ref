@@ -172,6 +172,13 @@ checked 2026-10-22).
   not dedup.
 - Inspection artifacts at `/tmp/inspect-industry-systems/` (archives, `extracted-<year>/`,
   `live-sample/`, `2022-index.json`).
+- **Genuine corruption found (2026-10-23)**: `systemcost_2022-01-07T10:52:21.json` inside
+  `industry-systems-2022.tar.bz2` is truncated mid-object (81841 bytes, cuts off inside a
+  `cost_indices` entry). Confirmed by downloading the archive fresh and extracting just that
+  member — byte-identical (same MD5) to the first run, so this is pre-existing damage in the
+  upstream archive, not something `rebuild-archive.sh` or its extraction/copy steps did. Led
+  to generalizing the "saved error responses" step to catch any file that fails to parse as
+  one JSON value, not just known HTML/`{"error":...}` bodies (see "Script: rebuild-archive.sh").
 
 ### sovereignty-structures (2017/2018/2019/2021/2022)
 
@@ -253,6 +260,12 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   "You have been banned" messages (exact text in `ERROR_JSON_BODIES`). Any other HTML file or
   `{"error": ...}` object aborts the run and lists the file, so a new kind of error body is
   reviewed and added to `ERROR_PAGE_TITLES`/`ERROR_JSON_BODIES` by hand, never removed by guess.
+  Separately, every non-HTML file is also checked to parse as exactly one JSON value — a
+  truncated snapshot (e.g. a partial write, cut off mid-object; found in practice in
+  `industry-systems-2022`, confirmed genuinely truncated in the upstream archive, not
+  something this script did) is removed and logged this way unconditionally, since no exact
+  body match is possible for arbitrary truncated content, and a parse failure is unambiguous
+  (unlike an unrecognised-but-valid error body, which still aborts for review).
 - Checks `https://data.everef.net/<dataset>/history/<year>/index.json`. 404 → no
   merge needed (e.g. any non-2022 year). 200 → live leftover, handled strictly, since
   whatever is recorded here is what later gets deleted from the remote. Any of these
@@ -264,6 +277,11 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
     `scripts/rollup/02-list.sh`); a `url` that isn't exactly the file's path on
     data.everef.net; missing or malformed `size`, `etag` or `last_modified`.
   - **Downloads**: size or MD5 not matching the listing, or `bzip2 -t` failing.
+  - **Invalid JSON is the one exception that doesn't abort**: right after decompression, each
+    live file is checked the same way as an old-archive file (parses as exactly one JSON
+    value). A failure here is logged individually (`removed.tsv`, reason suffixed `(live)`)
+    and the file is excluded from `live-files.tsv`/`live-files.txt`, so it's simply left on
+    the remote for manual review rather than ever being a candidate for deletion.
   - **Overlap**: a live file that doesn't sort after the last old-archive file (names are
     `<dataset>-<date>_<HH-MM-SS>`, so this is a time order check), or that would
     overwrite a staged file. Overlap was ruled out beforehand for every affected dataset
@@ -279,8 +297,11 @@ handled by a generic `_<date>T<time>.json` regex, not per-dataset logic).
   - `live-files.txt`: just the remote paths, for `rclone --files-from-raw`.
   - `live/`: the year and day `index.json` files exactly as served, `live-recheck/` the
     end-of-run re-fetch, `history-index.json` the dataset's history index.
-- Validates every staged file holds exactly one JSON value, hashes the stage
-  (`sha256sum`), then builds the `.tar.xz` with the **exact** `tar`/`xz` invocation
+- No separate JSON-validity pass over the whole stage: every file is already validated at
+  the point it's ingested (old-archive files in the error-removal step above, live files
+  right after decompression), so by the time anything reaches the stage dir it's known to
+  hold exactly one JSON value. Hashes the stage (`sha256sum`), then builds the `.tar.xz`
+  with the **exact** `tar`/`xz` invocation
   `scripts/rollup/05-archive.sh` uses (`--owner=0 --group=0 --numeric-owner
   --mode='a=r,u+w'`, `LC_ALL=C` sorted entries, `-cJf`), and runs the same
   verification suite minus a separate `xz -t` (redundant here: `tar -tvf` already
