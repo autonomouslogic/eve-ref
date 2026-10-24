@@ -1,5 +1,7 @@
-BASE_URL: https://data.everef.net/sovereignty-structures/history/
-YEARS: 2017-2022
+BASE_URL: https://data.everef.net/system-kills/history/
+YEARS: 2017-2022, except 2020
+
+If the files don't show up on index, attempt to download them directly.
 
 You are verifying converted data archives published under `BASE_URL` above, restricted to the
 `YEARS` range given — ignore any year outside that range even if `index.json` lists it. Everything
