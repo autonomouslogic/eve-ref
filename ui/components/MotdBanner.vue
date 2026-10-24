@@ -88,7 +88,7 @@ const motd = computed(() => {
 	}
 
 	// CSM.
-	const csmEnds = new Date("2025-11-10T11:00:00Z");
+	const csmEnds = new Date("2026-11-03T11:00:00Z");
 	const timeLeft = csmEnds.getTime() - time;
 	if (timeLeft > 0) {
 		const daysLeft = Math.floor(timeLeft / DAY);
@@ -110,7 +110,7 @@ const motd = computed(() => {
 		}
 		return {
 			text: msg,
-			url: "https://www.eveonline.com/news/view/csm-20-cast-your-vote-now",
+			url: "https://www.eveonline.com/news/view/csm-21-cast-your-vote-now",
 			urlText: "Vote now"
 		} as Motd;
 	}
