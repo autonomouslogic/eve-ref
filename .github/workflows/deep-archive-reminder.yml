@@ -1,0 +1,17 @@
+name: Deep Archive Reminder
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "57 9 15 2,8 *"
+env:
+  DISCORD_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
+jobs:
+  remind:
+    name: Remind
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Discord
+        run: |
+          curl --fail --silent --show-error -H "Content-Type: application/json" \
+            -d '{"content": "Deep Archive reminder, torrent time?"}' "$DISCORD_URL"

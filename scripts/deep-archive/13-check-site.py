@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check-site: step 14 of the EVE Ref Deep Archive workflow, and the last one. Checks what data.everef.net actually
+check-site: step 13 of the EVE Ref Deep Archive workflow, and the last scripted one. Checks what data.everef.net actually
 serves after the delete and the full DataIndex run, over HTTPS (PLAN 2.16).
 
 DRAFT. Read-only, over HTTPS.

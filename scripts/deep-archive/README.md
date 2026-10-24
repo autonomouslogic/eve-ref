@@ -2,10 +2,13 @@
 
 Moves old data.everef.net data into torrents. One workflow makes one torrent: the oldest data not archived yet, as
 much as the size limits allow, named after the last date it covers (`everef-deep-archive-YYYY-MM-DD`).
-It's then seeded, published, backed up, and deleted from the site.
+It's then seeded, published, listed on the docs site, and deleted from the site.
 
-Status: **draft**. Every step 00-16 is numbered and every scripted one is written; none has run against real data yet.
+Status: **draft**. Every step 00-14 is numbered and every scripted one is written; none has run against real data yet.
 Design and reasoning: [`PLAN.md`](PLAN.md).
+
+A GitHub Actions workflow (`.github/workflows/deep-archive-reminder.yml`) pings the dev notices Discord channel on
+15 February and 15 August, the day after that month's rollup check, as a reminder to run a workflow.
 
 ## Requirements
 
@@ -31,14 +34,14 @@ path.
 `make test-deep-archive` (from the repo root) runs the unit tests in `tests/`: how `01-find` dates files from their
 names, what it skips, how published torrents and `index.json` files are handled, and how it chooses the cutoff; the
 shared dataset/year classification and torrent comment (`lib/workflow.py`'s `classify_path`/`render_comment`), used by
-`01-find`, `04-make-torrent`, `08-check-before-delete` and `create_torrent.py` so their dataset breakdowns and the
-torrent's own comment always agree; the `.torrent` size estimate (`lib/torrent_size.py`), including a real torrent
-built with libtorrent and compared against the estimate for the same files; `07-publish`'s feed
-building, round-tripped through its own checks; and `10-check-delete`'s checks, including that nothing outside the
-confirmed delete set went missing. Standard library only, with one exception: the real-torrent-size and feed-building
-tests need the libtorrent Python bindings (like the scripts they test) and are skipped, not failed, without them. Uses
-your `python3`, or Docker if there isn't one; the Docker image doesn't have libtorrent, so those tests are skipped
-there.
+`01-find`, `04-make-torrent` and `09-check-before-delete` so their dataset breakdowns and the torrent's own comment
+always agree; that `STEPS` matches the numbered scripts; the `.torrent` size estimate (`lib/torrent_size.py`),
+including a real torrent built with libtorrent and compared against the estimate for the same files; `07-publish`'s
+feed building, round-tripped through its own checks; `09-check-before-delete`'s delete set and docs page check; and
+`11-check-delete`'s checks, including that nothing outside the confirmed delete set went missing. Standard library
+only, with one exception: the real-torrent-size and feed-building tests need the libtorrent Python bindings (like the
+scripts they test) and are skipped, not failed, without them. Uses your `python3`, or Docker if there isn't one; the
+Docker image doesn't have libtorrent, so those tests are skipped there.
 
 ## Procedure
 
@@ -46,26 +49,48 @@ Run each step in order, from `scripts/deep-archive/`. A step only starts once th
 can't run twice (Appendix A). The bullets under a step are what must hold before moving on; if one doesn't, or
 anything else looks wrong, stop. Keep notes for the workflow in `$SCRATCH_DIR/NOTES.md`.
 
+| Step | What | Script |
+|---|---|---|
+| 00 | Preflight | `./00-preflight.py` |
+| 01 | Find | `./01-find.py` |
+| 02 | Review the selection | manual |
+| 03 | Load | `./03-load.py` |
+| 04 | Make torrent | `./04-make-torrent.py` |
+| 05 | Seed | `./05-seed.py` |
+| 06 | Check seed | `./06-check-seed.py` |
+| 07 | Publish | `./07-publish.py` |
+| 08 | Update docs | manual |
+| 09 | Check before delete | `./09-check-before-delete.py` |
+| 10 | Delete | `./10-delete.py` |
+| 11 | Check delete | `./11-check-delete.py` |
+| 12 | Full DataIndex | manual |
+| 13 | Check site | `./13-check-site.py` |
+| 14 | Delete the scratch directory | manual |
+
 ### 00: Preflight
 ```
 ./00-preflight.py
 ```
 Checks the settings, both directories (created if missing; `SCRATCH_DIR` empty, room in `SEED_DIR`), rclone, the B2
 key and bucket, libtorrent, aria2c, the tracker lists (both download, at least 10 trackers together), `LOCAL_COPY_DIR`
-if set, and qBittorrent's Web API (reachable, the login works, libtorrent 2.x). Reports every problem, then aborts if
-there were any.
+if set, and qBittorrent's Web API (reachable, the login works, libtorrent 2.x). Names any setting the environment
+overrides `torrents.env` with. Reports every problem, then aborts if there were any.
 
 ### 01: Find
 ```
 ./01-find.py
 ```
 Lists the bucket and selects the oldest files not archived yet, by date (the earliest of the modification date, an
-ISO date in the file name, and 31 December of a year in the file name; PLAN 2.2), up to the last date that stays
-within the size limits (`lib/workflow.py`), and nothing newer than the minimum age (`01-find.py`). Each folder with a
-selected file brings its own `index.json`, whatever that file's date. Prints the cutoff, the torrent ID and a report,
-and writes the selection to `$SCRATCH_DIR/find/files.jsonl`.
+ISO date in the file name, and 31 December of a year in the file name; PLAN 2.2), and nothing newer than the minimum
+age (`MIN_AGE_YEARS`). Dates are added oldest first until a limit (`lib/workflow.py`) stops it: the `.torrent` size
+limit is hard (the date that would go over it is left out), the data limit `MAX_BYTES` is soft (the date that reaches
+it is the last one taken, so the torrent can be somewhat over). Each folder with a selected file brings its own
+`index.json`, whatever that file's date. Prints the cutoff, the torrent ID and a report, and writes the selection to
+`$SCRATCH_DIR/find/files.jsonl`.
 
-Aborts if a single date is over a limit: that needs resolving by hand.
+Aborts if the oldest date alone is over the `.torrent` size limit: that needs resolving by hand. Also aborts if the
+selection is under `MIN_BYTES` (500 GiB): not enough data for a torrent yet. Nothing is written in either case; run
+it again later.
 
 ### 02: Review the selection (manual)
 
@@ -100,10 +125,10 @@ different. Aborts before copying if the folder holds files that aren't selected,
 ```
 ./04-make-torrent.py
 ```
-Writes `<ID>-README.md` into `$SEED_DIR/<ID>/`, downloads the tracker lists (ngosang's `trackers_best.txt` and
-XIU2's `best.txt`; fails if either is unreachable or empty, or if they give fewer than 10 trackers together), makes
-`$SCRATCH_DIR/<ID>.torrent` (hybrid v1+v2, their union as trackers), and generates the file list
-`$SCRATCH_DIR/<ID>.txt` from it. Then reloads both from disk and checks them:
+Writes `<ID>-README.md` into `$SEED_DIR/<ID>/` (from `README-template.md`), downloads the tracker lists (ngosang's
+`trackers_best.txt` and XIU2's `best.txt`; fails if either is unreachable or empty, or if they give fewer than 10
+trackers together), makes `$SCRATCH_DIR/<ID>.torrent` (hybrid v1+v2, their union as trackers), and generates the file
+list `$SCRATCH_DIR/<ID>.txt` from it. Then reloads both from disk and checks them:
 - Files = the manifest plus `<ID>-README.md`; bytes match.
 - Hybrid, `name` is `<ID>`, not private, no web seed; trackers one per tier; the comment is right.
 - The trackers in `$SCRATCH_DIR/trackers/trackers.txt` look sane (no surprising domains).
@@ -140,60 +165,60 @@ Review notes, R16).
 Shows the targets and asks first, then uploads `<ID>.torrent` and `<ID>.txt` to the bucket's `deep-archive/`. Never
 overwrites (a file already published by an earlier attempt must be identical, and is skipped). Then rebuilds
 `everef-deep-archive.xml` from the published torrents, shows the difference, asks again, saves the published
-`everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it. Last, checks all three over HTTPS,
-retrying for a few minutes while Cloudflare still serves the old feed.
+`everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it. Last, checks all three
+over HTTPS, retrying for a few minutes while Cloudflare still serves the old feed. Prints the torrent's URL, v1 and v2
+info-hashes, and full magnet link for step 08.
 - The only difference in the feed is the new `<ID>`.
 - The `.torrent` and `.txt` are served from `https://data.everef.net/deep-archive/` with the right Content-Type and
   content; the feed is valid RSS and has `<ID>` with the right info-hash.
 
-### 08: Record (manual)
+### 08: Update docs (manual)
 
-Add a line to `LOG.md`: ID, cutoff, files, bytes, the v1 and v2 info-hashes, and the published date, all printed by
-step 07. Commit it.
-
-Also add the torrent to the docs site's `deep-archive.md` page: its URL, v1 and v2 info-hashes, and full magnet
-link (all printed by step 07).
+Add the torrent to the "Torrents" table on the docs site's Deep Archive page
+(`docs/src/datasets/deep-archive.md`), newest first: its ID linked to its URL, the v1 and v2 info-hashes, and the full
+magnet link, all printed by step 07. Commit it and deploy the docs site. Step 09 checks the live page lists it.
 
 ### 09: Check before delete
 ```
-./08-check-before-delete.py
+./09-check-before-delete.py
 ```
-- Docs page live, seeder at 100%.
+- The docs page is live and lists `<ID>` with its v1 info-hash (step 08); the seeder is at 100% with 0 bytes
+  downloaded.
 - The published `.torrent` on the bucket has the same info-hash as `$SCRATCH_DIR/<ID>.torrent`.
-- Builds the delete set from the torrent: each data file in it that is in the manifest, and is on the bucket with
-  the same size and modification time as in the selection (PLAN 2.14). No `index.json` or README.
+- Builds the delete set from the torrent: each data file in it that is in the manifest, has the selected size in the
+  torrent, and is on the bucket with the same size and modification time as in the selection (PLAN 2.14). No
+  `index.json` or README.
 - Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
 - Note the printed delete set: files, bytes, datasets.
 
-### 09: Delete
+### 10: Delete
 ```
-./09-delete.py              # dry run
-./09-delete.py --execute    # type the torrent ID to confirm
+./10-delete.py              # dry run
+./10-delete.py --execute    # type the torrent ID to confirm
 ```
-- The dry run shows exactly the delete set from step 08.
+- The dry run shows exactly the delete set from step 09.
 
 `--execute` re-checks against a fresh listing, then deletes exactly the confirmed files (soft deletes; never by
-prefix). Then it removes `index.html` and `index.json` from every folder the delete left with nothing else in it,
-and from parents left the same way, deepest first; never the site root or `deep-archive/` (PLAN 2.15). Treat it as
-permanent.
+prefix). Then it removes the folders the delete emptied: on B2 a folder disappears with its last file, so that means
+removing `index.html` and `index.json` from every folder left with nothing else in it, and from parents left the same
+way, deepest first; never the site root or `deep-archive/` (PLAN 2.15). Treat it as permanent.
 
-Until the full `DataIndex` in the next step runs, parent index pages still link to the now-deleted files/folders:
+Until the full `DataIndex` in step 12 runs, parent index pages still link to the now-deleted files/folders:
 scheduled jobs that crawl the site (e.g. `sync-fuzzwork-ordersets`, the market history scrape) may fail against
 those stale links in the meantime. Left as-is; they recover on their next run after `DataIndex` catches up.
 
-### 10: Check delete
+### 11: Check delete
 ```
-./10-check-delete.py
+./11-check-delete.py
 ```
 - Every file in the delete set is gone, no folder holds only index files, and nothing else changed: files that
-  failed the check in step 08 are still there, and so is every other path that was on the bucket when `01-find` ran
-  (step 08's pre-delete check already covers the delete set itself; this is what would catch `09-delete` deleting,
+  failed the check in step 09 are still there, and so is every other path that was on the bucket when `01-find` ran
+  (step 09's pre-delete check already covers the delete set itself; this is what would catch `10-delete` deleting,
   or anything else removing, a path outside it). New uploads since `01-find` ran are fine; they're not checked.
 
-### 11: Full DataIndex (manual)
+### 12: Full DataIndex (manual)
 
-Also how stale index cleanup is handled (PLAN "Still open" #7): not by `09-delete` itself, but by the next full
-`DataIndex` run picking up the deletes.
+Rewrites every folder's index pages, so the parents stop listing the deleted files and the folders step 10 removed.
 ```
 docker run --rm --env-file <production env> <eve-ref image> data-index
 ```
@@ -203,17 +228,12 @@ Or, from a checkout with production settings in the environment:
 ```
 Leave `DATA_INDEX_PREFIX` unset.
 
-### 12: Check site
+### 13: Check site
 ```
-./12-check-site.py
+./13-check-site.py
 ```
 - Every sampled deleted URL returns 404, or 200 from Cloudflare's cache (PLAN 2.16).
 - The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt` and the feed.
-
-### 13: Record (manual)
-
-Add a line to `LOG.md`: ID, cutoff, files, bytes, info-hashes, and the published, backed up and deleted dates.
-Commit it.
 
 ### 14: Delete the scratch directory (manual)
 
@@ -223,11 +243,13 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 
 ## Appendix A: How the scripts work
 
-- **One script per scripted step, all steps numbered in order** (`STEPS` in `lib/workflow.py`). Scripts never run the
-  next step.
+- **One script per scripted step, all steps numbered in order** (`STEPS` in `lib/workflow.py`; a unit test checks
+  the script names match). Scripts never run the next step.
 - **Completion files.** Each step writes `$SCRATCH_DIR/<NN>-<step>.done` as the last thing it does, only when it
   succeeded. A step refuses to start if the previous scripted step's file is missing, or if its own already exists. The
   torrent ID is read from `01-find.done`; no step takes arguments for it.
+- **One step at a time.** A step holds `$SCRATCH_DIR/log/.lock` while it runs; a second step started in the same
+  `$SCRATCH_DIR` refuses to start.
 - **Redoing a completed step** is deliberate: delete its completion file and every later one by hand, and note why
   in `NOTES.md`. A step that failed wrote no completion file and can simply be run again; copies and uploads carry
   on where they stopped.
@@ -245,7 +267,8 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 ## Appendix B: Settings, files and directories
 
 `torrents.env` (from `torrents.env.example`, not committed) holds only what differs per host, plus the secrets. The
-scripts read it for anything not already set in the environment.
+scripts read it for anything not already set in the environment; `00-preflight` names any setting the environment
+overrides.
 
 | Setting | What |
 |---|---|
@@ -257,33 +280,36 @@ scripts read it for anything not already set in the environment.
 | `QBITTORRENT_SAVE_PATH` | Optional. `SEED_DIR` as qBittorrent sees it, if different (qBittorrent in Docker, say). `05-seed` adds torrents with this save path; `SEED_DIR` if not set. |
 | `LOCAL_COPY_DIR` | Optional. A local copy of the data site, laid out like the bucket (`index.json` at the top). `03-load` copies the files it has with the selected size, modification time and SHA-1 instead of downloading them. |
 
-Everything else is fixed in `lib/workflow.py`: the size limits, the excluded datasets (`TORRENT_EXCLUDE`), the site
-URL (`DATA_BASE_URL`), and the rclone settings. As in the roll-up scripts, rclone is
-configured only from `RCLONE_CONFIG_*` variables (`RCLONE_CONFIG=/dev/null`, so your own `rclone.conf` is never
-used), with type `b2` and `hard_delete=false`, so deletes stay soft and the bucket's lifecycle rules give an undo
-window. All storage access goes through rclone.
+Everything else is fixed in `lib/workflow.py`: the size limits (`MIN_BYTES`, `MAX_BYTES`, `MAX_TORRENT_BYTES`), the
+excluded datasets (`TORRENT_EXCLUDE`), the site URL (`DATA_BASE_URL`), and the rclone settings. As in the roll-up
+scripts, rclone is configured only from `RCLONE_CONFIG_*` variables (`RCLONE_CONFIG=/dev/null`, so your own
+`rclone.conf` is never used), with type `b2` and `hard_delete=false`, so deletes stay soft and the bucket's lifecycle
+rules give an undo window. All storage access goes through rclone.
 
 ```
 scripts/deep-archive/
-  README.md  PLAN.md  LOG.md
+  README.md  PLAN.md
+  README-template.md               # the README inside each torrent (04-make-torrent)
   torrents.env.example             # copy to torrents.env (not committed)
   00-preflight.py  01-find.py  …   # the steps
-  create_torrent.py                # experiment: measure .torrent sizes; becomes 04-make-torrent
-  lib/workflow.py                  # shared: settings, size limits, completion files, output, dataset/date helpers
+  lib/workflow.py                  # shared: settings, size limits, steps, completion files, lock, output, helpers
   lib/trackers.py                  # downloads the tracker lists (00-preflight, 04-make-torrent)
   lib/torrent_size.py              # .torrent size estimate from paths and sizes, for 01-find's cutoff
+  lib/qbittorrent.py               # qBittorrent Web API client (00-preflight, 05-seed, 06-check-seed, 09-check-before-delete)
   tests/                           # unit tests: make test-deep-archive (from the repo root)
 
 $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
   00-preflight.done, 01-find.done, … # completion files
   find/                            # 01-find: files.jsonl (the selection), listing.jsonl.gz, report.txt, ...
-  NOTES.md                     # your notes for this workflow
+  NOTES.md                         # your notes for this workflow
   manifest.json                    # selection + SHA-256 (03-load)
   <ID>.torrent  <ID>.txt
   trackers/                        # 04-make-torrent: each tracker list as downloaded, and trackers.txt (the union)
   feed-backup/                     # 07-publish: the everef-deep-archive.xml it replaced
-  deleted.jsonl
+  delete-set.json                  # 09-check-before-delete
+  deleted.jsonl                    # 10-delete
   log/<NN>-<step>-<UTC time>.log   # everything each run of a step printed
+  log/.lock                        # held by the running step
 
 $SEED_DIR/                         # kept; qBittorrent save path
   everef-deep-archive-2023-04-11/  # torrent content, exactly what the torrent describes
@@ -307,13 +333,13 @@ the damaged files are lost.
 Re-upload the deleted files from `$SEED_DIR/<ID>/` (or other seeders) into the bucket, using the published `<ID>.txt`
 as the list (planned script, outside the numbered steps). Upload with rclone, which keeps the modification times,
 so `01-find` still sees them as the archived version. A path can be in several torrents, one version each: restore
-from the newest torrent holding it. While B2 still holds
-the hidden versions (the bucket's lifecycle rules decide how long), removing the hide markers in B2's web console is
-quicker (PLAN 2.14). Then run a full `DataIndex` and check the files are served again.
+from the newest torrent holding it. While B2 still holds the hidden versions (the bucket's lifecycle rules decide how
+long), removing the hide markers in B2's web console is quicker (PLAN 2.14). Then run a full `DataIndex` and check the
+files are served again.
 
 ## Appendix E: If data changed
 
-If `08-check-before-delete` finds a file that changed after it was selected:
+If `09-check-before-delete` finds a file that changed after it was selected:
 - That file isn't deleted; the rest of the delete set is. Note it in `NOTES.md`.
 - No replacement torrent: the changed file goes into a later torrent once it's old enough (PLAN Appendix A).
 - Find out why. If the dataset still changes after the minimum age, add it to `TORRENT_EXCLUDE`.
@@ -328,8 +354,8 @@ If `08-check-before-delete` finds a file that changed after it was selected:
 | `04-make-torrent` | README in `$SEED_DIR/<ID>/`, `.torrent`, `.txt` | none |
 | `05-seed` / `06-check-seed` | qBittorrent / throwaway aria2c download | none |
 | `07-publish` | **bucket `deep-archive/`**, `feed-backup/` | write |
-| `08-check-before-delete` | none | read |
-| `09-delete` / `10-check-delete` | **bucket data (permanent)** / none | write |
-| `12-check-site` | none | none |
+| `09-check-before-delete` | `delete-set.json` | read |
+| `10-delete` / `11-check-delete` | **bucket data (permanent)**, `deleted.jsonl` / none | write / read |
+| `13-check-site` | none | none |
 
 Every step also writes its completion file and its log in `$SCRATCH_DIR`.

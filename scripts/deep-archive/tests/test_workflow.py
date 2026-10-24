@@ -1,8 +1,8 @@
 """
 Tests for lib/workflow.py's shared helpers: dataset/year classification (classify_path), the torrent comment
 (render_comment), timestamp formatting (iso/parse_iso), and the file list format (file_list_problems,
-site_path_problem). These are shared by 01-find, 03-load, 04-make-torrent, 07-publish, 08-check-before-delete,
-09-delete and create_torrent, so a regression here would hit every one of them.
+site_path_problem). These are shared by 01-find, 03-load, 04-make-torrent, 07-publish, 09-check-before-delete and
+10-delete, so a regression here would hit every one of them.
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -10,6 +10,7 @@ Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make t
 import gzip
 import json
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -17,6 +18,8 @@ import unittest
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 from workflow import (  # noqa: E402
+    MANUAL_STEPS,
+    STEPS,
     classify_path,
     file_list_problems,
     iso,
@@ -24,6 +27,7 @@ from workflow import (  # noqa: E402
     read_listing_gz,
     render_comment,
     site_path_problem,
+    step_name,
 )
 
 
@@ -153,6 +157,26 @@ class ReadListingGzTest(unittest.TestCase):
                 f.write(json.dumps({"path": "a/b.txt", "size": 1, "last_modified": "2024-01-01T00:00:00Z"}) + "\n")
                 f.write("\n")
             self.assertEqual(read_listing_gz(path), {"a/b.txt"})
+
+
+class StepsTest(unittest.TestCase):
+    """STEPS numbers the scripts and their completion files; the two must never drift apart."""
+
+    def test_every_scripted_step_has_its_script(self):
+        for step in STEPS:
+            if step not in MANUAL_STEPS:
+                self.assertTrue(os.path.isfile(os.path.join(HERE, "..", f"{step_name(step)}.py")))
+
+    def test_every_numbered_script_is_a_scripted_step(self):
+        scripted = {f"{step_name(s)}.py" for s in STEPS if s not in MANUAL_STEPS}
+        numbered = {name for name in os.listdir(os.path.join(HERE, "..")) if re.match(r"^\d\d-.*\.py$", name)}
+        self.assertEqual(numbered, scripted)
+
+    def test_manual_steps_are_steps(self):
+        self.assertLessEqual(MANUAL_STEPS, set(STEPS))
+
+    def test_step_names_are_unique(self):
+        self.assertEqual(len(STEPS), len(set(STEPS)))
 
 
 if __name__ == "__main__":

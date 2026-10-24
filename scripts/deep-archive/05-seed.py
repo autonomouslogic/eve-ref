@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-seed: step 6 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent with SEED_DIR, as qBittorrent sees
+seed: step 05 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent with SEED_DIR, as qBittorrent sees
 it, as the save path, so it checks the files where they already are instead of downloading them.
 
 DRAFT. Writes only to qBittorrent (via its Web API) and SCRATCH_DIR.

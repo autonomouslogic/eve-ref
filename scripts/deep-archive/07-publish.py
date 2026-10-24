@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-publish: step 8 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent and <ID>.txt to the bucket's
+publish: step 07 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent and <ID>.txt to the bucket's
 deep-archive/, rebuilds everef-deep-archive.xml from every published .torrent, and checks what data.everef.net
 serves for all three.
 
@@ -23,8 +23,8 @@ Needs 06-check-seed's completion file, and refuses to run twice (lib/workflow.py
    Content-Type and exactly the local bytes; everef-deep-archive.xml is served as application/rss+xml, is valid XML and has an
    <item> with this torrent's v1 info-hash as its <guid>. Cloudflare may serve the old feed for
    up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
-5. Print this torrent's URL, v1 and v2 info-hashes, and full magnet link, for the next step (Record) to copy into
-   LOG.md and the docs site's deep-archive.md page.
+5. Print this torrent's URL, v1 and v2 info-hashes, and full magnet link, for the next step (08, update-docs) to copy
+   into the docs site's deep-archive.md page.
 
 On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up (manual, README).
 

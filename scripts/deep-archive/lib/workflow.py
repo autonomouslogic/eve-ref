@@ -102,18 +102,18 @@ STEPS = [
     "seed",
     "check-seed",
     "publish",
+    "update-docs",
     "check-before-delete",
     "delete",
     "check-delete",
     "data-index",
     "check-site",
-    "record",
     "delete-scratch",
 ]
 MANUAL_STEPS = {
     "review",
+    "update-docs",
     "data-index",
-    "record",
     "delete-scratch",
 }
 
@@ -154,12 +154,18 @@ def fmt_size(n):
 # Piece size the limits are worked out for.
 PIECE_SIZE = 32 * MIB
 
-# Most data in one torrent: what the seeder holds per torrent and what a full download is.
+# Data in one torrent, a soft limit: 01-find stops at the first date that reaches it, and takes that whole date, so a
+# torrent can be somewhat over. Roughly what the seeder holds per torrent and what a full download is.
 MAX_BYTES = 1 * TIB
+
+# Least data in one torrent: 01-find aborts if its selection (index.json included) is smaller, so no workflow makes a
+# small torrent. Rerun it once more data has passed MIN_AGE_YEARS.
+MIN_BYTES = 500 * GIB
 
 # Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
 # max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs up to about 12 KB high (its
-# FIXED_BYTES allowance), so a .torrent at the limit still loads. This is what limits the file count.
+# FIXED_BYTES allowance), so a .torrent at the limit still loads. This is what limits the file count. A hard limit:
+# 01-find leaves out the date that would go over it.
 MAX_TORRENT_BYTES = 10_000_000
 
 # qBittorrent's Web API (00-preflight, 05-seed, 06-check-seed). Torrents are added with save path
@@ -247,12 +253,18 @@ def ok(message):
     print(f"✅ {message}")
 
 
+# Settings in torrents.env that the environment already set to something else, filled in by load_env. 00-preflight
+# reports them, so a stale shell export doesn't silently override the file (PLAN, Review notes, R2).
+ENV_OVERRIDES = []
+
+
 def load_env():
     """
     Reads torrents.env into os.environ, without overriding anything already set, then applies RCLONE_FIXED.
-    Returns the file's path, or None if there isn't one.
+    Returns the file's path, or None if there isn't one. Settings the environment overrides go in ENV_OVERRIDES.
     """
     path = os.path.realpath(os.environ.get("TORRENTS_ENV") or ENV_FILE)
+    ENV_OVERRIDES.clear()
     if not os.path.isfile(path):
         os.environ.update(RCLONE_FIXED)
         return None
@@ -270,6 +282,8 @@ def load_env():
             value = value.strip()
             if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
                 value = value[1:-1]
+            if key in os.environ and os.environ[key] != value and key not in RCLONE_FIXED:
+                ENV_OVERRIDES.append(key)
             os.environ.setdefault(key, value)
     os.environ.update(RCLONE_FIXED)
     return path
@@ -287,6 +301,29 @@ def required_dir(name):
 
 def is_inside(path, parent):
     return path == parent or path.startswith(parent + os.sep)
+
+
+def lock(scratch_dir):
+    """
+    Takes SCRATCH_DIR/log/.lock for as long as the process runs, so only one step runs at a time (PLAN, Review notes,
+    R1): two steps started by mistake could otherwise both pass the completion-file checks. In log/, which 00-preflight
+    allows in an otherwise empty SCRATCH_DIR.
+    """
+    import fcntl
+
+    log_dir = os.path.join(scratch_dir, "log")
+    os.makedirs(log_dir, exist_ok=True)
+    path = os.path.join(log_dir, ".lock")
+    lock_file = open(path, "w")
+    try:
+        fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        fail(f"Another step is running in this SCRATCH_DIR ({path} is locked)")
+    _LOCKS.append(lock_file)
+
+
+# Open lock files, kept so they stay locked until the process exits.
+_LOCKS = []
 
 
 class Workflow:
@@ -317,6 +354,7 @@ class Workflow:
         """
         if step not in STEPS or step in MANUAL_STEPS:
             raise ValueError(f"unknown scripted step: {step}")
+        lock(self.scratch_dir)
         done = self.read_done(step)
         if done is not None:
             fail(
@@ -526,14 +564,13 @@ def classify_path(path):
     """
     (year, dataset) for a site path (file name included, as files.jsonl and the manifest record it):
     - year: the path's first YYYY directory (YEAR_DIR_RE), as an int; None if there isn't one. Callers that need a
-      fallback (01-find's "(no year folder)" flag, create_torrent's modification-year guess) check for None
-      themselves.
+      fallback (01-find's "(no year folder)" flag) check for None themselves.
     - dataset: the directories before that year folder, "/"-joined, with a trailing "history" or "backfills"
       (DATASET_SUFFIXES) removed; the first three directories if there's no year folder. "" at the site root (never
       reached: root-level files are skipped before classification) or directly under a year folder.
-    Used by 01-find's and 08-check-before-delete's dataset breakdowns, and by 04-make-torrent's and
-    create_torrent's "Datasets: ..." comment (render_comment), so a torrent's comment always groups paths the same
-    way the find report that selected them did.
+    Used by 01-find's and 09-check-before-delete's dataset breakdowns, and by 04-make-torrent's "Datasets: ..."
+    comment (render_comment), so a torrent's comment always groups paths the same way the find report that selected
+    them did.
     """
     dirs = path.split("/")[:-1]
     year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)

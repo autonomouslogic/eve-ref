@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check-seed: step 7 of the EVE Ref Deep Archive workflow. Checks qBittorrent's own state for the torrent, from
+check-seed: step 06 of the EVE Ref Deep Archive workflow. Checks qBittorrent's own state for the torrent, from
 scratch, never trusting 05-seed's own result, then downloads the torrent's README through BitTorrent with aria2c,
 as a separate client, to show the torrent can actually be downloaded.
 

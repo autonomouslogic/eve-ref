@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check-before-delete: step 10 of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
+check-before-delete: step 09 of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
 re-verifies the docs page and seeding, confirms the published torrent matches the local one, and builds the
 delete set from the torrent against a fresh listing of the bucket (PLAN 2.14).
 
@@ -8,10 +8,11 @@ DRAFT. Read-only on the bucket and qBittorrent.
 
     09-check-before-delete.py
 
-Needs 07-publish's completion file, and refuses to run twice (lib/workflow.py).
+Needs 07-publish's completion file (08, update-docs, is manual), and refuses to run twice (lib/workflow.py). Fails
+if the docs page doesn't list the torrent's ID and v1 info-hash: step 08 must come first.
 
 A data file is in the delete set only if all of these hold:
-- it's a data file in the published torrent (not index.json or the README);
+- it's a data file in the published torrent (not index.json or the README), with the selected size;
 - it's in the manifest (so its SHA-256 was checked against the torrent at 100%, PLAN 2.14);
 - it's on the bucket right now, in a **fresh** listing, with the same size and modification time recorded when
   it was selected (01-find's files.jsonl).
@@ -38,8 +39,6 @@ import time
 import urllib.error
 import urllib.request
 from collections import defaultdict
-
-import libtorrent as lt
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from qbittorrent import Client, QbittorrentError  # noqa: E402
@@ -76,13 +75,13 @@ def main():
     remote = data_remote()
 
     section("Docs")
-    check_docs_live()
+    check_docs_page(torrent_id, workflow.read_done("make-torrent")["summary"]["v1_info_hash"])
 
     section("Seeder")
     check_seeder(workflow, torrent_id)
 
     section("Published torrent")
-    data_paths = check_published_torrent(workflow, remote, torrent_id)
+    data_files = check_published_torrent(workflow, remote, torrent_id)
 
     section("Manifest")
     manifest = read_manifest(os.path.join(workflow.scratch_dir, "manifest.json"), torrent_id)
@@ -95,7 +94,7 @@ def main():
     print(f"{fmt_count(len(fresh))} files on the bucket right now")
 
     section("Delete set")
-    confirmed, failed = build_delete_set(data_paths, manifest, selection, fresh)
+    confirmed, failed = build_delete_set(data_files, manifest, selection, fresh)
     total_bytes = sum(f["size"] for f in confirmed)
     datasets = defaultdict(lambda: [0, 0])
     for f in confirmed:
@@ -132,17 +131,32 @@ def main():
     ok(f"Check before delete OK for {torrent_id}")
 
 
-def check_docs_live():
+def check_docs_page(torrent_id, v1_hash):
+    """The docs page is live and lists this torrent (step 08, update-docs), before anything is deleted."""
     try:
         with urllib.request.urlopen(DOCS_PAGE, timeout=60) as response:
             status = response.status
+            text = response.read().decode("utf-8", errors="replace")
     except urllib.error.HTTPError as e:
-        status = e.code
+        status, text = e.code, ""
     except urllib.error.URLError as e:
         fail(f"{DOCS_PAGE}: {e.reason}")
     if status != 200:
         fail(f"{DOCS_PAGE}: HTTP {status}")
-    print(f"{DOCS_PAGE}: 200")
+    problems = docs_page_problems(text, torrent_id, v1_hash)
+    if problems:
+        fail(f"{DOCS_PAGE}: {'; '.join(problems)}: add the torrent to the page first (step 08)")
+    print(f"{DOCS_PAGE}: 200, lists {torrent_id} with its v1 info-hash")
+
+
+def docs_page_problems(text, torrent_id, v1_hash):
+    """What the docs page is missing for this torrent: its ID and its v1 info-hash."""
+    problems = []
+    if torrent_id not in text:
+        problems.append(f"doesn't mention {torrent_id}")
+    if v1_hash.lower() not in text.lower():
+        problems.append(f"doesn't have the v1 info-hash {v1_hash}")
+    return problems
 
 
 def check_seeder(workflow, torrent_id):
@@ -162,6 +176,9 @@ def check_seeder(workflow, torrent_id):
 
 
 def check_published_torrent(workflow, remote, torrent_id):
+    """The published torrent's data files, as {site path: size in the torrent}, after checking its info-hash."""
+    import libtorrent as lt
+
     make_torrent = workflow.read_done("make-torrent")["summary"]
     local_v1_hash = make_torrent["v1_info_hash"]
     tmp = os.path.join(workflow.scratch_dir, f"{torrent_id}.published.torrent")
@@ -180,7 +197,7 @@ def check_published_torrent(workflow, remote, torrent_id):
     root_names = {f"{torrent_id}-README.md"}
     prefix = torrent_id + "/"
     storage = ti.files()
-    data_paths = set()
+    data_files = {}
     for i in range(storage.num_files()):
         if storage.file_flags(i) & lt.file_storage.flag_pad_file:
             continue
@@ -188,8 +205,8 @@ def check_published_torrent(workflow, remote, torrent_id):
         rel = path[len(prefix) :] if path.startswith(prefix) else path
         if rel in root_names or rel.rsplit("/", 1)[-1] == "index.json":
             continue
-        data_paths.add(rel)
-    return data_paths
+        data_files[rel] = storage.file_size(i)
+    return data_files
 
 
 def read_manifest(path, torrent_id):
@@ -214,16 +231,24 @@ def read_selection(path):
     return selection
 
 
-def build_delete_set(data_paths, manifest, selection, fresh):
+def build_delete_set(data_files, manifest, selection, fresh):
+    """
+    (confirmed, failed) for the torrent's data files ({path: size in the torrent}): confirmed if the file is in the
+    manifest and the selection, the torrent has the selected size, and the bucket has the selected size and
+    modification time right now (PLAN 2.14).
+    """
     confirmed = []
     failed = []
-    for path in sorted(data_paths):
+    for path, torrent_size in sorted(data_files.items()):
         if path not in manifest:
             failed.append({"path": path, "reason": "not in the manifest"})
             continue
         selected = selection.get(path)
         if selected is None:
             failed.append({"path": path, "reason": "not in the selection (files.jsonl)"})
+            continue
+        if torrent_size != selected[0]:
+            failed.append({"path": path, "reason": f"{torrent_size} bytes in the torrent, {selected[0]} selected"})
             continue
         current = fresh.get(path)
         if current is None:

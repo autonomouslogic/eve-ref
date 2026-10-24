@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check-delete: step 12 of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
+check-delete: step 11 of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
 listing of the bucket -- never trusting 10-delete's own result.
 
 DRAFT. Read-only on the bucket.
@@ -121,7 +121,7 @@ def main():
 
 def find_unexpectedly_gone(original, deleted_paths, failed_paths, fresh):
     """
-    Find-time paths (01-find's listing.jsonl.gz) that are neither in the delete set nor the failed-at-step-08 list,
+    Find-time paths (01-find's listing.jsonl.gz) that are neither in the delete set nor the failed-at-step-09 list,
     but are missing from a fresh listing anyway: something other than this workflow's confirmed delete set removed
     them. Sorted for a stable, readable sample.
     """

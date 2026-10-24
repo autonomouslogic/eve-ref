@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-load: step 4 of the EVE Ref Deep Archive workflow. Copies exactly the files find selected into the torrent's content
+load: step 03 of the EVE Ref Deep Archive workflow. Copies exactly the files find selected into the torrent's content
 folder, SEED_DIR/<ID>/, from the local copy (LOCAL_COPY_DIR, optional) where it has them and from the data site's
 bucket otherwise, keeping each file's modification time. Then checks the result and computes the SHA-256 manifest the
 rest of the workflow is built on.
@@ -30,7 +30,7 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
    in NOTES.md before going on.
 8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 04-make-torrent and
-   08-check-before-delete use it.
+   09-check-before-delete use it.
 
 Writes, in SCRATCH_DIR:
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make-torrent: step 5 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
+make-torrent: step 04 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
 v1+v2 .torrent and its file list, and checks both.
 
 DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.md and SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.

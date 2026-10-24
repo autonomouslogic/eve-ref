@@ -302,41 +302,68 @@ class ChooseCutoffTest(unittest.TestCase):
         self.assertEqual(cut.too_new, [0, 0])
         self.assertEqual(cut.reason, "age")
 
-    def test_cutoff_is_the_day_before_the_date_over_the_byte_limit(self):
+    def test_byte_limit_is_soft_the_date_reaching_it_is_included(self):
         candidates = [
             obj("d/a.json", size=400, modified=(2022, 1, 1)),
             obj("d/b.json", size=400, modified=(2022, 1, 5)),
             obj("d/c.json", size=400, modified=(2022, 1, 9)),
+            obj("d/d.json", size=400, modified=(2022, 1, 12)),
         ]
         cut = self.choose(candidates, max_bytes=1000)
         self.assertEqual(cut.reason, "bytes")
         self.assertEqual(cut.over_date, date(2022, 1, 9))
-        self.assertEqual(cut.cutoff, date(2022, 1, 8))
+        self.assertEqual(cut.cutoff, date(2022, 1, 9))
         self.assertEqual((cut.over_files, cut.over_bytes), (3, 1200))
         self.assertEqual(cut.over_day, (1, 400))
 
-    def test_a_date_is_never_split(self):
+    def test_byte_limit_reached_exactly(self):
+        candidates = [
+            obj("d/a.json", size=500, modified=(2022, 1, 1)),
+            obj("d/b.json", size=500, modified=(2022, 1, 2)),
+            obj("d/c.json", size=500, modified=(2022, 1, 3)),
+        ]
+        cut = self.choose(candidates, max_bytes=1000)
+        self.assertEqual(cut.reason, "bytes")
+        self.assertEqual(cut.cutoff, date(2022, 1, 2))
+
+    def test_byte_limit_takes_the_whole_date(self):
         candidates = [
             obj("d/a.json", size=400, modified=(2022, 1, 1)),
             obj("d/b.json", size=400, modified=(2022, 1, 2)),
             obj("d/c.json", size=400, modified=(2022, 1, 2)),
         ]
         cut = self.choose(candidates, max_bytes=1000)
-        self.assertEqual(cut.cutoff, date(2022, 1, 1))
+        self.assertEqual(cut.cutoff, date(2022, 1, 2))
         self.assertEqual(cut.over_day, (2, 800))
 
-    def test_first_date_alone_over_a_limit_has_no_cutoff(self):
+    def test_first_date_alone_over_the_byte_limit_is_taken(self):
         cut = self.choose([obj("d/a.json", size=2000, modified=(2022, 1, 1))], max_bytes=1000)
-        self.assertIsNone(cut.cutoff)
+        self.assertEqual(cut.cutoff, date(2022, 1, 1))
         self.assertEqual(cut.reason, "bytes")
+
+    def test_first_date_alone_over_the_torrent_limit_has_no_cutoff(self):
+        cut = self.choose([obj("d/a.json", size=1, modified=(2022, 1, 1))], max_torrent_bytes=1)
+        self.assertIsNone(cut.cutoff)
+        self.assertEqual(cut.reason, "torrent")
         self.assertEqual(cut.over_date, date(2022, 1, 1))
 
-    def test_torrent_size_limit(self):
+    def test_torrent_size_limit_is_hard_the_date_over_it_is_left_out(self):
         candidates = [obj(f"d/file-{i:03d}.json", size=1, modified=(2022, 1, 1 + i)) for i in range(20)]
         cut = self.choose(candidates, max_torrent_bytes=find.TorrentSize(find.PIECE_SIZE).bytes + 1000)
         self.assertEqual(cut.reason, "torrent")
         self.assertEqual(cut.cutoff, cut.over_date - datetime.timedelta(days=1))
         self.assertGreater(cut.over_date, date(2022, 1, 1))
+
+    def test_torrent_limit_wins_over_byte_limit_on_the_same_date(self):
+        candidates = [
+            obj("d/a.json", size=400, modified=(2022, 1, 1)),
+            obj("d/b.json", size=800, modified=(2022, 1, 5)),
+        ]
+        one_file = find.TorrentSize(find.PIECE_SIZE)
+        one_file.add("d/a.json", 400)
+        cut = self.choose(candidates, max_bytes=1000, max_torrent_bytes=one_file.bytes)
+        self.assertEqual(cut.reason, "torrent")
+        self.assertEqual(cut.cutoff, date(2022, 1, 4))
 
     def test_index_json_counts_on_its_folders_first_date(self):
         indexes = {"d": obj("d/index.json", size=500, modified=(2026, 1, 1))}
@@ -344,11 +371,12 @@ class ChooseCutoffTest(unittest.TestCase):
             obj("d/a.json", size=400, modified=(2022, 1, 1)),
             obj("e/b.json", size=400, modified=(2022, 1, 5)),
         ]
-        # Without the index: 800 bytes, fits. With it, counted on 2022-01-01: 1300, over on 2022-01-05.
+        # Without the index: 800 bytes, under the limit. With it, counted on 2022-01-01: 1300, reached on 2022-01-05.
         cut = self.choose(candidates, indexes, max_bytes=1000)
+        self.assertEqual(cut.reason, "bytes")
         self.assertEqual(cut.over_date, date(2022, 1, 5))
         self.assertEqual(cut.over_bytes, 1300)
-        self.assertEqual(cut.cutoff, date(2022, 1, 4))
+        self.assertEqual(cut.cutoff, date(2022, 1, 5))
 
     def test_index_json_counted_once_per_folder(self):
         indexes = {"d": obj("d/index.json", size=100)}

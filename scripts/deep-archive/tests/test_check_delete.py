@@ -1,5 +1,5 @@
 """
-Tests for 10-check-delete.py: catching a find-time path that disappeared without being part of the confirmed
+Tests for 11-check-delete.py: catching a find-time path that disappeared without being part of the confirmed
 delete set (find_unexpectedly_gone), and the stale-index-folder scan (find_index_only_folders).
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
@@ -12,7 +12,7 @@ import unittest
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
-SPEC = importlib.util.spec_from_file_location("check_delete", os.path.join(HERE, "..", "10-check-delete.py"))
+SPEC = importlib.util.spec_from_file_location("check_delete", os.path.join(HERE, "..", "11-check-delete.py"))
 check_delete = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(check_delete)
 
@@ -29,14 +29,14 @@ class FindUnexpectedlyGoneTest(unittest.TestCase):
         self.assertEqual(check_delete.find_unexpectedly_gone(original, {"a.csv"}, set(), fresh), [])
 
     def test_failed_paths_are_allowed_to_be_gone(self):
-        # 10-check-delete's own "Failed paths untouched" section already reports this case; find_unexpectedly_gone
+        # 11-check-delete's own "Failed paths untouched" section already reports this case; find_unexpectedly_gone
         # doesn't double-report it.
         original = {"a.csv", "b.csv"}
         fresh = {"b.csv"}
         self.assertEqual(check_delete.find_unexpectedly_gone(original, set(), {"a.csv"}, fresh), [])
 
     def test_catches_a_path_removed_outside_the_delete_set(self):
-        # Simulates the bug this check exists for: 09-delete's rclone call only ever takes an explicit file list, so
+        # Simulates the bug this check exists for: 10-delete's rclone call only ever takes an explicit file list, so
         # this is what would catch it deleting (or something else removing) a path that was never confirmed.
         original = {"a.csv", "b.csv", "c.csv"}
         fresh = {"b.csv"}  # a.csv and c.csv are both gone

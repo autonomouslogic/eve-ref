@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-preflight: step 1 of the EVE Ref Deep Archive workflow. Basic checks before a workflow starts.
+preflight: step 00 of the EVE Ref Deep Archive workflow. Basic checks before a workflow starts.
 
 DRAFT. Read-only, apart from its own completion file.
 
@@ -12,7 +12,7 @@ directory must be empty.
 
 Checks:
 - the settings are there: SCRATCH_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
-  (environment or torrents.env, see lib/workflow.py);
+  (environment or torrents.env, see lib/workflow.py); settings the environment overrides are named (not a failure);
 - SCRATCH_DIR and SEED_DIR exist (created, with their parents, if missing) and are writable;
 - SCRATCH_DIR is empty (log/ aside): one workflow per scratch directory;
 - SEED_DIR has room for the largest possible torrent (MAX_BYTES);
@@ -35,6 +35,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
+    ENV_OVERRIDES,
     MAX_BYTES,
     Workflow,
     data_remote,
@@ -45,6 +46,7 @@ from workflow import (  # noqa: E402
     join,
     load_env,
     local_copy_dir,
+    lock,
     ok,
     qbittorrent_save_path,
     qbittorrent_settings,
@@ -77,12 +79,16 @@ def main():
     scratch, scratch_created, scratch_problem = prepare_dir("SCRATCH_DIR")
     scratch_entries = sorted(e for e in os.listdir(scratch) if e != "log") if scratch else None
     if scratch:
+        lock(scratch)
         start_log(scratch, STEP)
     else:
         print(f"# 🚀 00-{STEP}")
 
     section("Settings")
     print(f"Settings from {env_file}" if env_file else "Settings from the environment only (no torrents.env)")
+    if ENV_OVERRIDES:
+        # Names only: some of them are secrets.
+        print(f"Note: set in the environment, overriding torrents.env: {', '.join(sorted(ENV_OVERRIDES))}")
 
     section("Directories")
     if scratch is None:

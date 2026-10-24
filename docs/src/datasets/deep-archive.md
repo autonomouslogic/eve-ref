@@ -21,6 +21,13 @@ The torrent and its seeders become their only remaining source.
 * `ccp/`, CCP/FC's own reference data
 * Any `*-latest*` files
 
+## Torrents
+Newest first. The [`deep-archive/`](https://data.everef.net/deep-archive/) folder and the RSS feed always have the
+complete list.
+
+| Torrent | v1 info-hash | v2 info-hash | Magnet |
+|---|---|---|---|
+
 ## The RSS Feed
 Archiving is done on an ad-hoc basis.
 Whenever a new archive has been prepared, it will be added to [everef-deep-archive.xml](https://data.everef.net/deep-archive/everef-deep-archive.xml).
