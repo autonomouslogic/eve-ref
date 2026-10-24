@@ -50,6 +50,7 @@ import com.autonomouslogic.everef.model.MarketHistoryEntryTest;
 import com.autonomouslogic.everef.mvstore.MVStoreTest;
 import com.autonomouslogic.everef.service.FuzzworkMarketServiceTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
+import com.autonomouslogic.everef.util.MockDataIndexHelperModule;
 import com.autonomouslogic.everef.util.RefDataUtilTest;
 import dagger.Component;
 import javax.inject.Singleton;
@@ -62,9 +63,9 @@ import javax.inject.Singleton;
 			MockS3Module.class,
 			TestOkHttpModule.class,
 			MockDataIndexModule.class,
+			MockDataIndexHelperModule.class,
 			MockLocationPopulatorModule.class,
 			RefDataApiModule.class,
-			GenericMockModule.class,
 			MockEsiAuthHelperModule.class,
 			ExecutorServiceModule.class
 		})
