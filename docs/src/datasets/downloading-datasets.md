@@ -21,6 +21,10 @@ As an example, to download all market orders from 2023 using concurrent download
 rclone copy -v --checkers 2 --transfers 2 --multi-thread-streams 0 --size-only --http-url https://data.everef.net :http:/market-orders/history/2023 pathtocopyto
 ```
 
+Use `rclone copy`, not `rclone sync`.
+Old data is periodically moved off `data.everef.net` into the [Deep Archive](deep-archive.md), and `sync` would delete your local copies of those files when they disappear from the site.
+`copy` only ever adds and updates files.
+
 ## Download with rclone on Docker
 To download data with `rclone` on Docker instead, use the following command:
 ```shell
