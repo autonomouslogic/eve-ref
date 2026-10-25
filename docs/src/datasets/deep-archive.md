@@ -5,7 +5,7 @@ The [Deep Archive](https://data.everef.net/deep-archive/) moves old data off
 ## Published Torrents
 Below is a list of published torrents.
 
-ℹ️ **To help seed it**, add [the RSS feed](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml) to
+ℹ️ **To help seed this historical EVE Online data**, add the [RSS feed](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml) to
 your torrent client and configure it for automatic downloads.
 
 | Torrent                                                                                                                     | Files                                                                                                               | Size     | Magnet link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
