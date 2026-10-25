@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-check-site: step 14 of the EVE Ref Deep Archive workflow, and the last scripted one. Checks what data.everef.net actually
+check-site: step 15 of the EVE Ref Deep Archive workflow, and the last scripted one. Checks what data.everef.net actually
 serves after the delete and the full DataIndex run, over HTTPS (PLAN 2.16).
 
 DRAFT. Read-only, over HTTPS.
 
-    14-check-site.py
+    15-check-site.py
 
-Needs 12-check-delete's completion file, and refuses to run twice (lib/workflow.py). Run this only after the
+Needs 13-check-delete's completion file, and refuses to run twice (lib/workflow.py). Run this only after the
 manual "Full DataIndex" step (README) has finished.
 
 Per sampled URL (a spread of deleted files across datasets and months, every deleted index.json, PLAN 2.16):
@@ -16,8 +16,8 @@ Per sampled URL (a spread of deleted files across datasets and months, every del
   accepted).
 - Anything else (200 from the origin, 5xx, ...): fail.
 
-Also checks deep-archive/ lists the torrent, the .txt and the feed, and that a sample of parent folders'
-index.json no longer mention a deleted file.
+Also checks deep-archive/ lists the torrent, the .txt, the torrent's signature and the feed, and that a sample of
+parent folders' index.json no longer mention a deleted file.
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR
@@ -129,7 +129,7 @@ def check_deep_archive_listing(base, torrent_id):
     except (urllib.error.HTTPError, urllib.error.URLError) as e:
         return [f"{url}: {e}"]
     names = index_file_names(entries)
-    expected = {f"{torrent_id}.torrent", f"{torrent_id}.txt", f"{torrent_id}-README.md", "everef-deep-archive.xml"}
+    expected = {f"{torrent_id}.torrent", f"{torrent_id}.txt", f"{torrent_id}.torrent.minisig", "everef-deep-archive.xml"}
     missing = expected - names
     if missing:
         return [f"{url}: missing {sorted(missing)}"]

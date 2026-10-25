@@ -179,41 +179,29 @@ class TorrentIdTest(unittest.TestCase):
 
 
 class LoadPublishedListsTest(unittest.TestCase):
-    """The cutoff date no longer comes from the ID: it's read back from each torrent's published README."""
+    """published maps path -> torrent ID, from each torrent's published .txt file list. No README is read: 01-find
+    never needs an earlier torrent's cutoff back (it picks its own fresh from this run's candidates)."""
 
     def load(self, listing, texts):
         with mock.patch.object(find, "rclone", side_effect=lambda *args: texts[args[-1]]):
             return quietly(find.load_published_lists, "remote", listing)
 
-    def test_reads_cutoff_from_readme(self):
-        torrent_id = "everef-eve-online-deep-archive-00"
-        listing = [obj(f"deep-archive/{torrent_id}.txt"), obj(f"deep-archive/{torrent_id}-README.md")]
-        texts = {
-            f"remote/deep-archive/{torrent_id}.txt": "a/b.json\n",
-            f"remote/deep-archive/{torrent_id}-README.md": (
-                "This is an EVE Ref EVE Online Deep Archive torrent dated up to 2023-04-11.\n"
-            ),
-        }
-        published, cutoffs = self.load(listing, texts)
-        self.assertEqual(published, {"a/b.json": torrent_id})
-        self.assertEqual(cutoffs, {torrent_id: date(2023, 4, 11)})
-
-    def test_missing_readme_fails(self):
+    def test_reads_published_paths(self):
         torrent_id = "everef-eve-online-deep-archive-00"
         listing = [obj(f"deep-archive/{torrent_id}.txt")]
         texts = {f"remote/deep-archive/{torrent_id}.txt": "a/b.json\n"}
+        published = self.load(listing, texts)
+        self.assertEqual(published, {"a/b.json": torrent_id})
+
+    def test_malformed_list_fails(self):
+        torrent_id = "everef-eve-online-deep-archive-00"
+        listing = [obj(f"deep-archive/{torrent_id}.txt")]
+        texts = {f"remote/deep-archive/{torrent_id}.txt": "not sorted\na/b.json\n"}
         with self.assertRaises(SystemExit):
             self.load(listing, texts)
 
-    def test_readme_without_a_cutoff_sentence_fails(self):
-        torrent_id = "everef-eve-online-deep-archive-00"
-        listing = [obj(f"deep-archive/{torrent_id}.txt"), obj(f"deep-archive/{torrent_id}-README.md")]
-        texts = {
-            f"remote/deep-archive/{torrent_id}.txt": "a/b.json\n",
-            f"remote/deep-archive/{torrent_id}-README.md": "No cutoff sentence here.\n",
-        }
-        with self.assertRaises(SystemExit):
-            self.load(listing, texts)
+    def test_no_published_lists(self):
+        self.assertEqual(self.load([], {}), {})
 
 
 class YearsBeforeTest(unittest.TestCase):
@@ -227,8 +215,8 @@ class YearsBeforeTest(unittest.TestCase):
 class ClassifyAllTest(unittest.TestCase):
     EXCLUDES = ["market-history"]
 
-    def classify(self, listing, taken=None, cutoffs=None):
-        return quietly(find.classify_all, listing, self.EXCLUDES, taken or {}, cutoffs or {})
+    def classify(self, listing, taken=None):
+        return quietly(find.classify_all, listing, self.EXCLUDES, taken or {})
 
     def test_candidates_sorted_by_date_then_modification_time_then_path(self):
         listing = [
@@ -265,42 +253,22 @@ class ClassifyAllTest(unittest.TestCase):
         self.assertEqual([o.path for o in scan.candidates], ["d/a.json"])
         self.assertEqual(scan.empty, ["d/a.json"])
 
-    def test_published_version_is_taken(self):
+    def test_published_path_still_on_site_is_an_error(self):
+        # No cutoff cleverness: a non-index path a published torrent already holds, still a candidate, is a bug.
         torrent_id = "everef-eve-online-deep-archive-00"
-        cutoffs = {torrent_id: date(2023, 4, 11)}
-        scan = self.classify([obj("d/a.json", size=7, modified=(2023, 4, 11))], {"d/a.json": torrent_id}, cutoffs)
+        scan = self.classify([obj("d/a.json", size=7)], {"d/a.json": torrent_id})
         self.assertEqual(scan.candidates, [])
-        self.assertEqual(scan.taken[torrent_id], [1, 7])
+        self.assertEqual(scan.already_archived, [f"d/a.json ({torrent_id})"])
 
-    def test_file_changed_after_its_torrent_is_a_candidate_again(self):
+    def test_published_index_json_is_not_an_error(self):
+        # DataIndex rewrites index.json every run, so the same folder's index.json legitimately recurs across
+        # several torrents' file lists as it's archived in parts: not a bug.
         torrent_id = "everef-eve-online-deep-archive-00"
-        cutoffs = {torrent_id: date(2023, 4, 11)}
-        scan = self.classify([obj("d/a.json", size=7, modified=(2023, 4, 12))], {"d/a.json": torrent_id}, cutoffs)
+        taken = {"d/index.json": torrent_id}
+        scan = self.classify([obj("d/index.json"), obj("d/a.json")], taken)
+        self.assertEqual(scan.already_archived, [])
+        self.assertIn("d", scan.indexes)
         self.assertEqual([o.path for o in scan.candidates], ["d/a.json"])
-        self.assertEqual(scan.changed[torrent_id], [1, 7])
-        self.assertEqual(scan.changed_paths, {"d/a.json"})
-
-    def test_taken_is_by_modification_date_not_name_date(self):
-        # Dated 2020 by its name, but uploaded again after the torrent's cutoff: changed.
-        torrent_id = "everef-eve-online-deep-archive-00"
-        cutoffs = {torrent_id: date(2023, 4, 11)}
-        scan = self.classify(
-            [obj("d/a-2020-01-01.json", modified=(2024, 1, 1))], {"d/a-2020-01-01.json": torrent_id}, cutoffs
-        )
-        self.assertEqual([o.path for o in scan.candidates], ["d/a-2020-01-01.json"])
-        self.assertEqual(scan.changed[torrent_id][0], 1)
-
-    def test_published_index_json(self):
-        torrent_id = "everef-eve-online-deep-archive-00"
-        cutoffs = {torrent_id: date(2023, 4, 11)}
-        taken = {"d/index.json": torrent_id, "e/index.json": torrent_id}
-        listing = [obj("d/index.json", modified=(2023, 1, 1)), obj("e/index.json", modified=(2024, 1, 1))]
-        scan = self.classify(listing, taken, cutoffs)
-        self.assertEqual(scan.taken_indexes, {"d"})
-        self.assertNotIn("d", scan.indexes)
-        # Rewritten by DataIndex since: set aside as the folder's index, not counted as changed.
-        self.assertIn("e", scan.indexes)
-        self.assertEqual(scan.changed[torrent_id], [0, 0])
 
 
 class FolderIndexesTest(unittest.TestCase):

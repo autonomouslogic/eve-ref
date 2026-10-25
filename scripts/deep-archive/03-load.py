@@ -3,8 +3,8 @@
 load: step 03 of the EVE Ref Deep Archive workflow. Copies exactly the files find selected into the torrent's content
 folder, SEED_DIR/<ID>/, from the local copy (LOCAL_COPY_DIR, optional) where it has them and from the data site's
 bucket otherwise, keeping each file's modification time. Then checks the result and computes the SHA-256 manifest the
-rest of the workflow is built on, and the standard `sha256sum`-format checksum file published alongside the torrent
-(step 04, sign, signs it).
+rest of the workflow is built on, and the standard `sha256sum`-format checksum file that ends up inside the torrent
+(04-sign-sha256 signs it; 05-make-torrent copies both into the content folder).
 
 DRAFT. Reads the bucket and the local copy; writes only to SEED_DIR/<ID>/ and SCRATCH_DIR.
 
@@ -31,11 +31,11 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
    in NOTES.md before going on.
 8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 05-make-torrent and
-   10-check-before-delete use it.
+   11-check-before-delete use it.
 9. Write SCRATCH_DIR/<ID>.sha256 from the manifest: standard `sha256sum` format ("<hex>  <path>", sorted by path,
-   "\n" line endings), one line per file. Published next to <ID>.txt in deep-archive/ (08-publish), outside the
-   torrent, so it lets someone check a file they got another way (e.g. a mirror) without a torrent client. 04-sign
-   signs it with minisign.
+   "\n" line endings), one line per file. Stays in SCRATCH_DIR for now; 04-sign-sha256 signs it with minisign, and
+   05-make-torrent copies both into the torrent's content folder, so they end up inside the torrent, next to the
+   README. Neither is published standalone: checking a file found another way (e.g. a mirror) needs the torrent.
 10. Run `sha256sum -c` on the file just written, from the content folder: an independent check, with a different
     tool, of the hashes just computed in Python.
 

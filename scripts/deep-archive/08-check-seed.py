@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-check-seed: step 07 of the EVE Ref Deep Archive workflow. Checks qBittorrent's own state for the torrent, from
-scratch, never trusting 06-seed's own result, then downloads the torrent's README through BitTorrent with aria2c,
+check-seed: step 08 of the EVE Ref Deep Archive workflow. Checks qBittorrent's own state for the torrent, from
+scratch, never trusting 07-seed's own result, then downloads the torrent's README through BitTorrent with aria2c,
 as a separate client, to show the torrent can actually be downloaded.
 
 DRAFT. Read-only on qBittorrent. Writes only a throwaway folder, SCRATCH_DIR/test-download/, deleted at the end.
 
-    07-check-seed.py
+    08-check-seed.py
 
-Needs 06-seed's completion file, and refuses to run twice (lib/workflow.py).
+Needs 07-seed's completion file, and refuses to run twice (lib/workflow.py).
 
 qBittorrent (Web API):
 - 100% progress with **0 bytes downloaded** (any download means the files on disk don't match the torrent: stop

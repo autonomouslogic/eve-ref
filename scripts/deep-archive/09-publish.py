@@ -1,35 +1,33 @@
 #!/usr/bin/env python3
 """
-publish: step 08 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent, <ID>.txt, <ID>-README.md, <ID>.sha256
-and <ID>.sha256.minisig to the bucket's deep-archive/, rebuilds everef-deep-archive.xml from every published
-.torrent, and checks what data.everef.net serves for all of them.
+publish: step 09 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent, <ID>.txt and <ID>.torrent.minisig to
+the bucket's deep-archive/, rebuilds everef-deep-archive.xml from every published .torrent, and checks what
+data.everef.net serves for all of them.
 
 DRAFT. Shows the targets and asks before each upload (lib/workflow.py, "Show, then ask"). Writes to the data bucket.
 
-    08-publish.py
+    09-publish.py
 
-Needs 07-check-seed's completion file, and refuses to run twice (lib/workflow.py).
+Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py).
 
-1. Upload <ID>.torrent, <ID>.txt, <ID>-README.md, <ID>.sha256 and <ID>.sha256.minisig to deep-archive/ with the
-   right Content-Type (the README comes from SEED_DIR/<ID>/, the torrent content folder; the others from
-   SCRATCH_DIR). The README is also published here on its own, not just inside the torrent, since it's now the
-   only place a torrent's cutoff date is recorded (01-find reads it back to tell what a published torrent already
-   holds). The checksum file and its signature (03-load, 04-sign) let someone verify a file against the minisign
-   key published at /.well-known/minisign.pub without a torrent client. Never overwrites: a file already published
-   must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
+1. Upload <ID>.torrent, <ID>.txt and <ID>.torrent.minisig to deep-archive/ with the right Content-Type (all three
+   from SCRATCH_DIR). The README, the checksum file and its signature stay inside the torrent only -- they're never
+   published standalone. <ID>.torrent.minisig (06-sign-torrent) lets someone verify the .torrent file itself,
+   against the minisign key published at /.well-known/minisign.pub, before loading it into a client. Never
+   overwrites: a file already published must be byte-identical to the local one (an earlier attempt that failed
+   later), and is then skipped.
 2. Rebuild everef-deep-archive.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth (PLAN 2.5). Each torrent
    is read with libtorrent: name (the ID), creation date, v1/v2 info-hashes, data
-   file count and bytes (the README excluded), trackers. Magnet links carry the torrent's first MAGNET_TRACKERS
-   trackers; newest first.
+   file count and bytes (the README, checksum file and signature excluded), trackers. Magnet links carry the
+   torrent's first MAGNET_TRACKERS trackers; newest first.
 3. Show the diff against what's published, and ask. Before uploading, save the published everef-deep-archive.xml to
    SCRATCH_DIR/feed-backup/feed-<UTC time>.xml.
-4. Check over HTTPS, never trusting the uploads' own result: <ID>.torrent, <ID>.txt, <ID>-README.md, <ID>.sha256
-   and <ID>.sha256.minisig all return 200 with the right Content-Type and exactly the local bytes;
-   everef-deep-archive.xml is served as application/rss+xml,
-   is valid XML and has an <item> with this torrent's v1 info-hash as its <guid>. Cloudflare may serve the old feed
-   for up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
-5. Print this torrent's URL, v1 and v2 info-hashes, and full magnet link, for the next step (09, update-docs) to copy
+4. Check over HTTPS, never trusting the uploads' own result: <ID>.torrent, <ID>.txt and <ID>.torrent.minisig all
+   return 200 with the right Content-Type and exactly the local bytes; everef-deep-archive.xml is served as
+   application/rss+xml, is valid XML and has an <item> with this torrent's v1 info-hash as its <guid>. Cloudflare
+   may serve the old feed for up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
+5. Print this torrent's URL, v1 and v2 info-hashes, and full magnet link, for the next step (10, update-docs) to copy
    into the docs site's deep-archive.md page.
 
 On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up (manual, README).
@@ -37,7 +35,7 @@ On the first workflow, also add the feed to a qBittorrent RSS reader and check t
 Writes, in SCRATCH_DIR:
 
     feed-backup/feed-<UTC time>.xml   the everef-deep-archive.xml published before this run (none on the first workflow)
-    08-publish.done                   completion file
+    09-publish.done                   completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
@@ -86,17 +84,12 @@ MAGNET_TRACKERS = 10
 UPLOADS = (
     ("{id}.torrent", "application/x-bittorrent"),
     ("{id}.txt", "text/plain; charset=utf-8"),
-    ("{id}-README.md", "text/markdown; charset=utf-8"),
-    ("{id}.sha256", "text/plain; charset=utf-8"),
-    ("{id}.sha256.minisig", "text/plain; charset=utf-8"),
+    ("{id}.torrent.minisig", "text/plain; charset=utf-8"),
 )
 
 
-def source_path(workflow, torrent_id, name):
-    """Where an upload's local copy lives: the README is in SEED_DIR/<ID>/ (the torrent content folder, written by
-    05-make-torrent); the .torrent, .txt, .sha256 and .sha256.minisig are all in SCRATCH_DIR."""
-    if name.endswith("-README.md"):
-        return os.path.join(workflow.seed_dir, torrent_id, name)
+def source_path(workflow, name):
+    """Where an upload's local copy lives: all three (.torrent, .txt, .torrent.minisig) are in SCRATCH_DIR."""
     return os.path.join(workflow.scratch_dir, name)
 
 
@@ -145,16 +138,16 @@ def main():
     ok(f"Publish OK for {torrent_id}")
 
 
-# Upload <ID>.torrent, <ID>.txt and <ID>-README.md.
+# Upload <ID>.torrent, <ID>.txt and <ID>.torrent.minisig.
 
 
 def upload_torrent(workflow, torrent_id, deep_archive):
-    """Uploads the .torrent, .txt and README, never overwriting. Returns the remote paths uploaded by this run."""
+    """Uploads the .torrent, .txt and .torrent.minisig, never overwriting. Returns the remote paths uploaded by this run."""
     section("Torrent and file list: targets")
     uploads = []
     for name_fmt, content_type in UPLOADS:
         name = name_fmt.format(id=torrent_id)
-        local = source_path(workflow, torrent_id, name)
+        local = source_path(workflow, name)
         if not os.path.isfile(local):
             fail(f"Not found: {local}")
         remote_path = join(deep_archive, name)
@@ -272,7 +265,7 @@ def read_torrent(deep_archive, tmp_dir, name):
         fail(f"{name}: torrent name {torrent_id!r} isn't a valid torrent ID")
     hashes = ti.info_hashes()
     storage = ti.files()
-    root_names = {f"{torrent_id}-README.md"}
+    root_names = {f"{torrent_id}-README.md", f"{torrent_id}.sha256", f"{torrent_id}.sha256.minisig"}
     prefix = torrent_id + "/"
     files = 0
     data_bytes = 0
@@ -392,7 +385,7 @@ def check_published(workflow, torrent_id, v1_hash):
         problems = []
         for name_fmt, content_type in UPLOADS:
             name = name_fmt.format(id=torrent_id)
-            problems += check_file(f"{base}/{name}", source_path(workflow, torrent_id, name), content_type)
+            problems += check_file(f"{base}/{name}", source_path(workflow, name), content_type)
         status, headers, body = fetch(f"{base}/everef-deep-archive.xml")
         problems += check_status(status, headers, body, "everef-deep-archive.xml", "application/rss+xml")
         if body:

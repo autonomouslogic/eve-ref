@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-delete: step 11 of the EVE Ref Deep Archive workflow. The permanent step: deletes exactly the confirmed delete
-set from 10-check-before-delete, then cleans up index files left in folders that delete emptied.
+delete: step 12 of the EVE Ref Deep Archive workflow. The permanent step: deletes exactly the confirmed delete
+set from 11-check-before-delete, then cleans up index files left in folders that delete emptied.
 
 DRAFT. Dry run by default; only --execute writes to the bucket, and only after typing the torrent ID back.
 
-    11-delete.py              # dry run: shows the delete set, changes nothing, doesn't complete the step
-    11-delete.py --execute    # re-checks against a fresh listing, asks, then deletes
+    12-delete.py              # dry run: shows the delete set, changes nothing, doesn't complete the step
+    12-delete.py --execute    # re-checks against a fresh listing, asks, then deletes
 
-Needs 10-check-before-delete's completion file. The dry run can be run any number of times; only --execute
+Needs 11-check-before-delete's completion file. The dry run can be run any number of times; only --execute
 completes the step, and it refuses to run twice (lib/workflow.py).
 
 1. Re-checks every file in delete-set.json against a **fresh** listing (PLAN 2.14): a file that changed since
-   10-check-before-delete ran is dropped from this run (it stays on the site; Appendix E), not re-included. A file
+   11-check-before-delete ran is dropped from this run (it stays on the site; Appendix E), not re-included. A file
    already gone (an earlier --execute that failed part way) counts as deleted, so rerunning finishes the job.
 2. `rclone delete --files-from` with the confirmed list -- never by prefix or pattern. B2 soft-deletes
    (hard_delete is fixed to false, lib/workflow.py): treat this as permanent anyway (PLAN 2.14).
@@ -22,7 +22,7 @@ completes the step, and it refuses to run twice (lib/workflow.py).
 Writes, in SCRATCH_DIR:
 
     deleted.jsonl           every deleted path, with its size and modification time, kind "data" or "index"
-    11-delete.done          completion file (only with --execute)
+    12-delete.done          completion file (only with --execute)
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
@@ -92,7 +92,7 @@ def main():
         for g in gone[:LOG_SAMPLE]:
             print(f"  {g['path']}")
     if skipped:
-        print(f"Changed since 10-check-before-delete, staying on site: {fmt_count(len(skipped))}")
+        print(f"Changed since 11-check-before-delete, staying on site: {fmt_count(len(skipped))}")
         for s in skipped[:LOG_SAMPLE]:
             print(f"  {s['path']}: {s['reason']}")
 

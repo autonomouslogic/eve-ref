@@ -211,15 +211,26 @@ Everything else is in scope. Using a denylist means:
 - `fuzzwork/ordersets` **is** in scope. Its sync command gets a cutoff (2.18), so it doesn't re-upload deleted
   files. `ccp/mer` isn't (excluded with `ccp/`), so `SyncMer` needs no change.
 
-**No version of a file lands in two torrents.** `01-find` reads every published `<ID>.txt`. A listed path still on
-the site with a modification date on or before that torrent's cutoff (read from its README, 2.3; no longer in its
-ID) is the version the torrent holds: it's skipped, and flagged, since its delete should have removed it. A later
-modification date means the file
-was uploaded again after it was archived, so it's a candidate like any other and goes into a later torrent. The same
-path can be in several torrents, one version each. This check uses the modification date, not the file's date: a
-date from the name stays the same when the file is uploaded again. The catch: a file the torrent selected by a date in
-its name, but modified after the cutoff, also looks changed. If its delete didn't happen, it's selected again (and
-flagged as changed); a duplicate rather than a lost version.
+**No version of a file lands in two torrents.** `01-find` reads every published `<ID>.txt`. A listed non-index path
+still on the site is a hard error, full stop -- not cleverness about modification dates and cutoffs.
+
+**Simplified (2026-10-25):** the cutoff-comparison dance described below (now struck through) was replaced with a
+flat rule: if `01-find`'s scan would select a path that's already in a published torrent's file list, that's a bug
+(an earlier delete that didn't happen, or the path reappearing), and `01-find` aborts listing every such path,
+rather than guessing whether it changed and silently re-selecting or re-skipping it. `index.json` is exempt: since
+`DataIndex` rewrites it on every run regardless of the underlying data, the same folder's `index.json` legitimately
+recurs across several torrents' file lists as a folder is archived in parts, and that's not a bug. This also means
+`01-find` never needs to read an earlier torrent's cutoff back from anywhere (its own cutoff is always picked fresh
+from this run's own candidates), so the README no longer needs to be published standalone just for that (2.6).
+
+~~A listed path still on the site with a modification date on or before that torrent's cutoff (read from its
+README, 2.3; no longer in its ID) is the version the torrent holds: it's skipped, and flagged, since its delete
+should have removed it. A later modification date means the file was uploaded again after it was archived, so it's
+a candidate like any other and goes into a later torrent. The same path can be in several torrents, one version
+each. This check uses the modification date, not the file's date: a date from the name stays the same when the file
+is uploaded again. The catch: a file the torrent selected by a date in its name, but modified after the cutoff, also
+looks changed. If its delete didn't happen, it's selected again (and flagged as changed); a duplicate rather than a
+lost version.~~
 
 **Risk of selecting by date:** a file that is still current but simply hasn't changed in two years
 would be archived and deleted from the site, e.g. a reference file a tool downloads by a fixed URL (`ccp/iec`,
@@ -234,9 +245,9 @@ list, files inside the torrent, seed folder.
 **(Revised 2026-10-24.) The ID is sequential, not the cutoff date:** `everef-eve-online-deep-archive-NN`, a
 two-digit sequence number starting at `00`. `00-preflight` lists `deep-archive/`'s published `.torrent` files and
 picks one past the highest sequence number found (`00` if there are none). This decouples the ID from the cutoff
-date, so the torrent's cutoff is instead stated in its own README (2.6): the sentence `01-find` reads back
-(`README_CUTOFF_RE`, `lib/workflow.py`) to tell what a published torrent already holds. The README is now published
-to `deep-archive/<ID>-README.md` as well as inside the torrent, since it's the only place the cutoff is recorded.
+date, so the torrent's cutoff is instead stated in its own README, inside the torrent only (2.6). **Revised again
+(2026-10-25):** the README is no longer published standalone -- `01-find` never needed the cutoff back for any
+other reason once the simplified check above shipped, so there's nothing left reading `deep-archive/<ID>-README.md`.
 
 | Case | ID |
 |---|---|
@@ -479,17 +490,17 @@ folder with the same name in this repo holds the scripts and operator docs; it i
 deep-archive/                       # at the root of data.everef.net
   everef-deep-archive.xml                          # RSS: all torrents
   everef-eve-online-deep-archive-00.torrent
-  everef-eve-online-deep-archive-00.txt      # every data file in the torrent, one site path per line
-  everef-eve-online-deep-archive-00-README.md # its cutoff date (2.3), same file as inside the torrent
+  everef-eve-online-deep-archive-00.txt         # every data file in the torrent, one site path per line
+  everef-eve-online-deep-archive-00.torrent.minisig # signature of the .torrent file itself (2.6)
   everef-eve-online-deep-archive-01.torrent
   everef-eve-online-deep-archive-01.txt
-  everef-eve-online-deep-archive-01-README.md
+  everef-eve-online-deep-archive-01.torrent.minisig
   ...
 ```
 
 - **"Already archived" is decided per file:** `01-find` downloads every published `<ID>.txt` (a `.txt` whose name
-  isn't a torrent ID is ignored) and skips the paths whose version a torrent already holds (2.2), by date read from
-  that torrent's `<ID>-README.md` (2.3).
+  isn't a torrent ID is ignored); a listed non-index path still on the site is a hard error (2.2), never something
+  decided by date.
 - The feed is **regenerated in full** from the `.torrent` files in `deep-archive/` each time, never
   edited by appending. The bucket's `deep-archive/` stays the single source of truth.
   - Publication date comes from the torrent's `creation date` field.
@@ -517,9 +528,11 @@ For quick review and search without having to parse torrent files:
 - Content-Type `text/plain; charset=utf-8`, set on the object at upload (2.21). At most ~21,000 files makes a list of
   about 1–2 MB. Cloudflare compresses it in transit.
 
-### 2.6 Files inside the torrent: README
+### 2.6 Files inside the torrent: README, checksum file and its signature
 
-The README ships **inside the torrent**, at the torrent root. It is **not** published separately on the data site.
+The README, the checksum file (`<ID>.sha256`) and its minisign signature (`<ID>.sha256.minisig`) all ship **inside
+the torrent**, at the torrent root. None of the three is published separately on the data site (**revised
+2026-10-25**: the README no longer is either -- see 2.3).
 
 **Its name starts with the ID on purpose.** With "Don't create subfolder", root files from every torrent land in the
 same directory. A generic name like `README.md` would collide.
@@ -546,18 +559,30 @@ piece hashes are computed (Review notes, R7).
 
 **Reversed (2026-10-25):** someone asked. `<ID>.sha256` is generated from the manifest by `03-load` (not
 `$SEED_DIR` directly, now that the manifest's hashes are checked a second time with `sha256sum -c` as it's
-written), signed with minisign by a new manual step, `04-sign`, and published next to `<ID>.txt` in
-`deep-archive/`, outside the torrent, by `08-publish` (Review notes, R5). The public key is published at
-`/.well-known/minisign.pub`, outside this repo's control of the data bucket, so a compromise of one doesn't also
-compromise the other.
+written) and signed with minisign by a new manual step, `04-sign-sha256`.
+
+**Settled where it lives (2026-10-25, same day):** rather than publish the checksum file and its signature
+standalone next to `<ID>.txt`, `05-make-torrent` copies both into the torrent's content folder, so they ship
+**inside the torrent**, next to the README -- never published on their own. This needed moving `04-sign-sha256`
+back to *before* `05-make-torrent` (it has to sign before the torrent is built, to get the signature inside it).
+
+In exchange, **the torrent file itself is now also signed**, by a second manual step, `06-sign-torrent`, run
+*after* `05-make-torrent`. Its signature, `<ID>.torrent.minisig`, **is** published standalone next to `<ID>.torrent`
+and `<ID>.txt` in `deep-archive/` by `09-publish` -- it's the one signature that has to be, since it verifies the
+`.torrent` file someone downloads before they have a torrent client's piece hashes to lean on at all. The checksum
+file's signature verifies files *extracted from* an already-trusted torrent; the torrent file's signature verifies
+the torrent itself.
+
+The public key for both is published at `/.well-known/minisign.pub`, outside this repo's control of the data
+bucket, so a compromise of one doesn't also compromise the other.
 
 #### `<ID>-README.md`
 
 Markdown, generated from a template in `deep-archive/`. Contents:
 
 1. What this is: an EVE Ref Deep Archive torrent, with data from data.everef.net modified up to the torrent's
-   cutoff date. (Revised 2026-10-24: the cutoff is no longer in the ID, which is sequential; this is now its only
-   recorded place, so it's also published on its own in `deep-archive/`, not just inside the torrent.)
+   cutoff date. (Revised 2026-10-24: the cutoff is no longer in the ID, which is sequential; this is its only
+   recorded place. Revised again 2026-10-25: not published on its own in `deep-archive/` either -- see 2.3.)
 2. Layout: paths match data.everef.net, plus the note about "Don't create subfolder".
 3. Links: docs page (docs.everef.net/datasets/deep-archive.html) and data.everef.net.
 4. A line saying the client verifies every piece, and v2 clients every file.
@@ -565,7 +590,8 @@ Markdown, generated from a template in `deep-archive/`. Contents:
 
 #### Checks
 
-- `make-torrent` checks the torrent's file list equals the manifest paths plus exactly the README.
+- `make-torrent` checks the torrent's file list equals the manifest paths plus exactly the root files (README,
+  `.sha256`, `.sha256.minisig`).
 - `check-seed` downloads the README through the torrent with aria2c, and checks it's identical to the seed
   directory's copy. No data files are test-downloaded (2026-10-12: the README is a good enough test).
 
@@ -1149,10 +1175,11 @@ step and were dropped with it (2.11).
   lived on in the backup; now it's deleted with `$SCRATCH_DIR`, so no SHA-256 of the archived files survives the
   workflow. **Decided (2026-10-24): accepted** (2.6); an `<ID>.sha256` can be added next to `<ID>.txt` later.
   **Reversed (2026-10-25):** `<ID>.sha256` is back, written by `03-load` from the manifest and verified there with
-  `sha256sum -c`, then signed with minisign (`04-sign`, new manual step) and published next to `<ID>.txt` in
-  `deep-archive/` (`08-publish`). It still doesn't outlive `$SCRATCH_DIR` unsigned; the signed, published copy is
-  the one that matters, verifiable against the public key at `/.well-known/minisign.pub` without a torrent client.
-- **R6. Three steps check themselves.** `03-load`, `05-make-torrent` and `08-publish` now check their own results at
+  `sha256sum -c`, signed with minisign (`04-sign-sha256`), and copied into the torrent's content folder by
+  `05-make-torrent` -- it ships inside the torrent, not published standalone. The torrent file itself is signed too
+  (`06-sign-torrent`), and that signature **is** published next to `<ID>.torrent` and `<ID>.txt` by `09-publish`
+  (2.6), verifiable against the public key at `/.well-known/minisign.pub` before anyone even loads the `.torrent`.
+- **R6. Three steps check themselves.** `03-load`, `05-make-torrent` and `09-publish` now check their own results at
   the end, like the roll-up scripts, instead of having a separate read-only check step (2.10). They re-read from disk
   or the site, but a bug shared by the action and its check (e.g. the same wrong comment template, the same path
   handling) is no longer caught: the old `check-torrent` re-rendered the comment from its own copy of the template,

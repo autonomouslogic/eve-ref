@@ -73,14 +73,9 @@ MIN_AGE_YEARS = 2
 DATA_BASE_URL = "https://data.everef.net/"
 
 # Torrent IDs (PLAN 2.3): everef-eve-online-deep-archive-<two-digit sequence number>, starting at 00. Sequential,
-# not date-based: 00-preflight picks the next one from the published torrents' IDs. A torrent's cutoff date is no
-# longer in its ID; it's in the torrent's README (README_CUTOFF_RE, read back by 01-find).
+# not date-based: 00-preflight picks the next one from the published torrents' IDs.
 TORRENT_ID_PREFIX = "everef-eve-online-deep-archive-"
 TORRENT_ID_RE = re.compile(r"^everef-eve-online-deep-archive-(\d{2})$")
-
-# The cutoff date sentence in a torrent's README (README-template.md's wording), read back by 01-find to tell what a
-# published torrent already holds, now that the ID itself doesn't carry the date.
-README_CUTOFF_RE = re.compile(r"\btorrent dated up to (\d{4}-\d{2}-\d{2})\.")
 
 
 def format_torrent_id(sequence):
@@ -94,17 +89,11 @@ def torrent_sequence(torrent_id):
     return int(m[1]) if m else None
 
 
-def readme_cutoff(text):
-    """The cutoff date from a torrent's README text (README_CUTOFF_RE), or None if it isn't stated there."""
-    m = README_CUTOFF_RE.search(text)
-    return datetime.date.fromisoformat(m[1]) if m else None
-
-
 # Cache-Control max-age for everef-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
 
-# A torrent's comment (PLAN 2.4), built by render_comment and read back by 08-publish's read_torrent. {id} is the
+# A torrent's comment (PLAN 2.4), built by render_comment and read back by 09-publish's read_torrent. {id} is the
 # torrent name. The template file itself must be a single line (load_comment_template): the comment is kept
 # deliberately short.
 COMMENT_TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "comment-template.txt")
@@ -126,8 +115,9 @@ STEPS = [
     "find",
     "review",
     "load",
-    "sign",
+    "sign-sha256",
     "make-torrent",
+    "sign-torrent",
     "seed",
     "check-seed",
     "publish",
@@ -141,7 +131,8 @@ STEPS = [
 ]
 MANUAL_STEPS = {
     "review",
-    "sign",
+    "sign-sha256",
+    "sign-torrent",
     "update-docs",
     "data-index",
     "delete-scratch",
@@ -198,7 +189,7 @@ MIN_BYTES = 500 * GIB
 # 01-find leaves out the date that would go over it.
 MAX_TORRENT_BYTES = 10_000_000
 
-# qBittorrent's Web API (00-preflight, 06-seed, 07-check-seed). Torrents are added with save path
+# qBittorrent's Web API (00-preflight, 07-seed, 08-check-seed). Torrents are added with save path
 # QBITTORRENT_SAVE_PATH (qbittorrent_save_path), SEED_DIR as qBittorrent sees it.
 def qbittorrent_settings():
     """(url, api_key) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
@@ -598,7 +589,7 @@ def classify_path(path):
     - dataset: the directories before that year folder, "/"-joined, with a trailing "history" or "backfills"
       (DATASET_SUFFIXES) removed; the first three directories if there's no year folder. "" at the site root (never
       reached: root-level files are skipped before classification) or directly under a year folder.
-    Used by 01-find's and 10-check-before-delete's dataset breakdowns.
+    Used by 01-find's and 11-check-before-delete's dataset breakdowns.
     """
     dirs = path.split("/")[:-1]
     year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)

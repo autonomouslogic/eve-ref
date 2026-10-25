@@ -1,30 +1,35 @@
 #!/usr/bin/env python3
 """
-make-torrent: step 05 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
-v1+v2 .torrent and its file list, and checks both.
+make-torrent: step 05 of the EVE Ref Deep Archive workflow. Writes the torrent's README, copies in the signed
+checksum file, then makes the hybrid v1+v2 .torrent and its file list, and checks both.
 
-DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.md and SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
+DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.md, <ID>.sha256 and <ID>.sha256.minisig (copied in), and
+SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 
     05-make-torrent.py
 
-Needs 03-load's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece
-of every file (hours for a full torrent).
+Needs 03-load's completion file and 04-sign-sha256's output (SCRATCH_DIR/<ID>.sha256.minisig), and refuses to run
+twice (lib/workflow.py). Slow: hashes every piece of every file (hours for a full torrent).
 
 1. Render README-template.md (ID, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
-2. Download the tracker lists (lib/trackers.py): the union of both "best" lists, UDP and HTTP(S) only. Fails if a
+2. Copy SCRATCH_DIR/<ID>.sha256 and SCRATCH_DIR/<ID>.sha256.minisig (03-load, 04-sign-sha256) into
+   $SEED_DIR/<ID>/, so they end up inside the torrent too: neither is published standalone, so this is the only
+   way to check a file against them without a torrent client.
+3. Download the tracker lists (lib/trackers.py): the union of both "best" lists, UDP and HTTP(S) only. Fails if a
    list can't be downloaded or has no usable trackers, or if the union has fewer than MIN_TRACKERS.
-3. Build the torrent from exactly the manifest's files plus the root README (<ID>-README.md), sorted by path, with
-   Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the downloaded trackers (one per tier, in order), the
-   PLAN 2.4 comment (comment-template.txt with the ID filled in), creator "EVE Ref", no private flag, no web seed.
-4. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
-5. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
+4. Build the torrent from exactly the manifest's files plus the root files (README, .sha256, .sha256.minisig),
+   sorted by path, with Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the downloaded trackers (one per
+   tier, in order), the PLAN 2.4 comment (comment-template.txt with the ID filled in), creator "EVE Ref", no
+   private flag, no web seed.
+5. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
+6. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
-   downloaded ones, one per tier, in order; the comment; files = the manifest plus <ID>-README.md, bytes match; the
+   downloaded ones, one per tier, in order; the comment; files = the manifest plus the root files, bytes match; the
    .txt passes file_list_problems, matches the manifest and has no market-history/, killmails/ or ccp/ paths. Prints the
    v1 and v2 info-hashes (copy them into NOTES.md) and records them in the completion file.
 
 Writes:
-    $SEED_DIR/<ID>/<ID>-README.md
+    $SEED_DIR/<ID>/<ID>-README.md, <ID>.sha256, <ID>.sha256.minisig
     SCRATCH_DIR/<ID>.torrent
     SCRATCH_DIR/<ID>.txt
     SCRATCH_DIR/trackers/     each tracker list as downloaded (<name>.txt), and trackers.txt: the torrent's trackers
@@ -38,6 +43,7 @@ Needs libtorrent 2.x, and HTTPS access to raw.githubusercontent.com for the trac
 
 import json
 import os
+import shutil
 import signal
 import sys
 import time
@@ -91,12 +97,16 @@ def main():
     write_readme(os.path.join(content_dir, readme_name), torrent_id, cutoff)
     print(f"Written: {os.path.join(content_dir, readme_name)}")
 
+    section("Checksum file and signature")
+    sha256_name, minisig_name = copy_checksum_files(workflow.scratch_dir, content_dir, torrent_id)
+    print(f"Copied into {content_dir}: {sha256_name}, {minisig_name}")
+
     section("Trackers")
     trackers = download_trackers(os.path.join(workflow.scratch_dir, "trackers"))
 
     section("Torrent")
     fs = lt.file_storage()
-    root_names = {readme_name}
+    root_names = {readme_name, sha256_name, minisig_name}
     for path in sorted(files) + sorted(root_names):
         full = os.path.join(content_dir, path)
         if not os.path.isfile(full):
@@ -125,7 +135,7 @@ def main():
     print(f"Written: {torrent_path} ({fmt_bytes(len(data))})")
 
     section("File list")
-    root_entries = {f"{torrent_id}/{readme_name}"}
+    root_entries = {f"{torrent_id}/{name}" for name in root_names}
     paths = sorted(
         name[len(torrent_id) + 1 :] for name in storage_paths(fs) if name not in root_entries
     )
@@ -140,7 +150,7 @@ def main():
 
     section("Check")
     v1_hash, v2_hash = check_torrent(
-        lt, torrent_path, txt_path, torrent_id, files, content_dir, readme_name, trackers, comment
+        lt, torrent_path, txt_path, torrent_id, files, content_dir, root_names, trackers, comment
     )
 
     workflow.complete(
@@ -165,7 +175,7 @@ def main():
     ok(f"Make torrent OK for {torrent_id}")
 
 
-def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, readme_name, trackers, comment):
+def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, root_names, trackers, comment):
     """
     Reloads the .torrent and the .txt from disk and checks them against the manifest, the trackers and the comment.
     Fails listing every problem; returns (v1 info-hash, v2 info-hash).
@@ -215,7 +225,7 @@ def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, re
             problems.append(f"file outside the torrent's root folder: {path}")
             continue
         torrent_bytes += storage.file_size(i)
-        if path[len(prefix) :] != readme_name:
+        if path[len(prefix) :] not in root_names:
             data_paths.add(path[len(prefix) :])
     if data_paths != set(files):
         extra = sorted(data_paths - set(files))
@@ -224,12 +234,16 @@ def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, re
             problems.append(f"files in the torrent but not the manifest: {len(extra)}, e.g. {extra[:LOG_SAMPLE]}")
         if missing:
             problems.append(f"manifest files missing from the torrent: {len(missing)}, e.g. {missing[:LOG_SAMPLE]}")
-    expected_bytes = sum(files.values()) + os.path.getsize(os.path.join(content_dir, readme_name))
+    expected_bytes = sum(files.values()) + sum(
+        os.path.getsize(os.path.join(content_dir, name)) for name in root_names
+    )
     if torrent_bytes != expected_bytes:
         problems.append(
-            f"torrent data bytes {fmt_count(torrent_bytes)}, expected {fmt_count(expected_bytes)} (manifest + README)"
+            f"torrent data bytes {fmt_count(torrent_bytes)}, expected {fmt_count(expected_bytes)} "
+            "(manifest + root files)"
         )
-    print(f"{fmt_count(len(data_paths))} data files plus the README, {fmt_bytes(torrent_bytes)}")
+    print(f"{fmt_count(len(data_paths))} data files plus {fmt_count(len(root_names))} root files, "
+          f"{fmt_bytes(torrent_bytes)}")
 
     with open(txt_path, encoding="utf-8") as f:
         text = f.read()
@@ -286,6 +300,22 @@ def write_readme(path, torrent_id, cutoff):
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(text)
     os.rename(tmp, path)
+
+
+def copy_checksum_files(scratch_dir, content_dir, torrent_id):
+    """
+    Copies SCRATCH_DIR/<ID>.sha256 and its .minisig (03-load, 04-sign-sha256) into the torrent's content folder, so
+    they end up inside the torrent as root files. Returns (sha256_name, minisig_name). Fails if either is missing:
+    04-sign-sha256 needs to run first.
+    """
+    sha256_name = f"{torrent_id}.sha256"
+    minisig_name = f"{sha256_name}.minisig"
+    for name in (sha256_name, minisig_name):
+        src = os.path.join(scratch_dir, name)
+        if not os.path.isfile(src):
+            fail(f"Missing {src}: run 03-load and 04-sign-sha256 first")
+        shutil.copyfile(src, os.path.join(content_dir, name))
+    return sha256_name, minisig_name
 
 
 def download_trackers(trackers_dir):

@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-check-delete: step 12 of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
-listing of the bucket -- never trusting 11-delete's own result.
+check-delete: step 13 of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
+listing of the bucket -- never trusting 12-delete's own result.
 
 DRAFT. Read-only on the bucket.
 
-    12-check-delete.py
+    13-check-delete.py
 
-Needs 11-delete's completion file, and refuses to run twice (lib/workflow.py).
+Needs 12-delete's completion file, and refuses to run twice (lib/workflow.py).
 
 - Every path in deleted.jsonl (data and index cleanup) is gone from a fresh listing.
 - Every path that failed the pre-delete check (delete-set.json's "failed" list) is still there, untouched.
 - No path that existed when 01-find listed the bucket (find/listing.jsonl.gz), other than the ones just deleted,
-  has disappeared: 11-delete's rclone delete call only ever takes an explicit file list (never a prefix), but this
+  has disappeared: 12-delete's rclone delete call only ever takes an explicit file list (never a prefix), but this
   is the only check that would catch it deleting something else too. It allows the site to have grown (new uploads
   since find ran) and files with new content at the same path (sizes/mtimes aren't compared: the normal scrapers
   keep writing throughout the workflow), only never a find-time path vanishing outside the delete set.

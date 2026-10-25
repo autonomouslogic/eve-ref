@@ -1,12 +1,12 @@
-# EVE Ref Deep Archive
+# EVE Ref Deep Archive for EVE Online
 
 Moves old data.everef.net data into torrents. One workflow makes one torrent: the oldest data not archived yet, as
 much as the size limits allow, named with a sequential two-digit ID (`everef-eve-online-deep-archive-NN`, starting
-at `00`). Its cutoff date -- the last date it covers -- is recorded in its own README, not its ID (00-preflight
-picks the next ID; 01-find picks the cutoff). It's then seeded, published, listed on the docs site, and deleted from
-the site.
+at `00`). Its cutoff date -- the last date it covers -- is recorded in its own README, inside the torrent only
+(00-preflight picks the next ID; 01-find picks the cutoff fresh each run, from its own candidates, and never reads
+an earlier torrent's cutoff back). It's then seeded, published, listed on the docs site, and deleted from the site.
 
-Status: **draft**. Every step 00-15 is numbered and every scripted one is written; none has run against real data yet.
+Status: **draft**. Every step 00-16 is numbered and every scripted one is written; none has run against real data yet.
 Design and reasoning: [`PLAN.md`](PLAN.md).
 
 A GitHub Actions workflow (`.github/workflows/deep-archive-reminder.yml`) pings the dev notices Discord channel on
@@ -15,8 +15,8 @@ A GitHub Actions workflow (`.github/workflows/deep-archive-reminder.yml`) pings 
 ## Requirements
 
 - Python 3, **rclone**, the libtorrent Python bindings, **2.x** (1.x can't make hybrid torrents), **aria2c** (the test
-  download in 07-check-seed), **sha256sum** (`03-load`'s own check of its checksum file), **Docker** (`04-sign`
-  runs minisign through it):
+  download in 08-check-seed), **sha256sum** (`03-load`'s own check of its checksum file), **Docker**
+  (`04-sign-sha256` and `06-sign-torrent` run minisign through it):
   ```
   sudo apt-get install python3 rclone python3-libtorrent aria2 coreutils docker.io
   ```
@@ -25,7 +25,8 @@ A GitHub Actions workflow (`.github/workflows/deep-archive-reminder.yml`) pings 
   `lib/workflow.py`). After deletion it's EVE Ref's only copy of the archived data (Appendix C).
 - qBittorrent-nox 5.2 or later, for seeding, with its Web API reachable (`QBITTORRENT_URL`) and an API key
   generated in the Web UI settings (`QBITTORRENT_API_KEY`).
-- The minisign private key used to sign deep-archive checksum files, kept outside this repo (`MINISIGN_KEY_PATH`).
+- The minisign private key used to sign the checksum file and the torrent file, kept outside this repo
+  (`MINISIGN_KEY_PATH`).
 
 ## Setup
 
@@ -37,14 +38,14 @@ path.
 ## Tests
 
 `make test-deep-archive` (from the repo root) runs the unit tests in `tests/`: how `01-find` dates files from their
-names, what it skips, how published torrents and `index.json` files are handled, and how it chooses the cutoff; the
-shared dataset/year classification (`lib/workflow.py`'s `classify_path`, used by `01-find`'s and
-`10-check-before-delete`'s dataset breakdowns) and the torrent comment (`render_comment`, that it's the template with
-the ID filled in and stays a single line); that `STEPS` matches the numbered scripts; the `.torrent` size estimate
-(`lib/torrent_size.py`), including a real torrent built with libtorrent and compared against the estimate for the
-same files; `08-publish`'s feed building, round-tripped through its own checks; `10-check-before-delete`'s delete set
-and docs page check; and `12-check-delete`'s checks, including that nothing outside the confirmed delete set went
-missing. Standard library
+names, what it skips, and how it chooses the cutoff -- and that a path a published torrent already holds, if it's
+still a candidate, is a hard error rather than something clever happening with cutoff dates; the shared dataset/year
+classification (`lib/workflow.py`'s `classify_path`, used by `01-find`'s and `11-check-before-delete`'s dataset
+breakdowns) and the torrent comment (`render_comment`, that it's the template with the ID filled in and stays a
+single line); that `STEPS` matches the numbered scripts; the `.torrent` size estimate (`lib/torrent_size.py`),
+including a real torrent built with libtorrent and compared against the estimate for the same files; `09-publish`'s
+feed building, round-tripped through its own checks; `11-check-before-delete`'s delete set and docs page check; and
+`13-check-delete`'s checks, including that nothing outside the confirmed delete set went missing. Standard library
 only, with one exception: the real-torrent-size and feed-building tests need the libtorrent Python bindings (like the
 scripts they test) and are skipped, not failed, without them. Uses your `python3`, or Docker if there isn't one; the
 Docker image doesn't have libtorrent, so those tests are skipped there.
@@ -61,18 +62,19 @@ anything else looks wrong, stop. Keep notes for the workflow in `$SCRATCH_DIR/NO
 | 01 | Find | `./01-find.py` |
 | 02 | Review the selection | manual |
 | 03 | Load | `./03-load.py` |
-| 04 | Sign | `./04-sign.sh` |
+| 04 | Sign the checksum file | `./04-sign-sha256.sh` |
 | 05 | Make torrent | `./05-make-torrent.py` |
-| 06 | Seed | `./06-seed.py` |
-| 07 | Check seed | `./07-check-seed.py` |
-| 08 | Publish | `./08-publish.py` |
-| 09 | Update docs | manual |
-| 10 | Check before delete | `./10-check-before-delete.py` |
-| 11 | Delete | `./11-delete.py` |
-| 12 | Check delete | `./12-check-delete.py` |
-| 13 | Full DataIndex | manual |
-| 14 | Check site | `./14-check-site.py` |
-| 15 | Delete the scratch directory | manual |
+| 06 | Sign the torrent file | `./06-sign-torrent.sh` |
+| 07 | Seed | `./07-seed.py` |
+| 08 | Check seed | `./08-check-seed.py` |
+| 09 | Publish | `./09-publish.py` |
+| 10 | Update docs | manual |
+| 11 | Check before delete | `./11-check-before-delete.py` |
+| 12 | Delete | `./12-delete.py` |
+| 13 | Check delete | `./13-check-delete.py` |
+| 14 | Full DataIndex | manual |
+| 15 | Check site | `./15-check-site.py` |
+| 16 | Delete the scratch directory | manual |
 
 ### 00: Preflight
 ```
@@ -91,8 +93,10 @@ aborts if there were any; a missing tool (rclone, libtorrent, aria2c) aborts rig
 ```
 Lists the bucket and selects the oldest files not archived yet, by date (the earliest of the modification date, an
 ISO date in the file name, and 31 December of a year in the file name; PLAN 2.2), and nothing newer than the minimum
-age (`MIN_AGE_YEARS`). What a published torrent already holds is read from its own `<ID>-README.md`, not its ID
-(the ID is now sequential, not date-based). Dates are added oldest first until a limit (`lib/workflow.py`) stops it:
+age (`MIN_AGE_YEARS`). What a published torrent already holds comes from its own `<ID>.txt` file list; a non-index
+path still on the site that's already in one of those lists is a hard error (something went wrong -- an earlier
+delete didn't happen, or the path reappeared), never silently re-selected. Dates are added oldest first until a
+limit (`lib/workflow.py`) stops it:
 the `.torrent` size limit is hard (the date that would go over it is left out), the data limit `MAX_BYTES` is soft
 (the date that reaches it is the last one taken, so the torrent can be somewhat over). Each folder with a selected
 file brings its own `index.json`, whatever that file's date. Uses the torrent ID `00-preflight` picked. Prints the
@@ -133,14 +137,16 @@ different. Aborts before copying if the folder holds files that aren't selected,
 - `$SCRATCH_DIR/<ID>.sha256` written and verified against it with `sha256sum -c` (an independent check, with a
   different tool, of the hashes step 03 just computed).
 
-### 04: Sign
+### 04: Sign the checksum file
 ```
-./04-sign.sh
+./04-sign-sha256.sh
 ```
 Signs `$SCRATCH_DIR/<ID>.sha256` with minisign, run through Docker, using the private key at `MINISIGN_KEY_PATH`
 (never committed to this repo, kept outside `$SCRATCH_DIR`). Always prompts for the key's passphrase interactively.
 Writes `$SCRATCH_DIR/<ID>.sha256.minisig`, then verifies it against the public key published at
 `ui/public/.well-known/minisign.pub` (https://everef.net/.well-known/minisign.pub), if that checkout is there.
+Runs before 05-make-torrent, which copies both files into the torrent's content folder: they end up inside the
+torrent, next to the README, and are never published standalone.
 - `$SCRATCH_DIR/<ID>.sha256.minisig` written.
 - Verified against the public key (the script does this itself if it can find it).
 
@@ -148,11 +154,12 @@ Writes `$SCRATCH_DIR/<ID>.sha256.minisig`, then verifies it against the public k
 ```
 ./05-make-torrent.py
 ```
-Writes `<ID>-README.md` into `$SEED_DIR/<ID>/` (from `README-template.md`), downloads the tracker lists (ngosang's
+Writes `<ID>-README.md` into `$SEED_DIR/<ID>/` (from `README-template.md`), copies `<ID>.sha256` and
+`<ID>.sha256.minisig` in from `$SCRATCH_DIR` (04-sign-sha256's output), downloads the tracker lists (ngosang's
 `trackers_best.txt` and XIU2's `best.txt`; fails if either is unreachable or empty, or if they give fewer than 10
 trackers together), makes `$SCRATCH_DIR/<ID>.torrent` (hybrid v1+v2, their union as trackers), and generates the file
 list `$SCRATCH_DIR/<ID>.txt` from it. Then reloads both from disk and checks them:
-- Files = the manifest plus `<ID>-README.md`; bytes match.
+- Files = the manifest plus the root files (README, `.sha256`, `.sha256.minisig`); bytes match.
 - Hybrid, `name` is `<ID>`, not private, no web seed; trackers one per tier; the comment is right.
 - The trackers in `$SCRATCH_DIR/trackers/trackers.txt` look sane (no surprising domains).
 - The `.txt` matches the torrent and passes `file_list_problems` (`lib/workflow.py`: full site paths,
@@ -162,52 +169,62 @@ list `$SCRATCH_DIR/<ID>.txt` from it. Then reloads both from disk and checks the
 
 Also read the `.txt` and the README yourself.
 
-### 06: Seed
+### 06: Sign the torrent file
 ```
-./06-seed.py
+./06-sign-torrent.sh
+```
+Signs `$SCRATCH_DIR/<ID>.torrent` with minisign, run through Docker, the same way as step 04. Writes
+`$SCRATCH_DIR/<ID>.torrent.minisig`, then verifies it against the public key if that's checked out. This is the
+signature 09-publish uploads: it lets someone verify the `.torrent` file itself, before loading it into a client,
+without needing the torrent's own piece hashes.
+- `$SCRATCH_DIR/<ID>.torrent.minisig` written.
+- Verified against the public key (the script does this itself if it can find it).
+
+### 07: Seed
+```
+./07-seed.py
 ```
 Adds the torrent to qBittorrent with save path `$QBITTORRENT_SAVE_PATH` (`$SEED_DIR` as qBittorrent sees it; `$SEED_DIR`
 itself if not set).
 
-### 07: Check seed
+### 08: Check seed
 ```
-./07-check-seed.py
+./08-check-seed.py
 ```
 Checks qBittorrent through its Web API, then downloads the README through the torrent with aria2c (from the
-`.torrent`, no magnet link) into a throwaway folder. Give the trackers a few minutes after step 06 first.
+`.torrent`, no magnet link) into a throwaway folder. Give the trackers a few minutes after step 07 first.
 - 100% with **0 bytes downloaded** (any download means the files don't match: stop), seeding, a tracker working.
 - aria2c downloaded the README, identical to the seed copy.
 
 It runs on the workflow host, so it proves the torrent downloads, not that it's reachable from outside (PLAN,
 Review notes, R16).
 
-### 08: Publish
+### 09: Publish
 ```
-./08-publish.py
+./09-publish.py
 ```
-Shows the targets and asks first, then uploads `<ID>.torrent`, `<ID>.txt` and `<ID>-README.md` to the bucket's
-`deep-archive/` (the README from `$SEED_DIR/<ID>/`; published on its own, not just inside the torrent, since it's
-now where the torrent's cutoff date lives). Never overwrites (a file already published by an earlier attempt must be
-identical, and is skipped). Then rebuilds `everef-deep-archive.xml` from the published torrents, shows the
-difference, asks again, saves the published `everef-deep-archive.xml` to
-`$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it. Last, checks all four files over HTTPS, retrying for
-a few minutes while Cloudflare still serves the old feed. Prints the torrent's URL, v1 and v2 info-hashes, and full
-magnet link for step 09.
+Shows the targets and asks first, then uploads `<ID>.torrent`, `<ID>.txt` and `<ID>.torrent.minisig` to the
+bucket's `deep-archive/` (all three from `$SCRATCH_DIR`). The README, the checksum file and its signature stay
+inside the torrent only. Never overwrites (a file already published by an earlier attempt must be identical, and
+is skipped). Then rebuilds `everef-deep-archive.xml` from the published torrents, shows the difference, asks again,
+saves the published `everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it.
+Last, checks all three files over HTTPS, retrying for a few minutes while Cloudflare still serves the old feed.
+Prints the torrent's URL, v1 and v2 info-hashes, and full magnet link for step 10.
 - The only difference in the feed is the new `<ID>`.
-- The `.torrent`, `.txt` and README are served from `https://data.everef.net/deep-archive/` with the right
-  Content-Type and content; the feed is valid RSS and has `<ID>` with the right info-hash.
+- The `.torrent`, `.txt` and `.torrent.minisig` are served from `https://data.everef.net/deep-archive/` with the
+  right Content-Type and content; the feed is valid RSS and has `<ID>` with the right info-hash.
 
-### 09: Update docs (manual)
+### 10: Update docs (manual)
 
 Add the torrent to the "Torrents" table on the docs site's Deep Archive page
 (`docs/src/datasets/deep-archive.md`), newest first: its ID linked to its URL, the v1 and v2 info-hashes, and the full
-magnet link, all printed by step 08. Commit it and deploy the docs site. Step 10 checks the live page lists it.
+magnet link, all printed by step 09. Commit it and deploy the docs site. Step 11 checks the live page lists it.
 
-### 10: Check before delete
+### 11: Check before delete
 ```
-./10-check-before-delete.py
+./11-check-before-delete.py
 ```
-- The docs page is live and lists `<ID>` with its v1 info-hash (step 09); the seeder is at 100% with 0 bytes
+- The docs page is live and lists `<ID>` with its v1 info-hash (step 10); the seeder is at 100% with 0 bytes
   downloaded.
 - The published `.torrent` on the bucket has the same info-hash as `$SCRATCH_DIR/<ID>.torrent`.
 - Builds the delete set from the torrent: each data file in it that is in the manifest, has the selected size in the
@@ -216,34 +233,34 @@ magnet link, all printed by step 08. Commit it and deploy the docs site. Step 10
 - Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
 - Note the printed delete set: files, bytes, datasets.
 
-### 11: Delete
+### 12: Delete
 ```
-./11-delete.py              # dry run
-./11-delete.py --execute    # type the torrent ID to confirm
+./12-delete.py              # dry run
+./12-delete.py --execute    # type the torrent ID to confirm
 ```
-- The dry run shows exactly the delete set from step 10.
+- The dry run shows exactly the delete set from step 11.
 
 `--execute` re-checks against a fresh listing, then deletes exactly the confirmed files (soft deletes; never by
 prefix). Then it removes the folders the delete emptied: on B2 a folder disappears with its last file, so that means
 removing `index.html` and `index.json` from every folder left with nothing else in it, and from parents left the same
 way, deepest first; never the site root or `deep-archive/` (PLAN 2.15). Treat it as permanent.
 
-Until the full `DataIndex` in step 13 runs, parent index pages still link to the now-deleted files/folders:
+Until the full `DataIndex` in step 14 runs, parent index pages still link to the now-deleted files/folders:
 scheduled jobs that crawl the site (e.g. `sync-fuzzwork-ordersets`, the market history scrape) may fail against
 those stale links in the meantime. Left as-is; they recover on their next run after `DataIndex` catches up.
 
-### 12: Check delete
+### 13: Check delete
 ```
-./12-check-delete.py
+./13-check-delete.py
 ```
 - Every file in the delete set is gone, no folder holds only index files, and nothing else changed: files that
-  failed the check in step 10 are still there, and so is every other path that was on the bucket when `01-find` ran
-  (step 10's pre-delete check already covers the delete set itself; this is what would catch `11-delete` deleting,
+  failed the check in step 11 are still there, and so is every other path that was on the bucket when `01-find` ran
+  (step 11's pre-delete check already covers the delete set itself; this is what would catch `12-delete` deleting,
   or anything else removing, a path outside it). New uploads since `01-find` ran are fine; they're not checked.
 
-### 13: Full DataIndex (manual)
+### 14: Full DataIndex (manual)
 
-Rewrites every folder's index pages, so the parents stop listing the deleted files and the folders step 11 removed.
+Rewrites every folder's index pages, so the parents stop listing the deleted files and the folders step 12 removed.
 ```
 docker run --rm --env-file <production env> <eve-ref image> data-index
 ```
@@ -253,14 +270,14 @@ Or, from a checkout with production settings in the environment:
 ```
 Leave `DATA_INDEX_PREFIX` unset.
 
-### 14: Check site
+### 15: Check site
 ```
-./14-check-site.py
+./15-check-site.py
 ```
 - Every sampled deleted URL returns 404, or 200 from Cloudflare's cache (PLAN 2.16).
-- The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt`, the README and the feed.
+- The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt`, the signature and the feed.
 
-### 15: Delete the scratch directory (manual)
+### 16: Delete the scratch directory (manual)
 
 Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 
@@ -284,9 +301,9 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 - **Show, then ask.** A step that writes outside `$SCRATCH_DIR` and `$SEED_DIR` (the bucket, qBittorrent)
   prints what it will do and asks first.
 - **Checks are read-only** and re-derive everything from the source (bucket, disk, qBittorrent, site). They never
-  trust the action step's output. `03-load`, `05-make-torrent` and `08-publish` check their own results at the
-  end, like the roll-up scripts, instead of having a separate check step. `04-sign` verifies its own signature the
-  same way, against the published public key, when it can find it.
+  trust the action step's output. `03-load`, `05-make-torrent` and `09-publish` check their own results at the
+  end, like the roll-up scripts, instead of having a separate check step. `04-sign-sha256` and `06-sign-torrent`
+  verify their own signature the same way, against the published public key, when they can find it.
 - **Manual steps** are numbered like the others (`MANUAL_STEPS` in `lib/workflow.py`), but have no script and no
   completion file: a script waits for the nearest earlier scripted step.
 
@@ -303,9 +320,9 @@ overrides.
 | `DATA_BUCKET` | The data site's bucket on B2. Its root is the site root. |
 | `RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY` | The B2 key for the `everef` rclone remote. |
 | `QBITTORRENT_URL`, `QBITTORRENT_API_KEY` | qBittorrent's Web API and its API key (qBittorrent 5.2+, generated in the Web UI settings). |
-| `QBITTORRENT_SAVE_PATH` | Optional. `SEED_DIR` as qBittorrent sees it, if different (qBittorrent in Docker, say). `06-seed` adds torrents with this save path; `SEED_DIR` if not set. |
+| `QBITTORRENT_SAVE_PATH` | Optional. `SEED_DIR` as qBittorrent sees it, if different (qBittorrent in Docker, say). `07-seed` adds torrents with this save path; `SEED_DIR` if not set. |
 | `LOCAL_COPY_DIR` | Optional. A local copy of the data site, laid out like the bucket (`index.json` at the top). `03-load` copies the files it has with the selected size, modification time and SHA-1 instead of downloading them. |
-| `MINISIGN_KEY_PATH` | Path to the minisign private key (`04-sign`), kept outside this repo and `$SCRATCH_DIR`. Its passphrase is always entered interactively, never put here. |
+| `MINISIGN_KEY_PATH` | Path to the minisign private key (`04-sign-sha256`, `06-sign-torrent`), kept outside this repo and `$SCRATCH_DIR`. Its passphrase is always entered interactively, never put here. |
 
 Everything else is fixed in `lib/workflow.py`: the size limits (`MIN_BYTES`, `MAX_BYTES`, `MAX_TORRENT_BYTES`), the
 excluded folders (`TORRENT_EXCLUDE`), the site URL (`DATA_BASE_URL`), and the rclone settings. As in the roll-up
@@ -320,11 +337,12 @@ scripts/deep-archive/
   comment-template.txt             # the torrent's comment, one line, {id} filled in (lib/workflow.py's render_comment)
   torrents.env.example             # copy to torrents.env (not committed)
   00-preflight.py  01-find.py  …   # the steps
-  04-sign.sh                       # signs <ID>.sha256 with minisign, through Docker (bash, not Python)
+  04-sign-sha256.sh                # signs <ID>.sha256 with minisign, through Docker (bash, not Python)
+  06-sign-torrent.sh               # signs <ID>.torrent the same way, after 05-make-torrent
   lib/workflow.py                  # shared: settings, size limits, steps, completion files, lock, output, helpers
   lib/trackers.py                  # downloads the tracker lists (00-preflight, 05-make-torrent)
   lib/torrent_size.py              # .torrent size estimate from paths and sizes, for 01-find's cutoff
-  lib/qbittorrent.py               # qBittorrent Web API client (00-preflight, 06-seed, 07-check-seed, 10-check-before-delete)
+  lib/qbittorrent.py               # qBittorrent Web API client (00-preflight, 07-seed, 08-check-seed, 11-check-before-delete)
   tests/                           # unit tests: make test-deep-archive (from the repo root)
 
 $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
@@ -332,12 +350,13 @@ $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
   find/                            # 01-find: files.jsonl (the selection), listing.jsonl.gz, report.txt, ...
   NOTES.md                         # your notes for this workflow
   manifest.json                    # selection + SHA-256 (03-load)
-  <ID>.sha256  <ID>.sha256.minisig # checksum file (03-load) and its signature (04-sign)
-  <ID>.torrent  <ID>.txt
+  <ID>.sha256  <ID>.sha256.minisig # checksum file (03-load) and its signature (04-sign-sha256); copied into the
+                                    # torrent by 05-make-torrent, never published standalone
+  <ID>.torrent  <ID>.txt  <ID>.torrent.minisig  # the torrent's own signature (06-sign-torrent), published
   trackers/                        # 05-make-torrent: each tracker list as downloaded, and trackers.txt (the union)
-  feed-backup/                     # 08-publish: the everef-deep-archive.xml it replaced
-  delete-set.json                  # 10-check-before-delete
-  deleted.jsonl                    # 11-delete
+  feed-backup/                     # 09-publish: the everef-deep-archive.xml it replaced
+  delete-set.json                  # 11-check-before-delete
+  deleted.jsonl                    # 12-delete
   log/<NN>-<step>-<UTC time>.log   # everything each run of a step printed
   log/.lock                        # held by the running step
 
@@ -369,7 +388,7 @@ files are served again.
 
 ## Appendix E: If data changed
 
-If `10-check-before-delete` finds a file that changed after it was selected:
+If `11-check-before-delete` finds a file that changed after it was selected:
 - That file isn't deleted; the rest of the delete set is. Note it in `NOTES.md`.
 - No replacement torrent: the changed file goes into a later torrent once it's old enough (PLAN Appendix A).
 - Find out why. If the dataset still changes after the minimum age, add it to `TORRENT_EXCLUDE`.
@@ -381,12 +400,13 @@ If `10-check-before-delete` finds a file that changed after it was selected:
 | `00-preflight` | none | read |
 | `01-find` | `$SCRATCH_DIR/find/` | read |
 | `03-load` | `$SEED_DIR/<ID>/`, `manifest.json`, `<ID>.sha256` | read |
-| `04-sign` | `<ID>.sha256.minisig` | none |
-| `05-make-torrent` | README in `$SEED_DIR/<ID>/`, `.torrent`, `.txt` | none |
-| `06-seed` / `07-check-seed` | qBittorrent / throwaway aria2c download | none |
-| `08-publish` | **bucket `deep-archive/`** (`.torrent`, `.txt`, README, `.sha256`, `.sha256.minisig`), `feed-backup/` | write |
-| `10-check-before-delete` | `delete-set.json` | read |
-| `11-delete` / `12-check-delete` | **bucket data (permanent)**, `deleted.jsonl` / none | write / read |
-| `14-check-site` | none | none |
+| `04-sign-sha256` | `<ID>.sha256.minisig` | none |
+| `05-make-torrent` | README, `.sha256`, `.sha256.minisig` in `$SEED_DIR/<ID>/`, `.torrent`, `.txt` | none |
+| `06-sign-torrent` | `<ID>.torrent.minisig` | none |
+| `07-seed` / `08-check-seed` | qBittorrent / throwaway aria2c download | none |
+| `09-publish` | **bucket `deep-archive/`** (`.torrent`, `.txt`, `.torrent.minisig`), `feed-backup/` | write |
+| `11-check-before-delete` | `delete-set.json` | read |
+| `12-delete` / `13-check-delete` | **bucket data (permanent)**, `deleted.jsonl` / none | write / read |
+| `15-check-site` | none | none |
 
 Every step also writes its completion file and its log in `$SCRATCH_DIR`.

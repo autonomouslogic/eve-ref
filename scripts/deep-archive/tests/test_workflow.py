@@ -1,13 +1,12 @@
 """
 Tests for lib/workflow.py's shared helpers: dataset/year classification (classify_path), the torrent comment
 (render_comment), timestamp formatting (iso/parse_iso), and the file list format (file_list_problems,
-site_path_problem). These are shared by 01-find, 03-load, 05-make-torrent, 08-publish, 10-check-before-delete and
-11-delete, so a regression here would hit every one of them.
+site_path_problem). These are shared by 01-find, 03-load, 05-make-torrent, 09-publish, 11-check-before-delete and
+12-delete, so a regression here would hit every one of them.
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
 
-import datetime
 import gzip
 import json
 import os
@@ -27,7 +26,6 @@ from workflow import (  # noqa: E402
     iso,
     parse_iso,
     read_listing_gz,
-    readme_cutoff,
     render_comment,
     site_path_problem,
     step_name,
@@ -99,15 +97,6 @@ class TorrentIdTest(unittest.TestCase):
 
     def test_sequence_none_for_non_ids(self):
         self.assertIsNone(torrent_sequence("feed"))
-
-
-class ReadmeCutoffTest(unittest.TestCase):
-    def test_reads_the_cutoff_sentence(self):
-        text = "This is an EVE Ref EVE Online Deep Archive torrent dated up to 2023-04-11.\nMore text.\n"
-        self.assertEqual(readme_cutoff(text), datetime.date(2023, 4, 11))
-
-    def test_none_without_the_sentence(self):
-        self.assertIsNone(readme_cutoff("Nothing relevant here.\n"))
 
 
 class IsoTest(unittest.TestCase):
