@@ -1,5 +1,32 @@
 EVE Ref Changelog
 
+## [2.83.4](https://github.com/autonomouslogic/eve-ref/compare/2.83.3...2.83.4) (2026-10-24)
+
+
+### Bug Fixes
+
+* DataCrawler fails loud on non-200 responses instead of returning a partial crawl ([#1151](https://github.com/autonomouslogic/eve-ref/issues/1151)) ([edd9e43](https://github.com/autonomouslogic/eve-ref/commit/edd9e438749ae61e31c1997bf50a147254ff4e22))
+* **deps:** update dependency de.neuland-bfi:pug4j to v3 ([#1058](https://github.com/autonomouslogic/eve-ref/issues/1058)) ([e8daa6c](https://github.com/autonomouslogic/eve-ref/commit/e8daa6cea030ee19fba35ce12fce835effaf3a95))
+* SyncFuzzworkOrdersets makes proper data indexes ([#1148](https://github.com/autonomouslogic/eve-ref/issues/1148)) ([b52c073](https://github.com/autonomouslogic/eve-ref/commit/b52c073c8596444468d3217d196488a3749dffcf))
+* **ui:** Cache headers on UI ([c9d7528](https://github.com/autonomouslogic/eve-ref/commit/c9d75288a806ea02895a3eec1b8618b57fcf4c55))
+* **ui:** CSM 21 vote MOTD ([29cce58](https://github.com/autonomouslogic/eve-ref/commit/29cce589a1e250a5dad1989397253ee1783dd7ba))
+* **ui:** CSM 21 vote MOTD ([e4f02b5](https://github.com/autonomouslogic/eve-ref/commit/e4f02b593134bffdedd46f446261e2454acab0d9))
+* **ui:** CSM 21 vote MOTD ([49c3e04](https://github.com/autonomouslogic/eve-ref/commit/49c3e04c8a1072f0a71425423acf5522fad25f68))
+* **ui:** Immutable client cache ([3798e7f](https://github.com/autonomouslogic/eve-ref/commit/3798e7f0b2f4a890059cc4c75ea5e1fa82ec59ac))
+
+
+### Dependency Updates
+
+* **deps:** update actions/setup-java action to v6 ([#1085](https://github.com/autonomouslogic/eve-ref/issues/1085)) ([b432913](https://github.com/autonomouslogic/eve-ref/commit/b4329136344ac96871207c5a657e82849295993d))
+* **deps:** update dependency proxy-agent to v8 ([#1134](https://github.com/autonomouslogic/eve-ref/issues/1134)) ([970e1dc](https://github.com/autonomouslogic/eve-ref/commit/970e1dce0f923bf407e49b45d264cdbb417fc03d))
+
+
+### Miscellaneous Chores
+
+* 2026 fix old archives ([#1150](https://github.com/autonomouslogic/eve-ref/issues/1150)) ([d8a452c](https://github.com/autonomouslogic/eve-ref/commit/d8a452ccb4cb91f07887151c8441c294e390f0e6))
+* Notes ([55effc8](https://github.com/autonomouslogic/eve-ref/commit/55effc83aabd6fe40e0073534bbb83b7db8de810))
+* UI CPU optimization plan ([4ce1d4f](https://github.com/autonomouslogic/eve-ref/commit/4ce1d4fdd02f090cab8ea4109d27de9bef5df4a4))
+
 ## [2.83.3](https://github.com/autonomouslogic/eve-ref/compare/2.83.2...2.83.3) (2026-10-21)
 
 
