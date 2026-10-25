@@ -28,7 +28,8 @@ Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py
    return 200 with the right Content-Type and exactly the local bytes; everef-eve-online-deep-archive.xml is served as
    application/rss+xml, is valid XML and has an <item> with this torrent's v1 info-hash as its <guid>. Cloudflare
    may serve the old feed for up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
-5. Print this torrent's URL, v1 and v2 info-hashes, and full magnet link, for the next step (10, update-docs) to copy
+5. Print this torrent's URL, v1 and v2 info-hashes, data size and file count (the README, checksum file and its
+   signature excluded), and full magnet link, for the next step (10, update-docs) to copy
    into the docs site's deep-archive.md page.
 
 On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up (manual, README).
@@ -70,7 +71,9 @@ from workflow import (  # noqa: E402
     error,
     fail,
     fmt_bytes,
+    fmt_count,
     fmt_duration,
+    fmt_size,
     join,
     ok,
     rclone,
@@ -117,14 +120,16 @@ def main():
     torrents, feed_backup, own_entry = publish_feed(workflow, torrent_id, deep_archive)
     check_published(workflow, torrent_id, v1_hash)
 
-    section("Torrent info")
+    section("Torrent info - for the docs")
     magnet = build_magnet(
         own_entry["id"], own_entry["v1_info_hash"], own_entry["v2_info_hash"], own_entry["trackers"][:MAGNET_TRACKERS]
     )
-    print(f"URL: {torrent_url(torrent_id, 'torrent')}")
-    print(f"v1 info-hash: {own_entry['v1_info_hash']}")
-    print(f"v2 info-hash: {own_entry['v2_info_hash']}")
-    print(f"Magnet: {magnet}")
+    print(f"Torrent: [{torrent_id}.torrent]({torrent_url(torrent_id, 'torrent')})")
+    print(f"Files: [{torrent_id}.txt]({torrent_url(torrent_id, 'txt')})")
+    print(f"Size: {fmt_size(own_entry['bytes'])}")
+    print(f"Magnet: [Magnet link]({magnet})")
+    print(f"v1 infohash: {own_entry['v1_info_hash']}")
+    print(f"v2 infohash: {own_entry['v2_info_hash']}")
 
     workflow.complete(
         STEP,
@@ -135,6 +140,8 @@ def main():
             "feed_backup": feed_backup,
             "v1_info_hash": own_entry["v1_info_hash"],
             "v2_info_hash": own_entry["v2_info_hash"],
+            "data_bytes": own_entry["bytes"],
+            "data_files": own_entry["files"],
             "magnet": magnet,
         },
     )
