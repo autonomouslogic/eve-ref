@@ -37,14 +37,18 @@ modification date (DataIndex rewrites it on every run, so its date says nothing 
 otherwise. Only the folder's own index.json; parent folders' aren't added.
 
 Published torrents: a path listed in a published deep-archive/<ID>.txt is skipped only if its modification date (not
-its date from the name) is on or before that torrent's cutoff (the date in the ID): it's the version the torrent
-holds, still on the site because its delete didn't happen (flagged). A later modification date means the file was
-uploaded again after it was archived (it changed), so it's a candidate like any other and can land in a new torrent.
-The same path can be in several torrents, one version each. A file the torrent selected by a date in its name, but
-modified after the cutoff, looks changed too: if its delete didn't happen, it's selected again (flagged).
+its date from the name) is on or before that torrent's cutoff. The cutoff is no longer in the ID (see Torrent ID
+below); it's read from that torrent's deep-archive/<ID>-README.md (README_CUTOFF_RE, lib/workflow.py). A skipped
+file is the version the torrent holds, still on the site because its delete didn't happen (flagged). A later
+modification date means the file was uploaded again after it was archived (it changed), so it's a candidate like any
+other and can land in a new torrent. The same path can be in several torrents, one version each. A file the torrent
+selected by a date in its name, but modified after the cutoff, looks changed too: if its delete didn't happen, it's
+selected again (flagged).
 
-The torrent ID is everef-eve-online-deep-archive-YYYY-MM-DD, with the cutoff date. The torrent holds everything not yet archived
-that was dated on or before that date. Writes, in SCRATCH_DIR:
+Torrent ID: sequential (everef-eve-online-deep-archive-NN, two digits, PLAN 2.3), chosen by 00-preflight (the
+completion file find needs) rather than from the cutoff date. The torrent holds everything not yet archived that
+was dated on or before the cutoff this run chose; that date is saved in the torrent's own README, not its ID (see
+04-make-torrent). Writes, in SCRATCH_DIR:
 
     find/
       files.jsonl          the selection, index.json files included: one file per line: path, size, last_modified,
@@ -92,7 +96,6 @@ from workflow import (  # noqa: E402
     MIN_BYTES,
     PIECE_SIZE,
     TORRENT_EXCLUDE,
-    TORRENT_ID_PREFIX,
     TORRENT_ID_RE,
     Workflow,
     classify_path,
@@ -109,6 +112,7 @@ from workflow import (  # noqa: E402
     lsjson,
     ok,
     rclone,
+    readme_cutoff,
     section,
 )
 
@@ -204,10 +208,10 @@ def main():
         fail(f"No {INDEX_JSON} at the root of {remote}")
 
     section("Published file lists")
-    taken = load_published_lists(remote, listing)
+    taken, cutoffs = load_published_lists(remote, listing)
 
     section("Selection")
-    scan = classify_all(listing, excludes, taken)
+    scan = classify_all(listing, excludes, taken, cutoffs)
     cut = choose_cutoff(scan.candidates, scan.indexes, newest_allowed)
     if cut.cutoff is None:
         fail(render_no_cutoff(cut, scan))
@@ -219,7 +223,10 @@ def main():
             f"Only {fmt_bytes(selected_bytes)} ({fmt_count(len(selected))} files, up to {cut.cutoff}) to archive, "
             f"less than MIN_BYTES ({fmt_bytes(MIN_BYTES)}): not enough data for a torrent yet"
         )
-    torrent_id = f"{TORRENT_ID_PREFIX}{cut.cutoff.isoformat()}"
+    preflight = workflow.read_done("preflight")["summary"]
+    torrent_id = preflight.get("next_torrent_id")
+    if not torrent_id:
+        fail("00-preflight.done has no next_torrent_id: rerun preflight")
     print(f"Cutoff: {cut.cutoff}")
     print(f"Torrent ID: {torrent_id}")
     content_dir = os.path.join(workflow.seed_dir, torrent_id)
@@ -303,23 +310,32 @@ def list_remote(data_remote, progress_seconds):
 
 def load_published_lists(data_remote, listing):
     """
-    Path -> torrent ID for every path in a published torrent, from the deep-archive/<ID>.txt file lists in the
-    bucket. A path in several lists maps to the newest torrent. Fails if any list isn't in the PLAN 2.5 format: a list
-    find can't read correctly would let the same version of a file land in two torrents.
+    (published, cutoffs): published maps path -> torrent ID for every path in a published torrent, from the
+    deep-archive/<ID>.txt file lists in the bucket (a path in several lists maps to the newest torrent); cutoffs
+    maps torrent ID -> its cutoff date, read from deep-archive/<ID>-README.md (readme_cutoff, lib/workflow.py), now
+    that the ID itself doesn't carry the date. Fails if any list isn't in the PLAN 2.5 format, or a referenced
+    torrent's README is missing or doesn't state a cutoff: find couldn't then tell what that torrent already holds.
     """
     published = {}
     lists = {}  # path -> torrent ID
+    readmes = {}  # torrent ID -> path
     for o in listing:
         folder, _, name = o.path.rpartition("/")
-        if folder == DEEP_ARCHIVE_DIR and name.endswith(".txt"):
+        if folder != DEEP_ARCHIVE_DIR:
+            continue
+        if name.endswith(".txt"):
             torrent_id = name[: -len(".txt")]
             if is_torrent_id(torrent_id):
                 lists[o.path] = torrent_id
             else:
                 print(f"Not a file list (no torrent ID in the name), ignored: {o.path}")
+        elif name.endswith("-README.md"):
+            torrent_id = name[: -len("-README.md")]
+            if is_torrent_id(torrent_id):
+                readmes[torrent_id] = o.path
     if not lists:
         print(f"No published file lists in {DEEP_ARCHIVE_DIR}/")
-        return published
+        return published, {}
     print(f"Loading {len(lists)} published file lists from {DEEP_ARCHIVE_DIR}/")
     bad = 0
     for path, torrent_id in sorted(lists.items()):
@@ -336,7 +352,26 @@ def load_published_lists(data_remote, listing):
     if bad:
         fail(f"{bad} published file lists aren't in the PLAN 2.5 format: full site paths, sorted, one per line")
     print(f"Loaded {fmt_count(len(published))} paths from {len(lists)} published file lists")
-    return published
+
+    cutoffs = {}
+    missing_readme = []
+    bad_readme = []
+    for torrent_id in sorted(set(lists.values())):
+        readme_path = readmes.get(torrent_id)
+        if readme_path is None:
+            missing_readme.append(torrent_id)
+            continue
+        cutoff = readme_cutoff(rclone("cat", join(data_remote, readme_path)))
+        if cutoff is None:
+            bad_readme.append(torrent_id)
+            continue
+        cutoffs[torrent_id] = cutoff
+    if missing_readme:
+        fail(f"No published README for {', '.join(missing_readme)}: can't tell what it already holds")
+    if bad_readme:
+        fail(f"README for {', '.join(bad_readme)} doesn't state a cutoff date: can't tell what it already holds")
+    print(f"Loaded {fmt_count(len(cutoffs))} torrent cutoffs from their READMEs")
+    return published, cutoffs
 
 
 class Scan:
@@ -353,7 +388,7 @@ class Scan:
         self.empty = []
 
 
-def classify_all(listing, excludes, taken):
+def classify_all(listing, excludes, taken, cutoffs):
     scan = Scan()
     for o in listing:
         reason = skip_reason(o.path, excludes)
@@ -370,7 +405,7 @@ def classify_all(listing, excludes, taken):
         archived_in = taken.get(o.path)
         if archived_in is not None:
             # By modification date: a date from the name stays the same when the file is uploaded again.
-            if o.modified <= torrent_cutoff(archived_in):
+            if o.modified <= cutoffs[archived_in]:
                 add(scan.taken[archived_in], o.size)
                 if is_index:
                     scan.taken_indexes.add(folder_of(o.path))
@@ -390,18 +425,7 @@ def classify_all(listing, excludes, taken):
 
 
 def is_torrent_id(name):
-    if not TORRENT_ID_RE.match(name):
-        return False
-    try:
-        torrent_cutoff(name)
-    except ValueError:
-        return False
-    return True
-
-
-def torrent_cutoff(torrent_id):
-    """The cutoff date in a torrent ID: the torrent holds nothing dated after it."""
-    return datetime.date.fromisoformat(torrent_id[len(TORRENT_ID_PREFIX) :])
+    return bool(TORRENT_ID_RE.match(name))
 
 
 def file_name(path):

@@ -7,6 +7,7 @@ site_path_problem). These are shared by 01-find, 03-load, 04-make-torrent, 07-pu
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
 
+import datetime
 import gzip
 import json
 import os
@@ -22,12 +23,15 @@ from workflow import (  # noqa: E402
     STEPS,
     classify_path,
     file_list_problems,
+    format_torrent_id,
     iso,
     parse_iso,
     read_listing_gz,
+    readme_cutoff,
     render_comment,
     site_path_problem,
     step_name,
+    torrent_sequence,
 )
 
 
@@ -91,6 +95,31 @@ class RenderCommentTest(unittest.TestCase):
         line = [line for line in comment.splitlines() if line.startswith("Data from")][0]
         self.assertTrue(line.endswith("...."))
         self.assertLessEqual(len(line), len("Data from 2024. Datasets: ") + 200 + len(", ..."))
+
+
+class TorrentIdTest(unittest.TestCase):
+    def test_format_is_two_digit_zero_padded(self):
+        self.assertEqual(format_torrent_id(0), "everef-eve-online-deep-archive-00")
+        self.assertEqual(format_torrent_id(9), "everef-eve-online-deep-archive-09")
+        self.assertEqual(format_torrent_id(42), "everef-eve-online-deep-archive-42")
+
+    def test_sequence_round_trips(self):
+        self.assertEqual(torrent_sequence(format_torrent_id(7)), 7)
+
+    def test_sequence_none_for_old_date_based_ids(self):
+        self.assertIsNone(torrent_sequence("everef-eve-online-deep-archive-2023-04-11"))
+
+    def test_sequence_none_for_non_ids(self):
+        self.assertIsNone(torrent_sequence("feed"))
+
+
+class ReadmeCutoffTest(unittest.TestCase):
+    def test_reads_the_cutoff_sentence(self):
+        text = "This is an EVE Ref EVE Online Deep Archive torrent dated up to 2023-04-11.\nMore text.\n"
+        self.assertEqual(readme_cutoff(text), datetime.date(2023, 4, 11))
+
+    def test_none_without_the_sentence(self):
+        self.assertIsNone(readme_cutoff("Nothing relevant here.\n"))
 
 
 class IsoTest(unittest.TestCase):

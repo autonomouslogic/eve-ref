@@ -129,7 +129,7 @@ def check_deep_archive_listing(base, torrent_id):
     except (urllib.error.HTTPError, urllib.error.URLError) as e:
         return [f"{url}: {e}"]
     names = index_file_names(entries)
-    expected = {f"{torrent_id}.torrent", f"{torrent_id}.txt", "everef-deep-archive.xml"}
+    expected = {f"{torrent_id}.torrent", f"{torrent_id}.txt", f"{torrent_id}-README.md", "everef-deep-archive.xml"}
     missing = expected - names
     if missing:
         return [f"{url}: missing {sorted(missing)}"]

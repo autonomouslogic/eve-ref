@@ -19,7 +19,8 @@ Checks:
 - SEED_DIR has room for the largest possible torrent (MAX_BYTES);
 - SCRATCH_DIR and SEED_DIR are separate;
 - rclone is installed;
-- the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable;
+- the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable; also picks the
+  next torrent ID (one past the highest published one, or 00 if there are none), for 01-find to use;
 - the other required tools: libtorrent 2.x, aria2c;
 - qBittorrent's Web API answers at QBITTORRENT_URL with QBITTORRENT_API_KEY, and runs libtorrent 2.x;
 - the tracker lists make-torrent downloads (lib/trackers.py) are reachable, each has UDP or HTTP(S) trackers, and
@@ -44,6 +45,7 @@ from workflow import (  # noqa: E402
     error,
     fail,
     fmt_bytes,
+    format_torrent_id,
     is_inside,
     join,
     load_env,
@@ -54,6 +56,7 @@ from workflow import (  # noqa: E402
     qbittorrent_settings,
     section,
     start_log,
+    torrent_sequence,
 )
 from qbittorrent import Client, QbittorrentError  # noqa: E402
 from trackers import MIN_TRACKERS, TrackersError, combine, fetch_tracker_lists  # noqa: E402
@@ -135,12 +138,12 @@ def main():
     check_trackers(checks)
 
     section("Remote")
-    check_remote(checks)
+    next_torrent_id = check_remote(checks)
 
     if checks.failed:
         fail(f"Preflight found {checks.failed} problem{'s' if checks.failed != 1 else ''}, aborting")
     workflow = Workflow()
-    workflow.complete(STEP, None, {"env_file": env_file})
+    workflow.complete(STEP, None, {"env_file": env_file, "next_torrent_id": next_torrent_id})
     ok("Preflight OK")
 
 
@@ -259,11 +262,13 @@ def check_trackers(checks):
 
 
 def check_remote(checks):
+    """Also picks the next torrent ID (sequential, TORRENT_ID_RE): one past the highest published one, or 00 if
+    there are none. Returns it, or None if it couldn't be determined."""
     settings = ("DATA_BUCKET", "RCLONE_CONFIG_EVEREF_ACCOUNT", "RCLONE_CONFIG_EVEREF_KEY")
     missing = [name for name in settings if not os.environ.get(name, "").strip()]
     if missing:
         checks.fail(f"{', '.join(missing)} not set (environment or torrents.env)")
-        return
+        return None
     remote = data_remote()
     print(f"Bucket: {remote}")
     print(f"B2 key: {os.environ['RCLONE_CONFIG_EVEREF_ACCOUNT']}")
@@ -272,20 +277,41 @@ def check_remote(checks):
     entries = json.loads(out) if out else []
     if error_line or not entries:
         checks.fail(f"Can't read {join(remote, 'index.json')}: {error_line or 'not found'}")
-        return
+        return None
     print(f"Site root: index.json modified {entries[0]['ModTime'][:19]}")
 
     out, error_line = run_rclone("lsjson", "--files-only", "--no-mimetype", join(remote, DEEP_ARCHIVE_DIR))
     if error_line and "directory not found" in error_line:
         print(f"{DEEP_ARCHIVE_DIR}/ doesn't exist yet: no published torrents")
-    elif error_line:
+        return format_torrent_id(0)
+    if error_line:
         checks.fail(f"Can't list {join(remote, DEEP_ARCHIVE_DIR)}: {error_line}")
-    else:
-        torrents = sorted(e["Path"] for e in json.loads(out) if e["Path"].endswith(".torrent"))
-        if torrents:
-            print(f"{DEEP_ARCHIVE_DIR}/: {len(torrents)} published torrents, newest {torrents[-1]}")
+        return None
+
+    torrents = sorted(e["Path"] for e in json.loads(out) if e["Path"].endswith(".torrent"))
+    if not torrents:
+        print(f"{DEEP_ARCHIVE_DIR}/: no published torrents yet")
+        return format_torrent_id(0)
+
+    sequences = []
+    for path in torrents:
+        torrent_id = path[: -len(".torrent")]
+        sequence = torrent_sequence(torrent_id)
+        if sequence is None:
+            checks.fail(f"{DEEP_ARCHIVE_DIR}/{path}: {torrent_id!r} isn't a valid torrent ID")
         else:
-            print(f"{DEEP_ARCHIVE_DIR}/: no published torrents yet")
+            sequences.append(sequence)
+    if not sequences:
+        return None
+    newest = format_torrent_id(max(sequences))
+    print(f"{DEEP_ARCHIVE_DIR}/: {len(torrents)} published torrents, newest {newest}")
+    next_sequence = max(sequences) + 1
+    if next_sequence > 99:
+        checks.fail("All double-digit torrent IDs (00-99) are used; the ID scheme needs widening")
+        return None
+    next_torrent_id = format_torrent_id(next_sequence)
+    print(f"Next torrent ID: {next_torrent_id}")
+    return next_torrent_id
 
 
 if __name__ == "__main__":

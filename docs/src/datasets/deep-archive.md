@@ -4,13 +4,16 @@ The [Deep Archive](https://data.everef.net/deep-archive) moves old data off [dat
 **To help host it**, add [the RSS feed](https://data.everef.net/deep-archive/everef-deep-archive.xml) to your torrent client.
 
 ## Structure
-Each archive is one torrent file, named `everef-eve-online-deep-archive-YYYY-MM-DD.torrent`.
-The date is the cutoff date for the torrent.
-It will only contain data from that date or earlier.
-However, it may not necesarrily contain all the data from before that date.
+Each archive is one torrent file, named `everef-eve-online-deep-archive-NN.torrent`, where `NN` is a sequential
+two-digit number starting at `00`.
 The files are laid out exactly as it was originally on `data.everef.net`.
 
-Alongside the torrent files are TXT files names `everef-eve-online-deep-archive-YYYY-MM-DD.txt`.
+Each torrent has a cutoff date: it will only contain data from that date or earlier.
+However, it may not necessarily contain all the data from before that date.
+The cutoff date is stated in the torrent's own `everef-eve-online-deep-archive-NN-README.md`, included both inside
+the torrent and published alongside it.
+
+Alongside the torrent files are TXT files named `everef-eve-online-deep-archive-NN.txt`.
 These simply contain a list of all the files in each torrent file and can be used to quickly search for specific files.
 
 ### What gets archived

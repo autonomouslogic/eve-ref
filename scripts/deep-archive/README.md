@@ -1,8 +1,10 @@
 # EVE Ref Deep Archive
 
 Moves old data.everef.net data into torrents. One workflow makes one torrent: the oldest data not archived yet, as
-much as the size limits allow, named after the last date it covers (`everef-eve-online-deep-archive-YYYY-MM-DD`).
-It's then seeded, published, listed on the docs site, and deleted from the site.
+much as the size limits allow, named with a sequential two-digit ID (`everef-eve-online-deep-archive-NN`, starting
+at `00`). Its cutoff date -- the last date it covers -- is recorded in its own README, not its ID (00-preflight
+picks the next ID; 01-find picks the cutoff). It's then seeded, published, listed on the docs site, and deleted from
+the site.
 
 Status: **draft**. Every step 00-14 is numbered and every scripted one is written; none has run against real data yet.
 Design and reasoning: [`PLAN.md`](PLAN.md).
@@ -75,8 +77,9 @@ anything else looks wrong, stop. Keep notes for the workflow in `$SCRATCH_DIR/NO
 Checks the settings, both directories (created if missing; `SCRATCH_DIR` empty, room in `SEED_DIR`), rclone, the B2
 key and bucket, libtorrent, aria2c, the tracker lists (both download, at least 10 trackers together), `LOCAL_COPY_DIR`
 if set, and qBittorrent's Web API (reachable, the API key works, libtorrent 2.x). Names any setting the environment
-overrides `torrents.env` with. Reports every problem, then aborts if there were any; a missing tool (rclone,
-libtorrent, aria2c) aborts right after the tool checks.
+overrides `torrents.env` with. Also picks the next torrent ID from the published `.torrent` files in
+`deep-archive/`: one past the highest sequence number, or `00` if there are none. Reports every problem, then
+aborts if there were any; a missing tool (rclone, libtorrent, aria2c) aborts right after the tool checks.
 
 ### 01: Find
 ```
@@ -84,11 +87,12 @@ libtorrent, aria2c) aborts right after the tool checks.
 ```
 Lists the bucket and selects the oldest files not archived yet, by date (the earliest of the modification date, an
 ISO date in the file name, and 31 December of a year in the file name; PLAN 2.2), and nothing newer than the minimum
-age (`MIN_AGE_YEARS`). Dates are added oldest first until a limit (`lib/workflow.py`) stops it: the `.torrent` size
-limit is hard (the date that would go over it is left out), the data limit `MAX_BYTES` is soft (the date that reaches
-it is the last one taken, so the torrent can be somewhat over). Each folder with a selected file brings its own
-`index.json`, whatever that file's date. Prints the cutoff, the torrent ID and a report, and writes the selection to
-`$SCRATCH_DIR/find/files.jsonl`.
+age (`MIN_AGE_YEARS`). What a published torrent already holds is read from its own `<ID>-README.md`, not its ID
+(the ID is now sequential, not date-based). Dates are added oldest first until a limit (`lib/workflow.py`) stops it:
+the `.torrent` size limit is hard (the date that would go over it is left out), the data limit `MAX_BYTES` is soft
+(the date that reaches it is the last one taken, so the torrent can be somewhat over). Each folder with a selected
+file brings its own `index.json`, whatever that file's date. Uses the torrent ID `00-preflight` picked. Prints the
+cutoff, the torrent ID and a report, and writes the selection to `$SCRATCH_DIR/find/files.jsonl`.
 
 Aborts if the oldest date alone is over the `.torrent` size limit: that needs resolving by hand. Also aborts if the
 selection is under `MIN_BYTES` (500 GiB): not enough data for a torrent yet. Nothing is written in either case; run
@@ -164,15 +168,17 @@ Review notes, R16).
 ```
 ./07-publish.py
 ```
-Shows the targets and asks first, then uploads `<ID>.torrent` and `<ID>.txt` to the bucket's `deep-archive/`. Never
-overwrites (a file already published by an earlier attempt must be identical, and is skipped). Then rebuilds
-`everef-deep-archive.xml` from the published torrents, shows the difference, asks again, saves the published
-`everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it. Last, checks all three
-over HTTPS, retrying for a few minutes while Cloudflare still serves the old feed. Prints the torrent's URL, v1 and v2
-info-hashes, and full magnet link for step 08.
+Shows the targets and asks first, then uploads `<ID>.torrent`, `<ID>.txt` and `<ID>-README.md` to the bucket's
+`deep-archive/` (the README from `$SEED_DIR/<ID>/`; published on its own, not just inside the torrent, since it's
+now where the torrent's cutoff date lives). Never overwrites (a file already published by an earlier attempt must be
+identical, and is skipped). Then rebuilds `everef-deep-archive.xml` from the published torrents, shows the
+difference, asks again, saves the published `everef-deep-archive.xml` to
+`$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it. Last, checks all four files over HTTPS, retrying for
+a few minutes while Cloudflare still serves the old feed. Prints the torrent's URL, v1 and v2 info-hashes, and full
+magnet link for step 08.
 - The only difference in the feed is the new `<ID>`.
-- The `.torrent` and `.txt` are served from `https://data.everef.net/deep-archive/` with the right Content-Type and
-  content; the feed is valid RSS and has `<ID>` with the right info-hash.
+- The `.torrent`, `.txt` and README are served from `https://data.everef.net/deep-archive/` with the right
+  Content-Type and content; the feed is valid RSS and has `<ID>` with the right info-hash.
 
 ### 08: Update docs (manual)
 
@@ -235,7 +241,7 @@ Leave `DATA_INDEX_PREFIX` unset.
 ./13-check-site.py
 ```
 - Every sampled deleted URL returns 404, or 200 from Cloudflare's cache (PLAN 2.16).
-- The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt` and the feed.
+- The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt`, the README and the feed.
 
 ### 14: Delete the scratch directory (manual)
 
@@ -314,10 +320,10 @@ $SCRATCH_DIR/                      # one workflow; deleted by hand at the end
   log/.lock                        # held by the running step
 
 $SEED_DIR/                         # kept; qBittorrent save path
-  everef-eve-online-deep-archive-2023-04-11/  # torrent content, exactly what the torrent describes
-    everef-eve-online-deep-archive-2023-04-11-README.md
+  everef-eve-online-deep-archive-01/  # torrent content, exactly what the torrent describes
+    everef-eve-online-deep-archive-01-README.md
     market-orders/history/2023/…
-  everef-eve-online-deep-archive-…/           # earlier torrents, still seeding
+  everef-eve-online-deep-archive-00/  # earlier torrents, still seeding
 ```
 
 `SCRATCH_DIR` and `SEED_DIR` must be separate, neither inside the other.
@@ -355,7 +361,7 @@ If `09-check-before-delete` finds a file that changed after it was selected:
 | `03-load` | `$SEED_DIR/<ID>/`, `manifest.json` | read |
 | `04-make-torrent` | README in `$SEED_DIR/<ID>/`, `.torrent`, `.txt` | none |
 | `05-seed` / `06-check-seed` | qBittorrent / throwaway aria2c download | none |
-| `07-publish` | **bucket `deep-archive/`**, `feed-backup/` | write |
+| `07-publish` | **bucket `deep-archive/`** (`.torrent`, `.txt`, README), `feed-backup/` | write |
 | `09-check-before-delete` | `delete-set.json` | read |
 | `10-delete` / `11-check-delete` | **bucket data (permanent)**, `deleted.jsonl` / none | write / read |
 | `13-check-site` | none | none |

@@ -72,9 +72,33 @@ MIN_AGE_YEARS = 2
 # Public URL of the data site.
 DATA_BASE_URL = "https://data.everef.net/"
 
-# Torrent IDs (PLAN 2.3): everef-eve-online-deep-archive-<cutoff date>.
+# Torrent IDs (PLAN 2.3): everef-eve-online-deep-archive-<two-digit sequence number>, starting at 00. Sequential,
+# not date-based: 00-preflight picks the next one from the published torrents' IDs. A torrent's cutoff date is no
+# longer in its ID; it's in the torrent's README (README_CUTOFF_RE, read back by 01-find).
 TORRENT_ID_PREFIX = "everef-eve-online-deep-archive-"
-TORRENT_ID_RE = re.compile(r"^everef-eve-online-deep-archive-\d{4}-\d{2}-\d{2}$")
+TORRENT_ID_RE = re.compile(r"^everef-eve-online-deep-archive-(\d{2})$")
+
+# The cutoff date sentence in a torrent's README (README-template.md's wording), read back by 01-find to tell what a
+# published torrent already holds, now that the ID itself doesn't carry the date.
+README_CUTOFF_RE = re.compile(r"\btorrent dated up to (\d{4}-\d{2}-\d{2})\.")
+
+
+def format_torrent_id(sequence):
+    """The torrent ID for a sequence number, e.g. 0 -> everef-eve-online-deep-archive-00."""
+    return f"{TORRENT_ID_PREFIX}{sequence:02d}"
+
+
+def torrent_sequence(torrent_id):
+    """The sequence number in a torrent ID (TORRENT_ID_RE), or None if it doesn't match."""
+    m = TORRENT_ID_RE.match(torrent_id)
+    return int(m[1]) if m else None
+
+
+def readme_cutoff(text):
+    """The cutoff date from a torrent's README text (README_CUTOFF_RE), or None if it isn't stated there."""
+    m = README_CUTOFF_RE.search(text)
+    return datetime.date.fromisoformat(m[1]) if m else None
+
 
 # Cache-Control max-age for everef-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.

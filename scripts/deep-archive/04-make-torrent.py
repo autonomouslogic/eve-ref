@@ -47,7 +47,6 @@ from workflow import (  # noqa: E402
     MAX_TORRENT_BYTES,
     PIECE_SIZE,
     TORRENT_EXCLUDE,
-    TORRENT_ID_PREFIX,
     Workflow,
     classify_path,
     error,
@@ -78,6 +77,7 @@ def main():
     workflow = Workflow()
     workflow.begin(STEP)
     torrent_id = workflow.torrent_id()
+    cutoff = workflow.read_done("find")["summary"]["cutoff"]
     content_dir = os.path.join(workflow.seed_dir, torrent_id)
     torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
     txt_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.txt")
@@ -90,7 +90,7 @@ def main():
     section("README")
     readme_name = f"{torrent_id}-README.md"
     years, datasets = classify_all(files)
-    write_readme(os.path.join(content_dir, readme_name), torrent_id)
+    write_readme(os.path.join(content_dir, readme_name), torrent_id, cutoff)
     print(f"Written: {os.path.join(content_dir, readme_name)}")
 
     section("Trackers")
@@ -291,12 +291,11 @@ def classify_all(files):
     return years, datasets
 
 
-def write_readme(path, torrent_id):
+def write_readme(path, torrent_id, cutoff):
     if not os.path.isfile(README_TEMPLATE):
         fail(f"README template not found: {README_TEMPLATE}")
     with open(README_TEMPLATE, encoding="utf-8") as f:
         template = f.read()
-    cutoff = torrent_id[len(TORRENT_ID_PREFIX) :]
     text = template.format(id=torrent_id, cutoff=cutoff)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
