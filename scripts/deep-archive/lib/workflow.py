@@ -16,7 +16,8 @@ anything the environment doesn't set:
     SCRATCH_DIR  work files for the current workflow; deleted by hand once the workflow is complete
     SEED_DIR     torrent content, one folder per torrent ID, kept for seeding (qBittorrent save path)
     RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
-                 the B2 key for the "everef" rclone remote; the rest of the remote is fixed here (RCLONE_FIXED)
+                 the B2 key for the "everef" rclone remote; the rest of the remote is fixed here, and every other
+                 RCLONE_* setting is dropped (RCLONE_FIXED)
     QBITTORRENT_URL, QBITTORRENT_API_KEY
                  qBittorrent's Web API and its API key (qBittorrent 5.2+, qbittorrent_settings)
     QBITTORRENT_SAVE_PATH  optional: SEED_DIR as qBittorrent sees it, if different (qbittorrent_save_path)
@@ -38,15 +39,17 @@ import threading
 
 ENV_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "torrents.env")
 
-# rclone is configured only from RCLONE_CONFIG_* env vars. This keeps the operator's own rclone.conf, and any remotes
-# defined in it, out of the picture entirely. Only the account and key are secrets, so only those come from
-# torrents.env; the rest of the "everef" remote is fixed here, and overrides the environment. hard_delete must never be
-# true: deletes must stay soft, so the bucket lifecycle rules provide the undo window.
+# rclone is configured only from these env vars. RCLONE_CONFIG=/dev/null keeps the operator's own rclone.conf, and any
+# remotes defined in it, out of the picture entirely, and load_env drops every other RCLONE_* variable but the B2 key
+# (RCLONE_ALLOWED), from the environment or torrents.env: a filter or flag left in the shell (RCLONE_EXCLUDE,
+# RCLONE_DRY_RUN, ...) would change what a listing or a delete sees. The rest of the "everef" remote is fixed here.
+# hard_delete must never be true: deletes must stay soft, so the bucket lifecycle rules provide the undo window.
 RCLONE_FIXED = {
     "RCLONE_CONFIG": "/dev/null",
     "RCLONE_CONFIG_EVEREF_TYPE": "b2",
     "RCLONE_CONFIG_EVEREF_HARD_DELETE": "false",
 }
+RCLONE_ALLOWED = {"RCLONE_CONFIG_EVEREF_ACCOUNT", "RCLONE_CONFIG_EVEREF_KEY"}
 
 # The rclone remote for the data site's bucket; the bucket itself is the DATA_BUCKET setting.
 REMOTE_NAME = "everef"
@@ -309,22 +312,46 @@ def ok(message):
 # names them (print_env_overrides), so a stale shell export doesn't silently override the file.
 ENV_OVERRIDES = []
 
+# RCLONE_* settings load_env dropped (see RCLONE_FIXED), named by every step like ENV_OVERRIDES.
+RCLONE_IGNORED = []
+
 
 def print_env_overrides():
-    """Names the settings the environment overrides torrents.env with (ENV_OVERRIDES): names only, some are secrets."""
+    """
+    Names the settings the environment overrides torrents.env with (ENV_OVERRIDES), and the RCLONE_* settings dropped
+    (RCLONE_IGNORED): names only, some are secrets.
+    """
     if ENV_OVERRIDES:
         print(f"Note: set in the environment, overriding torrents.env: {', '.join(sorted(ENV_OVERRIDES))}")
+    if RCLONE_IGNORED:
+        print(f"Note: ignored, rclone only takes the B2 key from the settings: {', '.join(RCLONE_IGNORED)}")
+
+
+def _dropped_rclone_setting(key):
+    return key.startswith("RCLONE_") and key not in RCLONE_ALLOWED
+
+
+def _apply_rclone_settings():
+    """Drops every RCLONE_* setting but RCLONE_ALLOWED, naming them in RCLONE_IGNORED, then applies RCLONE_FIXED."""
+    RCLONE_IGNORED.clear()
+    for key in sorted(os.environ):
+        if _dropped_rclone_setting(key):
+            if os.environ[key] != RCLONE_FIXED.get(key):
+                RCLONE_IGNORED.append(key)
+            del os.environ[key]
+    os.environ.update(RCLONE_FIXED)
 
 
 def load_env():
     """
-    Reads torrents.env into os.environ, without overriding anything already set, then applies RCLONE_FIXED.
-    Returns the file's path, or None if there isn't one. Settings the environment overrides go in ENV_OVERRIDES.
+    Reads torrents.env into os.environ, without overriding anything already set, then drops every RCLONE_* setting but
+    the B2 key and applies RCLONE_FIXED. Returns the file's path, or None if there isn't one. Settings the environment
+    overrides go in ENV_OVERRIDES, the RCLONE_* settings dropped in RCLONE_IGNORED.
     """
     path = os.path.realpath(os.environ.get("TORRENTS_ENV") or ENV_FILE)
     ENV_OVERRIDES.clear()
     if not os.path.isfile(path):
-        os.environ.update(RCLONE_FIXED)
+        _apply_rclone_settings()
         return None
     with open(path, encoding="utf-8") as f:
         for number, line in enumerate(f, 1):
@@ -340,10 +367,10 @@ def load_env():
             value = value.strip()
             if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
                 value = value[1:-1]
-            if key in os.environ and os.environ[key] != value and key not in RCLONE_FIXED:
+            if key in os.environ and os.environ[key] != value and not _dropped_rclone_setting(key):
                 ENV_OVERRIDES.append(key)
             os.environ.setdefault(key, value)
-    os.environ.update(RCLONE_FIXED)
+    _apply_rclone_settings()
     return path
 
 
@@ -649,8 +676,9 @@ MINISIGN_PUBLIC_KEY = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "..", "..", "..", "ui", "public", ".well-known", "minisign.pub"
 )
 
-# minisign's Docker image, as 04-sign-sha256.sh and 06-sign-torrent.sh run it.
-MINISIGN_IMAGE = "jedisct1/minisign"
+# minisign's Docker image, pinned by digest (latest as of 2026-10-26), the same as lib/sign.sh's for 04-sign-sha256.sh
+# and 06-sign-torrent.sh: a swapped image could pass any signature here. Always run with no network.
+MINISIGN_IMAGE = "jedisct1/minisign@sha256:ee60186c5d05e342e66cbc81133aa744d026752d909d8ea021a15c4d16b1193b"
 
 
 def verify_signature(path):
@@ -673,6 +701,8 @@ def verify_signature(path):
         "docker",
         "run",
         "--rm",
+        "--network",
+        "none",
         "-v",
         f"{folder}:/data:ro",
         "-v",

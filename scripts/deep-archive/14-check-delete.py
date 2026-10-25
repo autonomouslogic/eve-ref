@@ -10,13 +10,15 @@ DRAFT. Read-only on the bucket.
 Needs 13-delete's completion file, and refuses to run twice (lib/workflow.py).
 
 - Every path in deleted.jsonl (data and index cleanup) is gone from a fresh listing.
-- Every path that failed the pre-delete check (delete-set.json's "failed" list) is still there, untouched.
+- Every path that failed the pre-delete check (delete-set.json's "failed" list) while on the bucket is still there,
+  untouched.
 - No path that existed when 01-find listed the bucket (find/listing.jsonl.gz), other than the ones just deleted,
   has disappeared: 13-delete's rclone delete call only ever takes an explicit file list (never a prefix), but this
   is the only check that would catch it deleting something else too. It allows the site to have grown (new uploads
   since find ran) and files with new content at the same path (sizes/mtimes aren't compared: the normal scrapers
   keep writing throughout the workflow), only never a find-time path vanishing outside the delete set.
-- No folder holds nothing but index.html/index.json, anywhere beneath it (the cleanup fully worked).
+- No folder holding or above a deleted path holds nothing but index.html/index.json, anywhere beneath it (the cleanup
+  fully worked). Other such folders were there before the delete, which never touches them: a warning.
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
@@ -43,6 +45,7 @@ from workflow import (  # noqa: E402
     ok,
     read_listing_gz,
     section,
+    warning,
 )
 
 STEP = "check-delete"
@@ -64,8 +67,10 @@ def main():
     with open(delete_set_path, encoding="utf-8") as f:
         delete_set = json.load(f)
     failed = delete_set.get("failed", [])
+    # 12-check-before-delete's failures that were on the bucket then: the delete must have left them there.
+    kept = sum(1 for f in failed if f.get("on_bucket", True))
     print(f"{fmt_count(len(deleted))} deleted entries in {deleted_log}")
-    print(f"{fmt_count(len(failed))} paths that failed 12-check-before-delete, should still be present")
+    print(f"{fmt_count(kept)} paths that failed 12-check-before-delete while on the bucket, should still be present")
 
     section("Fresh listing")
     fresh = {path: (size, mtime) for path, size, mtime in lsjson(remote, recursive=True)}
@@ -81,14 +86,14 @@ def main():
         print(f"All {fmt_count(len(deleted))} deleted paths are gone")
 
     section("Failed paths untouched")
-    missing_failed = [f["path"] for f in failed if "path" in f and f["path"] not in fresh]
+    missing_failed = failed_paths_gone(failed, fresh)
     if missing_failed:
         problems.append(
             f"{len(missing_failed)} path(s) that failed 12-check-before-delete are gone too: "
             f"{missing_failed[:LOG_SAMPLE]}"
         )
     else:
-        print(f"All {fmt_count(len(failed))} paths that failed 12-check-before-delete are still there")
+        print(f"All {fmt_count(kept)} paths that failed 12-check-before-delete while on the bucket are still there")
 
     section("No other find-time paths disappeared")
     listing_path = os.path.join(workflow.scratch_dir, "find", "listing.jsonl.gz")
@@ -106,20 +111,33 @@ def main():
         print(f"All {fmt_count(untouched)} other find-time paths are still there (or legitimately changed)")
 
     section("Stale indexes")
-    stale = find_index_only_folders(fresh)
+    stale, elsewhere = split_index_only_folders(fresh, deleted_paths)
+    if elsewhere:
+        warning(
+            f"{len(elsewhere)} folder(s) the delete never touched hold only index files, left as they are: "
+            f"{elsewhere[:LOG_SAMPLE]}"
+        )
     if stale:
-        problems.append(f"{len(stale)} folder(s) still hold only index files: {stale[:LOG_SAMPLE]}")
+        problems.append(f"{len(stale)} folder(s) the delete touched still hold only index files: {stale[:LOG_SAMPLE]}")
     else:
-        print("No folder holds only index.html/index.json")
+        print("No folder the delete touched holds only index.html/index.json")
 
     if problems:
         for problem in problems:
             error(f"  {problem}")
         fail(f"{len(problems)} problems after the delete")
 
-    workflow.complete(STEP, torrent_id, {"deleted": len(deleted), "failed_untouched": len(failed)})
+    workflow.complete(STEP, torrent_id, {"deleted": len(deleted), "failed_untouched": kept})
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     ok(f"Check delete OK for {torrent_id}")
+
+
+def failed_paths_gone(failed, fresh):
+    """
+    Paths that failed 12-check-before-delete while on the bucket (on_bucket) but are missing from a fresh listing now:
+    the delete should have left them alone. One that was already gone then isn't expected back.
+    """
+    return [f["path"] for f in failed if f.get("on_bucket", True) and f["path"] not in fresh]
 
 
 def find_unexpectedly_gone(original, deleted_paths, failed_paths, fresh):
@@ -136,6 +154,19 @@ def read_jsonl(path):
         return []
     with open(path, encoding="utf-8") as f:
         return [json.loads(line) for line in f if line.strip()]
+
+
+def split_index_only_folders(fresh, deleted_paths):
+    """
+    (index-only folders holding or above a deleted path, the other index-only folders): 13-delete cleans up the
+    first, so any left is a problem; the others were there before (an earlier manual delete, say) and aren't.
+    """
+    touched = set()
+    for path in deleted_paths:
+        parts = path.split("/")[:-1]
+        touched.update("/".join(parts[:i]) for i in range(1, len(parts) + 1))
+    stale = find_index_only_folders(fresh)
+    return [f for f in stale if f in touched], [f for f in stale if f not in touched]
 
 
 def find_index_only_folders(fresh):

@@ -9,7 +9,7 @@ SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
     05-make-torrent.py
 
 Needs 04-sign-sha256's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece of every
-file (hours for a full torrent).
+file (hours for a full torrent), with a progress line every PROGRESS_INTERVAL seconds.
 
 First checks every manifest file in $SEED_DIR/<ID>/ still has the manifest's size and modification time
 (content_problems; NOTES.md "Known limitations"), so a file changed on disk since 03-load hashed it doesn't go into the
@@ -84,6 +84,7 @@ STEP = "make-torrent"
 README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib", "README-template.md")
 CREATOR = "EVE Ref"
 LOG_SAMPLE = 20
+PROGRESS_INTERVAL = 30  # seconds between hashing progress lines
 
 
 def main():
@@ -153,7 +154,7 @@ def main():
         os.path.getsize(os.path.join(content_dir, name)) for name in root_names
     )
     print(f"Hashing {fmt_count(num_pieces)} pieces ({fmt_bytes(total_bytes)})")
-    lt.set_piece_hashes(ct, workflow.seed_dir)
+    lt.set_piece_hashes(ct, workflow.seed_dir, hashing_progress(num_pieces))
     data = lt.bencode(ct.generate())
     tmp = torrent_path + ".tmp"
     with open(tmp, "wb") as f:
@@ -200,6 +201,27 @@ def main():
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     print(f"Copy into $SCRATCH_DIR/NOTES.md: v1 {v1_hash}, v2 {v2_hash}")
     ok(f"Make torrent OK for {torrent_id}")
+
+
+def hashing_progress(num_pieces):
+    """
+    A set_piece_hashes callback, which libtorrent calls once per piece hashed (not in piece order): prints the count
+    every PROGRESS_INTERVAL seconds, and once all are done.
+    """
+    started = time.monotonic()
+    state = {"done": 0, "printed": started}
+
+    def progress(piece):
+        state["done"] += 1
+        now = time.monotonic()
+        if now - state["printed"] >= PROGRESS_INTERVAL or state["done"] == num_pieces:
+            state["printed"] = now
+            print(
+                f"{fmt_count(state['done'])}/{fmt_count(num_pieces)} pieces, {fmt_duration(now - started)} elapsed",
+                flush=True,
+            )
+
+    return progress
 
 
 def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, root_names, trackers, comment):

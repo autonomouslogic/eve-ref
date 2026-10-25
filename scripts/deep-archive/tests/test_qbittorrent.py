@@ -1,5 +1,6 @@
 """
-Tests for lib/qbittorrent.py: authenticating with the Web API key (Authorization: Bearer on every request).
+Tests for lib/qbittorrent.py: authenticating with the Web API key (Authorization: Bearer on every request), adding a
+torrent, and qBittorrent's torrent ID.
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -51,10 +52,16 @@ class ClientAuthTest(unittest.TestCase):
 
 class AddTorrentTest(unittest.TestCase):
     def add(self, response):
+        """Adds a torrent, qBittorrent answering with response. Returns the request's body."""
         with tempfile.NamedTemporaryFile(suffix=".torrent") as torrent:
             with patch.object(qbittorrent.urllib.request, "urlopen") as urlopen:
                 urlopen.return_value.__enter__.return_value.read.return_value = response
                 qbittorrent.Client("http://localhost:8080", "qbt_key").add_torrent_file(torrent.name, "/downloads")
+        return urlopen.call_args.args[0].data
+
+    def test_keeps_the_torrents_root_folder(self):
+        # Whatever qBittorrent's default content layout, the files are looked for in /downloads/<torrent name>/.
+        self.assertIn(b'name="contentLayout"\r\n\r\nOriginal\r\n', self.add(b"Ok."))
 
     def test_ok_text(self):
         # qBittorrent before 5.2.

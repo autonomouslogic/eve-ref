@@ -24,6 +24,7 @@ problem; look before going on (README, "Check before delete").
 Writes, in SCRATCH_DIR:
 
     delete-set.json              torrent_id, confirmed files (path, size, last_modified), bytes, datasets, failed
+                                 files (path, reason, on_bucket)
     12-check-before-delete.done  completion file
 
 Environment (or torrents.env, see lib/workflow.py):
@@ -250,29 +251,28 @@ def build_delete_set(data_files, manifest, selection, fresh):
     """
     (confirmed, failed) for the torrent's data files ({path: size in the torrent}): confirmed if the file is in the
     manifest and the selection, the bucket has it right now with the torrent's size, and with the selected size and
-    modification time.
+    modification time. A failed file's on_bucket says whether the bucket has it right now: 14-check-delete expects
+    those still there after the delete.
     """
     confirmed = []
     failed = []
     for path, torrent_size in sorted(data_files.items()):
-        if path not in manifest:
-            failed.append({"path": path, "reason": "not in the manifest"})
-            continue
         selected = selection.get(path)
-        if selected is None:
-            failed.append({"path": path, "reason": "not in the selection (files.jsonl)"})
-            continue
         current = fresh.get(path)
-        if current is None:
-            failed.append({"path": path, "reason": "no longer on the bucket"})
+        if path not in manifest:
+            reason = "not in the manifest"
+        elif selected is None:
+            reason = "not in the selection (files.jsonl)"
+        elif current is None:
+            reason = "no longer on the bucket"
+        elif torrent_size != current[0]:
+            reason = f"{torrent_size} bytes in the torrent, {current[0]} on the bucket"
+        elif current[0] != selected[0] or int(current[1]) != selected[1]:
+            reason = "changed since it was selected: not the archived version"
+        else:
+            confirmed.append({"path": path, "size": selected[0], "last_modified": iso(selected[1])})
             continue
-        if torrent_size != current[0]:
-            failed.append({"path": path, "reason": f"{torrent_size} bytes in the torrent, {current[0]} on the bucket"})
-            continue
-        if current[0] != selected[0] or int(current[1]) != selected[1]:
-            failed.append({"path": path, "reason": "changed since it was selected: not the archived version"})
-            continue
-        confirmed.append({"path": path, "size": selected[0], "last_modified": iso(selected[1])})
+        failed.append({"path": path, "reason": reason, "on_bucket": current is not None})
     return confirmed, failed
 
 

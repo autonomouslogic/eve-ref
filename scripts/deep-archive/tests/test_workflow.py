@@ -7,26 +7,34 @@ site_path_problem). These are shared by 01-find, 03-load, 05-make-torrent, 09-pu
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
 
+import contextlib
 import gzip
+import io
 import json
 import os
 import re
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
+import workflow  # noqa: E402
 from workflow import (  # noqa: E402
     MANUAL_STEPS,
+    MINISIGN_IMAGE,
+    RCLONE_FIXED,
     STEPS,
     classify_path,
     file_list_problems,
     format_torrent_id,
     in_folders,
     iso,
+    load_env,
     parse_iso,
     previous_scripted_step,
+    print_env_overrides,
     read_listing_gz,
     render_comment,
     site_path_problem,
@@ -182,6 +190,64 @@ class ReadListingGzTest(unittest.TestCase):
                 f.write(json.dumps({"path": "a/b.txt", "size": 1, "last_modified": "2024-01-01T00:00:00Z"}) + "\n")
                 f.write("\n")
             self.assertEqual(read_listing_gz(path), {"a/b.txt"})
+
+
+class LoadEnvTest(unittest.TestCase):
+    """
+    Of all RCLONE_* settings, load_env keeps only the B2 key, so nothing left in the operator's shell (a filter, a
+    flag, another option for the remote) changes what rclone lists or deletes.
+    """
+
+    def load(self, environ, env_file=None):
+        """The RCLONE_* settings after load_env, with this environment and torrents.env (None: no file)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "torrents.env")
+            if env_file is not None:
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(env_file)
+            with patch.dict(os.environ, {**environ, "TORRENTS_ENV": path}, clear=True):
+                load_env()
+                return {k: v for k, v in os.environ.items() if k.startswith("RCLONE_")}
+
+    def test_keeps_the_b2_key(self):
+        env = self.load({"RCLONE_CONFIG_EVEREF_ACCOUNT": "account"}, "RCLONE_CONFIG_EVEREF_KEY=key\n")
+        self.assertEqual(
+            env, {**RCLONE_FIXED, "RCLONE_CONFIG_EVEREF_ACCOUNT": "account", "RCLONE_CONFIG_EVEREF_KEY": "key"}
+        )
+
+    def test_drops_other_rclone_settings_from_the_environment(self):
+        env = self.load({"RCLONE_EXCLUDE": "*.bz2", "RCLONE_DRY_RUN": "true", "RCLONE_CONFIG_EVEREF_VERSIONS": "true"})
+        self.assertEqual(env, RCLONE_FIXED)
+
+    def test_drops_other_rclone_settings_from_torrents_env(self):
+        self.assertEqual(self.load({}, "RCLONE_MAX_AGE=1y\n"), RCLONE_FIXED)
+
+    def test_drops_them_without_a_torrents_env(self):
+        self.assertEqual(self.load({"RCLONE_EXCLUDE": "*.bz2"}), RCLONE_FIXED)
+
+    def test_fixed_settings_win(self):
+        env = self.load({"RCLONE_CONFIG_EVEREF_HARD_DELETE": "true", "RCLONE_CONFIG": "/home/me/rclone.conf"})
+        self.assertEqual(env, RCLONE_FIXED)
+
+    def test_names_what_it_dropped(self):
+        self.load({"RCLONE_EXCLUDE": "*.bz2", "RCLONE_CONFIG_EVEREF_HARD_DELETE": "true"})
+        self.assertEqual(workflow.RCLONE_IGNORED, ["RCLONE_CONFIG_EVEREF_HARD_DELETE", "RCLONE_EXCLUDE"])
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            print_env_overrides()
+        self.assertIn("RCLONE_CONFIG_EVEREF_HARD_DELETE, RCLONE_EXCLUDE", out.getvalue())
+
+
+class MinisignImageTest(unittest.TestCase):
+    """minisign's Docker image is pinned by digest, the same for verifying (lib/workflow.py) and signing (sign.sh)."""
+
+    def test_pinned_by_digest(self):
+        self.assertRegex(MINISIGN_IMAGE, r"^jedisct1/minisign@sha256:[0-9a-f]{64}$")
+
+    def test_sign_sh_pins_the_same_image(self):
+        with open(os.path.join(HERE, "..", "lib", "sign.sh"), encoding="utf-8") as f:
+            pins = re.findall(r'^MINISIGN_IMAGE="([^"]*)"$', f.read(), re.MULTILINE)
+        self.assertEqual(pins, [MINISIGN_IMAGE])
 
 
 class StepsTest(unittest.TestCase):

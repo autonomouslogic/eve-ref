@@ -10,8 +10,9 @@ DRAFT. Writes only to qBittorrent (via its Web API) and SCRATCH_DIR.
 Needs 06-sign-torrent's completion file, and refuses to run twice (lib/workflow.py).
 
 Adds $SCRATCH_DIR/<ID>.torrent to qBittorrent with save path QBITTORRENT_SAVE_PATH (SEED_DIR as qBittorrent sees
-it; SEED_DIR itself if not set) and automatic torrent management off, so qBittorrent uses $SEED_DIR/<ID>/ (already
-there from 03-load) rather than moving or re-downloading anything.
+it; SEED_DIR itself if not set), automatic torrent management off and content layout Original (the torrent's own <ID>
+root folder, whatever qBittorrent's default), so qBittorrent uses $SEED_DIR/<ID>/ (already there from 03-load) rather
+than moving or re-downloading anything.
 Waits for qBittorrent to report the torrent, then triggers a recheck (qBittorrent doesn't always check a torrent
 added from existing files without being asked).
 
@@ -62,7 +63,11 @@ def main():
     print(f"{url}: qBittorrent {version}")
 
     print(f"qBittorrent's torrent ID: {qbittorrent_id} (the v2 info-hash, truncated)")
-    if client.info(qbittorrent_id) is not None:
+    try:
+        existing = client.info(qbittorrent_id)
+    except QbittorrentError as e:
+        fail(f"Can't read the torrents in qBittorrent: {e}")
+    if existing is not None:
         fail(f"Torrent {qbittorrent_id} is already in qBittorrent: remove it by hand first if this is a redo")
 
     section("Add torrent")
@@ -75,13 +80,19 @@ def main():
     except QbittorrentError as e:
         fail(f"Adding the torrent failed: {e}")
 
-    info = wait_for(client, qbittorrent_id)
+    try:
+        info = wait_for(client, qbittorrent_id)
+    except QbittorrentError as e:
+        fail(f"Can't read the torrent back from qBittorrent: {e}")
     if info is None:
         fail(f"qBittorrent didn't report {qbittorrent_id} within {WAIT_TIMEOUT}s")
     print(f"Added: state {info['state']}, {info['num_seeds']} seeds reported")
 
     section("Recheck")
-    client.recheck(qbittorrent_id)
+    try:
+        client.recheck(qbittorrent_id)
+    except QbittorrentError as e:
+        fail(f"Triggering the recheck failed: {e}")
     print("Recheck triggered. Run 08-check-seed once it reaches 100%.")
 
     workflow.complete(

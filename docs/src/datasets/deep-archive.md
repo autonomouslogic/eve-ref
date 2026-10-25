@@ -16,7 +16,7 @@ your torrent client and configure it for automatic downloads.
 Each archive is one torrent file, named `everef-eve-online-deep-archive-NN.torrent`, where `NN` is a sequential number.
 The files are laid out exactly as they were originally on `data.everef.net`.
 
-Text files named `everef-eve-online-deep-archive-NN.txt` contain  a list of all the files in each torrent file and can
+Text files named `everef-eve-online-deep-archive-NN.txt` contain a list of all the files in each torrent file and can
 be used to search for specific content.
 
 Alongside the torrent files are [minisign](https://jedisct1.github.io/minisign/) signatures of the torrent
@@ -49,7 +49,8 @@ Once the torrent has downloaded, the SHA-256 checksum file `everef-eve-online-de
 See the readme at `everef-eve-online-deep-archive-NN-README.md` for instructions.
 
 ## What gets archived
-Files that have been on the site for at least 2 years, oldest first.
+Files dated at least 2 years ago, oldest first.
+A file is dated by the earliest of its upload time and any date or year in its name.
 Once a torrent is published, those files are removed from `data.everef.net`.
 The torrent and its seeders become the only remaining source.
 
@@ -59,4 +60,5 @@ Whenever a new archive has been prepared, it will be added to [everef-eve-online
 
 ### What _never_ gets archived
 * [`market-history/`](market-history.md) and [`killmails/`](killmails.md), since these effectively function as a database, with old files updated in-place.
-* [`ccp/`](https://data.everef.net/ccp/), CCP's own data (SDE, MER, image collections and so on), for now.* Any `*-latest*` files
+* [`ccp/`](https://data.everef.net/ccp/), CCP's own data (SDE, MER, image collections and so on), for now.
+* Any `*-latest*` files

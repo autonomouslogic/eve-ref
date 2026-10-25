@@ -16,7 +16,8 @@ Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py
    against the minisign key published at /.well-known/minisign.pub, before loading it into a client. Before uploading,
    verifies <ID>.torrent.minisig against <ID>.torrent with that key (lib/workflow.py's verify_signature), so a
    signature left from before 05-make-torrent was redone is never published. Never overwrites: a file already
-   published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
+   published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped;
+   the uploads themselves run with rclone --immutable.
 2. Rebuild everef-eve-online-deep-archive.xml (RSS 2.0, NOTES.md "Feed") in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth. Each torrent
    is read with libtorrent: name (the ID), creation date, v1/v2 info-hashes, data
@@ -54,6 +55,7 @@ import subprocess
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 import xml.sax.saxutils as xml_escape
@@ -178,7 +180,8 @@ def upload_torrent(workflow, torrent_id, deep_archive):
     if uploads:
         section("Torrent and file list: uploading")
         for local, remote_path, content_type in uploads:
-            rclone("copyto", local, remote_path, "--header-upload", f"Content-Type: {content_type}")
+            # --immutable: rclone itself refuses to replace a file that's already there with other content.
+            rclone("copyto", local, remote_path, "--immutable", "--header-upload", f"Content-Type: {content_type}")
             print(f"Uploaded {remote_path}")
     return [u[1] for u in uploads]
 
@@ -334,11 +337,12 @@ def build_feed(entries):
 
 
 def build_magnet(torrent_id, v1_hash, v2_hash, trackers):
+    """The magnet link, with the name and trackers percent-encoded: a tracker URL's own ? or & mustn't split it."""
     params = [f"xt=urn:btih:{v1_hash}"]
     if v2_hash:
         params.append(f"xt=urn:btmh:1220{v2_hash}")
-    params.append(f"dn={torrent_id}")
-    params += [f"tr={t}" for t in trackers]
+    params.append(f"dn={urllib.parse.quote(torrent_id, safe='')}")
+    params += [f"tr={urllib.parse.quote(t, safe='')}" for t in trackers]
     return "magnet:?" + "&".join(params)
 
 

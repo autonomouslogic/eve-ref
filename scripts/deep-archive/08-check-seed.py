@@ -45,6 +45,7 @@ import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from qbittorrent import Client, QbittorrentError  # noqa: E402
+from trackers import TRACKER_SCHEMES  # noqa: E402
 from workflow import (  # noqa: E402
     Workflow,
     error,
@@ -75,12 +76,11 @@ def main():
 
     section("qBittorrent")
     url, api_key = qbittorrent_settings()
+    client = Client(url, api_key)
     try:
-        client = Client(url, api_key)
+        info = client.info(qbittorrent_id)
     except QbittorrentError as e:
         fail(f"Can't reach qBittorrent at {url}: {e}")
-
-    info = client.info(qbittorrent_id)
     if info is None:
         fail(f"Torrent {qbittorrent_id} isn't in qBittorrent")
 
@@ -104,9 +104,9 @@ def main():
         trackers = client.trackers(qbittorrent_id)
     except QbittorrentError as e:
         fail(f"Can't read trackers: {e}")
-    working = [t for t in trackers if t.get("status") == TRACKER_WORKING]
+    working = working_trackers(trackers)
     for t in trackers:
-        if t["url"].startswith(("udp://", "http://", "https://")):
+        if t["url"].startswith(TRACKER_SCHEMES):
             print(f"  {t['url']}: status {t['status']} ({t.get('msg') or 'ok'}), {t.get('num_seeds', 0)} seeds")
     if not working:
         problems.append("no tracker reports as working yet (give it a few minutes and rerun)")
@@ -134,6 +134,14 @@ def main():
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     ok(f"Check seed OK for {torrent_id}")
+
+
+def working_trackers(trackers):
+    """
+    The torrent's trackers that qBittorrent's torrents/trackers reports as working. Only real trackers count:
+    torrents/trackers also lists DHT, PeX and LSD as "** [DHT] **" etc., working whenever they're enabled.
+    """
+    return [t for t in trackers if t["url"].startswith(TRACKER_SCHEMES) and t.get("status") == TRACKER_WORKING]
 
 
 def test_download(workflow, torrent_id):

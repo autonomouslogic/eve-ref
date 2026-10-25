@@ -9,10 +9,11 @@
 # e.g. sign_step 03-load "<ID>.sha256", with <ID> filled in from 01-find.done. The step's own name comes from its
 # script's file name; tests/test_workflow.py checks the previous step matches lib/workflow.py's STEPS.
 #
-# Signs SCRATCH_DIR/<file name> with `jedisct1/minisign -S` through Docker, mounting SCRATCH_DIR and the key's
-# folder read-only, into SCRATCH_DIR/<file name>.minisig. Always prompts for the key's passphrase interactively: it's
-# never put in the environment or torrents.env. Then verifies the signature against the public key in this
-# checkout, ui/public/.well-known/minisign.pub (the one published on the site).
+# Signs SCRATCH_DIR/<file name> with `minisign -S` through Docker (MINISIGN_IMAGE), with no network and as the
+# calling user, mounting SCRATCH_DIR (read-write, for the signature) and only the key file (read-only), into
+# SCRATCH_DIR/<file name>.minisig. Always prompts for the key's passphrase interactively: it's never put in the
+# environment or torrents.env. Then verifies the signature against the public key in this checkout,
+# ui/public/.well-known/minisign.pub (the one published on the site).
 #
 # Environment (or torrents.env, see lib/workflow.py):
 #     SCRATCH_DIR
@@ -24,7 +25,9 @@ LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SELF_DIR="$(dirname "$LIB_DIR")"
 STEP_NAME="$(basename "$0" .sh)"
 PUBLIC_KEY="$SELF_DIR/../../ui/public/.well-known/minisign.pub"
-MINISIGN_IMAGE="jedisct1/minisign"
+# Pinned by digest (latest as of 2026-10-26): the signing container gets the private key and its passphrase. The same
+# pin as lib/workflow.py's MINISIGN_IMAGE (tests/test_workflow.py checks).
+MINISIGN_IMAGE="jedisct1/minisign@sha256:ee60186c5d05e342e66cbc81133aa744d026752d909d8ea021a15c4d16b1193b"
 
 die() {
   echo "🔴 $1" >&2
@@ -97,15 +100,14 @@ EOF
 }
 
 sign_step() {
-  local previous="$1" name_template="$2" name sig_name file sig_file key_dir key_name
+  local previous="$1" name_template="$2" name sig_name file sig_file key_file
   load_settings
   begin_step "$previous"
   name="${name_template//<ID>/$TORRENT_ID}"
   sig_name="$name.minisig"
   file="$SCRATCH_DIR/$name"
   sig_file="$SCRATCH_DIR/$sig_name"
-  key_dir="$(cd "$(dirname "$MINISIGN_KEY_PATH")" && pwd)"
-  key_name="$(basename "$MINISIGN_KEY_PATH")"
+  key_file="$(cd "$(dirname "$MINISIGN_KEY_PATH")" && pwd)/$(basename "$MINISIGN_KEY_PATH")"
 
   [[ -f "$file" ]] || die "Not found: $file (from $previous)"
   [[ ! -f "$sig_file" ]] || die "Already signed: $sig_file (delete it by hand to redo)"
@@ -113,14 +115,14 @@ sign_step() {
 
   echo "🔵 Signing"
   echo "$file"
-  docker run -it --rm \
-    -v "$SCRATCH_DIR:/data" -v "$key_dir:/key:ro" \
-    "$MINISIGN_IMAGE" -S -s "/key/$key_name" -m "/data/$name" -x "/data/$sig_name" >&3 2>&4
+  docker run -it --rm --network none -u "$(id -u):$(id -g)" \
+    -v "$SCRATCH_DIR:/data" -v "$key_file:/key/minisign.key:ro" \
+    "$MINISIGN_IMAGE" -S -s /key/minisign.key -m "/data/$name" -x "/data/$sig_name" >&3 2>&4
   [[ -f "$sig_file" ]] || die "minisign didn't write $sig_file"
   echo "Written: $sig_file"
 
   echo "🔵 Verifying against $PUBLIC_KEY"
-  docker run --rm \
+  docker run --rm --network none \
     -v "$SCRATCH_DIR:/data:ro" -v "$(cd "$(dirname "$PUBLIC_KEY")" && pwd):/pub:ro" \
     "$MINISIGN_IMAGE" -V -p "/pub/$(basename "$PUBLIC_KEY")" -m "/data/$name" -x "/data/$sig_name"
 

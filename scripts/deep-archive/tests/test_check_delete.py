@@ -1,6 +1,7 @@
 """
 Tests for 14-check-delete.py: catching a find-time path that disappeared without being part of the confirmed
-delete set (find_unexpectedly_gone), and the stale-index-folder scan (find_index_only_folders).
+delete set (find_unexpectedly_gone), a file that failed the pre-delete check disappearing too (failed_paths_gone),
+and the stale-index-folder scan (find_index_only_folders, split_index_only_folders).
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -54,6 +55,22 @@ class FindUnexpectedlyGoneTest(unittest.TestCase):
         self.assertEqual(check_delete.find_unexpectedly_gone(original, set(), set(), fresh), ["a.csv", "b.csv", "c.csv"])
 
 
+class FailedPathsGoneTest(unittest.TestCase):
+    CHANGED = "changed since it was selected: not the archived version"
+
+    def test_failed_path_still_there(self):
+        failed = [{"path": "a.csv", "reason": self.CHANGED, "on_bucket": True}]
+        self.assertEqual(check_delete.failed_paths_gone(failed, {"a.csv": None}), [])
+
+    def test_failed_path_deleted_anyway(self):
+        failed = [{"path": "a.csv", "reason": self.CHANGED, "on_bucket": True}]
+        self.assertEqual(check_delete.failed_paths_gone(failed, {}), ["a.csv"])
+
+    def test_path_already_gone_at_check_before_delete_is_not_expected_back(self):
+        failed = [{"path": "a.csv", "reason": "no longer on the bucket", "on_bucket": False}]
+        self.assertEqual(check_delete.failed_paths_gone(failed, {}), [])
+
+
 class FindIndexOnlyFoldersTest(unittest.TestCase):
     def test_no_stale_folders(self):
         fresh = {"a/index.json": None, "a/data.csv": None}
@@ -74,6 +91,27 @@ class FindIndexOnlyFoldersTest(unittest.TestCase):
     def test_deep_archive_is_never_reported(self):
         fresh = {"deep-archive/index.json": None}
         self.assertEqual(check_delete.find_index_only_folders(fresh), [])
+
+
+class SplitIndexOnlyFoldersTest(unittest.TestCase):
+    """Only folders the delete touched are 14-check-delete's problem: 13-delete never cleans up any other."""
+
+    def test_folder_of_a_deleted_file(self):
+        fresh = {"a/b/index.json": None, "a/c/data.csv": None}
+        self.assertEqual(check_delete.split_index_only_folders(fresh, {"a/b/data.csv"}), (["a/b"], []))
+
+    def test_parent_of_a_deleted_file(self):
+        fresh = {"a/index.json": None, "a/b/index.json": None}
+        self.assertEqual(check_delete.split_index_only_folders(fresh, {"a/b/data.csv"}), (["a", "a/b"], []))
+
+    def test_folder_the_delete_never_touched(self):
+        # e.g. left by an earlier manual delete: not this workflow's to clean up.
+        fresh = {"old/index.json": None, "old/index.html": None, "a/data.csv": None}
+        self.assertEqual(check_delete.split_index_only_folders(fresh, {"a/b/data.csv"}), ([], ["old"]))
+
+    def test_folder_named_like_a_deleted_one(self):
+        fresh = {"a/bc/index.json": None}
+        self.assertEqual(check_delete.split_index_only_folders(fresh, {"a/b/data.csv"}), ([], ["a/bc"]))
 
 
 if __name__ == "__main__":

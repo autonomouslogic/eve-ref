@@ -327,8 +327,9 @@ def write_sha256sums(path, manifest_files):
 def verify_sha256sums(sha256_path, content_dir):
     """Runs sha256sum -c on the just-written checksum file, from content_dir (the paths are relative to it). Fails
     with sha256sum's own output on any mismatch: a second, independent check of the hashes just computed in Python."""
+    # --quiet: on a mismatch, only the files that failed are listed, not every one that's OK.
     result = subprocess.run(
-        ["sha256sum", "-c", "--strict", sha256_path], cwd=content_dir, capture_output=True, text=True
+        ["sha256sum", "-c", "--strict", "--quiet", sha256_path], cwd=content_dir, capture_output=True, text=True
     )
     if result.returncode != 0:
         for line in result.stdout.splitlines() + result.stderr.splitlines():

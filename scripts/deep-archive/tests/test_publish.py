@@ -22,6 +22,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+import urllib.parse
 import xml.etree.ElementTree as ET
 
 HERE = os.path.dirname(os.path.realpath(__file__))
@@ -63,12 +64,19 @@ class BuildMagnetTest(unittest.TestCase):
         self.assertTrue(magnet.startswith("magnet:?xt=urn:btih:" + "a" * 40))
         self.assertIn("xt=urn:btmh:1220" + "b" * 64, magnet)
         self.assertIn("dn=id", magnet)
-        self.assertIn("tr=udp://t1", magnet)
-        self.assertIn("tr=udp://t2", magnet)
+        self.assertIn("tr=udp%3A%2F%2Ft1", magnet)
+        self.assertIn("tr=udp%3A%2F%2Ft2", magnet)
 
     def test_no_v2_hash(self):
         magnet = publish.build_magnet("id", "a" * 40, None, [])
         self.assertNotIn("btmh", magnet)
+
+    def test_tracker_urls_with_their_own_query_round_trip(self):
+        trackers = ["http://t1.example.com/announce?passkey=a&b=c", "udp://t2.example.com:1337/announce"]
+        magnet = publish.build_magnet("id", "a" * 40, None, trackers)
+        params = urllib.parse.parse_qs(magnet[len("magnet:?") :])
+        self.assertEqual(params["tr"], trackers)
+        self.assertEqual(params["dn"], ["id"])
 
 
 class TorrentUrlTest(unittest.TestCase):

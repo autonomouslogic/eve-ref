@@ -92,7 +92,6 @@ from workflow import (  # noqa: E402
     DEEP_ARCHIVE_DIR,
     MAX_BYTES,
     MAX_TORRENT_BYTES,
-    MIB,
     MIN_AGE_YEARS,
     MIN_BYTES,
     PIECE_SIZE,
@@ -128,14 +127,12 @@ NAME_YEAR_RE = re.compile(r"(?<![0-9])([0-9]{4})(?![0-9])")
 # Earlier numbers in a file name aren't years: EVE Online was released in 2003.
 FIRST_YEAR = 2003
 
-# Limits a .torrent should stay within (NOTES.md "Torrent size"), checked against the estimate.
-# libtorrent defaults from its documentation; the qBittorrent values are assumed and need checking.
+# Limits a .torrent should stay within (NOTES.md "Torrent size"), checked against the estimate: libtorrent's
+# defaults, from its documentation. qBittorrent's own defaults are higher.
 LIMITS = [
     ("libtorrent .torrent size (max_buffer_size)", "bytes", 10_000_000),
     ("libtorrent decode tokens (max_decode_tokens)", "tokens", 3_000_000),
     ("libtorrent magnet metadata (max_metadata_size)", "bytes", 3 * 1024 * 10240),
-    ("qBittorrent .torrent size (assumed default, check)", "bytes", 100 * MIB),
-    ("qBittorrent decode tokens (assumed default, check)", "tokens", 10_000_000),
 ]
 
 LOG_SAMPLE = 20

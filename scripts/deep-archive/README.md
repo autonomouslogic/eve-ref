@@ -32,7 +32,8 @@ must be deployed, or the sync re-uploads the deleted ordersets.
 ## Tests
 
 `make test-deep-archive` (from the repo root) runs `tests/`, standard library only. The tests that need libtorrent are
-skipped without it, as they are in the Docker fallback used when there's no `python3`.
+skipped without it, as they are in the Docker fallback used when there's no `python3`. CI installs it, so they all
+run there.
 
 ## Procedure
 
@@ -67,7 +68,7 @@ Checks the settings, directories, tools, bucket, tracker lists, `LOCAL_COPY_DIR`
 torrent ID. Reports every problem before aborting.
 
 ### 01: Find
-Selects the oldest files not archived yet, by date, up to the size limits (NOTES.md "Selection"). Aborts if the
+Selects the oldest files not archived yet, by date, up to the size limits (`01-find.py`'s docstring). Aborts if the
 oldest date alone is too big for one `.torrent`, if the selection is under `MIN_BYTES` (not enough data yet), or if a
 path a published `<ID>.txt` lists is still on the site (Appendix E). In each case nothing is written.
 
@@ -101,7 +102,8 @@ Signs `<ID>.sha256` with minisign (asks for the key's passphrase) and verifies t
 
 ### 05: Make torrent
 Writes the README into the content folder, copies in `<ID>.sha256` and its signature (verified first), and makes
-`<ID>.torrent` (hybrid v1+v2) and `<ID>.txt`. Slow: hours for a full torrent. Then checks both.
+`<ID>.torrent` (hybrid v1+v2) and `<ID>.txt`. Slow: hours for a full torrent, with a progress line every 30 seconds.
+Then checks both.
 - The trackers in `$SCRATCH_DIR/trackers/trackers.txt` look sane (no surprising domains).
 - Read the `.txt` and the README yourself.
 - Copy the v1 and v2 info-hashes into `$SCRATCH_DIR/NOTES.md`.
@@ -110,7 +112,8 @@ Writes the README into the content folder, copies in `<ID>.sha256` and its signa
 Signs `<ID>.torrent` with minisign and verifies the signature. This one is published.
 
 ### 07: Seed
-Adds the torrent to qBittorrent, which checks the files where they are.
+Adds the torrent to qBittorrent with content layout Original, whatever qBittorrent's default, so it checks the files
+where they are, in `$SEED_DIR/<ID>/`.
 
 ### 08: Check seed
 Give the trackers a few minutes after seed first. It fails until a tracker reports working, and while the recheck
@@ -128,8 +131,8 @@ saved in `feed-backup/`.
 - On the first workflow only: add the feed to a qBittorrent RSS reader and check the item shows up.
 
 ### 10: Update docs (manual)
-Add the torrent to the "Torrents" table on `docs/src/datasets/deep-archive.md`, newest first: its ID linked to its URL,
-the v1 and v2 info-hashes, and the magnet link, all printed by publish. If the rules in `lib/workflow.py` changed
+Add the torrent to the "Published Torrents" table on `docs/src/datasets/deep-archive.md`, newest first: the `.torrent`
+and `.txt` links, the size and the magnet link, as publish prints them. If the rules in `lib/workflow.py` changed
 (`TORRENT_EXCLUDE`, `MIN_AGE_YEARS`, size limits), update the page's rule text too: nothing checks it. Commit it and
 deploy the docs site.
 
@@ -142,7 +145,7 @@ DATA_INDEX_PREFIX=/deep-archive/ DATA_INDEX_RECURSIVE=false ./gradlew dataIndex
 
 ### 12: Check before delete
 Checks the docs page lists the torrent, the seeder is clean and the published `.torrent` matches, then builds the
-delete set from the torrent against a fresh listing (NOTES.md "Deletion").
+delete set from the torrent against a fresh listing (`12-check-before-delete.py`'s docstring).
 - Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
 - Note the delete set: files, bytes, datasets.
 
@@ -151,16 +154,17 @@ delete set from the torrent against a fresh listing (NOTES.md "Deletion").
 ./13-delete.py              # dry run, as often as you like
 ./13-delete.py --execute    # type the torrent ID to confirm
 ```
-- The dry run shows exactly the delete set from check-before-delete.
+- The dry run shows exactly the delete set from check-before-delete, and rclone's dry run deleting exactly those files.
 
-`--execute` deletes exactly those files (soft deletes, never by prefix), then the index files of folders it left
-empty (NOTES.md "Stale index files"). Treat it as permanent. Until the full `DataIndex`, jobs that crawl the site
+`--execute` asks, re-checks against a fresh listing, and deletes exactly those files (soft deletes, never by prefix,
+each delete only after an rclone dry run of the same list matched it, and capped with `--max-delete`), then the index
+files of folders it left empty (NOTES.md "Stale index files"). Treat it as permanent. Until the full `DataIndex`, jobs that crawl the site
 (`sync-fuzzwork-ordersets`, the market history scrape) may fail on stale links; they recover on their next run after
 it.
 
 ### 14: Check delete
-- Everything in the delete set is gone, no folder holds only index files, and every other path that was on the
-  bucket when `01-find` ran is still there.
+- Everything in the delete set is gone, no folder the delete touched holds only index files (others are a warning),
+  and every other path that was on the bucket when `01-find` ran is still there.
 
 ### 15: Full DataIndex (manual)
 ```
@@ -211,7 +215,8 @@ step names the settings the environment overrides.
 | `MINISIGN_KEY_PATH` | The minisign private key, kept outside this repo and `$SCRATCH_DIR`. Its passphrase is always typed in. |
 
 Everything else is fixed in `lib/workflow.py`: size limits, `TORRENT_EXCLUDE`, `TORRENT_INCLUDE`, the site URL, and the rclone remote
-(configured only from `RCLONE_CONFIG_*`, never your own `rclone.conf`, with `hard_delete=false`).
+(configured only from `RCLONE_CONFIG_*`, never your own `rclone.conf`, with `hard_delete=false`; every other `RCLONE_*`
+setting is ignored, and named).
 
 ```
 scripts/deep-archive/

@@ -1,6 +1,10 @@
 """
 qbittorrent: a tiny client for qBittorrent's Web API (https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API),
 stdlib only (urllib), for 00-preflight, 07-seed, 08-check-seed and 12-check-before-delete.
+
+No delete or stop, on purpose, and never add either: nothing may remove a torrent from qBittorrent, with or without
+its files, or stop it seeding. After 13-delete, $SEED_DIR holds EVE Ref's only copy of the archived data (NOTES.md
+"Script principles").
 """
 
 import json
@@ -80,11 +84,19 @@ class Client:
         return json.loads(self._request("GET", "/api/v2/app/buildInfo"))
 
     def add_torrent_file(self, torrent_path, save_path, category=None):
-        """Adds a .torrent by multipart upload, with autoTMM off so save_path is used (checks the files in place)."""
-        boundary = "----evereef-deep-archive"
+        """
+        Adds a .torrent by multipart upload, with autoTMM off so save_path is used (checks the files in place), and
+        content layout Original, whatever qBittorrent's default: the files go under save_path/<torrent name>/.
+        """
+        boundary = "----everef-deep-archive"
         with open(torrent_path, "rb") as f:
             torrent_bytes = f.read()
-        fields = [("savepath", save_path), ("autoTMM", "false"), ("skip_checking", "false")]
+        fields = [
+            ("savepath", save_path),
+            ("autoTMM", "false"),
+            ("skip_checking", "false"),
+            ("contentLayout", "Original"),
+        ]
         if category:
             fields.append(("category", category))
         parts = []
@@ -99,22 +111,11 @@ class Client:
         headers = {"Content-Type": f"multipart/form-data; boundary={boundary}"}
         check_added(self._request("POST", "/api/v2/torrents/add", data=body, headers=headers))
 
-    def add_torrent_magnet(self, magnet_uri, save_path, category=None):
-        fields = {"urls": magnet_uri, "savepath": save_path, "autoTMM": "false"}
-        if category:
-            fields["category"] = category
-        body = urllib.parse.urlencode(fields).encode()
-        check_added(self._request("POST", "/api/v2/torrents/add", data=body))
-
     def info(self, info_hash):
         """The torrent's info dict (hashes, progress, state, …), or None if it isn't added."""
         text = self._request("GET", "/api/v2/torrents/info", params={"hashes": info_hash})
         torrents = json.loads(text)
         return torrents[0] if torrents else None
-
-    def properties(self, info_hash):
-        text = self._request("GET", "/api/v2/torrents/properties", params={"hash": info_hash})
-        return json.loads(text)
 
     def trackers(self, info_hash):
         text = self._request("GET", "/api/v2/torrents/trackers", params={"hash": info_hash})
@@ -122,7 +123,3 @@ class Client:
 
     def recheck(self, info_hash):
         self._request("POST", "/api/v2/torrents/recheck", data=urllib.parse.urlencode({"hashes": info_hash}).encode())
-
-    def delete(self, info_hash, delete_files=False):
-        body = urllib.parse.urlencode({"hashes": info_hash, "deleteFiles": "true" if delete_files else "false"})
-        self._request("POST", "/api/v2/torrents/delete", data=body.encode())

@@ -52,16 +52,20 @@ class BuildDeleteSetTest(unittest.TestCase):
         confirmed, failed = self.build(manifest=False)
         self.assertEqual(confirmed, [])
         self.assertEqual(len(failed), 1)
+        self.assertTrue(failed[0]["on_bucket"])
 
     def test_changed_on_bucket(self):
         confirmed, failed = self.build(fresh=(10, MTIME + 1))
         self.assertEqual(confirmed, [])
         self.assertEqual(len(failed), 1)
+        self.assertTrue(failed[0]["on_bucket"])
 
     def test_gone_from_bucket(self):
+        # 14-check-delete expects every failed file that was on the bucket to still be there; this one wasn't.
         confirmed, failed = self.build(fresh=None)
         self.assertEqual(confirmed, [])
         self.assertEqual(len(failed), 1)
+        self.assertFalse(failed[0]["on_bucket"])
 
 
 class TorrentDataFilesTest(unittest.TestCase):
