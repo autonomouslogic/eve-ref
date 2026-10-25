@@ -8,24 +8,30 @@ SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 
     05-make-torrent.py
 
-Needs 04-sign-sha256's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece of every file (hours for a full torrent).
+Needs 04-sign-sha256's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece of every
+file (hours for a full torrent).
 
-1. Render README-template.md (ID, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
+First checks every manifest file in $SEED_DIR/<ID>/ still has the manifest's size and modification time
+(content_problems; PLAN Review notes, R7), so a file changed on disk since 03-load hashed it doesn't go into the
+torrent unnoticed. Then:
+
+1. Render lib/README-template.md (ID, its two-digit number, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
 2. Verify SCRATCH_DIR/<ID>.sha256.minisig against SCRATCH_DIR/<ID>.sha256 (03-load, 04-sign-sha256) with minisign
    and the public key in this checkout (lib/workflow.py's verify_signature), then copy both into $SEED_DIR/<ID>/, so
    they end up inside the torrent too: neither is published standalone, so this is the only way to check a file
    against them without a torrent client.
 3. Download the tracker lists (lib/trackers.py): the union of both "best" lists, UDP and HTTP(S) only. Fails if a
    list can't be downloaded or has no usable trackers, or if the union has fewer than MIN_TRACKERS.
-4. Build the torrent from exactly the manifest's files plus the root files (README, .sha256, .sha256.minisig),
-   sorted by path, with Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the downloaded trackers (one per
-   tier, in order), the PLAN 2.4 comment (comment-template.txt with the ID filled in), creator "EVE Ref", no
-   private flag, no web seed.
+4. Remove a SCRATCH_DIR/<ID>.torrent.minisig left by an earlier run (it signs the old .torrent, so 06-sign-torrent
+   has to sign the new one), then build the torrent from exactly the manifest's files plus the root files (README,
+   .sha256, .sha256.minisig), sorted by path, with Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the
+   downloaded trackers (one per tier, in order), the PLAN 2.4 comment (lib/comment-template.txt with the ID filled
+   in), creator "EVE Ref", no private flag, no web seed.
 5. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
 6. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
    downloaded ones, one per tier, in order; the comment; files = the manifest plus the root files, bytes match; the
-   .txt passes file_list_problems, matches the manifest and has no market-history/, killmails/ or ccp/ paths. Prints the
+   .txt passes file_list_problems, matches the manifest and has no TORRENT_EXCLUDE paths. Prints the
    v1 and v2 info-hashes (copy them into NOTES.md) and records them in the completion file.
 
 Writes:
@@ -60,16 +66,19 @@ from workflow import (  # noqa: E402
     fmt_bytes,
     fmt_count,
     fmt_duration,
+    iso,
     ok,
+    parse_iso,
     render_comment,
     root_file_names,
     section,
+    torrent_sequence,
     verify_signature,
 )
 from trackers import TRACKER_SOURCES, TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
 STEP = "make-torrent"
-README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "README-template.md")
+README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib", "README-template.md")
 CREATOR = "EVE Ref"
 LOG_SAMPLE = 20
 
@@ -91,8 +100,16 @@ def main():
 
     section("Manifest")
     manifest_path = os.path.join(workflow.scratch_dir, "manifest.json")
-    files = read_manifest(manifest_path, torrent_id)
+    files, mtimes = read_manifest(manifest_path, torrent_id)
     print(f"{fmt_count(len(files))} files in {manifest_path}")
+
+    section("Content folder")
+    problems = content_problems(content_dir, files, mtimes)
+    if problems:
+        for problem in problems[:LOG_SAMPLE]:
+            error(f"  {problem}")
+        fail(f"{fmt_count(len(problems))} files in {content_dir} changed since 03-load hashed them: investigate")
+    print(f"All {fmt_count(len(files))} files in {content_dir} have the manifest's size and modification time")
 
     section("README")
     readme_name = f"{torrent_id}-README.md"
@@ -107,6 +124,11 @@ def main():
     trackers = download_trackers(os.path.join(workflow.scratch_dir, "trackers"))
 
     section("Torrent")
+    # A signature from an earlier run is of the old .torrent: remove it, so 06-sign-torrent has to sign this one.
+    minisig_path = torrent_path + ".minisig"
+    if os.path.exists(minisig_path):
+        os.remove(minisig_path)
+        print(f"Removed the earlier run's signature, sign again with 06-sign-torrent: {minisig_path}")
     fs = lt.file_storage()
     root_names = root_file_names(torrent_id)
     for path in sorted(files) + sorted(root_names):
@@ -213,7 +235,7 @@ def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, ro
     if [t.tier for t in actual] != list(range(len(trackers))):
         problems.append(f"trackers aren't one per tier in order: tiers {[t.tier for t in actual]}")
     if ti.comment() != comment:
-        problems.append(f"comment doesn't match the PLAN 2.4 template rendered from the manifest:\n{ti.comment()}")
+        problems.append(f"comment doesn't match comment-template.txt rendered with the ID:\n{ti.comment()}")
 
     prefix = torrent_id + "/"
     storage = ti.files()
@@ -280,6 +302,7 @@ def storage_paths(fs):
 
 
 def read_manifest(path, torrent_id):
+    """({path: size}, {path: modification time}) for the manifest's files; modification times as POSIX seconds."""
     if not os.path.isfile(path):
         fail(f"Manifest not found: {path}")
     with open(path, encoding="utf-8") as f:
@@ -289,15 +312,36 @@ def read_manifest(path, torrent_id):
     files = manifest.get("files")
     if not files:
         fail(f"No files in {path}")
-    return {f["path"]: f["size"] for f in files}
+    return {f["path"]: f["size"] for f in files}, {f["path"]: parse_iso(f["last_modified"]) for f in files}
+
+
+def content_problems(content_dir, files, mtimes):
+    """
+    Manifest files missing from the content folder, or with another size or modification time than the manifest
+    records: a cheap check, before hashing, that nothing changed on disk since 03-load hashed it (PLAN Review notes,
+    R7). Doesn't read the data.
+    """
+    problems = []
+    for path in sorted(files):
+        try:
+            stat = os.stat(os.path.join(content_dir, path))
+        except FileNotFoundError:
+            problems.append(f"{path}: missing")
+            continue
+        if stat.st_size != files[path]:
+            problems.append(f"{path}: {fmt_count(stat.st_size)} bytes, manifest {fmt_count(files[path])}")
+        elif int(stat.st_mtime) != mtimes[path]:
+            problems.append(f"{path}: modified {iso(stat.st_mtime)}, manifest {iso(mtimes[path])}")
+    return problems
 
 
 def write_readme(path, torrent_id, cutoff):
+    """lib/README-template.md with {id}, {sequence} (the ID's two-digit number, e.g. 00) and {cutoff} filled in."""
     if not os.path.isfile(README_TEMPLATE):
         fail(f"README template not found: {README_TEMPLATE}")
     with open(README_TEMPLATE, encoding="utf-8") as f:
         template = f.read()
-    text = template.format(id=torrent_id, cutoff=cutoff)
+    text = template.format(id=torrent_id, sequence=f"{torrent_sequence(torrent_id):02d}", cutoff=cutoff)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(text)

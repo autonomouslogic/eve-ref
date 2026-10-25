@@ -41,6 +41,10 @@ load_settings() {
     source "$env_file"
     set +a
   fi
+  # Named once the log starts, like lib/workflow.py's print_env_overrides (R2).
+  ENV_OVERRIDES=()
+  [[ -n "$pre_minisign_key_path" && "$pre_minisign_key_path" != "${MINISIGN_KEY_PATH:-}" ]] && ENV_OVERRIDES+=(MINISIGN_KEY_PATH)
+  [[ -n "$pre_scratch_dir" && "$pre_scratch_dir" != "${SCRATCH_DIR:-}" ]] && ENV_OVERRIDES+=(SCRATCH_DIR)
   SCRATCH_DIR="${pre_scratch_dir:-${SCRATCH_DIR:-}}"
   MINISIGN_KEY_PATH="${pre_minisign_key_path:-${MINISIGN_KEY_PATH:-}}"
   [[ -n "$SCRATCH_DIR" ]] || die "SCRATCH_DIR is not set (environment or torrents.env)"
@@ -69,6 +73,10 @@ begin_step() {
   exec 3>&1 4>&2
   exec > >(tee -a "$SCRATCH_DIR/log/$STEP_NAME-$(date -u +%Y%m%dT%H%M%SZ).log") 2>&1
   echo "🚀 $STEP_NAME: $TORRENT_ID"
+  if [[ ${#ENV_OVERRIDES[@]} -gt 0 ]]; then
+    local IFS=","
+    echo "Note: set in the environment, overriding torrents.env: ${ENV_OVERRIDES[*]}" | sed 's/,/, /g'
+  fi
 }
 
 # The completion file, in the same format as Workflow.complete.

@@ -23,6 +23,7 @@ anything the environment doesn't set:
     DATA_BUCKET  the data site's bucket on B2; its root is the site root (data_remote)
     LOCAL_COPY_DIR  optional: a local copy of the data site, same layout as the bucket (local_copy_dir); load copies
                  matching files from it before downloading the rest
+    MINISIGN_KEY_PATH  the minisign private key, for the bash signing steps (lib/sign.sh)
 
 The scripts reach the data bucket only through rclone (data_remote).
 """
@@ -54,10 +55,11 @@ REMOTE_NAME = "everef"
 DEEP_ARCHIVE_DIR = "deep-archive"
 
 # Folders never archived (PLAN 2.2): paths from the site root. market-history and killmails work as databases, with
-# past files modified in place, which a torrent can't follow. ccp holds CCP's own data (SDE, MER, image collections,
-# etc.), linked from the docs and downloaded by URL; it's small enough to keep on HTTP. deep-archive holds the
-# torrents themselves.
-TORRENT_EXCLUDE = ["market-history", "killmails", DEEP_ARCHIVE_DIR]
+# past files modified in place, which a torrent can't follow. deep-archive holds the torrents themselves.
+# ccp (CCP's own data: SDE, MER, image collections, CSM results, ...) has to stay excluded for now: the docs link its
+# old files and folders directly (sde.md links ccp/sde/older/, the datasets index links ccp/ccp_quant/, ccp/iec/ and
+# ccp/csm/), and those links would break once a torrent took them. Revisit later, together with those docs.
+TORRENT_EXCLUDE = ["market-history", "killmails", "ccp", DEEP_ARCHIVE_DIR]
 
 # A path's year folder, for classify_path: the first 4-digit 19xx/20xx directory.
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
@@ -104,7 +106,7 @@ FEED_CACHE_MAX_AGE_SECONDS = 120
 # A torrent's comment (PLAN 2.4), built by render_comment and read back by 09-publish's read_torrent. {id} is the
 # torrent name. The template file itself must be a single line (load_comment_template): the comment is kept
 # deliberately short.
-COMMENT_TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "comment-template.txt")
+COMMENT_TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "comment-template.txt")
 
 
 def load_comment_template():
@@ -196,7 +198,7 @@ MIN_BYTES = 500 * GIB
 # 01-find leaves out the date that would go over it.
 MAX_TORRENT_BYTES = 10_000_000
 
-# qBittorrent's Web API (00-preflight, 07-seed, 08-check-seed). Torrents are added with save path
+# qBittorrent's Web API (00-preflight, 07-seed, 08-check-seed, 11-check-before-delete). Torrents are added with save path
 # QBITTORRENT_SAVE_PATH (qbittorrent_save_path), SEED_DIR as qBittorrent sees it.
 def qbittorrent_settings():
     """(url, api_key) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
@@ -281,9 +283,16 @@ def ok(message):
     print(f"✅ {message}")
 
 
-# Settings in torrents.env that the environment already set to something else, filled in by load_env. 00-preflight
-# reports them, so a stale shell export doesn't silently override the file (PLAN, Review notes, R2).
+# Settings in torrents.env that the environment already set to something else, filled in by load_env. Every step
+# names them (print_env_overrides), so a stale shell export doesn't silently override the file (PLAN, Review notes,
+# R2).
 ENV_OVERRIDES = []
+
+
+def print_env_overrides():
+    """Names the settings the environment overrides torrents.env with (ENV_OVERRIDES): names only, some are secrets."""
+    if ENV_OVERRIDES:
+        print(f"Note: set in the environment, overriding torrents.env: {', '.join(sorted(ENV_OVERRIDES))}")
 
 
 def load_env():
@@ -375,10 +384,11 @@ class Workflow:
         with open(path, encoding="utf-8") as f:
             return json.load(f)
 
-    def begin(self, step):
+    def begin(self, step, dry_run=False):
         """
-        Refuses to start a step that already completed, or whose previous step hasn't. Then starts the step's log and
-        prints its header, with the torrent ID once find has chosen it.
+        Takes the lock, and refuses to start a step that already completed, or whose previous step hasn't. Then starts
+        the step's log and prints its header, with the torrent ID once find has chosen it, and names any setting the
+        environment overrides torrents.env with (R2). dry_run only marks the header: the checks are the same.
         """
         if step not in STEPS or step in MANUAL_STEPS:
             raise ValueError(f"unknown scripted step: {step}")
@@ -394,7 +404,11 @@ class Workflow:
             if self.read_done(previous) is None:
                 fail(f"Earlier step {step_name(previous)} has not completed yet ({self.done_path(previous)} missing)")
         find = self.read_done("find")
-        start_log(self.scratch_dir, step, find["torrent_id"] if find else None)
+        subject = find["torrent_id"] if find else None
+        if dry_run:
+            subject = f"{subject} (dry run)" if subject else "(dry run)"
+        start_log(self.scratch_dir, step, subject)
+        print_env_overrides()
 
     def complete(self, step, torrent_id, summary):
         """Writes the step's completion file. Call it last, only after the step succeeded."""
@@ -440,8 +454,8 @@ def file_list_problems(text):
     """
     Problems with a <ID>.txt file list (PLAN 2.5), as "line N: ..." strings; empty if it's well-formed. The format:
     UTF-8, "\\n" line endings, one data file per line as its full path from the site root (the same path inside the
-    torrent, without the torrent's root folder), sorted by code point, no duplicates. The torrent's own README isn't
-    listed.
+    torrent, without the torrent's root folder), sorted by code point, no duplicates. The torrent's root files
+    (root_file_names) aren't listed.
     """
     if not text:
         return ["empty file"]
@@ -479,7 +493,7 @@ def site_path_problem(path):
     if any(part in ("", ".", "..") for part in parts):
         return "empty, . or .. path segment"
     if len(parts) == 1:
-        return "at the site root: data files never are, and the torrent's README isn't listed"
+        return "at the site root: data files never are, and the torrent's root files aren't listed"
     if parts[0].startswith(TORRENT_ID_PREFIX):
         return "starts with a torrent ID: the torrent's root folder isn't part of the path"
     if parts[0] == DEEP_ARCHIVE_DIR:

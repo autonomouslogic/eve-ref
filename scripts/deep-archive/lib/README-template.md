@@ -1,11 +1,11 @@
-# EVE Ref Deep Archive #{id} for EVE Online
+# EVE Ref Deep Archive #{sequence} for EVE Online
 This is an EVE Ref Deep Archive torrent dated up to {cutoff}.
 It contains data from [data.everef.net](https://data.everef.net/).
 For more information, see [the docs](https://docs.everef.net/datasets/deep-archive.html).
 
 ## Verifying the files
 Besides the torrent's own hashes, a SHA-256 checksum file is included at `{id}.sha256`, and a
-[minisign](https://jedisct1.github.io/minisign/) signature at`{id}.sha256.minisig`.
+[minisign](https://jedisct1.github.io/minisign/) signature at `{id}.sha256.minisig`.
 
 To verify the hash file:
 ```

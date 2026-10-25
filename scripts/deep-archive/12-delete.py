@@ -8,8 +8,9 @@ DRAFT. Dry run by default; only --execute writes to the bucket, and only after t
     12-delete.py              # dry run: shows the delete set, changes nothing, doesn't complete the step
     12-delete.py --execute    # re-checks against a fresh listing, asks, then deletes
 
-Needs 11-check-before-delete's completion file. The dry run can be run any number of times; only --execute
-completes the step, and it refuses to run twice (lib/workflow.py).
+Needs 11-check-before-delete's completion file, and refuses to run once the step completed (lib/workflow.py), dry run
+included. The dry run takes the lock and writes a log like any step, and can be run any number of times; only
+--execute completes the step.
 
 1. Re-checks every file in delete-set.json against a **fresh** listing (PLAN 2.14): a file that changed since
    11-check-before-delete ran is dropped from this run (it stays on the site; Appendix E), not re-included. A file
@@ -66,10 +67,7 @@ def main():
     workflow = Workflow()
     torrent_id = workflow.torrent_id()
     remote = data_remote()
-    if args.execute:
-        workflow.begin(STEP)
-    else:
-        print(f"\U0001f680 (dry run) {STEP}: {torrent_id}")
+    workflow.begin(STEP, dry_run=not args.execute)
 
     section("Delete set")
     delete_set_path = os.path.join(workflow.scratch_dir, "delete-set.json")

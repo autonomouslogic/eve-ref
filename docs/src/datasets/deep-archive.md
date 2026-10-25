@@ -17,7 +17,7 @@ files themselves, named `everef-eve-online-deep-archive-NN.torrent.minisig`.
 ## Signature Verification
 There are two things to verify: the `.torrent` file itself and the individual files inside the torrent after downloading.
 Torrent files have their own hashes, which guards against corruption.
-The signatures can be used to verify that the data did indeed come from EVE Ref originally nad has not been tampered with.
+The signatures can be used to verify that the data did indeed come from EVE Ref originally and has not been tampered with.
 
 The public key for both is published at
 [everef.net/.well-known/minisign.pub](https://everef.net/.well-known/minisign.pub).
@@ -51,7 +51,7 @@ Whenever a new archive has been prepared, it will be added to [everef-deep-archi
 
 ### What _never_ gets archived
 * [`market-history/`](market-history.md) and [`killmails/`](killmails.md), since these effectively function as a database, with old files updated in-place.
-* Any `*-latest*` files
+* [`ccp/`](https://data.everef.net/ccp/), CCP's own data (SDE, MER, image collections and so on), for now.* Any `*-latest*` files
 
 ## Published Torrents
 Below is a list of published torrents:

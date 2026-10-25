@@ -13,10 +13,10 @@ if the docs page doesn't list the torrent's ID and v1 info-hash: update-docs mus
 
 A data file is in the delete set only if all of these hold:
 - it's a data file in the published torrent (not index.json, or the README, checksum file or its signature at the
-  torrent's root), with the selected size;
+  torrent's root);
 - it's in the manifest (so its SHA-256 was checked against the torrent at 100%, PLAN 2.14);
-- it's on the bucket right now, in a **fresh** listing, with the same size and modification time recorded when
-  it was selected (01-find's files.jsonl).
+- it's on the bucket right now, in a **fresh** listing, with the size the torrent gives it, and the same size and
+  modification time recorded when it was selected (01-find's files.jsonl).
 
 A file that fails stays on the site (Appendix E); it's listed and doesn't stop the step. Many failures point at a
 problem; look before going on (README, "Check before delete").
@@ -246,8 +246,8 @@ def read_selection(path):
 def build_delete_set(data_files, manifest, selection, fresh):
     """
     (confirmed, failed) for the torrent's data files ({path: size in the torrent}): confirmed if the file is in the
-    manifest and the selection, the torrent has the selected size, and the bucket has the selected size and
-    modification time right now (PLAN 2.14).
+    manifest and the selection, the bucket has it right now with the torrent's size, and with the selected size and
+    modification time (PLAN 2.14).
     """
     confirmed = []
     failed = []
@@ -259,12 +259,12 @@ def build_delete_set(data_files, manifest, selection, fresh):
         if selected is None:
             failed.append({"path": path, "reason": "not in the selection (files.jsonl)"})
             continue
-        if torrent_size != selected[0]:
-            failed.append({"path": path, "reason": f"{torrent_size} bytes in the torrent, {selected[0]} selected"})
-            continue
         current = fresh.get(path)
         if current is None:
             failed.append({"path": path, "reason": "no longer on the bucket"})
+            continue
+        if torrent_size != current[0]:
+            failed.append({"path": path, "reason": f"{torrent_size} bytes in the torrent, {current[0]} on the bucket"})
             continue
         if current[0] != selected[0] or int(current[1]) != selected[1]:
             failed.append({"path": path, "reason": "changed since it was selected: not the archived version"})

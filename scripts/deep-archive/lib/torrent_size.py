@@ -16,9 +16,9 @@ root files) is the FIXED_BYTES allowance, not worked out. Token counts are withi
 import math
 
 # Allowance for the parts that don't depend on the selection: trackers, comment, creator, name, top-level keys, and the
-# README file at the root of the torrent.
-# Trackers take about 50 bytes and 2 tokens each (lib/trackers.py downloads about 70 today), the longest PLAN 2.4
-# comment about 400 bytes: about 4 KB in all. Rounded up for room to about 300 trackers.
+# root files (README, checksum file, its signature; lib/workflow.py's root_file_names).
+# Trackers take about 50 bytes and 2 tokens each (lib/trackers.py downloads about 70 today), the one-line PLAN 2.4
+# comment under 100 bytes: about 4 KB in all. Rounded up for room to about 300 trackers.
 FIXED_BYTES = 16384
 FIXED_TOKENS = 1000
 

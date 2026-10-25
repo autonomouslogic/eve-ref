@@ -39,7 +39,6 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
     DEEP_ARCHIVE_DIR,
-    ENV_OVERRIDES,
     MAX_BYTES,
     Workflow,
     data_remote,
@@ -53,6 +52,7 @@ from workflow import (  # noqa: E402
     local_copy_dir,
     lock,
     ok,
+    print_env_overrides,
     qbittorrent_save_path,
     qbittorrent_settings,
     section,
@@ -91,9 +91,7 @@ def main():
 
     section("Settings")
     print(f"Settings from {env_file}" if env_file else "Settings from the environment only (no torrents.env)")
-    if ENV_OVERRIDES:
-        # Names only: some of them are secrets.
-        print(f"Note: set in the environment, overriding torrents.env: {', '.join(sorted(ENV_OVERRIDES))}")
+    print_env_overrides()
 
     section("Directories")
     if scratch is None:

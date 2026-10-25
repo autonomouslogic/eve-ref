@@ -11,8 +11,8 @@ EVE Ref (https://everef.net/) is a reference site for the game EVE Online. This 
 - A **Nuxt 3 frontend** (`ui/`) — the public website, consumes the API via generated OpenAPI clients.
 - **VuePress docs** (`docs/`) — published to docs.everef.net.
 - A **`database` Gradle subproject** — Flyway migrations + jOOQ code generation.
-- **`scripts/deep-archive/`** — a standalone, manually-run Python workflow (not part of the Gradle build) that
-  moves old data.everef.net data into BitTorrent archives, seeded from a local copy. See
+- **`scripts/deep-archive/`** — a standalone, manually-run Python workflow (plus two bash signing steps; not part
+  of the Gradle build) that moves old data.everef.net data into BitTorrent archives, seeded from a local copy. See
   `scripts/deep-archive/README.md` for the operator process and `PLAN.md` for the design.
 
 ## Build & Test

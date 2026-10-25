@@ -42,6 +42,12 @@ class BuildDeleteSetTest(unittest.TestCase):
         self.assertEqual(confirmed, [])
         self.assertEqual([f["path"] for f in failed], [PATH])
 
+    def test_torrent_size_differs_from_bucket(self):
+        confirmed, failed = self.build(torrent_size=10, selected=(11, MTIME), fresh=(11, MTIME))
+        self.assertEqual(confirmed, [])
+        self.assertEqual([f["path"] for f in failed], [PATH])
+        self.assertIn("on the bucket", failed[0]["reason"])
+
     def test_not_in_manifest(self):
         confirmed, failed = self.build(manifest=False)
         self.assertEqual(confirmed, [])
