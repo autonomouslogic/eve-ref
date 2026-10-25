@@ -75,13 +75,18 @@ class ClassifyPathTest(unittest.TestCase):
 
 
 class RenderCommentTest(unittest.TestCase):
-    def test_includes_the_torrent_id(self):
-        comment = render_comment("everef-eve-online-deep-archive-00")
-        self.assertIn("everef-eve-online-deep-archive-00", comment)
+    def test_includes_the_two_digit_sequence_number(self):
+        comment = render_comment(format_torrent_id(7))
+        self.assertIn("07", comment)
+        self.assertNotIn(format_torrent_id(7), comment)
 
     def test_is_a_single_line(self):
-        comment = render_comment("id")
+        comment = render_comment(format_torrent_id(0))
         self.assertEqual(len(comment.splitlines()), 1)
+
+    def test_fails_for_a_name_that_is_not_a_torrent_id(self):
+        with self.assertRaises(SystemExit):
+            render_comment("everef-eve-online-deep-archive-2023-04-11")
 
 
 class TorrentIdTest(unittest.TestCase):

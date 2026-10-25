@@ -103,9 +103,9 @@ def root_file_names(torrent_id):
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
 
-# A torrent's comment (PLAN 2.4), built by render_comment and read back by 09-publish's read_torrent. {id} is the
-# torrent name. The template file itself must be a single line (load_comment_template): the comment is kept
-# deliberately short.
+# A torrent's comment (PLAN 2.4), built by render_comment and read back by 09-publish's read_torrent. {sequence} is
+# the torrent ID's two-digit sequence number, e.g. 00. The template file itself must be a single line
+# (load_comment_template): the comment is kept deliberately short.
 COMMENT_TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "comment-template.txt")
 
 
@@ -678,8 +678,11 @@ def verify_signature(path):
 
 
 def render_comment(torrent_id):
-    """The torrent's comment (PLAN 2.4): comment-template.txt with {id} filled in."""
-    return load_comment_template().format(id=torrent_id)
+    """The torrent's comment (PLAN 2.4): comment-template.txt with {sequence} (the ID's two-digit number) filled in."""
+    sequence = torrent_sequence(torrent_id)
+    if sequence is None:
+        fail(f"Not a torrent ID: {torrent_id}")
+    return load_comment_template().format(sequence=f"{sequence:02d}")
 
 
 def read_listing_gz(path):

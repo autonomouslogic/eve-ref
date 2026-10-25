@@ -26,7 +26,7 @@ import xml.etree.ElementTree as ET
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
-from workflow import render_comment  # noqa: E402
+from workflow import format_torrent_id  # noqa: E402
 
 try:
     import libtorrent as lt
@@ -47,7 +47,7 @@ def entry(id_, pub_date, v1_hash="a" * 40, v2_hash="b" * 64, files=2, size=1000)
         "pub_date": pub_date,
         "files": files,
         "bytes": size,
-        "comment": render_comment(id_),
+        "comment": f"comment for {id_}",
         "trackers": ["udp://tracker.example.com:1337/announce"],
     }
 
@@ -187,10 +187,9 @@ class ReadTorrentTest(unittest.TestCase):
         fs = lt.file_storage()
         fs.add_file(f"{torrent_id}/a/file.bin", 100)
         fs.add_file(f"{torrent_id}/{torrent_id}-README.md", len(b"readme"))
-        comment = render_comment(torrent_id)
         ct = lt.create_torrent(fs, 16 * 1024)
         ct.add_tracker("udp://tracker.example.com:1337/announce", 0)
-        ct.set_comment(comment)
+        ct.set_comment(f"comment for {torrent_id}")
         ct.set_creator("EVE Ref")
         lt.set_piece_hashes(ct, os.path.join(self.tmp, "content"))
         torrent_path = os.path.join(self.store, f"{torrent_id}.torrent")
@@ -199,7 +198,7 @@ class ReadTorrentTest(unittest.TestCase):
         return torrent_path, lt.torrent_info(torrent_path)
 
     def test_fields_extracted_from_a_real_torrent(self):
-        torrent_id = "everef-eve-online-deep-archive-2024-01-01"
+        torrent_id = format_torrent_id(0)
         torrent_path, ti = self._make_torrent(torrent_id)
 
         result = quietly(publish.read_torrent, "deep_archive_remote", self.tmp, f"{torrent_id}.torrent")

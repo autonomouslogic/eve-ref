@@ -238,16 +238,17 @@ files:  everef-eve-online-deep-archive-00-README.md       # what this is (2.6)
 - Not private. DHT/PEX enabled. Public trackers: see "Trackers" below.
 - Piece size: see "Creating the torrent" below.
 - **Comment** (required): directs the user to the Deep Archive page on the docs site. **Generated automatically**
-  by `make-torrent` from a template file, `lib/comment-template.txt`, never typed by hand. One line: the ID and the
-  docs page, no years or datasets. Template:
+  by `make-torrent` from a template file, `lib/comment-template.txt`, never typed by hand. One line: the sequence
+  number and the docs page, no years or datasets. Template:
   ```
-  EVE Ref Deep Archive: {id} - https://docs.everef.net/datasets/deep-archive.html
+  EVE Ref Deep Archive for EVE Online #{sequence} - https://docs.everef.net/datasets/deep-archive.html
   ```
   Example:
   ```
-  EVE Ref Deep Archive: everef-eve-online-deep-archive-00 - https://docs.everef.net/datasets/deep-archive.html
+  EVE Ref Deep Archive for EVE Online #00 - https://docs.everef.net/datasets/deep-archive.html
   ```
-  - `{id}` is the torrent ID (2.3), which is also the torrent's name.
+  - `{sequence}` is the torrent ID's (2.3) two-digit sequence number, e.g. `00`. `render_comment` fails for a name
+    that isn't a torrent ID.
   - `load_comment_template` (`lib/workflow.py`) trims the file and fails if the result has more than one line: the
     comment is kept deliberately short, and a template edit can't silently turn it into several lines.
   - `make-torrent` reloads the torrent and compares its comment with the one rendered from the template.

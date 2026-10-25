@@ -25,8 +25,8 @@ torrent unnoticed. Then:
 4. Remove a SCRATCH_DIR/<ID>.torrent.minisig left by an earlier run (it signs the old .torrent, so 06-sign-torrent
    has to sign the new one), then build the torrent from exactly the manifest's files plus the root files (README,
    .sha256, .sha256.minisig), sorted by path, with Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the
-   downloaded trackers (one per tier, in order), the PLAN 2.4 comment (lib/comment-template.txt with the ID filled
-   in), creator "EVE Ref", no private flag, no web seed.
+   downloaded trackers (one per tier, in order), the PLAN 2.4 comment (lib/comment-template.txt with the ID's
+   sequence number filled in), creator "EVE Ref", no private flag, no web seed.
 5. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
 6. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
@@ -235,7 +235,7 @@ def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, ro
     if [t.tier for t in actual] != list(range(len(trackers))):
         problems.append(f"trackers aren't one per tier in order: tiers {[t.tier for t in actual]}")
     if ti.comment() != comment:
-        problems.append(f"comment doesn't match comment-template.txt rendered with the ID:\n{ti.comment()}")
+        problems.append(f"comment doesn't match comment-template.txt rendered with the sequence number:\n{ti.comment()}")
 
     prefix = torrent_id + "/"
     storage = ti.files()
