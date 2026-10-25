@@ -131,6 +131,66 @@ public class ArchivePathFactoriesTest {
 	}
 
 	@Test
+	void shouldGenerateWarsNames() {
+		var factory = ArchivePathFactories.WARS;
+		testExpectedPaths(
+				factory,
+				Instant.parse("2021-07-27T00:00:00Z"),
+				"wars/history/2021/wars-2021-07-27_00-00-00.tar.bz2",
+				"wars/wars-current.json");
+	}
+
+	@Test
+	void shouldGenerateWarsRollupNames() {
+		var factory = ArchivePathFactories.WARS_ROLLUP;
+		testExpectedPaths(factory, LocalDate.parse("2017-01-01"), "wars/history/wars-2017.tar.bz2");
+	}
+
+	@Test
+	void shouldGenerateShadowWarArcGoalsNames() {
+		var factory = ArchivePathFactories.SHADOW_WAR_ARC_GOALS;
+		assertEquals("shadow-war-arc-goals/shadow-war-arc-goals-latest.json", factory.createLatestPath());
+	}
+
+	@Test
+	void shouldGenerateShadowWarArcGoalsRollupNames() {
+		var factory = ArchivePathFactories.SHADOW_WAR_ARC_GOALS_ROLLUP;
+		testExpectedPaths(
+				factory,
+				LocalDate.parse("2023-01-01"),
+				"shadow-war-arc-goals/history/shadow-war-arc-goals-2023.tar.xz");
+	}
+
+	@Test
+	void shouldGenerateSystemKillsRollupNames() {
+		var factory = ArchivePathFactories.SYSTEM_KILLS_ROLLUP;
+		testExpectedPaths(factory, LocalDate.parse("2017-01-01"), "system-kills/history/system-kills-2017.tar.xz");
+	}
+
+	@Test
+	void shouldGenerateStructuresRollupNames() {
+		var factory = ArchivePathFactories.STRUCTURES_ROLLUP;
+		testExpectedPaths(factory, LocalDate.parse("2023-01-01"), "structures/history/structures-2023.tar.xz");
+	}
+
+	@Test
+	void shouldGenerateFactionWarfareLeaderboardsCharactersRollupNames() {
+		var factory = ArchivePathFactories.FACTION_WARFARE_LEADERBOARDS_CHARACTERS_ROLLUP;
+		testExpectedPaths(
+				factory,
+				LocalDate.parse("2022-01-01"),
+				"faction-warfare-leaderboards-characters/history/faction-warfare-leaderboards-characters-2022.tar.xz");
+	}
+
+	@Test
+	void shouldMatchRollupType() {
+		var match = ArchivePathFactories.tryMatch("system-kills/history/system-kills-2017.tar.xz");
+		assertEquals("system-kills-rollup", match.get().getType());
+		assertEquals(
+				Instant.parse("2017-01-01T00:00:00Z"), match.get().getDate().get());
+	}
+
+	@Test
 	void shouldGenerateFuzzworkOrderset() {
 		var factory = ArchivePathFactories.FUZZWORK_ORDERSET;
 		// Test pattern with sequence number and timestamp (main archive pattern)

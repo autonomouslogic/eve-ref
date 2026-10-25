@@ -285,6 +285,73 @@ public class ArchivePathFactories {
 
 	public static final MerArchivePathFactory MER = register(new MerArchivePathFactory());
 
+	public static final StandardArchivePathFactory WARS = register(StandardArchivePathFactory.builder()
+			.folder("wars")
+			.filename("wars")
+			.dateFolder(false)
+			.suffix(".tar.bz2")
+			.latestLabel("current")
+			.latestSuffix(".json")
+			.build());
+
+	public static final StandardArchivePathFactory SHADOW_WAR_ARC_GOALS = register(StandardArchivePathFactory.builder()
+			.folder("shadow-war-arc-goals")
+			.filename("shadow-war-arc-goals")
+			.suffix(".json")
+			.build());
+
+	public static final StandardArchivePathFactory WARS_ROLLUP = registerRollup(WARS, ".tar.bz2");
+	public static final StandardArchivePathFactory SHADOW_WAR_ARC_GOALS_ROLLUP = registerRollup(SHADOW_WAR_ARC_GOALS);
+	public static final StandardArchivePathFactory SYSTEM_KILLS_ROLLUP = registerRollup(SYSTEM_KILLS);
+	public static final StandardArchivePathFactory SYSTEM_JUMPS_ROLLUP = registerRollup(SYSTEM_JUMPS);
+	public static final StandardArchivePathFactory STRUCTURES_ROLLUP = registerRollup(STRUCTURES);
+	public static final StandardArchivePathFactory SOVEREIGNTY_MAP_ROLLUP = registerRollup(SOVEREIGNTY_MAP);
+	public static final StandardArchivePathFactory SOVEREIGNTY_STRUCTURES_ROLLUP =
+			registerRollup(SOVEREIGNTY_STRUCTURES);
+	public static final StandardArchivePathFactory SOVEREIGNTY_CAMPAIGNS_ROLLUP = registerRollup(SOVEREIGNTY_CAMPAIGNS);
+	public static final StandardArchivePathFactory INDUSTRY_SYSTEMS_ROLLUP = registerRollup(INDUSTRY_SYSTEMS);
+	public static final StandardArchivePathFactory INDUSTRY_FACILITIES_ROLLUP = registerRollup(INDUSTRY_FACILITIES);
+	public static final StandardArchivePathFactory INSURANCE_PRICES_ROLLUP = registerRollup(INSURANCE_PRICES);
+	public static final StandardArchivePathFactory MARKETS_PRICES_ROLLUP = registerRollup(MARKETS_PRICES);
+	public static final StandardArchivePathFactory WARZONE_ROLLUP = registerRollup(WARZONE);
+	public static final StandardArchivePathFactory WARZONE_INSURGENCY_ROLLUP = registerRollup(WARZONE_INSURGENCY);
+	public static final StandardArchivePathFactory FREELANCE_JOBS_ROLLUP = registerRollup(FREELANCE_JOBS);
+	public static final StandardArchivePathFactory INCURSIONS_ROLLUP = registerRollup(INCURSIONS);
+	public static final StandardArchivePathFactory FACTION_WARFARE_STATS_ROLLUP = registerRollup(FACTION_WARFARE_STATS);
+	public static final StandardArchivePathFactory FACTION_WARFARE_WARS_ROLLUP = registerRollup(FACTION_WARFARE_WARS);
+	public static final StandardArchivePathFactory FACTION_WARFARE_SYSTEMS_ROLLUP =
+			registerRollup(FACTION_WARFARE_SYSTEMS);
+	public static final StandardArchivePathFactory FACTION_WARFARE_LEADERBOARDS_ROLLUP =
+			registerRollup(FACTION_WARFARE_LEADERBOARDS);
+	public static final StandardArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CHARACTERS_ROLLUP =
+			registerRollup(FACTION_WARFARE_LEADERBOARDS_CHARACTERS);
+	public static final StandardArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CORPORATIONS_ROLLUP =
+			registerRollup(FACTION_WARFARE_LEADERBOARDS_CORPORATIONS);
+
+	/**
+	 * Registers a yearly rollup archive factory for a base type whose daily archives live under
+	 * "{baseFolder}/history". A rollup file sits directly in that history folder, named
+	 * "{filename}-{year}.{suffix}", with no year or date subfolder. The rollup's type is the
+	 * base type's name (or folder, as a fallback) with a "-rollup" suffix.
+	 */
+	private static StandardArchivePathFactory registerRollup(StandardArchivePathFactory base) {
+		return registerRollup(base, ".tar.xz");
+	}
+
+	private static StandardArchivePathFactory registerRollup(StandardArchivePathFactory base, String suffix) {
+		var baseName = base.getName() != null ? base.getName() : base.getFolder();
+		return register(base.toBuilder()
+				.name(baseName + "-rollup")
+				.folder(base.getFolder() + "/history")
+				.historyFolder(false)
+				.yearFolder(false)
+				.dateFolder(false)
+				.fileDateTimeFormatter(YEAR_PATTERN)
+				.suffix(suffix)
+				.latestSuffix(null)
+				.build());
+	}
+
 	private static <T extends ArchivePathFactory> T register(T pattern) {
 		// Only register once - MER and its aliases point to the same instance
 		if (!allPatterns.contains(pattern)) {

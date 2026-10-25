@@ -38,6 +38,9 @@ public class StandardArchivePathFactory implements ArchivePathFactory {
 	String latestSuffix;
 
 	@lombok.Builder.Default
+	String latestLabel = "latest";
+
+	@lombok.Builder.Default
 	boolean historyFolder = true;
 
 	@lombok.Builder.Default
@@ -54,7 +57,8 @@ public class StandardArchivePathFactory implements ArchivePathFactory {
 
 	public String createLatestPath() {
 		return join(List.of(
-				folder, filename + "-latest" + Optional.ofNullable(latestSuffix).orElse(suffix)));
+				folder,
+				filename + "-" + latestLabel + Optional.ofNullable(latestSuffix).orElse(suffix)));
 	}
 
 	public String createArchivePath(LocalDate date) {
