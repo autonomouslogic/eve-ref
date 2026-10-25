@@ -3,7 +3,7 @@ trackers: the trackers for a new torrent (PLAN 2.4 "Trackers"), downloaded when 
 from ngosang/trackerslist and XIU2/TrackersListCollection, in that order, duplicates dropped. Only UDP and HTTP(S)
 trackers are kept; libtorrent clients can't use the rest (WebSocket, I2P, ...).
 
-stdlib only, for 00-preflight and 04-make-torrent.
+stdlib only, for 00-preflight and 05-make-torrent.
 """
 
 import urllib.error

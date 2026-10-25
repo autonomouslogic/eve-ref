@@ -104,7 +104,7 @@ def readme_cutoff(text):
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
 
-# A torrent's comment (PLAN 2.4), built by render_comment and read back by 07-publish's read_torrent. {id} is the
+# A torrent's comment (PLAN 2.4), built by render_comment and read back by 08-publish's read_torrent. {id} is the
 # torrent name.
 COMMENT_TEMPLATE = """EVE Ref Deep Archive: {id}
 Data from {years}. Datasets: {datasets}.
@@ -123,6 +123,7 @@ STEPS = [
     "find",
     "review",
     "load",
+    "sign",
     "make-torrent",
     "seed",
     "check-seed",
@@ -137,6 +138,7 @@ STEPS = [
 ]
 MANUAL_STEPS = {
     "review",
+    "sign",
     "update-docs",
     "data-index",
     "delete-scratch",
@@ -193,7 +195,7 @@ MIN_BYTES = 500 * GIB
 # 01-find leaves out the date that would go over it.
 MAX_TORRENT_BYTES = 10_000_000
 
-# qBittorrent's Web API (00-preflight, 05-seed, 06-check-seed). Torrents are added with save path
+# qBittorrent's Web API (00-preflight, 06-seed, 07-check-seed). Torrents are added with save path
 # QBITTORRENT_SAVE_PATH (qbittorrent_save_path), SEED_DIR as qBittorrent sees it.
 def qbittorrent_settings():
     """(url, api_key) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
@@ -593,7 +595,7 @@ def classify_path(path):
     - dataset: the directories before that year folder, "/"-joined, with a trailing "history" or "backfills"
       (DATASET_SUFFIXES) removed; the first three directories if there's no year folder. "" at the site root (never
       reached: root-level files are skipped before classification) or directly under a year folder.
-    Used by 01-find's and 09-check-before-delete's dataset breakdowns, and by 04-make-torrent's "Datasets: ..."
+    Used by 01-find's and 10-check-before-delete's dataset breakdowns, and by 05-make-torrent's "Datasets: ..."
     comment (render_comment), so a torrent's comment always groups paths the same way the find report that selected
     them did.
     """

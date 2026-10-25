@@ -93,7 +93,7 @@ class RealTorrentTest(unittest.TestCase):
     def _build(self, files, readme_bytes=b"EVE Ref Deep Archive test README\n"):
         """
         files: {relative path: size in bytes}. Returns (actual .torrent bytes, TorrentSize estimate for just the
-        data files -- the same split 01-find/04-make-torrent use, where the README only counts via FIXED_BYTES).
+        data files -- the same split 01-find/05-make-torrent use, where the README only counts via FIXED_BYTES).
         """
         name = "everef-eve-online-deep-archive-2024-01-01"
         with tempfile.TemporaryDirectory() as parent:

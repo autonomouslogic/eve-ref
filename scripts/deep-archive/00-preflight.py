@@ -21,7 +21,8 @@ Checks:
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable; also picks the
   next torrent ID (one past the highest published one, or 00 if there are none), for 01-find to use;
-- the other required tools: libtorrent 2.x, aria2c;
+- the other required tools: libtorrent 2.x, aria2c, sha256sum (03-load uses it to verify the checksum file it just
+  wrote), Docker (04-sign runs minisign through it);
 - qBittorrent's Web API answers at QBITTORRENT_URL with QBITTORRENT_API_KEY, and runs libtorrent 2.x;
 - the tracker lists make-torrent downloads (lib/trackers.py) are reachable, each has UDP or HTTP(S) trackers, and
   together they have at least MIN_TRACKERS;
@@ -246,6 +247,15 @@ def check_tools(checks):
         checks.fail("Missing required tool: aria2c")
     else:
         print(aria2c.stdout.splitlines()[0] if aria2c.stdout else "aria2c")
+    if shutil.which("sha256sum") is None:
+        checks.fail("Missing required tool: sha256sum")
+    else:
+        print("sha256sum found")
+    docker = subprocess.run(["docker", "version"], capture_output=True, text=True) if shutil.which("docker") else None
+    if docker is None or docker.returncode != 0:
+        checks.fail("Missing required tool: Docker (04-sign runs minisign through it)")
+    else:
+        print("Docker found")
 
 
 def check_trackers(checks):

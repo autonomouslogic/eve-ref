@@ -3,7 +3,8 @@
 load: step 03 of the EVE Ref Deep Archive workflow. Copies exactly the files find selected into the torrent's content
 folder, SEED_DIR/<ID>/, from the local copy (LOCAL_COPY_DIR, optional) where it has them and from the data site's
 bucket otherwise, keeping each file's modification time. Then checks the result and computes the SHA-256 manifest the
-rest of the workflow is built on.
+rest of the workflow is built on, and the standard `sha256sum`-format checksum file published alongside the torrent
+(step 04, sign, signs it).
 
 DRAFT. Reads the bucket and the local copy; writes only to SEED_DIR/<ID>/ and SCRATCH_DIR.
 
@@ -29,8 +30,14 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    stream decompresses cleanly (tolerating concatenated streams). An archive test failure is reported but doesn't
    fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
    in NOTES.md before going on.
-8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 04-make-torrent and
-   09-check-before-delete use it.
+8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 05-make-torrent and
+   10-check-before-delete use it.
+9. Write SCRATCH_DIR/<ID>.sha256 from the manifest: standard `sha256sum` format ("<hex>  <path>", sorted by path,
+   "\n" line endings), one line per file. Published next to <ID>.txt in deep-archive/ (08-publish), outside the
+   torrent, so it lets someone check a file they got another way (e.g. a mirror) without a torrent client. 04-sign
+   signs it with minisign.
+10. Run `sha256sum -c` on the file just written, from the content folder: an independent check, with a different
+    tool, of the hashes just computed in Python.
 
 Writes, in SCRATCH_DIR:
 
@@ -40,6 +47,7 @@ Writes, in SCRATCH_DIR:
       local-files-from.txt  the paths copied from the local copy
       files-from.txt        the paths downloaded from the bucket
     manifest.json           the selection plus a SHA-256 for every file (torrent_id, generated_at, files)
+    <ID>.sha256             the same hashes, standard sha256sum format
     03-load.done            completion file
 
 Environment (or torrents.env, see lib/workflow.py):
@@ -47,7 +55,7 @@ Environment (or torrents.env, see lib/workflow.py):
     DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY   the bucket and B2 key (lib/workflow.py)
     LOCAL_COPY_DIR   optional: a local copy of the data site, laid out like the bucket
 
-Needs rclone.
+Needs rclone and sha256sum.
 """
 
 import bz2
@@ -56,6 +64,7 @@ import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import time
 import zlib
@@ -246,12 +255,20 @@ def main():
     os.rename(tmp, manifest_path)
     print(f"{fmt_count(len(manifest_files))} files in {manifest_path}")
 
+    section("Checksum file")
+    sha256_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.sha256")
+    write_sha256sums(sha256_path, manifest_files)
+    print(f"{fmt_count(len(manifest_files))} files in {sha256_path}")
+    verify_sha256sums(sha256_path, content_dir)
+    print(f"sha256sum -c: all {fmt_count(len(manifest_files))} files OK")
+
     workflow.complete(
         STEP,
         torrent_id,
         {
             "content_dir": content_dir,
             "manifest": manifest_path,
+            "sha256": sha256_path,
             "files": len(files),
             "bytes": total,
             "local_copy_files": len(from_local),
@@ -334,6 +351,28 @@ def check_local_copy(local_dir, files, remote, load_dir):
         report_problems("files in the local copy that failed rclone check, downloaded instead", rejected)
     print(f"From the local copy: {fmt_count(len(verified))} files ({fmt_bytes(sum(f.size for f in verified))})")
     return verified
+
+
+def write_sha256sums(path, manifest_files):
+    """Writes the standard sha256sum format: "<hex>  <path>", sorted by path, one line per file."""
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        for entry in sorted(manifest_files, key=lambda e: e["path"]):
+            f.write(f"{entry['sha256']}  {entry['path']}\n")
+    os.rename(tmp, path)
+
+
+def verify_sha256sums(sha256_path, content_dir):
+    """Runs sha256sum -c on the just-written checksum file, from content_dir (the paths are relative to it). Fails
+    with sha256sum's own output on any mismatch: a second, independent check of the hashes just computed in Python."""
+    result = subprocess.run(
+        ["sha256sum", "-c", "--strict", sha256_path], cwd=content_dir, capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        for line in result.stdout.splitlines() + result.stderr.splitlines():
+            if line.strip():
+                error(f"  {line}")
+        fail(f"sha256sum -c failed for {sha256_path}")
 
 
 def write_files_from(path, files):

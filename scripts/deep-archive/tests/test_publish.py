@@ -1,14 +1,14 @@
 """
-Tests for 07-publish.py's feed code: building everef-deep-archive.xml from a torrent's info
+Tests for 08-publish.py's feed code: building everef-deep-archive.xml from a torrent's info
 (build_feed, build_magnet, torrent_url), reading a torrent's fields back out of a real .torrent
 (read_torrent), and the diff shown before publishing (print_diff). No network, no rclone: read_torrent's one rclone
 call is replaced with a local file copy.
 
 These close the loop end to end: build_feed's output is fed back into check_feed_item, the same function
-07-publish uses after publishing to check what data.everef.net actually serves, so a mismatch between
+08-publish uses after publishing to check what data.everef.net actually serves, so a mismatch between
 building and checking the feed fails here instead of after publishing it live.
 
-Needs the libtorrent Python bindings, like 07-publish.py itself; skipped (not failed) if they aren't installed.
+Needs the libtorrent Python bindings, like 08-publish.py itself; skipped (not failed) if they aren't installed.
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -33,7 +33,7 @@ try:
 except ImportError:
     raise unittest.SkipTest("libtorrent Python bindings aren't installed")
 
-SPEC = importlib.util.spec_from_file_location("publish", os.path.join(HERE, "..", "07-publish.py"))
+SPEC = importlib.util.spec_from_file_location("publish", os.path.join(HERE, "..", "08-publish.py"))
 publish = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publish)  # also needs libtorrent, already checked above
 
@@ -131,7 +131,7 @@ class BuildFeedTest(unittest.TestCase):
             ET.tostring(items[existing["id"]], encoding="unicode"), ET.tostring(before.find("channel/item"), encoding="unicode")
         )
 
-        # Both round-trip through the module's own feed check, as 07-publish uses it after publishing live.
+        # Both round-trip through the module's own feed check, as 08-publish uses it after publishing live.
         body = publish.build_feed([existing, new]).encode("utf-8")
         self.assertEqual(quietly(publish.check_feed_item, body, existing["id"], existing["v1_info_hash"]), [])
         self.assertEqual(quietly(publish.check_feed_item, body, new["id"], new["v1_info_hash"]), [])

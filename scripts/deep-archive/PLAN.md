@@ -550,6 +550,13 @@ torrent would have had to be decided before the first publish. What's also lost:
 data against the manifest before the torrent was made; now nothing re-reads it independently before the torrent's
 piece hashes are computed (Review notes, R7).
 
+**Reversed (2026-10-25):** someone asked. `<ID>.sha256` is generated from the manifest by `03-load` (not
+`$SEED_DIR` directly, now that the manifest's hashes are checked a second time with `sha256sum -c` as it's
+written), signed with minisign by a new manual step, `04-sign`, and published next to `<ID>.txt` in
+`deep-archive/`, outside the torrent, by `08-publish` (Review notes, R5). The public key is published at
+`/.well-known/minisign.pub`, outside this repo's control of the data bucket, so a compromise of one doesn't also
+compromise the other.
+
 #### `<ID>-README.md`
 
 Markdown, generated from a template in `deep-archive/`. Contents:
@@ -1147,7 +1154,11 @@ step and were dropped with it (2.11).
 - **R5. The checksum file is gone** (2.6), **and the manifest is thrown away.** `manifest.json` (every file's SHA-256)
   lived on in the backup; now it's deleted with `$SCRATCH_DIR`, so no SHA-256 of the archived files survives the
   workflow. **Decided (2026-10-24): accepted** (2.6); an `<ID>.sha256` can be added next to `<ID>.txt` later.
-- **R6. Three steps check themselves.** `03-load`, `04-make-torrent` and `07-publish` now check their own results at
+  **Reversed (2026-10-25):** `<ID>.sha256` is back, written by `03-load` from the manifest and verified there with
+  `sha256sum -c`, then signed with minisign (`04-sign`, new manual step) and published next to `<ID>.txt` in
+  `deep-archive/` (`08-publish`). It still doesn't outlive `$SCRATCH_DIR` unsigned; the signed, published copy is
+  the one that matters, verifiable against the public key at `/.well-known/minisign.pub` without a torrent client.
+- **R6. Three steps check themselves.** `03-load`, `05-make-torrent` and `08-publish` now check their own results at
   the end, like the roll-up scripts, instead of having a separate read-only check step (2.10). They re-read from disk
   or the site, but a bug shared by the action and its check (e.g. the same wrong comment template, the same path
   handling) is no longer caught: the old `check-torrent` re-rendered the comment from its own copy of the template,

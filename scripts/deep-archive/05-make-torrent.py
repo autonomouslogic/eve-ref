@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-make-torrent: step 04 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
+make-torrent: step 05 of the EVE Ref Deep Archive workflow. Writes the torrent's README, then makes the hybrid
 v1+v2 .torrent and its file list, and checks both.
 
 DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.md and SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 
-    04-make-torrent.py
+    05-make-torrent.py
 
 Needs 03-load's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece
 of every file (hours for a full torrent).
@@ -28,7 +28,7 @@ Writes:
     SCRATCH_DIR/<ID>.torrent
     SCRATCH_DIR/<ID>.txt
     SCRATCH_DIR/trackers/     each tracker list as downloaded (<name>.txt), and trackers.txt: the torrent's trackers
-    04-make-torrent.done     completion file
+    05-make-torrent.done     completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR

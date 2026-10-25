@@ -16,6 +16,25 @@ the torrent and published alongside it.
 Alongside the torrent files are TXT files named `everef-eve-online-deep-archive-NN.txt`.
 These simply contain a list of all the files in each torrent file and can be used to quickly search for specific files.
 
+Also alongside the torrent files are SHA-256 checksum files named `everef-eve-online-deep-archive-NN.sha256`
+(standard `sha256sum` format), each signed with [minisign](https://jedisct1.github.io/minisign/) in
+`everef-eve-online-deep-archive-NN.sha256.minisig`. See [Verification](#verification) below.
+
+## Verification
+The torrent's own piece hashes already verify everything a torrent client downloads. The `.sha256`/`.sha256.minisig`
+files are for checking a file you got another way, e.g. copied off a mirror, without a torrent client.
+
+The public key used to sign them is published at
+[everef.net/.well-known/minisign.pub](https://everef.net/.well-known/minisign.pub).
+
+```
+curl -O https://data.everef.net/deep-archive/everef-eve-online-deep-archive-NN.sha256
+curl -O https://data.everef.net/deep-archive/everef-eve-online-deep-archive-NN.sha256.minisig
+curl -O https://everef.net/.well-known/minisign.pub
+minisign -V -p minisign.pub -m everef-eve-online-deep-archive-NN.sha256
+sha256sum -c everef-eve-online-deep-archive-NN.sha256
+```
+
 ### What gets archived
 Files that have been on the site for at least 2 years, oldest first.
 Once a torrent is published, those files are removed from `data.everef.net`.

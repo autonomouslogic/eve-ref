@@ -1,6 +1,6 @@
 """
 qbittorrent: a tiny client for qBittorrent's Web API (https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API),
-stdlib only (urllib), for 00-preflight, 05-seed and 06-check-seed.
+stdlib only (urllib), for 00-preflight, 06-seed and 07-check-seed.
 """
 
 import json

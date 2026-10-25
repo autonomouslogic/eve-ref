@@ -48,7 +48,7 @@ selected again (flagged).
 Torrent ID: sequential (everef-eve-online-deep-archive-NN, two digits, PLAN 2.3), chosen by 00-preflight (the
 completion file find needs) rather than from the cutoff date. The torrent holds everything not yet archived that
 was dated on or before the cutoff this run chose; that date is saved in the torrent's own README, not its ID (see
-04-make-torrent). Writes, in SCRATCH_DIR:
+05-make-torrent). Writes, in SCRATCH_DIR:
 
     find/
       files.jsonl          the selection, index.json files included: one file per line: path, size, last_modified,

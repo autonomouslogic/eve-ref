@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-seed: step 05 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent with SEED_DIR, as qBittorrent sees
+seed: step 06 of the EVE Ref Deep Archive workflow. Adds the torrent to qBittorrent with SEED_DIR, as qBittorrent sees
 it, as the save path, so it checks the files where they already are instead of downloading them.
 
 DRAFT. Writes only to qBittorrent (via its Web API) and SCRATCH_DIR.
 
-    05-seed.py
+    06-seed.py
 
-Needs 04-make-torrent's completion file, and refuses to run twice (lib/workflow.py).
+Needs 05-make-torrent's completion file, and refuses to run twice (lib/workflow.py).
 
 Adds $SCRATCH_DIR/<ID>.torrent to qBittorrent with save path QBITTORRENT_SAVE_PATH (SEED_DIR as qBittorrent sees
 it; SEED_DIR itself if not set) and automatic torrent management off, so qBittorrent uses $SEED_DIR/<ID>/ (already
@@ -79,7 +79,7 @@ def main():
 
     section("Recheck")
     client.recheck(v1_hash)
-    print("Recheck triggered. Run 06-check-seed once it reaches 100%.")
+    print("Recheck triggered. Run 07-check-seed once it reaches 100%.")
 
     workflow.complete(STEP, torrent_id, {"info_hash": v1_hash, "save_path": save_path})
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
