@@ -13,6 +13,15 @@ class QbittorrentError(Exception):
     pass
 
 
+def torrent_id(v1_hash, v2_hash):
+    """
+    qBittorrent's ID for a torrent, what the Web API's hash/hashes parameters take: libtorrent's info_hash_t::get_best(),
+    the v2 info-hash truncated to 20 bytes if there is one, otherwise the v1 info-hash. torrents/info matches only
+    this ID, so a hybrid torrent isn't found by its v1 info-hash.
+    """
+    return v2_hash[:40] if v2_hash else v1_hash
+
+
 def without_default_port(url):
     """
     The URL without an explicit default port (:80 for http, :443 for https). urllib sends the port in the Host header

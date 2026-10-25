@@ -164,14 +164,14 @@ def docs_page_problems(text, torrent_id, v1_hash):
 def check_seeder(workflow, torrent_id):
     url, api_key = qbittorrent_settings()
     seed_done = workflow.read_done("seed")
-    info_hash = seed_done["summary"]["info_hash"]
+    qbittorrent_id = seed_done["summary"]["qbittorrent_id"]
     try:
         client = Client(url, api_key)
-        info = client.info(info_hash)
+        info = client.info(qbittorrent_id)
     except QbittorrentError as e:
         fail(f"Can't reach qBittorrent: {e}")
     if info is None:
-        fail(f"Torrent {info_hash} isn't in qBittorrent")
+        fail(f"Torrent {qbittorrent_id} isn't in qBittorrent")
     if info["progress"] != 1.0 or info["downloaded"] != 0:
         fail(f"Seeder isn't clean: progress {info['progress'] * 100:.2f}%, downloaded {info['downloaded']} bytes")
     print(f"qBittorrent: {info['state']}, 100%, 0 bytes downloaded")

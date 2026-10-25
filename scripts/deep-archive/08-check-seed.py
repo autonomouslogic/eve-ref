@@ -71,6 +71,7 @@ def main():
     torrent_id = workflow.torrent_id()
     seed_done = workflow.read_done("seed")
     info_hash = seed_done["summary"]["info_hash"]
+    qbittorrent_id = seed_done["summary"]["qbittorrent_id"]
 
     section("qBittorrent")
     url, api_key = qbittorrent_settings()
@@ -79,9 +80,9 @@ def main():
     except QbittorrentError as e:
         fail(f"Can't reach qBittorrent at {url}: {e}")
 
-    info = client.info(info_hash)
+    info = client.info(qbittorrent_id)
     if info is None:
-        fail(f"Torrent {info_hash} isn't in qBittorrent")
+        fail(f"Torrent {qbittorrent_id} isn't in qBittorrent")
 
     problems = []
     progress_pct = info["progress"] * 100
@@ -100,7 +101,7 @@ def main():
 
     section("Trackers")
     try:
-        trackers = client.trackers(info_hash)
+        trackers = client.trackers(qbittorrent_id)
     except QbittorrentError as e:
         fail(f"Can't read trackers: {e}")
     working = [t for t in trackers if t.get("status") == TRACKER_WORKING]

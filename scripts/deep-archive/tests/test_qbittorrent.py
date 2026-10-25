@@ -48,5 +48,18 @@ class ClientAuthTest(unittest.TestCase):
                 self.assertEqual([r.host for r in self.requests("qbt_key", url)], [host, host])
 
 
+class TorrentIdTest(unittest.TestCase):
+    V1 = "a" * 40
+    V2 = "0123456789abcdef" * 4
+
+    def test_hybrid_is_truncated_v2(self):
+        # qBittorrent's torrent ID is libtorrent's info_hash_t::get_best(): the v2 hash, truncated to 20 bytes.
+        # torrents/info?hashes= matches only that ID, so a hybrid torrent isn't found by its v1 hash.
+        self.assertEqual(qbittorrent.torrent_id(self.V1, self.V2), self.V2[:40])
+
+    def test_v1_only_is_v1(self):
+        self.assertEqual(qbittorrent.torrent_id(self.V1, None), self.V1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -26,6 +26,7 @@ import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from qbittorrent import Client, QbittorrentError  # noqa: E402
+from qbittorrent import torrent_id as qbittorrent_torrent_id  # noqa: E402
 from workflow import (  # noqa: E402
     Workflow,
     fail,
@@ -48,6 +49,7 @@ def main():
     torrent_id = workflow.torrent_id()
     make_torrent = workflow.read_done("make-torrent")
     v1_hash = make_torrent["summary"]["v1_info_hash"]
+    qbittorrent_id = qbittorrent_torrent_id(v1_hash, make_torrent["summary"]["v2_info_hash"])
     torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
 
     section("qBittorrent")
@@ -59,8 +61,9 @@ def main():
         fail(f"Can't reach qBittorrent at {url}: {e}")
     print(f"{url}: qBittorrent {version}")
 
-    if client.info(v1_hash) is not None:
-        fail(f"Torrent {v1_hash} is already in qBittorrent: remove it by hand first if this is a redo")
+    print(f"qBittorrent's torrent ID: {qbittorrent_id} (the v2 info-hash, truncated)")
+    if client.info(qbittorrent_id) is not None:
+        fail(f"Torrent {qbittorrent_id} is already in qBittorrent: remove it by hand first if this is a redo")
 
     section("Add torrent")
     if not os.path.isfile(torrent_path):
@@ -72,16 +75,18 @@ def main():
     except QbittorrentError as e:
         fail(f"Adding the torrent failed: {e}")
 
-    info = wait_for(client, v1_hash)
+    info = wait_for(client, qbittorrent_id)
     if info is None:
-        fail(f"qBittorrent didn't report {v1_hash} within {WAIT_TIMEOUT}s")
+        fail(f"qBittorrent didn't report {qbittorrent_id} within {WAIT_TIMEOUT}s")
     print(f"Added: state {info['state']}, {info['num_seeds']} seeds reported")
 
     section("Recheck")
-    client.recheck(v1_hash)
+    client.recheck(qbittorrent_id)
     print("Recheck triggered. Run 08-check-seed once it reaches 100%.")
 
-    workflow.complete(STEP, torrent_id, {"info_hash": v1_hash, "save_path": save_path})
+    workflow.complete(
+        STEP, torrent_id, {"info_hash": v1_hash, "qbittorrent_id": qbittorrent_id, "save_path": save_path}
+    )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     ok(f"Seed OK for {torrent_id}")
 
