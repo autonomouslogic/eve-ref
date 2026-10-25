@@ -64,6 +64,7 @@ The torrent content folder, SEED_DIR/<ID>/, must not exist yet. find doesn't cre
 Skipped:
 - index.html files (index.json files are selected with their folder, see above);
 - folders in TORRENT_EXCLUDE (lib/workflow.py), *-latest.* files, hidden files, files at the root of the site;
+- with TORRENT_INCLUDE set (lib/workflow.py), files outside its folders;
 - files a published torrent already holds (see Published torrents above).
 
 Environment (or torrents.env, see lib/workflow.py):
@@ -97,6 +98,7 @@ from workflow import (  # noqa: E402
     PIECE_SIZE,
     TORRENT_EXCLUDE,
     TORRENT_ID_RE,
+    TORRENT_INCLUDE,
     Workflow,
     classify_path,
     data_remote,
@@ -107,6 +109,7 @@ from workflow import (  # noqa: E402
     fmt_count,
     fmt_duration,
     fmt_size,
+    in_folders,
     iso,
     join,
     lsjson,
@@ -188,6 +191,7 @@ def main():
     workflow = Workflow()
     workflow.begin(STEP)
     excludes = TORRENT_EXCLUDE
+    includes = TORRENT_INCLUDE
     remote = data_remote()
     today = datetime.datetime.now(datetime.timezone.utc).date()
     newest_allowed = years_before(today, MIN_AGE_YEARS)
@@ -196,6 +200,7 @@ def main():
     print(f"Source: {remote}")
     print(f"Seed dir: {workflow.seed_dir}")
     print(f"Excluded folders: {', '.join(excludes) or '(none)'}")
+    print(f"Included folders: {', '.join(includes) if includes is not None else '(all)'}")
     print(
         f"Limits: .torrent {fmt_size(MAX_TORRENT_BYTES)}, data {fmt_bytes(MIN_BYTES)} to {fmt_bytes(MAX_BYTES)}, "
         f"nothing dated after {newest_allowed}"
@@ -210,7 +215,7 @@ def main():
     taken = load_published_lists(remote, listing)
 
     section("Selection")
-    scan = classify_all(listing, excludes, taken)
+    scan = classify_all(listing, excludes, taken, includes)
     if scan.already_archived:
         error(f"{fmt_count(len(scan.already_archived))} paths already archived but still on the site, e.g.")
         for path in scan.already_archived[:LOG_SAMPLE]:
@@ -241,7 +246,9 @@ def main():
     if os.path.exists(content_dir):
         fail(f"{content_dir} already exists: a torrent with this ID was started before")
 
-    summary = build_summary(listing, scan, cut, data, selected, torrent_id, remote, excludes, taken, newest_allowed)
+    summary = build_summary(
+        listing, scan, cut, data, selected, torrent_id, remote, excludes, includes, taken, newest_allowed
+    )
     print(f"Estimated .torrent: {fmt_size(summary['torrent_estimate']['bytes'])}, max {fmt_size(MAX_TORRENT_BYTES)}")
     report = render_report(summary)
     section("Report")
@@ -362,19 +369,22 @@ class Scan:
         self.indexes = {}  # folder -> its index.json Obj
         self.already_archived = []  # "path (<ID>)" for a non-index path a published torrent already holds
         self.excluded = defaultdict(lambda: [0, 0])  # dataset -> [files, bytes]
+        self.not_included = defaultdict(lambda: [0, 0])  # top-level folder -> [files, bytes], with TORRENT_INCLUDE
         self.ignored = defaultdict(lambda: [0, 0])  # reason -> [files, bytes]
         self.root_files = []
         self.empty = []
 
 
-def classify_all(listing, excludes, taken):
+def classify_all(listing, excludes, taken, includes=None):
     scan = Scan()
     for o in listing:
-        reason = skip_reason(o.path, excludes)
+        reason = skip_reason(o.path, excludes, includes)
         if reason is not None:
             kind, label = reason
             if kind == "excluded":
                 add(scan.excluded[label], o.size)
+            elif kind == "not_included":
+                add(scan.not_included[label], o.size)
             elif kind == "root":
                 scan.root_files.append(o.path)
             else:
@@ -416,8 +426,8 @@ def folder_indexes(files, indexes):
     return [indexes[f] for f in sorted(folders) if f in indexes]
 
 
-def skip_reason(path, excludes):
-    """(kind, label) if the path is never archived, else None."""
+def skip_reason(path, excludes, includes=None):
+    """(kind, label) if the path is never archived, or not in includes (when not None), else None."""
     parts = path.split("/")
     name = parts[-1]
     if name in IGNORED_NAMES:
@@ -427,11 +437,13 @@ def skip_reason(path, excludes):
     if any(p.startswith(".") for p in parts):
         return ("ignored", "hidden files")
     for exclude in excludes:
-        if path == exclude or path.startswith(exclude + "/"):
+        if in_folders(path, [exclude]):
             return ("excluded", exclude)
     if len(parts) == 1:
         # Root-level files are site files, not datasets.
         return ("root", None)
+    if includes is not None and not in_folders(path, includes):
+        return ("not_included", parts[0])
     return None
 
 
@@ -556,7 +568,9 @@ def unindexed_folders(data, scan):
     return sorted(f for f in folders if f not in scan.indexes)
 
 
-def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, excludes, taken, newest_allowed):
+def build_summary(
+    listing, scan, cut, data, selected, torrent_id, data_remote, excludes, includes, taken, newest_allowed
+):
     """data: the selected files without index.json, in date order; selected: data plus their folders' index.json."""
     now = datetime.datetime.now(datetime.timezone.utc)
     datasets = defaultdict(lambda: [0, 0])
@@ -615,6 +629,7 @@ def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, e
         "source": data_remote,
         "run_at": iso(now.timestamp()),
         "exclude": excludes,
+        "include": includes,
         "published": sorted(set(taken.values())),
         "listed": {"files": len(listing), "bytes": sum(o.size for o in listing)},
         "candidates": {"files": len(scan.candidates), "bytes": sum(o.size for o in scan.candidates)},
@@ -637,6 +652,7 @@ def build_summary(listing, scan, cut, data, selected, torrent_id, data_remote, e
         "flags": flags,
         "skipped": {
             "excluded": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.excluded.items())},
+            "not_included": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.not_included.items())},
             "root_files": len(scan.root_files),
             "ignored": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.ignored.items())},
         },
@@ -680,6 +696,8 @@ def render_report(summary):
     lines.append(f"Torrent ID: {summary['torrent_id']}")
     lines.append(f"Source:     {summary['source']}")
     lines.append(f"Exclude:    {', '.join(summary['exclude']) or '(none)'}")
+    if summary["include"] is not None:
+        lines.append(f"Include:    {', '.join(summary['include']) or '(none)'}")
     lines.append(
         f"Limits:     .torrent {fmt_size(limits['max_torrent_bytes'])}, data {fmt_bytes(limits['max_bytes'])}, "
         f"dated on or before {limits['newest_allowed']}"
@@ -725,6 +743,7 @@ def render_report(summary):
     skipped = summary["skipped"]
     rows = []
     rows += [(f"excluded {name}", s["files"], s["bytes"]) for name, s in skipped["excluded"].items()]
+    rows += [(f"not included {name}", s["files"], s["bytes"]) for name, s in skipped["not_included"].items()]
     if skipped["root_files"]:
         rows.append(("root-level files", skipped["root_files"], None))
     rows += [(name, s["files"], s["bytes"]) for name, s in skipped["ignored"].items()]

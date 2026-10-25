@@ -78,8 +78,12 @@ Read `$SCRATCH_DIR/find/report.txt`:
 - Files dated by a year in the name (`find.log`): the number is a year, not an ID.
 - If the limits weren't reached, a smaller torrent is worth making now.
 
-To change the selection: fix `TORRENT_EXCLUDE` in `lib/workflow.py`, delete `$SCRATCH_DIR/01-find.done`, and run
-`01-find` again.
+To change the selection: fix `TORRENT_EXCLUDE` (or `TORRENT_INCLUDE`) in `lib/workflow.py`, delete
+`$SCRATCH_DIR/01-find.done`, and run `01-find` again.
+
+`TORRENT_INCLUDE` is optional (`None` by default). Set to a list of folders, only files in those folders are selected
+(`TORRENT_EXCLUDE` still applies), and the report lists the rest as "not included". Use it to give the first torrents
+only the biggest datasets; set it back to `None` once they're archived.
 
 ### 03: Load
 Copies the selection into `$SEED_DIR/<ID>/` (from `LOCAL_COPY_DIR` where it matches, otherwise from the bucket),
@@ -187,7 +191,7 @@ step names the settings the environment overrides.
 | `LOCAL_COPY_DIR` | Optional. A local copy of the data site, laid out like the bucket; `03-load` copies matching files from it. |
 | `MINISIGN_KEY_PATH` | The minisign private key, kept outside this repo and `$SCRATCH_DIR`. Its passphrase is always typed in. |
 
-Everything else is fixed in `lib/workflow.py`: size limits, `TORRENT_EXCLUDE`, the site URL, and the rclone remote
+Everything else is fixed in `lib/workflow.py`: size limits, `TORRENT_EXCLUDE`, `TORRENT_INCLUDE`, the site URL, and the rclone remote
 (configured only from `RCLONE_CONFIG_*`, never your own `rclone.conf`, with `hard_delete=false`).
 
 ```

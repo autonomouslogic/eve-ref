@@ -187,6 +187,14 @@ would be archived and deleted from the site, e.g. a reference file a tool downlo
 `ccp/sde/older`, Appendix B). The find report breaks the selection down by dataset, marks datasets with no year folder,
 and the operator must check them (README, "Review the selection"). Add anything that must stay to `TORRENT_EXCLUDE`.
 
+**Optional allowlist (`TORRENT_INCLUDE`, 2026-10-25).** `None` by default: everything above. Set to a list of folders
+(paths from the site root), `01-find` selects only files in them; `TORRENT_EXCLUDE` still applies within them, and
+root files stay root files. Everything else is counted as "not included" (by top-level folder) in the report, and
+`05-make-torrent` checks the `.txt` has no path outside it. Meant for the first torrents: archive the biggest datasets
+first, to get them out of the way, then set it back to `None`. The cutoff is chosen among the included files only, so
+a later torrent can hold other datasets' files dated before an earlier torrent's cutoff; nothing relies on cutoffs
+being in order (2.3, `01-find` never reads one back).
+
 ### 2.3 Torrent IDs, naming and layout
 
 Every torrent has an **ID**. The ID is used everywhere: torrent name (root folder), `.torrent` file, `.txt` file
@@ -641,7 +649,7 @@ moving on. The scripts support the human; they don't replace their judgement.
 - **Settings in `torrents.env`** (`torrents.env.example`), read for anything the environment doesn't set:
   `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET`, the B2 key (`RCLONE_CONFIG_EVEREF_ACCOUNT`,
   `RCLONE_CONFIG_EVEREF_KEY`), the qBittorrent Web API, `MINISIGN_KEY_PATH` and, optionally, `LOCAL_COPY_DIR` and
-  `QBITTORRENT_SAVE_PATH`. Everything else (rclone settings, size limits, `TORRENT_EXCLUDE`, `DATA_BASE_URL`) is fixed
+  `QBITTORRENT_SAVE_PATH`. Everything else (rclone settings, size limits, `TORRENT_EXCLUDE`, `TORRENT_INCLUDE`, `DATA_BASE_URL`) is fixed
   in `lib/workflow.py`. No `--dir` or ID arguments. Every step names any setting the environment overrides the file
   with (R2).
 - **One workflow per scratch directory.** `$SCRATCH_DIR` holds the work files of the current workflow and must be

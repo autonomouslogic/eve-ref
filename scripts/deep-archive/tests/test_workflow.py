@@ -23,6 +23,7 @@ from workflow import (  # noqa: E402
     classify_path,
     file_list_problems,
     format_torrent_id,
+    in_folders,
     iso,
     parse_iso,
     previous_scripted_step,
@@ -72,6 +73,18 @@ class ClassifyPathTest(unittest.TestCase):
     def test_first_year_folder_wins(self):
         # A year-looking directory inside the dataset name itself (not realistic, but the first match should win).
         self.assertEqual(classify_path("a/2020/b/2021/file.json"), (2020, "a"))
+
+
+class InFoldersTest(unittest.TestCase):
+    def test_the_folder_and_inside_it(self):
+        self.assertTrue(in_folders("ccp", ["ccp"]))
+        self.assertTrue(in_folders("ccp/sde/a.zip", ["killmails", "ccp"]))
+
+    def test_by_whole_folder_name_not_prefix(self):
+        self.assertFalse(in_folders("ccp-other/a.json", ["ccp"]))
+
+    def test_no_folders(self):
+        self.assertFalse(in_folders("ccp/a.json", []))
 
 
 class RenderCommentTest(unittest.TestCase):

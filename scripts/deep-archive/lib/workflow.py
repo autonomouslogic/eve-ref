@@ -61,6 +61,16 @@ DEEP_ARCHIVE_DIR = "deep-archive"
 # ccp/csm/), and those links would break once a torrent took them. Revisit later, together with those docs.
 TORRENT_EXCLUDE = ["market-history", "killmails", "ccp", DEEP_ARCHIVE_DIR]
 
+# Optional allowlist: paths from the site root. None selects every folder not in TORRENT_EXCLUDE; a list selects only
+# files in these folders (TORRENT_EXCLUDE still applies within them). Used to give the first torrents only the biggest
+# datasets, to get them out of the way. Set it back to None once they're archived.
+TORRENT_INCLUDE = None
+
+
+def in_folders(path, folders):
+    """Whether the path is one of the folders or inside one, by whole folder name (ccp-other isn't in ccp)."""
+    return any(path == f or path.startswith(f + "/") for f in folders)
+
 # A path's year folder, for classify_path: the first 4-digit 19xx/20xx directory.
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 
@@ -186,11 +196,11 @@ PIECE_SIZE = 32 * MIB
 
 # Data in one torrent, a soft limit: 01-find stops at the first date that reaches it, and takes that whole date, so a
 # torrent can be somewhat over. Roughly what the seeder holds per torrent and what a full download is.
-MAX_BYTES = 1 * TIB
+MAX_BYTES = 10 * GIB
 
 # Least data in one torrent: 01-find aborts if its selection (index.json included) is smaller, so no workflow makes a
 # small torrent. Rerun it once more data has passed MIN_AGE_YEARS.
-MIN_BYTES = 500 * GIB
+MIN_BYTES = MAX_BYTES
 
 # Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
 # max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs up to about 12 KB high (its

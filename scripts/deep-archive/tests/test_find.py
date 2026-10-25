@@ -168,6 +168,27 @@ class SkipReasonTest(unittest.TestCase):
         self.assertEqual(self.skip("robots.txt"), ("root", None))
         self.assertEqual(self.skip("index.json"), ("root", None))
 
+    def test_no_includes_selects_everything(self):
+        self.assertIsNone(find.skip_reason("fuzzwork/ordersets/2020/a.csv.gz", self.EXCLUDES, None))
+
+    def test_not_included_by_top_folder(self):
+        includes = ["market-orders", "fuzzwork/ordersets"]
+        self.assertIsNone(find.skip_reason("market-orders/history/2020/a.csv.bz2", self.EXCLUDES, includes))
+        self.assertIsNone(find.skip_reason("fuzzwork/ordersets/2020/a.csv.gz", self.EXCLUDES, includes))
+        self.assertEqual(
+            find.skip_reason("fuzzwork/other/2020/a.csv.gz", self.EXCLUDES, includes), ("not_included", "fuzzwork")
+        )
+        self.assertEqual(
+            find.skip_reason("market-orders-x/2020/a.json", self.EXCLUDES, includes),
+            ("not_included", "market-orders-x"),
+        )
+
+    def test_excludes_apply_within_includes(self):
+        self.assertEqual(find.skip_reason("ccp/sde/sde-2019.zip", self.EXCLUDES, ["ccp"]), ("excluded", "ccp"))
+
+    def test_root_files_with_includes(self):
+        self.assertEqual(find.skip_reason("robots.txt", self.EXCLUDES, ["market-orders"]), ("root", None))
+
 
 class TorrentIdTest(unittest.TestCase):
     def test_is_torrent_id(self):
@@ -247,6 +268,12 @@ class ClassifyAllTest(unittest.TestCase):
         self.assertEqual(scan.excluded["market-history"], [1, 10])
         self.assertEqual(scan.ignored["index.html files"], [1, 5])
         self.assertEqual(scan.root_files, ["robots.txt"])
+
+    def test_not_included_files_counted(self):
+        listing = [obj("d/a.json", size=3), obj("e/f/a.json", size=4), obj("e/g/a.json", size=5)]
+        scan = quietly(find.classify_all, listing, self.EXCLUDES, {}, ["d", "e/f"])
+        self.assertEqual([o.path for o in scan.candidates], ["d/a.json", "e/f/a.json"])
+        self.assertEqual(scan.not_included, {"e": [1, 5]})
 
     def test_empty_files_are_candidates_and_flagged(self):
         scan = self.classify([obj("d/a.json", size=0)])

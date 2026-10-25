@@ -31,8 +31,9 @@ torrent unnoticed. Then:
 6. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
    downloaded ones, one per tier, in order; the comment; files = the manifest plus the root files, bytes match; the
-   .txt passes file_list_problems, matches the manifest and has no TORRENT_EXCLUDE paths. Prints the
-   v1 and v2 info-hashes (copy them into NOTES.md) and records them in the completion file.
+   .txt passes file_list_problems, matches the manifest and has no TORRENT_EXCLUDE paths (and, with TORRENT_INCLUDE
+   set, none outside it). Prints the v1 and v2 info-hashes (copy them into NOTES.md) and records them in the
+   completion file.
 
 Writes:
     $SEED_DIR/<ID>/<ID>-README.md, <ID>.sha256, <ID>.sha256.minisig
@@ -59,6 +60,7 @@ from workflow import (  # noqa: E402
     MAX_TORRENT_BYTES,
     PIECE_SIZE,
     TORRENT_EXCLUDE,
+    TORRENT_INCLUDE,
     Workflow,
     error,
     fail,
@@ -66,6 +68,7 @@ from workflow import (  # noqa: E402
     fmt_bytes,
     fmt_count,
     fmt_duration,
+    in_folders,
     iso,
     ok,
     parse_iso,
@@ -277,9 +280,13 @@ def check_torrent(lt, torrent_path, txt_path, torrent_id, files, content_dir, ro
     listed = set(text.splitlines())
     if listed != set(files):
         problems.append(f"{txt_path} doesn't match the manifest's paths")
-    excluded = [p for p in listed if any(p == e or p.startswith(e + "/") for e in TORRENT_EXCLUDE)]
+    excluded = sorted(p for p in listed if in_folders(p, TORRENT_EXCLUDE))
     if excluded:
         problems.append(f"{txt_path} has excluded paths: {excluded[:LOG_SAMPLE]}")
+    if TORRENT_INCLUDE is not None:
+        not_included = sorted(p for p in listed if not in_folders(p, TORRENT_INCLUDE))
+        if not_included:
+            problems.append(f"{txt_path} has paths outside TORRENT_INCLUDE: {not_included[:LOG_SAMPLE]}")
     print(f"{txt_path}: {fmt_count(len(listed))} lines")
 
     if problems:
