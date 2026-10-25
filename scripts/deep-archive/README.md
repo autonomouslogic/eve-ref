@@ -88,7 +88,8 @@ only the biggest datasets; set it back to `None` once they're archived.
 ### 03: Load
 Copies the selection into `$SEED_DIR/<ID>/`: what `LOCAL_COPY_DIR` has first, unchecked, then from the bucket with
 `--checksum`, which replaces any file that doesn't match the bucket's SHA-1. Then hashes it, and writes `manifest.json` and `<ID>.sha256`. Resumable.
-- File count and bytes equal the selection; nothing missing, different or extra.
+- File count and bytes equal the selection; nothing missing, different or extra (changed `index.json` files are
+  ignored: DataIndex rewrites them).
 - No archive test failures, or each one accepted in `NOTES.md` (corrupt files are archived as they are).
 - `sha256sum -c` passed.
 

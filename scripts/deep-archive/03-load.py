@@ -24,15 +24,18 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    (bucket_sha1s) are never taken from it, as step 5 could only compare their size.
 5. rclone copy --checksum --files-from-raw the whole selection from the bucket into SEED_DIR/<ID>/: rclone compares
    every file already there with the bucket by SHA-1 (by size where B2 has none) and downloads those that differ or
-   are missing, keeping the bucket's modification times, and checks each download's SHA-1 where B2 has one.
-6. Walk the content folder again and check every listed file is on disk with the listed size and modification time,
-   and nothing else is. Any problem aborts the step without a completion file; running it again carries on where it
+   are missing, keeping the bucket's modification times, and checks each download's SHA-1 where B2 has one. Then a
+   normal rclone copy: --checksum leaves the modification time of a file whose content matches as it is, so this sets
+   the bucket's on any file where it differs (after checking the SHA-1 matches), without downloading it.
+6. Walk the content folder again and check every listed file is on disk with the listed size and modification time
+   (an index.json only has to be there: DataIndex rewrites it on every run), and nothing else is. Any problem aborts the step without a completion file; running it again carries on where it
    stopped.
 7. Read every selected file once, computing its SHA-256 and, for .bz2 and .gz files, testing that the compressed
    stream decompresses cleanly (tolerating concatenated streams). An archive test failure is reported but doesn't
    fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
    in NOTES.md before going on.
-8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file. 05-make-torrent and
+8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file, with each file's size and
+   modification time as on disk (only an index.json can differ from the selection). 05-make-torrent and
    11-check-before-delete use it.
 9. Write SCRATCH_DIR/<ID>.sha256 from the manifest: standard `sha256sum` format ("<hex>  <path>", sorted by path,
    "\n" line endings), one line per file. Stays in SCRATCH_DIR for now; 04-sign-sha256 signs it with minisign, and
@@ -105,6 +108,9 @@ CHUNK_SIZE = 4 * MIB
 PROGRESS_INTERVAL = 30  # seconds
 
 LOG_SAMPLE = 20
+
+# Rewritten by DataIndex on every run: changes to one after find selected it are ignored (compare).
+INDEX_JSON = "index.json"
 
 class Selected:
     """One selected file. mtime is whole seconds, as files.jsonl records it."""
@@ -192,6 +198,13 @@ def main():
     download_started = time.monotonic()
     rclone_copy(remote, content_dir, files_from, "--checksum")
     print(f"rclone finished in {fmt_duration(time.monotonic() - download_started)}")
+    # --checksum never updates a modification time when the content matches (e.g. a local copy file the bucket has
+    # re-uploaded unchanged). A normal pass does: for a file with the same size and another modification time, rclone
+    # compares the SHA-1 and, if it matches, sets the bucket's modification time without downloading.
+    print(f"rclone copy {remote} -> {content_dir}: modification times")
+    times_started = time.monotonic()
+    rclone_copy(remote, content_dir, files_from)
+    print(f"rclone finished in {fmt_duration(time.monotonic() - times_started)}")
 
     section("Result")
     state = compare(content_dir, files)
@@ -217,8 +230,12 @@ def main():
     for index, f in enumerate(sorted(files, key=lambda s: s.path), 1):
         full = os.path.join(content_dir, f.path)
         digest, archive_error = hash_and_test(full)
-        manifest_files.append({"path": f.path, "size": f.size, "last_modified": iso(f.mtime), "sha256": digest})
-        hashed_bytes += f.size
+        # As on disk: the same as selected, except for an index.json that changed since (compare).
+        stat = os.stat(full)
+        manifest_files.append(
+            {"path": f.path, "size": stat.st_size, "last_modified": iso(stat.st_mtime), "sha256": digest}
+        )
+        hashed_bytes += stat.st_size
         if archive_error is not None:
             archive_failures.append(f"{f.path}: {archive_error}")
         now = time.monotonic()
@@ -396,7 +413,10 @@ class State:
 
 
 def compare(content_dir, files):
-    """The content folder against the selection, by size and modification time (to the second)."""
+    """
+    The content folder against the selection, by size and modification time (to the second). An index.json only has
+    to be there: DataIndex rewrites it on every run, so a change to it since find selected it is ignored.
+    """
     state = State()
     selected = {f.path: f for f in files}
     on_disk = set()
@@ -413,7 +433,9 @@ def compare(content_dir, files):
                 continue
             on_disk.add(path)
             stat = os.stat(full)
-            if stat.st_size != f.size:
+            if name == INDEX_JSON:
+                state.matching.add(path)
+            elif stat.st_size != f.size:
                 state.different.append(f"{path}: {fmt_count(stat.st_size)} bytes, selected {fmt_count(f.size)}")
             elif int(stat.st_mtime) != f.mtime:
                 state.different.append(f"{path}: modified {iso(stat.st_mtime)}, selected {iso(f.mtime)}")
