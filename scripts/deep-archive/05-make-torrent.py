@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make-torrent: step 05 of the EVE Ref Deep Archive workflow. Writes the torrent's README, copies in the signed
+make-torrent: a step of the EVE Ref Deep Archive workflow. Writes the torrent's README, copies in the signed
 checksum file, then makes the hybrid v1+v2 .torrent and its file list, and checks both.
 
 DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.md, <ID>.sha256 and <ID>.sha256.minisig (copied in), and

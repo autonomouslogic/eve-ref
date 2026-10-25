@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-publish: step 09 of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent, <ID>.txt and <ID>.torrent.minisig to
+publish: a step of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent, <ID>.txt and <ID>.torrent.minisig to
 the bucket's deep-archive/, rebuilds everef-deep-archive.xml from every published .torrent, and checks what
 data.everef.net serves for all of them.
 

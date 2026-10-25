@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sign-torrent: step 06 of the EVE Ref Deep Archive workflow (manual). Signs the <ID>.torrent file (05-make-torrent)
+# sign-torrent: a manual step of the EVE Ref Deep Archive workflow. Signs the <ID>.torrent file (05-make-torrent)
 # with minisign, run through Docker, producing <ID>.torrent.minisig next to it in SCRATCH_DIR. This is the signature
 # 09-publish uploads alongside the torrent, so someone can verify the .torrent file itself before loading it into a
 # client, without needing the torrent's own piece hashes.

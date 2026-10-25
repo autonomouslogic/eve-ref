@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check-before-delete: step 11 of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
+check-before-delete: a step of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
 re-verifies the docs page and seeding, confirms the published torrent matches the local one, and builds the
 delete set from the torrent against a fresh listing of the bucket (PLAN 2.14).
 
@@ -8,8 +8,8 @@ DRAFT. Read-only on the bucket and qBittorrent.
 
     11-check-before-delete.py
 
-Needs 09-publish's completion file (10, update-docs, is manual), and refuses to run twice (lib/workflow.py). Fails
-if the docs page doesn't list the torrent's ID and v1 info-hash: step 10 must come first.
+Needs 09-publish's completion file (update-docs is manual), and refuses to run twice (lib/workflow.py). Fails
+if the docs page doesn't list the torrent's ID and v1 info-hash: update-docs must come first.
 
 A data file is in the delete set only if all of these hold:
 - it's a data file in the published torrent (not index.json or the README), with the selected size;
@@ -18,7 +18,7 @@ A data file is in the delete set only if all of these hold:
   it was selected (01-find's files.jsonl).
 
 A file that fails stays on the site (Appendix E); it's listed and doesn't stop the step. Many failures point at a
-problem; look before going on (README, "09: Check before delete").
+problem; look before going on (README, "Check before delete").
 
 Writes, in SCRATCH_DIR:
 
@@ -132,7 +132,7 @@ def main():
 
 
 def check_docs_page(torrent_id, v1_hash):
-    """The docs page is live and lists this torrent (step 10, update-docs), before anything is deleted."""
+    """The docs page is live and lists this torrent (update-docs), before anything is deleted."""
     try:
         with urllib.request.urlopen(DOCS_PAGE, timeout=60) as response:
             status = response.status
@@ -145,7 +145,7 @@ def check_docs_page(torrent_id, v1_hash):
         fail(f"{DOCS_PAGE}: HTTP {status}")
     problems = docs_page_problems(text, torrent_id, v1_hash)
     if problems:
-        fail(f"{DOCS_PAGE}: {'; '.join(problems)}: add the torrent to the page first (step 10)")
+        fail(f"{DOCS_PAGE}: {'; '.join(problems)}: add the torrent to the page first (update-docs)")
     print(f"{DOCS_PAGE}: 200, lists {torrent_id} with its v1 info-hash")
 
 

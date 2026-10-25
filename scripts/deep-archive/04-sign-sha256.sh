@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sign-sha256: step 04 of the EVE Ref Deep Archive workflow (manual). Signs the <ID>.sha256 checksum file 03-load
+# sign-sha256: a manual step of the EVE Ref Deep Archive workflow. Signs the <ID>.sha256 checksum file 03-load
 # wrote with minisign, run through Docker, producing <ID>.sha256.minisig next to it in SCRATCH_DIR. Runs before
 # 05-make-torrent so both end up inside the torrent, next to the README -- they're never published standalone.
 #

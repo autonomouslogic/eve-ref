@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-delete: step 12 of the EVE Ref Deep Archive workflow. The permanent step: deletes exactly the confirmed delete
+delete: a step of the EVE Ref Deep Archive workflow. The permanent step: deletes exactly the confirmed delete
 set from 11-check-before-delete, then cleans up index files left in folders that delete emptied.
 
 DRAFT. Dry run by default; only --execute writes to the bucket, and only after typing the torrent ID back.

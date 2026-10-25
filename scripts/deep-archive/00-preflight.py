@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-preflight: step 00 of the EVE Ref Deep Archive workflow. Basic checks before a workflow starts.
+preflight: a step of the EVE Ref Deep Archive workflow. Basic checks before a workflow starts.
 
 DRAFT. Read-only, apart from its own completion file.
 

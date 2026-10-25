@@ -135,7 +135,7 @@ different. Aborts before copying if the folder holds files that aren't selected,
 - No archive test failures, or each one accepted in `NOTES.md` (corrupt files are archived as they are).
 - `manifest.json` written, with a SHA-256 for every file.
 - `$SCRATCH_DIR/<ID>.sha256` written and verified against it with `sha256sum -c` (an independent check, with a
-  different tool, of the hashes step 03 just computed).
+  different tool, of the hashes load just computed).
 
 ### 04: Sign the checksum file
 ```
@@ -173,7 +173,7 @@ Also read the `.txt` and the README yourself.
 ```
 ./06-sign-torrent.sh
 ```
-Signs `$SCRATCH_DIR/<ID>.torrent` with minisign, run through Docker, the same way as step 04. Writes
+Signs `$SCRATCH_DIR/<ID>.torrent` with minisign, run through Docker, the same way as sign-sha256. Writes
 `$SCRATCH_DIR/<ID>.torrent.minisig`, then verifies it against the public key if that's checked out. This is the
 signature 09-publish uploads: it lets someone verify the `.torrent` file itself, before loading it into a client,
 without needing the torrent's own piece hashes.
@@ -192,7 +192,7 @@ itself if not set).
 ./08-check-seed.py
 ```
 Checks qBittorrent through its Web API, then downloads the README through the torrent with aria2c (from the
-`.torrent`, no magnet link) into a throwaway folder. Give the trackers a few minutes after step 07 first.
+`.torrent`, no magnet link) into a throwaway folder. Give the trackers a few minutes after seed first.
 - 100% with **0 bytes downloaded** (any download means the files don't match: stop), seeding, a tracker working.
 - aria2c downloaded the README, identical to the seed copy.
 
@@ -209,7 +209,7 @@ inside the torrent only. Never overwrites (a file already published by an earlie
 is skipped). Then rebuilds `everef-deep-archive.xml` from the published torrents, shows the difference, asks again,
 saves the published `everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it.
 Last, checks all three files over HTTPS, retrying for a few minutes while Cloudflare still serves the old feed.
-Prints the torrent's URL, v1 and v2 info-hashes, and full magnet link for step 10.
+Prints the torrent's URL, v1 and v2 info-hashes, and full magnet link for update-docs.
 - The only difference in the feed is the new `<ID>`.
 - The `.torrent`, `.txt` and `.torrent.minisig` are served from `https://data.everef.net/deep-archive/` with the
   right Content-Type and content; the feed is valid RSS and has `<ID>` with the right info-hash.
@@ -218,13 +218,13 @@ Prints the torrent's URL, v1 and v2 info-hashes, and full magnet link for step 1
 
 Add the torrent to the "Torrents" table on the docs site's Deep Archive page
 (`docs/src/datasets/deep-archive.md`), newest first: its ID linked to its URL, the v1 and v2 info-hashes, and the full
-magnet link, all printed by step 09. Commit it and deploy the docs site. Step 11 checks the live page lists it.
+magnet link, all printed by publish. Commit it and deploy the docs site. Check before delete checks the live page lists it.
 
 ### 11: Check before delete
 ```
 ./11-check-before-delete.py
 ```
-- The docs page is live and lists `<ID>` with its v1 info-hash (step 10); the seeder is at 100% with 0 bytes
+- The docs page is live and lists `<ID>` with its v1 info-hash (update-docs); the seeder is at 100% with 0 bytes
   downloaded.
 - The published `.torrent` on the bucket has the same info-hash as `$SCRATCH_DIR/<ID>.torrent`.
 - Builds the delete set from the torrent: each data file in it that is in the manifest, has the selected size in the
@@ -238,14 +238,14 @@ magnet link, all printed by step 09. Commit it and deploy the docs site. Step 11
 ./12-delete.py              # dry run
 ./12-delete.py --execute    # type the torrent ID to confirm
 ```
-- The dry run shows exactly the delete set from step 11.
+- The dry run shows exactly the delete set from check-before-delete.
 
 `--execute` re-checks against a fresh listing, then deletes exactly the confirmed files (soft deletes; never by
 prefix). Then it removes the folders the delete emptied: on B2 a folder disappears with its last file, so that means
 removing `index.html` and `index.json` from every folder left with nothing else in it, and from parents left the same
 way, deepest first; never the site root or `deep-archive/` (PLAN 2.15). Treat it as permanent.
 
-Until the full `DataIndex` in step 14 runs, parent index pages still link to the now-deleted files/folders:
+Until the full `DataIndex` run, parent index pages still link to the now-deleted files/folders:
 scheduled jobs that crawl the site (e.g. `sync-fuzzwork-ordersets`, the market history scrape) may fail against
 those stale links in the meantime. Left as-is; they recover on their next run after `DataIndex` catches up.
 
@@ -254,13 +254,13 @@ those stale links in the meantime. Left as-is; they recover on their next run af
 ./13-check-delete.py
 ```
 - Every file in the delete set is gone, no folder holds only index files, and nothing else changed: files that
-  failed the check in step 11 are still there, and so is every other path that was on the bucket when `01-find` ran
-  (step 11's pre-delete check already covers the delete set itself; this is what would catch `12-delete` deleting,
+  failed the check in check-before-delete are still there, and so is every other path that was on the bucket when `01-find` ran
+  (check-before-delete's pre-delete check already covers the delete set itself; this is what would catch `delete` deleting,
   or anything else removing, a path outside it). New uploads since `01-find` ran are fine; they're not checked.
 
 ### 14: Full DataIndex (manual)
 
-Rewrites every folder's index pages, so the parents stop listing the deleted files and the folders step 12 removed.
+Rewrites every folder's index pages, so the parents stop listing the deleted files and the folders delete removed.
 ```
 docker run --rm --env-file <production env> <eve-ref image> data-index
 ```

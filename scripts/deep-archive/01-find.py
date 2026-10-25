@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-find: step 01 of the EVE Ref Deep Archive workflow. Selects the files for the torrent: the oldest files on
+find: a step of the EVE Ref Deep Archive workflow. Selects the files for the torrent: the oldest files on
 data.everef.net that aren't archived yet, by date (see Dates below), up to the last date that keeps the torrent as big
 as the size limits allow.
 

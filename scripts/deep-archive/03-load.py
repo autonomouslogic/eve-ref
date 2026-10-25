@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-load: step 03 of the EVE Ref Deep Archive workflow. Copies exactly the files find selected into the torrent's content
+load: a step of the EVE Ref Deep Archive workflow. Copies exactly the files find selected into the torrent's content
 folder, SEED_DIR/<ID>/, from the local copy (LOCAL_COPY_DIR, optional) where it has them and from the data site's
 bucket otherwise, keeping each file's modification time. Then checks the result and computes the SHA-256 manifest the
 rest of the workflow is built on, and the standard `sha256sum`-format checksum file that ends up inside the torrent

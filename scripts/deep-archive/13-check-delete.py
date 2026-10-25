@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check-delete: step 13 of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
+check-delete: a step of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
 listing of the bucket -- never trusting 12-delete's own result.
 
 DRAFT. Read-only on the bucket.
