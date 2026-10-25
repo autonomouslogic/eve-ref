@@ -47,7 +47,7 @@ def entry(id_, pub_date, v1_hash="a" * 40, v2_hash="b" * 64, files=2, size=1000)
         "pub_date": pub_date,
         "files": files,
         "bytes": size,
-        "comment": render_comment(id_, {2020, 2021}, {"a", "b"}),
+        "comment": render_comment(id_),
         "trackers": ["udp://tracker.example.com:1337/announce"],
     }
 
@@ -173,7 +173,7 @@ class ReadTorrentTest(unittest.TestCase):
     def _restore(self):
         publish.rclone = self._real_rclone
 
-    def _make_torrent(self, torrent_id, years=(2020, 2021), datasets=("a", "b")):
+    def _make_torrent(self, torrent_id):
         content_dir = os.path.join(self.tmp, "content", torrent_id)
         os.makedirs(content_dir)
         data_path = os.path.join(content_dir, "a", "file.bin")
@@ -187,7 +187,7 @@ class ReadTorrentTest(unittest.TestCase):
         fs = lt.file_storage()
         fs.add_file(f"{torrent_id}/a/file.bin", 100)
         fs.add_file(f"{torrent_id}/{torrent_id}-README.md", len(b"readme"))
-        comment = render_comment(torrent_id, set(years), set(datasets))
+        comment = render_comment(torrent_id)
         ct = lt.create_torrent(fs, 16 * 1024)
         ct.add_tracker("udp://tracker.example.com:1337/announce", 0)
         ct.set_comment(comment)

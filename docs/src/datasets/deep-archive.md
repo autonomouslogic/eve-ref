@@ -1,4 +1,4 @@
-# EVE Ref Deep Archive
+# Deep Archive
 The [Deep Archive](https://data.everef.net/deep-archive) moves old data off [data.everef.net](https://data.everef.net/) and into torrent archives.
 
 **To help host it**, add [the RSS feed](https://data.everef.net/deep-archive/everef-deep-archive.xml) to your torrent client.

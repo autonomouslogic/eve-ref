@@ -277,26 +277,20 @@ files:  everef-eve-online-deep-archive-00-README.md       # what this is (2.6)
 - Not private. DHT/PEX enabled. Public trackers: see "Trackers" below.
 - Piece size: see "Creating the torrent" below.
 - **Comment** (required): directs the user to the Deep Archive page on the docs site. **Generated automatically**
-  by `make-torrent`, never typed by hand. Template:
+  by `make-torrent` from a template file, `comment-template.txt`, never typed by hand. **Revised (2026-10-25):
+  one line, just the ID** -- no years or datasets (both dropped; they only ever came from the manifest, not
+  anything a magnet-link-only user could get another way). Template:
   ```
-  EVE Ref Deep Archive: {ID}
-  Data from {YEARS}. Datasets: {DATASETS}.
-  What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
-  File list: https://data.everef.net/deep-archive/{ID}.txt
+  EVE Ref Deep Archive: {id}. What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html File list: https://data.everef.net/deep-archive/{id}.txt
   ```
   Example:
   ```
-  EVE Ref Deep Archive: everef-eve-online-deep-archive-00
-  Data from 2017–2023. Datasets: esi-scrape, fuzzwork/ordersets, market-orders, public-contracts, reference-data, ...
-  What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
-  File list: https://data.everef.net/deep-archive/everef-eve-online-deep-archive-00.txt
+  EVE Ref Deep Archive: everef-eve-online-deep-archive-00. What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html File list: https://data.everef.net/deep-archive/everef-eve-online-deep-archive-00.txt
   ```
-  - `{ID}` is the torrent ID (2.3), which is also the torrent's name.
-  - `{YEARS}` comes from the **manifest**, not the ID: the distinct years of the data files (year folder in the
-    path, or the modification year for files without one). One year (`2023`), or a range (`2017–2023`).
-  - `{DATASETS}` also comes from the manifest: the distinct dataset folders, sorted. If the list is long, it's cut
-    off after a fixed length with `...`; the file list has everything.
-  - `make-torrent` reloads the torrent and compares its comment with the one rendered from the manifest.
+  - `{id}` is the torrent ID (2.3), which is also the torrent's name.
+  - `load_comment_template` (`lib/workflow.py`) trims the file and fails if the result has more than one line: the
+    comment is kept deliberately short, and a template edit can't silently turn it into several lines.
+  - `make-torrent` reloads the torrent and compares its comment with the one rendered from the template.
   - qBittorrent and most other clients show the comment in the torrent's details, and qBittorrent makes URLs in it
     clickable.
   - The comment is outside the `info` dictionary, so it doesn't change the info-hash, and it could be updated in a

@@ -38,12 +38,13 @@ path.
 
 `make test-deep-archive` (from the repo root) runs the unit tests in `tests/`: how `01-find` dates files from their
 names, what it skips, how published torrents and `index.json` files are handled, and how it chooses the cutoff; the
-shared dataset/year classification and torrent comment (`lib/workflow.py`'s `classify_path`/`render_comment`), used by
-`01-find`, `04-make-torrent` and `09-check-before-delete` so their dataset breakdowns and the torrent's own comment
-always agree; that `STEPS` matches the numbered scripts; the `.torrent` size estimate (`lib/torrent_size.py`),
-including a real torrent built with libtorrent and compared against the estimate for the same files; `07-publish`'s
-feed building, round-tripped through its own checks; `09-check-before-delete`'s delete set and docs page check; and
-`11-check-delete`'s checks, including that nothing outside the confirmed delete set went missing. Standard library
+shared dataset/year classification (`lib/workflow.py`'s `classify_path`, used by `01-find`'s and
+`10-check-before-delete`'s dataset breakdowns) and the torrent comment (`render_comment`, that it's the template with
+the ID filled in and stays a single line); that `STEPS` matches the numbered scripts; the `.torrent` size estimate
+(`lib/torrent_size.py`), including a real torrent built with libtorrent and compared against the estimate for the
+same files; `08-publish`'s feed building, round-tripped through its own checks; `10-check-before-delete`'s delete set
+and docs page check; and `12-check-delete`'s checks, including that nothing outside the confirmed delete set went
+missing. Standard library
 only, with one exception: the real-torrent-size and feed-building tests need the libtorrent Python bindings (like the
 scripts they test) and are skipped, not failed, without them. Uses your `python3`, or Docker if there isn't one; the
 Docker image doesn't have libtorrent, so those tests are skipped there.
@@ -316,6 +317,7 @@ rules give an undo window. All storage access goes through rclone.
 scripts/deep-archive/
   README.md  PLAN.md
   README-template.md               # the README inside each torrent (05-make-torrent)
+  comment-template.txt             # the torrent's comment, one line, {id} filled in (lib/workflow.py's render_comment)
   torrents.env.example             # copy to torrents.env (not committed)
   00-preflight.py  01-find.py  …   # the steps
   04-sign.sh                       # signs <ID>.sha256 with minisign, through Docker (bash, not Python)

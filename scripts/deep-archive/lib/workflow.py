@@ -105,15 +105,18 @@ def readme_cutoff(text):
 FEED_CACHE_MAX_AGE_SECONDS = 120
 
 # A torrent's comment (PLAN 2.4), built by render_comment and read back by 08-publish's read_torrent. {id} is the
-# torrent name.
-COMMENT_TEMPLATE = """EVE Ref Deep Archive: {id}
-Data from {years}. Datasets: {datasets}.
-What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html
-File list: https://data.everef.net/deep-archive/{id}.txt"""
-COMMENT_RE = re.compile(r"^Data from (.+)\. Datasets: (.+)\.$", re.MULTILINE)
+# torrent name. The template file itself must be a single line (load_comment_template): the comment is kept
+# deliberately short.
+COMMENT_TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "comment-template.txt")
 
-# Longest "Datasets: ..." text in a comment before it's truncated (render_comment).
-DATASETS_MAX_LENGTH = 200
+
+def load_comment_template():
+    """comment-template.txt, trimmed. Fails if what's left has more than one line."""
+    with open(COMMENT_TEMPLATE_PATH, encoding="utf-8") as f:
+        text = f.read().strip()
+    if "\n" in text:
+        fail(f"{COMMENT_TEMPLATE_PATH} must be a single line, found {text.count(chr(10)) + 1}")
+    return text
 
 # The workflow's steps, in order (README), numbered by their place here. Each scripted step's script is named after
 # its number and name, e.g. 01-find.py. Manual steps (MANUAL_STEPS) are numbered too, but have no script and no
@@ -595,9 +598,7 @@ def classify_path(path):
     - dataset: the directories before that year folder, "/"-joined, with a trailing "history" or "backfills"
       (DATASET_SUFFIXES) removed; the first three directories if there's no year folder. "" at the site root (never
       reached: root-level files are skipped before classification) or directly under a year folder.
-    Used by 01-find's and 10-check-before-delete's dataset breakdowns, and by 05-make-torrent's "Datasets: ..."
-    comment (render_comment), so a torrent's comment always groups paths the same way the find report that selected
-    them did.
+    Used by 01-find's and 10-check-before-delete's dataset breakdowns.
     """
     dirs = path.split("/")[:-1]
     year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)
@@ -610,18 +611,9 @@ def classify_path(path):
     return year, "/".join(dataset_parts)
 
 
-def render_comment(torrent_id, years, datasets):
-    """The torrent's comment (PLAN 2.4, COMMENT_TEMPLATE) from the years and dataset names it holds (classify_path)."""
-    if not years:
-        years_text = "unknown years"
-    elif min(years) == max(years):
-        years_text = str(min(years))
-    else:
-        years_text = f"{min(years)}–{max(years)}"
-    datasets_text = ", ".join(sorted(datasets)) or "none"
-    if len(datasets_text) > DATASETS_MAX_LENGTH:
-        datasets_text = datasets_text[:DATASETS_MAX_LENGTH].rsplit(", ", 1)[0] + ", ..."
-    return COMMENT_TEMPLATE.format(id=torrent_id, years=years_text, datasets=datasets_text)
+def render_comment(torrent_id):
+    """The torrent's comment (PLAN 2.4): comment-template.txt with {id} filled in."""
+    return load_comment_template().format(id=torrent_id)
 
 
 def read_listing_gz(path):

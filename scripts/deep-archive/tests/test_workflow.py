@@ -76,25 +76,13 @@ class ClassifyPathTest(unittest.TestCase):
 
 
 class RenderCommentTest(unittest.TestCase):
-    def test_single_year_and_datasets_sorted(self):
-        comment = render_comment("everef-eve-online-deep-archive-2024-01-01", {2024}, {"b", "a"})
-        self.assertIn("Data from 2024. Datasets: a, b.", comment)
-        self.assertIn("everef-eve-online-deep-archive-2024-01-01", comment)
+    def test_includes_the_torrent_id(self):
+        comment = render_comment("everef-eve-online-deep-archive-00")
+        self.assertIn("everef-eve-online-deep-archive-00", comment)
 
-    def test_year_range(self):
-        comment = render_comment("id", {2022, 2020, 2021}, {"a"})
-        self.assertIn("Data from 2020–2022.", comment)
-
-    def test_no_years_or_datasets(self):
-        comment = render_comment("id", set(), set())
-        self.assertIn("Data from unknown years. Datasets: none.", comment)
-
-    def test_long_dataset_list_is_truncated(self):
-        datasets = {f"dataset-{i:03d}" for i in range(50)}
-        comment = render_comment("id", {2024}, datasets)
-        line = [line for line in comment.splitlines() if line.startswith("Data from")][0]
-        self.assertTrue(line.endswith("...."))
-        self.assertLessEqual(len(line), len("Data from 2024. Datasets: ") + 200 + len(", ..."))
+    def test_is_a_single_line(self):
+        comment = render_comment("id")
+        self.assertEqual(len(comment.splitlines()), 1)
 
 
 class TorrentIdTest(unittest.TestCase):

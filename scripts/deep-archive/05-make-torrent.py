@@ -15,7 +15,7 @@ of every file (hours for a full torrent).
    list can't be downloaded or has no usable trackers, or if the union has fewer than MIN_TRACKERS.
 3. Build the torrent from exactly the manifest's files plus the root README (<ID>-README.md), sorted by path, with
    Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the downloaded trackers (one per tier, in order), the
-   PLAN 2.4 comment (years and datasets from the manifest), creator "EVE Ref", no private flag, no web seed.
+   PLAN 2.4 comment (comment-template.txt with the ID filled in), creator "EVE Ref", no private flag, no web seed.
 4. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
 5. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
@@ -48,7 +48,6 @@ from workflow import (  # noqa: E402
     PIECE_SIZE,
     TORRENT_EXCLUDE,
     Workflow,
-    classify_path,
     error,
     fail,
     file_list_problems,
@@ -89,7 +88,6 @@ def main():
 
     section("README")
     readme_name = f"{torrent_id}-README.md"
-    years, datasets = classify_all(files)
     write_readme(os.path.join(content_dir, readme_name), torrent_id, cutoff)
     print(f"Written: {os.path.join(content_dir, readme_name)}")
 
@@ -104,7 +102,7 @@ def main():
         if not os.path.isfile(full):
             fail(f"Missing file for the torrent: {full}")
         fs.add_file(f"{torrent_id}/{path}", os.path.getsize(full))
-    comment = render_comment(torrent_id, years, datasets)
+    comment = render_comment(torrent_id)
     print(comment)
 
     ct = lt.create_torrent(fs, PIECE_SIZE)
@@ -276,19 +274,6 @@ def read_manifest(path, torrent_id):
     if not files:
         fail(f"No files in {path}")
     return {f["path"]: f["size"] for f in files}
-
-
-def classify_all(files):
-    """Distinct years and dataset folders across the manifest paths (classify_path, PLAN 2.4's comment)."""
-    years = set()
-    datasets = set()
-    for path in files:
-        year, dataset = classify_path(path)
-        if year is not None:
-            years.add(year)
-        if dataset:
-            datasets.add(dataset)
-    return years, datasets
 
 
 def write_readme(path, torrent_id, cutoff):
