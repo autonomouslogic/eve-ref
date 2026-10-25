@@ -34,10 +34,4 @@ tar -xJf incursions-2023.tar.xz
 Some archives predate this format:
 
 * `incursions/history/incursions-2022.tar.xz`
-* `industry-systems/history/industry-systems-2017.tar.bz2` to `industry-systems-2022.tar.bz2` (no 2020 archive)
-* `sovereignty-campaigns/history/sovereignty-campaigns-2017.tar.bz2` to `sovereignty-campaigns-2022.tar.bz2` (no 2020 archive)
-* `sovereignty-map/history/sovereignty-map-2017.tar.bz2` to `sovereignty-map-2022.tar.bz2` (no 2020 archive)
-* `sovereignty-structures/history/sovereignty-structures-2017.tar.bz2` to `sovereignty-structures-2022.tar.bz2` (no 2020 archive)
-* `system-jumps/history/system-jumps-2017.tar.bz2` to `system-jumps-2022.tar.bz2` (no 2020 archive)
-* `system-kills/history/system-kills-2017.tar.bz2` to `system-kills-2022.tar.bz2` (no 2020 archive)
 * `wars/history/wars-2003.tar.bz2` to `wars-2020.tar.bz2`
