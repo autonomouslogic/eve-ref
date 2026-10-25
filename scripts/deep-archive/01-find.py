@@ -45,7 +45,7 @@ exception: DataIndex rewrites it on every run regardless of the underlying data,
 legitimately appear in several torrents' file lists over time (one partial archive after another) without anything
 being wrong.
 
-Torrent ID: sequential (everef-eve-online-deep-archive-NN, two digits, PLAN 2.3), chosen by 00-preflight (the
+Torrent ID: sequential (everef-eve-online-deep-archive-NN, two digits), chosen by 00-preflight (the
 completion file find needs) rather than from the cutoff date. The torrent holds everything not yet archived that
 was dated on or before the cutoff this run chose, picked fresh from this run's own candidates -- not from any
 earlier torrent's cutoff. Writes, in SCRATCH_DIR:
@@ -128,7 +128,7 @@ NAME_YEAR_RE = re.compile(r"(?<![0-9])([0-9]{4})(?![0-9])")
 # Earlier numbers in a file name aren't years: EVE Online was released in 2003.
 FIRST_YEAR = 2003
 
-# Limits a .torrent should stay within (PLAN 2.4 "Creating the torrent"), checked against the estimate.
+# Limits a .torrent should stay within (NOTES.md "Torrent size"), checked against the estimate.
 # libtorrent defaults from its documentation; the qBittorrent values are assumed and need checking.
 LIMITS = [
     ("libtorrent .torrent size (max_buffer_size)", "bytes", 10_000_000),
@@ -327,7 +327,7 @@ def load_published_lists(data_remote, listing):
     """
     published maps path -> torrent ID for every path in a published torrent, from the deep-archive/<ID>.txt file
     lists in the bucket (a path in several lists maps to the newest torrent). Fails if any list isn't in the
-    PLAN 2.5 format: full site paths, sorted, one per line.
+    file list format: full site paths, sorted, one per line.
     """
     published = {}
     lists = {}  # path -> torrent ID
@@ -358,7 +358,7 @@ def load_published_lists(data_remote, listing):
         for line in text.splitlines():
             published[line] = torrent_id  # sorted by ID, so the newest torrent wins
     if bad:
-        fail(f"{bad} published file lists aren't in the PLAN 2.5 format: full site paths, sorted, one per line")
+        fail(f"{bad} published file lists aren't in the file list format: full site paths, sorted, one per line")
     print(f"Loaded {fmt_count(len(published))} paths from {len(lists)} published file lists")
     return published
 

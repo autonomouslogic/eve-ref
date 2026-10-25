@@ -51,11 +51,11 @@ RCLONE_FIXED = {
 # The rclone remote for the data site's bucket; the bucket itself is the DATA_BUCKET setting.
 REMOTE_NAME = "everef"
 
-# The site folder holding the published torrents and their file lists (PLAN 2.5).
+# The site folder holding the published torrents and their file lists (NOTES.md "Published files").
 DEEP_ARCHIVE_DIR = "deep-archive"
 
-# Folders never archived (PLAN 2.2): paths from the site root. market-history and killmails work as databases, with
-# past files modified in place, which a torrent can't follow. deep-archive holds the torrents themselves.
+# Folders never archived (NOTES.md "Never archived"): paths from the site root. market-history and killmails work
+# as databases, with past files modified in place, which a torrent can't follow. deep-archive holds the torrents themselves.
 # ccp (CCP's own data: SDE, MER, image collections, CSM results, ...) has to stay excluded for now: the docs link its
 # old files and folders directly (sde.md links ccp/sde/older/, the datasets index links ccp/ccp_quant/, ccp/iec/ and
 # ccp/csm/), and those links would break once a torrent took them. Revisit later, together with those docs.
@@ -84,8 +84,8 @@ MIN_AGE_YEARS = 2
 # Public URL of the data site.
 DATA_BASE_URL = "https://data.everef.net/"
 
-# Torrent IDs (PLAN 2.3): everef-eve-online-deep-archive-<two-digit sequence number>, starting at 00. Sequential,
-# not date-based: 00-preflight picks the next one from the published torrents' IDs.
+# Torrent IDs: everef-eve-online-deep-archive-<two-digit sequence number>, starting at 00. Sequential, not
+# date-based: 00-preflight picks the next one from the published torrents' IDs.
 TORRENT_ID_PREFIX = "everef-eve-online-deep-archive-"
 TORRENT_ID_RE = re.compile(r"^everef-eve-online-deep-archive-(\d{2})$")
 
@@ -103,17 +103,17 @@ def torrent_sequence(torrent_id):
 
 def root_file_names(torrent_id):
     """
-    The files at the root of a torrent, next to the data (PLAN 2.6): its README, checksum file and the checksum file's
+    The files at the root of a torrent, next to the data: its README, checksum file and the checksum file's
     signature. Not data files: never in the manifest, the .txt file list or the delete set.
     """
     return {f"{torrent_id}-README.md", f"{torrent_id}.sha256", f"{torrent_id}.sha256.minisig"}
 
 
-# Cache-Control max-age for everef-eve-online-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
+# Cache-Control max-age for everef-eve-online-deep-archive.xml: short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
 
-# A torrent's comment (PLAN 2.4), built by render_comment and read back by 09-publish's read_torrent. {sequence} is
+# A torrent's comment, built by render_comment and read back by 09-publish's read_torrent. {sequence} is
 # the torrent ID's two-digit sequence number, e.g. 00. The template file itself must be a single line
 # (load_comment_template): the comment is kept deliberately short.
 COMMENT_TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "comment-template.txt")
@@ -198,11 +198,11 @@ PIECE_SIZE = 32 * MIB
 
 # Data in one torrent, a soft limit: 01-find stops at the first date that reaches it, and takes that whole date, so a
 # torrent can be somewhat over. Roughly what the seeder holds per torrent and what a full download is.
-MAX_BYTES = 10 * GIB
+MAX_BYTES = 990 * GIB
 
 # Least data in one torrent: 01-find aborts if its selection (index.json included) is smaller, so no workflow makes a
 # small torrent. Rerun it once more data has passed MIN_AGE_YEARS.
-MIN_BYTES = MAX_BYTES
+MIN_BYTES = 900 * GIB
 
 # Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
 # max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs up to about 12 KB high (its
@@ -306,8 +306,7 @@ def ok(message):
 
 
 # Settings in torrents.env that the environment already set to something else, filled in by load_env. Every step
-# names them (print_env_overrides), so a stale shell export doesn't silently override the file (PLAN, Review notes,
-# R2).
+# names them (print_env_overrides), so a stale shell export doesn't silently override the file.
 ENV_OVERRIDES = []
 
 
@@ -364,9 +363,9 @@ def is_inside(path, parent):
 
 def lock(scratch_dir):
     """
-    Takes SCRATCH_DIR/log/.lock for as long as the process runs, so only one step runs at a time (PLAN, Review notes,
-    R1): two steps started by mistake could otherwise both pass the completion-file checks. In log/, which 00-preflight
-    allows in an otherwise empty SCRATCH_DIR.
+    Takes SCRATCH_DIR/log/.lock for as long as the process runs, so only one step runs at a time: two steps started
+    by mistake could otherwise both pass the completion-file checks. In log/, which 00-preflight allows in an
+    otherwise empty SCRATCH_DIR.
     """
     import fcntl
 
@@ -410,7 +409,7 @@ class Workflow:
         """
         Takes the lock, and refuses to start a step that already completed, or whose previous step hasn't. Then starts
         the step's log and prints its header, with the torrent ID once find has chosen it, and names any setting the
-        environment overrides torrents.env with (R2). dry_run only marks the header: the checks are the same.
+        environment overrides torrents.env with. dry_run only marks the header: the checks are the same.
         """
         if step not in STEPS or step in MANUAL_STEPS:
             raise ValueError(f"unknown scripted step: {step}")
@@ -474,7 +473,7 @@ def data_remote():
 
 def file_list_problems(text):
     """
-    Problems with a <ID>.txt file list (PLAN 2.5), as "line N: ..." strings; empty if it's well-formed. The format:
+    Problems with a <ID>.txt file list, as "line N: ..." strings; empty if it's well-formed. The format:
     UTF-8, "\\n" line endings, one data file per line as its full path from the site root (the same path inside the
     torrent, without the torrent's root folder), sorted by code point, no duplicates. The torrent's root files
     (root_file_names) aren't listed.
@@ -645,7 +644,7 @@ def classify_path(path):
     return year, "/".join(dataset_parts)
 
 
-# The minisign public key published at https://everef.net/.well-known/minisign.pub, from this checkout (PLAN 2.6).
+# The minisign public key published at https://everef.net/.well-known/minisign.pub, from this checkout.
 MINISIGN_PUBLIC_KEY = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "..", "..", "..", "ui", "public", ".well-known", "minisign.pub"
 )
@@ -700,7 +699,7 @@ def verify_signature(path):
 
 
 def render_comment(torrent_id):
-    """The torrent's comment (PLAN 2.4): comment-template.txt with {sequence} (the ID's two-digit number) filled in."""
+    """The torrent's comment: comment-template.txt with {sequence} (the ID's two-digit number) filled in."""
     sequence = torrent_sequence(torrent_id)
     if sequence is None:
         fail(f"Not a torrent ID: {torrent_id}")

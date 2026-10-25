@@ -41,7 +41,7 @@ load_settings() {
     source "$env_file"
     set +a
   fi
-  # Named once the log starts, like lib/workflow.py's print_env_overrides (R2).
+  # Named once the log starts, like lib/workflow.py's print_env_overrides.
   ENV_OVERRIDES=()
   [[ -n "$pre_minisign_key_path" && "$pre_minisign_key_path" != "${MINISIGN_KEY_PATH:-}" ]] && ENV_OVERRIDES+=(MINISIGN_KEY_PATH)
   [[ -n "$pre_scratch_dir" && "$pre_scratch_dir" != "${SCRATCH_DIR:-}" ]] && ENV_OVERRIDES+=(SCRATCH_DIR)

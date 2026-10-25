@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 check-site: a step of the EVE Ref Deep Archive workflow, and the last scripted one. Checks what data.everef.net actually
-serves after the delete and the full DataIndex run, over HTTPS (PLAN 2.16).
+serves after the delete and the full DataIndex run, over HTTPS (NOTES.md "Cloudflare cache").
 
 DRAFT. Read-only, over HTTPS.
 
@@ -10,7 +10,7 @@ DRAFT. Read-only, over HTTPS.
 Needs 14-check-delete's completion file, and refuses to run twice (lib/workflow.py). Run this only after the
 manual "Full DataIndex" step (README) has finished.
 
-Per sampled URL (a spread of deleted files across datasets and months, every deleted index.json, PLAN 2.16):
+Per sampled URL (a spread of deleted files across datasets and months, every deleted index.json):
 - 404: pass.
 - 200 with cf-cache-status: HIT: pass, reported as "still cached" (up to 30 days, DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE;
   accepted).

@@ -33,7 +33,7 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
 7. Read every selected file once, computing its SHA-256 and, for .bz2 and .gz files, testing that the compressed
    stream decompresses cleanly (tolerating concatenated streams). An archive test failure is reported but doesn't
    fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
-   in NOTES.md before going on.
+   in $SCRATCH_DIR/NOTES.md before going on.
 8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file, with each file's size and
    modification time as on disk (only an index.json can differ from the selection). 05-make-torrent and
    12-check-before-delete use it.
@@ -251,7 +251,7 @@ def main():
         report_problems("files that failed their archive integrity test", archive_failures, warning)
         warning(
             f"{fmt_count(len(archive_failures))} archive test failures. Corrupt files are archived as they are "
-            f"(README, 'Load'): accept each one in NOTES.md before going on, or investigate first"
+            f"(README, 'Load'): accept each one in $SCRATCH_DIR/NOTES.md before going on, or investigate first"
         )
 
     section("Manifest")

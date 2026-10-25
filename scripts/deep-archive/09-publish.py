@@ -17,8 +17,8 @@ Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py
    verifies <ID>.torrent.minisig against <ID>.torrent with that key (lib/workflow.py's verify_signature), so a
    signature left from before 05-make-torrent was redone is never published. Never overwrites: a file already
    published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
-2. Rebuild everef-eve-online-deep-archive.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
-   deep-archive/ -- never from local state, so the bucket stays the single source of truth (PLAN 2.5). Each torrent
+2. Rebuild everef-eve-online-deep-archive.xml (RSS 2.0, NOTES.md "Feed") in full, from every published .torrent in
+   deep-archive/ -- never from local state, so the bucket stays the single source of truth. Each torrent
    is read with libtorrent: name (the ID), creation date, v1/v2 info-hashes, data
    file count and bytes (the README, checksum file and signature excluded), trackers. Magnet links carry the
    torrent's first MAGNET_TRACKERS trackers; newest first.

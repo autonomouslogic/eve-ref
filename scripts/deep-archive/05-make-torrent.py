@@ -12,7 +12,7 @@ Needs 04-sign-sha256's completion file, and refuses to run twice (lib/workflow.p
 file (hours for a full torrent).
 
 First checks every manifest file in $SEED_DIR/<ID>/ still has the manifest's size and modification time
-(content_problems; PLAN Review notes, R7), so a file changed on disk since 03-load hashed it doesn't go into the
+(content_problems; NOTES.md "Known limitations"), so a file changed on disk since 03-load hashed it doesn't go into the
 torrent unnoticed. Then:
 
 1. Render lib/README-template.md (ID, its two-digit number, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
@@ -25,14 +25,14 @@ torrent unnoticed. Then:
 4. Remove a SCRATCH_DIR/<ID>.torrent.minisig left by an earlier run (it signs the old .torrent, so 06-sign-torrent
    has to sign the new one), then build the torrent from exactly the manifest's files plus the root files (README,
    .sha256, .sha256.minisig), sorted by path, with Python libtorrent 2.x: hybrid v1+v2, PIECE_SIZE pieces, the
-   downloaded trackers (one per tier, in order), the PLAN 2.4 comment (lib/comment-template.txt with the ID's
+   downloaded trackers (one per tier, in order), the comment (lib/comment-template.txt with the ID's
    sequence number filled in), creator "EVE Ref", no private flag, no web seed.
 5. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list (the data files only, without the root folder).
 6. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; hybrid (v1 and v2 info-hashes), name <ID>, not private, no web seeds; trackers equal the
    downloaded ones, one per tier, in order; the comment; files = the manifest plus the root files, bytes match; the
    .txt passes file_list_problems, matches the manifest and has no TORRENT_EXCLUDE paths (and, with TORRENT_INCLUDE
-   set, none outside it). Prints the v1 and v2 info-hashes (copy them into NOTES.md) and records them in the
+   set, none outside it). Prints the v1 and v2 info-hashes (copy them into $SCRATCH_DIR/NOTES.md) and records them in the
    completion file.
 
 Writes:
@@ -198,7 +198,7 @@ def main():
         },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
-    print(f"Copy into NOTES.md: v1 {v1_hash}, v2 {v2_hash}")
+    print(f"Copy into $SCRATCH_DIR/NOTES.md: v1 {v1_hash}, v2 {v2_hash}")
     ok(f"Make torrent OK for {torrent_id}")
 
 
@@ -325,8 +325,7 @@ def read_manifest(path, torrent_id):
 def content_problems(content_dir, files, mtimes):
     """
     Manifest files missing from the content folder, or with another size or modification time than the manifest
-    records: a cheap check, before hashing, that nothing changed on disk since 03-load hashed it (PLAN Review notes,
-    R7). Doesn't read the data.
+    records: a cheap check, before hashing, that nothing changed on disk since 03-load hashed it. Doesn't read the data.
     """
     problems = []
     for path in sorted(files):

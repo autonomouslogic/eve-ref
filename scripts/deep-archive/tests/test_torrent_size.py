@@ -1,6 +1,6 @@
 """
 Tests for lib/torrent_size.py: TorrentSize, the .torrent size estimate 01-find uses to pick its cutoff without
-reading any data (PLAN 2.1, 2.4).
+reading any data (NOTES.md "Torrent size").
 
 TorrentSizeTest covers the class on its own: it never shrinks as files are added, and an empty torrent is just the
 fixed allowance.

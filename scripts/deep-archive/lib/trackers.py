@@ -1,5 +1,5 @@
 """
-trackers: the trackers for a new torrent (PLAN 2.4 "Trackers"), downloaded when it's made: the union of the "best" lists
+trackers: the trackers for a new torrent (NOTES.md "Trackers"), downloaded when it's made: the union of the "best" lists
 from ngosang/trackerslist and XIU2/TrackersListCollection, in that order, duplicates dropped. Only UDP and HTTP(S)
 trackers are kept; libtorrent clients can't use the rest (WebSocket, I2P, ...).
 

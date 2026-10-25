@@ -2,7 +2,7 @@
 """
 check-before-delete: a step of the EVE Ref Deep Archive workflow. The last check before anything is deleted:
 re-verifies the docs page and seeding, confirms the published torrent matches the local one, and builds the
-delete set from the torrent against a fresh listing of the bucket (PLAN 2.14).
+delete set from the torrent against a fresh listing of the bucket (NOTES.md "Deletion").
 
 DRAFT. Read-only on the bucket and qBittorrent.
 
@@ -14,7 +14,7 @@ if the docs page doesn't list the torrent's ID and v1 info-hash: update-docs mus
 A data file is in the delete set only if all of these hold:
 - it's a data file in the published torrent (not index.json, or the README, checksum file or its signature at the
   torrent's root);
-- it's in the manifest (so its SHA-256 was checked against the torrent at 100%, PLAN 2.14);
+- it's in the manifest (so its SHA-256 was checked against the torrent at 100%);
 - it's on the bucket right now, in a **fresh** listing, with the size the torrent gives it, and the same size and
   modification time recorded when it was selected (01-find's files.jsonl).
 
@@ -250,7 +250,7 @@ def build_delete_set(data_files, manifest, selection, fresh):
     """
     (confirmed, failed) for the torrent's data files ({path: size in the torrent}): confirmed if the file is in the
     manifest and the selection, the bucket has it right now with the torrent's size, and with the selected size and
-    modification time (PLAN 2.14).
+    modification time.
     """
     confirmed = []
     failed = []

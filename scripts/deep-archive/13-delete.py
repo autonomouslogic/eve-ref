@@ -12,13 +12,13 @@ Needs 12-check-before-delete's completion file, and refuses to run once the step
 included. The dry run takes the lock and writes a log like any step, and can be run any number of times; only
 --execute completes the step.
 
-1. Re-checks every file in delete-set.json against a **fresh** listing (PLAN 2.14): a file that changed since
+1. Re-checks every file in delete-set.json against a **fresh** listing: a file that changed since
    12-check-before-delete ran is dropped from this run (it stays on the site; Appendix E), not re-included. A file
    already gone (an earlier --execute that failed part way) counts as deleted, so rerunning finishes the job.
 2. `rclone delete --files-from` with the confirmed list -- never by prefix or pattern. B2 soft-deletes
-   (hard_delete is fixed to false, lib/workflow.py): treat this as permanent anyway (PLAN 2.14).
+   (hard_delete is fixed to false, lib/workflow.py): treat this as permanent anyway (NOTES.md "Deletion").
 3. Cleans up `index.html`/`index.json` from every folder a delete left holding nothing else, and parents left the
-   same way, deepest first (PLAN 2.15). Never the site root, never under `deep-archive/`.
+   same way, deepest first (NOTES.md "Stale index files"). Never the site root, never under `deep-archive/`.
 
 Writes, in SCRATCH_DIR:
 

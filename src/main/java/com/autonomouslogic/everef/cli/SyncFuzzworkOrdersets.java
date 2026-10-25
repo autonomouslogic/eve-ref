@@ -153,7 +153,7 @@ public class SyncFuzzworkOrdersets implements Command {
 	 * mid-run is retried on the next run. IDs below the lowest existing one are never synced: once the deep archive
 	 * deletes old ordersets off the data site, the lowest remaining ID moves up and those IDs must not come back.
 	 * Backfills are ignored entirely, both as existing files and as a floor: they have no year folder and may be
-	 * archived before or after the dated ordersets (PLAN 2.18), and Fuzzwork's listing starts well above their ID
+	 * archived before or after the dated ordersets, and Fuzzwork's listing starts well above their ID
 	 * range anyway.
 	 */
 	private Flowable<FuzzworkFile> getFilesToSync() {

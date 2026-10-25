@@ -1,6 +1,6 @@
 """
 Tests for 05-make-torrent.py: the check that the content folder still matches the manifest before the torrent is
-hashed (content_problems, PLAN Review notes R7).
+hashed (content_problems).
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """

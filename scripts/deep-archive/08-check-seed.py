@@ -25,7 +25,7 @@ Test download (aria2c), only once qBittorrent checks out:
 
 It runs on the workflow host, so it proves the torrent can be downloaded, not that the seeder is reachable from
 outside. If the seeder is on the same host, aria2c may have to reach qBittorrent through the host's own public address
-(NAT hairpinning), which some routers don't allow (PLAN, Review notes, R16).
+(NAT hairpinning), which some routers don't allow (NOTES.md "Known limitations").
 
 If the recheck is still running, this fails with the current progress; run it again once it finishes.
 

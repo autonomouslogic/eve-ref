@@ -4,8 +4,8 @@ Moves old data.everef.net data into torrents. One workflow makes one torrent, `e
 (sequential, from `00`): the oldest data not archived yet, as much as the size limits allow. It's signed, seeded,
 published, listed on the docs site, and then deleted from the site.
 
-Status: **draft**. Every step is written; none has run against real data yet. Design and reasoning:
-[`PLAN.md`](PLAN.md). What each script does in detail: its own docstring.
+What each script does in detail: its own docstring. Design constraints and reference material for working on the
+scripts: [`NOTES.md`](NOTES.md).
 
 A GitHub Actions workflow (`.github/workflows/deep-archive-reminder.yml`) pings the dev notices Discord on 15 February
 and 15 August, the day after that month's rollup check, as a reminder to run a workflow.
@@ -26,8 +26,8 @@ and 15 August, the day after that month's rollup check, as a reminder to run a w
 
 Copy `torrents.env.example` to `torrents.env` and fill it in (Appendix B).
 
-Before the first delete of `fuzzwork/` data, the `SyncFuzzworkOrdersets` ID cutoff (PLAN 2.18) must be deployed, or the
-sync re-uploads the deleted ordersets.
+Before the first delete of `fuzzwork/` data, the `SyncFuzzworkOrdersets` ID cutoff (NOTES.md "Fuzzwork sync cutoff")
+must be deployed, or the sync re-uploads the deleted ordersets.
 
 ## Tests
 
@@ -67,7 +67,7 @@ Checks the settings, directories, tools, bucket, tracker lists, `LOCAL_COPY_DIR`
 torrent ID. Reports every problem before aborting.
 
 ### 01: Find
-Selects the oldest files not archived yet, by date (PLAN 2.2), up to the size limits (PLAN 2.8). Aborts if the
+Selects the oldest files not archived yet, by date, up to the size limits (NOTES.md "Selection"). Aborts if the
 oldest date alone is too big for one `.torrent`, if the selection is under `MIN_BYTES` (not enough data yet), or if a
 path a published `<ID>.txt` lists is still on the site (Appendix E). In each case nothing is written.
 
@@ -75,7 +75,8 @@ path a published `<ID>.txt` lists is still on the site (Appendix E). In each cas
 Read `$SCRATCH_DIR/find/report.txt`:
 - No `market-history/`, `killmails/` or `ccp/` files.
 - Every flag looked at.
-- Every "(no year folder)" dataset is archive data, not a current file that just hasn't changed.
+- Every "(no year folder)" dataset is archive data, not a current file that just hasn't changed (a reference file
+  tools fetch by URL must stay: add it to `TORRENT_EXCLUDE`).
 - Files dated by a year in the name (`find.log`): the number is a year, not an ID.
 - If the limits weren't reached, a smaller torrent is worth making now.
 
@@ -88,10 +89,11 @@ only the biggest datasets; set it back to `None` once they're archived.
 
 ### 03: Load
 Copies the selection into `$SEED_DIR/<ID>/`: what `LOCAL_COPY_DIR` has first, unchecked, then from the bucket with
-`--checksum`, which replaces any file that doesn't match the bucket's SHA-1. Then hashes it, and writes `manifest.json` and `<ID>.sha256`. Resumable.
+`--checksum`, which replaces any file that doesn't match the bucket's SHA-1. Then hashes it, and writes
+`manifest.json` and `<ID>.sha256`. Resumable.
 - File count and bytes equal the selection; nothing missing, different or extra (changed `index.json` files are
   ignored: DataIndex rewrites them).
-- No archive test failures, or each one accepted in `NOTES.md` (corrupt files are archived as they are).
+- No archive test failures, or each one accepted in `$SCRATCH_DIR/NOTES.md` (corrupt files are archived as they are).
 - `sha256sum -c` passed.
 
 ### 04: Sign the checksum file
@@ -102,7 +104,7 @@ Writes the README into the content folder, copies in `<ID>.sha256` and its signa
 `<ID>.torrent` (hybrid v1+v2) and `<ID>.txt`. Slow: hours for a full torrent. Then checks both.
 - The trackers in `$SCRATCH_DIR/trackers/trackers.txt` look sane (no surprising domains).
 - Read the `.txt` and the README yourself.
-- Copy the v1 and v2 info-hashes into `NOTES.md`.
+- Copy the v1 and v2 info-hashes into `$SCRATCH_DIR/NOTES.md`.
 
 ### 06: Sign the torrent file
 Signs `<ID>.torrent` with minisign and verifies the signature. This one is published.
@@ -111,19 +113,25 @@ Signs `<ID>.torrent` with minisign and verifies the signature. This one is publi
 Adds the torrent to qBittorrent, which checks the files where they are.
 
 ### 08: Check seed
-Give the trackers a few minutes after seed first.
+Give the trackers a few minutes after seed first. It fails until a tracker reports working, and while the recheck
+runs; running it again is fine.
 - 100% with **0 bytes downloaded** (any download means the files don't match: stop), seeding, a tracker working.
 - aria2c downloaded the README through the torrent, identical to the seed copy.
 
 ### 09: Publish
 Verifies the torrent's signature, uploads `<ID>.torrent`, `<ID>.txt` and `<ID>.torrent.minisig` to `deep-archive/`,
-rebuilds `everef-eve-online-deep-archive.xml`, and checks what the site serves. Uploads without asking, and never overwrites.
+rebuilds `everef-eve-online-deep-archive.xml`, and checks what the site serves. Uploads without asking, and never
+overwrites: if it fails part way, running it again skips files already published identically. The HTTPS checks retry
+for a few minutes while Cloudflare serves the old feed, so a real problem takes that long to report. The old feed is
+saved in `feed-backup/`.
 - The only difference in the feed is the new `<ID>`.
 - On the first workflow only: add the feed to a qBittorrent RSS reader and check the item shows up.
 
 ### 10: Update docs (manual)
 Add the torrent to the "Torrents" table on `docs/src/datasets/deep-archive.md`, newest first: its ID linked to its URL,
-the v1 and v2 info-hashes, and the magnet link, all printed by publish. Commit it and deploy the docs site.
+the v1 and v2 info-hashes, and the magnet link, all printed by publish. If the rules in `lib/workflow.py` changed
+(`TORRENT_EXCLUDE`, `MIN_AGE_YEARS`, size limits), update the page's rule text too: nothing checks it. Commit it and
+deploy the docs site.
 
 ### 11: Index deep-archive/ (manual)
 From a checkout with production settings in the environment:
@@ -134,7 +142,7 @@ DATA_INDEX_PREFIX=/deep-archive/ DATA_INDEX_RECURSIVE=false ./gradlew dataIndex
 
 ### 12: Check before delete
 Checks the docs page lists the torrent, the seeder is clean and the published `.torrent` matches, then builds the
-delete set from the torrent against a fresh listing (PLAN 2.14).
+delete set from the torrent against a fresh listing (NOTES.md "Deletion").
 - Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
 - Note the delete set: files, bytes, datasets.
 
@@ -146,8 +154,9 @@ delete set from the torrent against a fresh listing (PLAN 2.14).
 - The dry run shows exactly the delete set from check-before-delete.
 
 `--execute` deletes exactly those files (soft deletes, never by prefix), then the index files of folders it left
-empty (PLAN 2.15). Treat it as permanent. Until the full `DataIndex`, jobs that crawl the site (`sync-fuzzwork-ordersets`,
-the market history scrape) may fail on stale links; they recover on their next run after it.
+empty (NOTES.md "Stale index files"). Treat it as permanent. Until the full `DataIndex`, jobs that crawl the site
+(`sync-fuzzwork-ordersets`, the market history scrape) may fail on stale links; they recover on their next run after
+it.
 
 ### 14: Check delete
 - Everything in the delete set is gone, no folder holds only index files, and every other path that was on the
@@ -160,7 +169,7 @@ docker run --rm --env-file <production env> <eve-ref image> data-index
 Or `./gradlew dataIndex` from a checkout with production settings in the environment. Leave `DATA_INDEX_PREFIX` unset.
 
 ### 16: Check site
-- Sampled deleted URLs return 404, or 200 from Cloudflare's cache (PLAN 2.16).
+- Sampled deleted URLs return 404, or 200 from Cloudflare's cache (up to 30 days).
 - The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt`, the signature and the
   feed.
 
@@ -174,7 +183,7 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 - **Completion files.** Each step writes `$SCRATCH_DIR/<NN>-<step>.done` as its last act, only on success. A step
   refuses to start if the previous scripted step's file is missing or its own exists. Manual steps have none.
 - **Redoing a step** is deliberate: delete its completion file and every later one by hand, and note why in
-  `NOTES.md`. A step that failed wrote no completion file and can simply be run again.
+  `$SCRATCH_DIR/NOTES.md`. A step that failed wrote no completion file and can simply be run again.
 - **One step at a time.** Every step holds `$SCRATCH_DIR/log/.lock` while it runs.
 - **Output**, like the roll-up scripts: `🚀` once, `🔵` sections, `🟡` warnings (the step carries on), `🔴`
   errors (the step stops), `✅` last on success. Everything is also
@@ -206,12 +215,13 @@ Everything else is fixed in `lib/workflow.py`: size limits, `TORRENT_EXCLUDE`, `
 
 ```
 scripts/deep-archive/
+  README.md, NOTES.md                  # this process; design notes for working on the scripts
   00-preflight.py … 16-check-site.py   # the steps; 04 and 06 are .sh
   lib/                                 # shared code (workflow.py, sign.sh, …) and the README and comment templates
   tests/
 
 $SCRATCH_DIR/                          # one workflow
-  <NN>-<step>.done, NOTES.md, log/
+  <NN>-<step>.done, NOTES.md (the operator's), log/
   find/, manifest.json, delete-set.json, deleted.jsonl, feed-backup/, trackers/
   <ID>.sha256, <ID>.sha256.minisig     # copied into the torrent, never published
   <ID>.torrent, <ID>.txt, <ID>.torrent.minisig   # published
@@ -222,20 +232,20 @@ $SEED_DIR/
 
 ## Appendix C: Maintenance
 
-`$SEED_DIR` is EVE Ref's only copy of the archived data (no backup, PLAN 2.11). Monthly, force a recheck of every
-torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding. If one finds damage, qBittorrent can
+`$SEED_DIR` is EVE Ref's only copy of the archived data (no backup: NOTES.md "Durability"). Monthly, force a recheck
+of every torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding. If one finds damage, qBittorrent can
 re-download it from other seeders; if there are none, those files are lost.
 
 ## Appendix D: Rollback
 
 There is no script. Re-upload the deleted files from `$SEED_DIR/<ID>/` (or other seeders) with rclone, which keeps the
 modification times, using the published `<ID>.txt` as the list. While B2 still holds the hidden versions, removing the
-hide markers in B2's web console is quicker (PLAN 2.14). Then run a full `DataIndex` and check the files are served.
+hide markers in B2's web console is quicker (the bucket purges them after about 2 days). Then run a full `DataIndex` and check the files are served.
 
 ## Appendix E: If data changed
 
 If `12-check-before-delete` finds a file that changed after it was selected, that file isn't deleted; the rest is.
-Note it in `NOTES.md`. There is no replacement torrent. The file stays on the site at a path the published `<ID>.txt`
+Note it in `$SCRATCH_DIR/NOTES.md`. There is no replacement torrent. The file stays on the site at a path the published `<ID>.txt`
 lists, so the next `01-find` stops with a hard error on it, as on any file check-before-delete leaves on the site.
-That isn't handled yet: resolve it by hand if it ever happens (PLAN Appendix A). Find out why it changed; if the
-dataset still changes after the minimum age, add it to `TORRENT_EXCLUDE`.
+That isn't handled: resolve it by hand before running `01-find` again. Find out why it changed; if the dataset still
+changes after the minimum age, add it to `TORRENT_EXCLUDE`.
