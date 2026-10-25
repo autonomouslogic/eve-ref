@@ -77,6 +77,7 @@ from workflow import (  # noqa: E402
     root_file_names,
     section,
     verify_signature,
+    warning,
 )
 
 STEP = "publish"
@@ -403,7 +404,7 @@ def check_published(workflow, torrent_id, v1_hash):
             for problem in problems:
                 error(f"  {problem}")
             fail(f"{len(problems)} problems with what data.everef.net serves, after {CHECK_TIMEOUT}s")
-        print(f"{len(problems)} problems, e.g. {problems[0]}; retrying in {CHECK_INTERVAL}s (Cloudflare cache)")
+        warning(f"{len(problems)} problems, e.g. {problems[0]}; retrying in {CHECK_INTERVAL}s (Cloudflare cache)")
         time.sleep(CHECK_INTERVAL)
 
 

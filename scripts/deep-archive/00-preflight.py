@@ -188,7 +188,7 @@ def check_local_copy(checks, scratch, seed):
         if path and (is_inside(local, path) or is_inside(path, local)):
             checks.fail(f"LOCAL_COPY_DIR and {name} must not be inside each other")
             return
-    print(f"LOCAL_COPY_DIR: {local}, load copies matching files from it")
+    print(f"LOCAL_COPY_DIR: {local}, load copies what it has, the bucket replaces any that don't match")
 
 
 def check_qbittorrent(checks, seed):

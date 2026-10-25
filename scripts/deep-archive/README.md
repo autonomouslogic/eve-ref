@@ -86,10 +86,9 @@ To change the selection: fix `TORRENT_EXCLUDE` (or `TORRENT_INCLUDE`) in `lib/wo
 only the biggest datasets; set it back to `None` once they're archived.
 
 ### 03: Load
-Copies the selection into `$SEED_DIR/<ID>/` (from `LOCAL_COPY_DIR` where it matches, otherwise from the bucket),
-hashes it, and writes `manifest.json` and `<ID>.sha256`. Resumable.
+Copies the selection into `$SEED_DIR/<ID>/`: what `LOCAL_COPY_DIR` has first, unchecked, then from the bucket with
+`--checksum`, which replaces any file that doesn't match the bucket's SHA-1. Then hashes it, and writes `manifest.json` and `<ID>.sha256`. Resumable.
 - File count and bytes equal the selection; nothing missing, different or extra.
-- With `LOCAL_COPY_DIR`: files that differ or fail `rclone check` are explainable (re-uploaded since the copy, say).
 - No archive test failures, or each one accepted in `NOTES.md` (corrupt files are archived as they are).
 - `sha256sum -c` passed.
 
@@ -168,7 +167,8 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 - **Redoing a step** is deliberate: delete its completion file and every later one by hand, and note why in
   `NOTES.md`. A step that failed wrote no completion file and can simply be run again.
 - **One step at a time.** Every step holds `$SCRATCH_DIR/log/.lock` while it runs.
-- **Output**, like the roll-up scripts: `🚀` once, `🔵` sections, `🔴` problems, `✅` last on success. Everything is also
+- **Output**, like the roll-up scripts: `🚀` once, `🔵` sections, `🟡` warnings (the step carries on), `🔴`
+  errors (the step stops), `✅` last on success. Everything is also
   logged to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
 - **Show, then ask** before anything that writes to the bucket or qBittorrent.
 - **Checks re-derive everything** from the bucket, disk, qBittorrent or site. Signatures are verified again before
@@ -188,7 +188,7 @@ step names the settings the environment overrides.
 | `RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY` | The B2 key. |
 | `QBITTORRENT_URL`, `QBITTORRENT_API_KEY` | qBittorrent's Web API and its API key. |
 | `QBITTORRENT_SAVE_PATH` | Optional. `SEED_DIR` as qBittorrent sees it, if different (qBittorrent in Docker, say). |
-| `LOCAL_COPY_DIR` | Optional. A local copy of the data site, laid out like the bucket; `03-load` copies matching files from it. |
+| `LOCAL_COPY_DIR` | Optional. A local copy of the data site, laid out like the bucket; `03-load` copies what it has, then the bucket replaces any that don't match. Never trusted. |
 | `MINISIGN_KEY_PATH` | The minisign private key, kept outside this repo and `$SCRATCH_DIR`. Its passphrase is always typed in. |
 
 Everything else is fixed in `lib/workflow.py`: size limits, `TORRENT_EXCLUDE`, `TORRENT_INCLUDE`, the site URL, and the rclone remote

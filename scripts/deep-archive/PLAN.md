@@ -609,8 +609,9 @@ after that is checked against that list, never against "whatever is in the direc
   To change it on purpose, delete `01-find`'s completion file and run it again.
 - `03-load` copies **exactly** the files in the list into `$SEED_DIR/<ID>/` with `rclone copy --files-from-raw`:
   parallel, resumable, and it keeps each file's modification time. With `LOCAL_COPY_DIR` set (a local copy of the
-  site), files there with the selected size and modification time, and the bucket's SHA-1 (`rclone check`), come from
-  it; everything else comes from the bucket.
+  site, a shortcut that is never trusted), the selected files it has are copied first, unchecked; then the whole
+  selection is copied from the bucket with `--checksum`, which replaces any file that doesn't match the bucket's
+  SHA-1. Files the bucket has no SHA-1 for always come from the bucket.
 - `03-load` then checks every listed file is on disk with the listed size and modification time, and nothing else
   is, computes SHA-256 for every file into `manifest.json` (the selection plus hashes), and writes `<ID>.sha256` from
   it (2.6). The manifest feeds the torrent checks and the delete set.
@@ -625,7 +626,7 @@ after that is checked against that list, never against "whatever is in the direc
 |---|---|---|
 | Preflight | `./00-preflight.py` | Fails early on a wrong setup, before anything is selected. |
 | Find | `./01-find.py`: `rclone lsjson` of the whole bucket | One B2 request per 1,000 files; sizes and modification times straight from the storage. |
-| Load | `rclone copy --files-from-raw` from the bucket (and `LOCAL_COPY_DIR`, if set, after `rclone check`) to `$SEED_DIR/<ID>/`; `sha256sum -c` | Concurrent and resumable. Copies exactly the selection. |
+| Load | `rclone copy --files-from-raw` from the bucket (after copying what `LOCAL_COPY_DIR` has, if set, unchecked; `--checksum` replaces what doesn't match) to `$SEED_DIR/<ID>/`; `sha256sum -c` | Concurrent and resumable. Copies exactly the selection. |
 | Sign | `minisign` through Docker (`jedisct1/minisign`), from bash (`lib/sign.sh`) | Small, standard signatures. Docker because minisign isn't readily available from package managers. |
 | Make torrent | Python `libtorrent` 2.x (hybrid v1+v2); alternatives in 2.4 "Creating the torrent". Not `mktorrent` (v1 only). | Mature library, same as qBittorrent. Don't write a torrent creator. |
 | Seed | `qBittorrent-nox` in Docker, through its Web API | Headless and scriptable, and it's what most feed subscribers use. |
@@ -674,7 +675,8 @@ moving on. The scripts support the human; they don't replace their judgement.
 - **Resumable until complete.** A step that fails or is interrupted writes no completion file and can be run again;
   copies and uploads carry on where they stopped.
 - **Output like the roll-up scripts** (`lib/workflow.py`): `🚀 <step>: <ID>` once, `🔵 <section>` headings,
-  plain lines for results, `🔴 <message>` on stderr for each problem (then exit 1), and `✅ <step> OK …` as the last
+  plain lines for results, `🟡 <message>` on stderr for problems the step carries on past, `🔴 <message>` on stderr
+  for each problem that stops it (then exit 1), and `✅ <step> OK …` as the last
   line on success. Everything a step prints is also written to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
 - **Notes.** The operator keeps `$SCRATCH_DIR/NOTES.md` for notes on manual steps and decisions. It goes with the
   scratch directory.

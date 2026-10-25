@@ -7,8 +7,8 @@ exists (no accidental double execution), or if the previous step's doesn't. To r
 completion file, and every later one, by hand.
 
 Output follows the roll-up scripts (scripts/rollup on the rollup-scripts branch): "🚀 <step>" once,
-"🔵 <section>" headings, plain lines for results, "🔴 <message>" on stderr for errors (then exit 1), and "✅ ..."
-as the last line on success. Everything a step prints, stdout and stderr, is also written to
+"🔵 <section>" headings, plain lines for results, "🟡 <message>" on stderr for problems the step carries on past,
+"🔴 <message>" on stderr for errors (always followed by exit 1), and "✅ ..." as the last line on success. Everything a step prints, stdout and stderr, is also written to
 SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log.
 
 Settings come from the environment, then from deep-archive/torrents.env (or the file named by TORRENTS_ENV) for
@@ -22,7 +22,7 @@ anything the environment doesn't set:
     QBITTORRENT_SAVE_PATH  optional: SEED_DIR as qBittorrent sees it, if different (qbittorrent_save_path)
     DATA_BUCKET  the data site's bucket on B2; its root is the site root (data_remote)
     LOCAL_COPY_DIR  optional: a local copy of the data site, same layout as the bucket (local_copy_dir); load copies
-                 matching files from it before downloading the rest
+                 what it has, unchecked, then the bucket copy replaces any that don't match (a shortcut, not trusted)
     MINISIGN_KEY_PATH  the minisign private key, for the bash signing steps (lib/sign.sh)
 
 The scripts reach the data bucket only through rclone (data_remote).
@@ -278,9 +278,19 @@ def section(title):
 
 
 def error(message):
-    """Reports a problem without stopping, for steps that list every problem before aborting."""
+    """
+    Reports a problem that stops the step, without stopping yet: for steps that list every problem before aborting.
+    Always followed by fail. A problem the step carries on past is a warning.
+    """
     sys.stdout.flush()
     print(f"🔴 {message}", file=sys.stderr)
+    sys.stderr.flush()
+
+
+def warning(message):
+    """Reports a problem the step carries on past (e.g. a file downloaded instead of copied from the local copy)."""
+    sys.stdout.flush()
+    print(f"🟡 {message}", file=sys.stderr)
     sys.stderr.flush()
 
 

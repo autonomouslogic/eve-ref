@@ -62,6 +62,7 @@ from workflow import (  # noqa: E402
     rclone,
     root_file_names,
     section,
+    warning,
 )
 
 STEP = "check-before-delete"
@@ -107,10 +108,12 @@ def main():
     for name, (count, size) in sorted(datasets.items()):
         print(f"  {name:<40} {fmt_count(count):>10} {fmt_bytes(size):>12}")
     if failed:
-        print(f"FAILED (stay on site): {fmt_count(len(failed))}, e.g.")
+        too_many = len(failed) > len(confirmed) // 2
+        report = error if too_many else warning
+        report(f"FAILED (stay on site): {fmt_count(len(failed))}, e.g.")
         for f in failed[:LOG_SAMPLE]:
-            error(f"  {f['path']}: {f['reason']}")
-        if len(failed) > len(confirmed) // 2:
+            report(f"  {f['path']}: {f['reason']}")
+        if too_many:
             fail(f"{len(failed)} failures is a lot relative to {len(confirmed)} confirmed: look before going on")
 
     delete_set = {
