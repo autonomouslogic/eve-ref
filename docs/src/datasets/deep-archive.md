@@ -1,5 +1,5 @@
 # Deep Archive
-The [Deep Archive](https://data.everef.net/deep-archive) moves old data off
+The [Deep Archive](https://data.everef.net/deep-archive/) moves old data off
 [data.everef.net](https://data.everef.net/) and into torrent archives.
 
 ## Published Torrents
@@ -12,8 +12,6 @@ your torrent client and configure it for automatic downloads.
 |-----------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|--------------------------------------------------------------------|
 | [everef-eve-online-deep-archive-00.torrent](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-00.torrent) | [everef-eve-online-deep-archive-00.txt](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-00.txt) | 10.2 GiB | [🧲 Magnet link](magnet:?xt=urn:btih:490948968a99044b47b4745d6669f17615395fa0&xt=urn:btmh:122064d67e474d13c31da81afecb310bac2082dd416ea0f0f61b90e55da6c89991a6&dn=everef-eve-online-deep-archive-00&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://exodus.desync.com:6969/announce&tr=udp://tracker.skynetcloud.site:6969/announce&tr=udp://tracker.qu.ax:6969/announce&tr=udp://tracker.corpscorp.online:80/announce&tr=udp://tracker.bittor.pw:1337/announce&tr=udp://tracker.tryhackx.org:6969/announce) | `490948968a99044b47b4745d6669f17615395fa0` | `64d67e474d13c31da81afecb310bac2082dd416ea0f0f61b90e55da6c89991a6` |
 
-[See all files](https://data.everef.net/deep-archive).
-
 To download the archives without a torrent client, use [aria2](https://aria2.github.io/):
 ```bash
 aria2c https://data.everef.net/deep-archive/everef-eve-online-deep-archive-00.torrent
@@ -23,8 +21,8 @@ aria2c https://data.everef.net/deep-archive/everef-eve-online-deep-archive-00.to
 Each archive is one torrent file, named `everef-eve-online-deep-archive-NN.torrent`, where `NN` is a sequential number.
 The files are laid out exactly as they were originally on `data.everef.net`.
 
-Alongside the torrent files are text files named `everef-eve-online-deep-archive-NN.txt`.
-These simply contain a list of all the files in each torrent file and can be used to search for specific content.
+Text files named `everef-eve-online-deep-archive-NN.txt` contain  a list of all the files in each torrent file and can
+be used to search for specific content.
 
 Alongside the torrent files are [minisign](https://jedisct1.github.io/minisign/) signatures of the torrent
 files themselves, named `everef-eve-online-deep-archive-NN.torrent.minisig`.
