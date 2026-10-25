@@ -36,6 +36,8 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    "\n" line endings), one line per file. Stays in SCRATCH_DIR for now; 04-sign-sha256 signs it with minisign, and
    05-make-torrent copies both into the torrent's content folder, so they end up inside the torrent, next to the
    README. Neither is published standalone: checking a file found another way (e.g. a mirror) needs the torrent.
+   A SCRATCH_DIR/<ID>.sha256.minisig left by an earlier run is removed first: it signs the old file, so
+   04-sign-sha256 has to sign the new one (05-make-torrent refuses to run without it).
 10. Run `sha256sum -c` on the file just written, from the content folder: an independent check, with a different
     tool, of the hashes just computed in Python.
 
@@ -257,6 +259,11 @@ def main():
 
     section("Checksum file")
     sha256_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.sha256")
+    # A signature from an earlier run is of the old checksum file: remove it, so 04-sign-sha256 has to sign this one.
+    minisig_path = sha256_path + ".minisig"
+    if os.path.exists(minisig_path):
+        os.remove(minisig_path)
+        print(f"Removed the earlier run's signature, sign again with 04-sign-sha256: {minisig_path}")
     write_sha256sums(sha256_path, manifest_files)
     print(f"{fmt_count(len(manifest_files))} files in {sha256_path}")
     verify_sha256sums(sha256_path, content_dir)

@@ -94,8 +94,9 @@ aborts if there were any; a missing tool (rclone, libtorrent, aria2c) aborts rig
 Lists the bucket and selects the oldest files not archived yet, by date (the earliest of the modification date, an
 ISO date in the file name, and 31 December of a year in the file name; PLAN 2.2), and nothing newer than the minimum
 age (`MIN_AGE_YEARS`). What a published torrent already holds comes from its own `<ID>.txt` file list; a non-index
-path still on the site that's already in one of those lists is a hard error (something went wrong -- an earlier
-delete didn't happen, or the path reappeared), never silently re-selected. Dates are added oldest first until a
+path still on the site that's already in one of those lists is a hard error, whatever its date (an earlier delete
+didn't happen, the path reappeared, or check-before-delete left it on the site: Appendix E), never silently
+re-selected. Dates are added oldest first until a
 limit (`lib/workflow.py`) stops it:
 the `.torrent` size limit is hard (the date that would go over it is left out), the data limit `MAX_BYTES` is soft
 (the date that reaches it is the last one taken, so the torrent can be somewhat over). Each folder with a selected
@@ -135,7 +136,8 @@ different. Aborts before copying if the folder holds files that aren't selected,
 - No archive test failures, or each one accepted in `NOTES.md` (corrupt files are archived as they are).
 - `manifest.json` written, with a SHA-256 for every file.
 - `$SCRATCH_DIR/<ID>.sha256` written and verified against it with `sha256sum -c` (an independent check, with a
-  different tool, of the hashes load just computed).
+  different tool, of the hashes load just computed). Any `<ID>.sha256.minisig` from an earlier run is removed, so
+  sign-sha256 always signs this one.
 
 ### 04: Sign the checksum file
 ```
@@ -143,19 +145,19 @@ different. Aborts before copying if the folder holds files that aren't selected,
 ```
 Signs `$SCRATCH_DIR/<ID>.sha256` with minisign, run through Docker, using the private key at `MINISIGN_KEY_PATH`
 (never committed to this repo, kept outside `$SCRATCH_DIR`). Always prompts for the key's passphrase interactively.
-Writes `$SCRATCH_DIR/<ID>.sha256.minisig`, then verifies it against the public key published at
-`ui/public/.well-known/minisign.pub` (https://everef.net/.well-known/minisign.pub), if that checkout is there.
-Runs before 05-make-torrent, which copies both files into the torrent's content folder: they end up inside the
-torrent, next to the README, and are never published standalone.
-- `$SCRATCH_DIR/<ID>.sha256.minisig` written.
-- Verified against the public key (the script does this itself if it can find it).
+Writes `$SCRATCH_DIR/<ID>.sha256.minisig`, then verifies it against the public key in this checkout,
+`ui/public/.well-known/minisign.pub` (published at https://everef.net/.well-known/minisign.pub), and fails if the key
+isn't there. Runs before 05-make-torrent, which verifies the signature again and copies both files into the
+torrent's content folder: they end up inside the torrent, next to the README, and are never published standalone.
+A bash script, with the same completion file and rules as the Python steps (`lib/sign.sh`).
+- `$SCRATCH_DIR/<ID>.sha256.minisig` written and verified.
 
 ### 05: Make torrent
 ```
 ./05-make-torrent.py
 ```
 Writes `<ID>-README.md` into `$SEED_DIR/<ID>/` (from `README-template.md`), copies `<ID>.sha256` and
-`<ID>.sha256.minisig` in from `$SCRATCH_DIR` (04-sign-sha256's output), downloads the tracker lists (ngosang's
+`<ID>.sha256.minisig` in from `$SCRATCH_DIR` (04-sign-sha256's output, verified with minisign first), downloads the tracker lists (ngosang's
 `trackers_best.txt` and XIU2's `best.txt`; fails if either is unreachable or empty, or if they give fewer than 10
 trackers together), makes `$SCRATCH_DIR/<ID>.torrent` (hybrid v1+v2, their union as trackers), and generates the file
 list `$SCRATCH_DIR/<ID>.txt` from it. Then reloads both from disk and checks them:
@@ -174,11 +176,10 @@ Also read the `.txt` and the README yourself.
 ./06-sign-torrent.sh
 ```
 Signs `$SCRATCH_DIR/<ID>.torrent` with minisign, run through Docker, the same way as sign-sha256. Writes
-`$SCRATCH_DIR/<ID>.torrent.minisig`, then verifies it against the public key if that's checked out. This is the
-signature 09-publish uploads: it lets someone verify the `.torrent` file itself, before loading it into a client,
-without needing the torrent's own piece hashes.
-- `$SCRATCH_DIR/<ID>.torrent.minisig` written.
-- Verified against the public key (the script does this itself if it can find it).
+`$SCRATCH_DIR/<ID>.torrent.minisig` and verifies it. This is the signature 09-publish uploads (after verifying it
+again): it lets someone verify the `.torrent` file itself, before loading it into a client, without needing the
+torrent's own piece hashes.
+- `$SCRATCH_DIR/<ID>.torrent.minisig` written and verified.
 
 ### 07: Seed
 ```
@@ -203,8 +204,9 @@ Review notes, R16).
 ```
 ./09-publish.py
 ```
-Shows the targets and asks first, then uploads `<ID>.torrent`, `<ID>.txt` and `<ID>.torrent.minisig` to the
-bucket's `deep-archive/` (all three from `$SCRATCH_DIR`). The README, the checksum file and its signature stay
+Shows the targets, verifies `<ID>.torrent.minisig` against `<ID>.torrent` with minisign, and asks first, then uploads
+`<ID>.torrent`, `<ID>.txt` and `<ID>.torrent.minisig` to the bucket's `deep-archive/` (all three from
+`$SCRATCH_DIR`). The README, the checksum file and its signature stay
 inside the torrent only. Never overwrites (a file already published by an earlier attempt must be identical, and
 is skipped). Then rebuilds `everef-deep-archive.xml` from the published torrents, shows the difference, asks again,
 saves the published `everef-deep-archive.xml` to `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, and uploads it.
@@ -303,7 +305,11 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 - **Checks are read-only** and re-derive everything from the source (bucket, disk, qBittorrent, site). They never
   trust the action step's output. `03-load`, `05-make-torrent` and `09-publish` check their own results at the
   end, like the roll-up scripts, instead of having a separate check step. `04-sign-sha256` and `06-sign-torrent`
-  verify their own signature the same way, against the published public key, when they can find it.
+  verify their own signature the same way, against the public key in this checkout; `05-make-torrent` and
+  `09-publish` verify it again before using it (`verify_signature` in `lib/workflow.py`), so a signature left from
+  before a redo is never used.
+- **Bash steps.** `04-sign-sha256` and `06-sign-torrent` are bash, through `lib/sign.sh`, which follows the same
+  rules: completion files, the lock, output and log.
 - **Manual steps** are numbered like the others (`MANUAL_STEPS` in `lib/workflow.py`), but have no script and no
   completion file: a script waits for the nearest earlier scripted step.
 
@@ -340,6 +346,7 @@ scripts/deep-archive/
   04-sign-sha256.sh                # signs <ID>.sha256 with minisign, through Docker (bash, not Python)
   06-sign-torrent.sh               # signs <ID>.torrent the same way, after 05-make-torrent
   lib/workflow.py                  # shared: settings, size limits, steps, completion files, lock, output, helpers
+  lib/sign.sh                      # the same for the two bash signing steps, and the signing itself
   lib/trackers.py                  # downloads the tracker lists (00-preflight, 05-make-torrent)
   lib/torrent_size.py              # .torrent size estimate from paths and sizes, for 01-find's cutoff
   lib/qbittorrent.py               # qBittorrent Web API client (00-preflight, 07-seed, 08-check-seed, 11-check-before-delete)
@@ -390,7 +397,10 @@ files are served again.
 
 If `11-check-before-delete` finds a file that changed after it was selected:
 - That file isn't deleted; the rest of the delete set is. Note it in `NOTES.md`.
-- No replacement torrent: the changed file goes into a later torrent once it's old enough (PLAN Appendix A).
+- No replacement torrent. The file stays on the site at a path the published `<ID>.txt` lists, so the next `01-find`
+  stops with a hard error on it (already archived but still on the site). The same goes for any other file
+  `11-check-before-delete` leaves on the site. Not handled yet: resolve it by hand if it ever happens (PLAN
+  Appendix A).
 - Find out why. If the dataset still changes after the minimum age, add it to `TORRENT_EXCLUDE`.
 
 ## Appendix F: Script reference

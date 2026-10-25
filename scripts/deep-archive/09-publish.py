@@ -13,9 +13,10 @@ Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py
 1. Upload <ID>.torrent, <ID>.txt and <ID>.torrent.minisig to deep-archive/ with the right Content-Type (all three
    from SCRATCH_DIR). The README, the checksum file and its signature stay inside the torrent only -- they're never
    published standalone. <ID>.torrent.minisig (06-sign-torrent) lets someone verify the .torrent file itself,
-   against the minisign key published at /.well-known/minisign.pub, before loading it into a client. Never
-   overwrites: a file already published must be byte-identical to the local one (an earlier attempt that failed
-   later), and is then skipped.
+   against the minisign key published at /.well-known/minisign.pub, before loading it into a client. Before asking,
+   verifies <ID>.torrent.minisig against <ID>.torrent with that key (lib/workflow.py's verify_signature), so a
+   signature left from before 05-make-torrent was redone is never published. Never overwrites: a file already
+   published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
 2. Rebuild everef-deep-archive.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth (PLAN 2.5). Each torrent
    is read with libtorrent: name (the ID), creation date, v1/v2 info-hashes, data
@@ -40,7 +41,7 @@ Writes, in SCRATCH_DIR:
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
 
-Needs rclone and libtorrent 2.x.
+Needs rclone, libtorrent 2.x and Docker (minisign).
 """
 
 import datetime
@@ -73,7 +74,9 @@ from workflow import (  # noqa: E402
     join,
     ok,
     rclone,
+    root_file_names,
     section,
+    verify_signature,
 )
 
 STEP = "publish"
@@ -160,6 +163,9 @@ def upload_torrent(workflow, torrent_id, deep_archive):
             print("  already published by an earlier attempt, identical: skipped")
             continue
         uploads.append((local, remote_path, content_type))
+
+    section("Torrent signature")
+    verify_signature(source_path(workflow, f"{torrent_id}.torrent"))
 
     if uploads:
         typed = input(f"Type {torrent_id} to upload: ")
@@ -265,7 +271,7 @@ def read_torrent(deep_archive, tmp_dir, name):
         fail(f"{name}: torrent name {torrent_id!r} isn't a valid torrent ID")
     hashes = ti.info_hashes()
     storage = ti.files()
-    root_names = {f"{torrent_id}-README.md", f"{torrent_id}.sha256", f"{torrent_id}.sha256.minisig"}
+    root_names = root_file_names(torrent_id)
     prefix = torrent_id + "/"
     files = 0
     data_bytes = 0

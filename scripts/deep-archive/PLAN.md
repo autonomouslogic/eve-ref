@@ -154,7 +154,7 @@ Dates and IDs in this document (`everef-eve-online-deep-archive-2023-04-11`, …
   workflows catch up on the backlog (~800,000 files and ~4 TiB on 2026-10-08, Appendix B), one torrent at a time; after
   that, a workflow runs whenever enough data has passed the minimum age to fill a torrent.
 - A torrent can't be changed after it's published, and is never replaced. Files that change before their delete
-  stay on the site and go into a later torrent (Appendix A).
+  stay on the site, and the next `01-find` stops with a hard error on them (2.2, Appendix A).
 
 ### 2.2 What gets archived
 
@@ -573,6 +573,11 @@ and `<ID>.txt` in `deep-archive/` by `09-publish` -- it's the one signature that
 file's signature verifies files *extracted from* an already-trusted torrent; the torrent file's signature verifies
 the torrent itself.
 
+**No longer manual (2026-10-25):** both signing steps write completion files like the Python steps (`lib/sign.sh`),
+so `05-make-torrent` waits for `04-sign-sha256` and `07-seed` for `06-sign-torrent`. `05-make-torrent` and
+`09-publish` also verify the signature before using it, and `03-load` removes an earlier run's
+`<ID>.sha256.minisig`, so a signature of a file since remade is never shipped.
+
 The public key for both is published at `/.well-known/minisign.pub`, outside this repo's control of the data
 bucket, so a compromise of one doesn't also compromise the other.
 
@@ -583,9 +588,7 @@ Markdown, generated from a template in `deep-archive/`. Contents:
 1. What this is: an EVE Ref Deep Archive torrent, with data from data.everef.net modified up to the torrent's
    cutoff date. (Revised 2026-10-24: the cutoff is no longer in the ID, which is sequential; this is its only
    recorded place. Revised again 2026-10-25: not published on its own in `deep-archive/` either -- see 2.3.)
-2. Layout: paths match data.everef.net, plus the note about "Don't create subfolder".
 3. Links: docs page (docs.everef.net/datasets/deep-archive.html) and data.everef.net.
-4. A line saying the client verifies every piece, and v2 clients every file.
 5. Licence/attribution notes, the same as the data site (CCP data, see `LICENSE-CCP`).
 
 #### Checks
@@ -831,9 +834,8 @@ and testing.
   - it isn't an `index.json` (they're rewritten by `DataIndex`, so they never match; 2.15 handles them), or the
     torrent's README (not a site file).
 - A file that fails a check **stays on the site**, and the step goes on with the rest. It's reported, and noted in
-  `NOTES.md`. A file that changed after it was selected has a newer modification date, so `01-find` picks it up for a
-  later torrent once it's old enough (2.2, Appendix A). Many failures point at a problem rather than at changed data:
-  look before executing.
+  `NOTES.md`. It's still at a path the published `<ID>.txt` lists, so the next `01-find` stops with a hard error on
+  it (2.2, Appendix A). Many failures point at a problem rather than at changed data: look before executing.
 - Files in the same folders that aren't in the torrent (uploaded after the cutoff) **stay**. Only confirmed keys are
   ever deleted.
 - Deletes are an explicit list (`rclone delete --files-from`), never a prefix or a pattern.
@@ -1145,11 +1147,10 @@ Still open:
     that "year", possibly much too early. Fuzzwork IDs are clear (backfills 21000–59999, live from 90019); other
     datasets aren't checked. The first real run's `find.log` ("dated by a year in the name") answers it; if IDs show
     up, narrow the rule (e.g. only years next to a separator and no other digits, or per dataset).
-17. **Re-selection after a failed delete (2.2).** The published-torrent check compares the modification date, not
-    the file's date, so a re-uploaded file is never taken for the archived version. The cost: a file a torrent took
-    by the date in its name, but modified after that torrent's cutoff, looks changed if its delete fails, and is
-    selected again (a duplicate in the next torrent, flagged as changed). Acceptable, or record each file's
-    modification time in the published `<ID>.txt` so the check can match the exact version?
+17. ~~**Re-selection after a failed delete (2.2).**~~ **Decided (2026-10-25): no re-selection.** A non-index path in
+    a published `<ID>.txt` that's still on the site, for any reason (a failed delete, a file that changed before its
+    delete, Appendix A), is a hard error in `01-find`. Addressed if it ever actually happens (e.g. by recording each
+    file's modification time in `<ID>.txt` so a new version can be told apart).
 
 ---
 
@@ -1256,8 +1257,9 @@ If the pre-delete check (`09-check-before-delete`) finds that a file changed on 
 - **Don't delete that file.** It isn't the version in the torrent. Everything else that's confirmed is deleted as
   usual (2.14).
 - The torrent stays as it is: it holds the version from when it was made. No replacement torrent.
-- The changed file has a new modification date, so a later `01-find` selects it for a new torrent once it's old
-  enough (2.2). The same path is then in two torrents, one version each.
+- The changed file stays on the site at a path the published `<ID>.txt` lists, so the next `01-find` stops with a
+  hard error on it (2.2), as for any file the pre-delete check leaves on the site. **Not handled yet (2026-10-25):
+  addressed if it ever actually happens.** Until then, resolve it by hand before running `01-find` again.
 - Find out why it changed. If the dataset's old files still change, consider adding it to `TORRENT_EXCLUDE`.
 
 ---

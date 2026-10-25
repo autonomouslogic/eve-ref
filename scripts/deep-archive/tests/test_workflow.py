@@ -25,6 +25,7 @@ from workflow import (  # noqa: E402
     format_torrent_id,
     iso,
     parse_iso,
+    previous_scripted_step,
     read_listing_gz,
     render_comment,
     site_path_problem,
@@ -168,15 +169,28 @@ class ReadListingGzTest(unittest.TestCase):
 class StepsTest(unittest.TestCase):
     """STEPS numbers the scripts and their completion files; the two must never drift apart."""
 
-    def test_every_scripted_step_has_its_script(self):
-        for step in STEPS:
-            if step not in MANUAL_STEPS:
-                self.assertTrue(os.path.isfile(os.path.join(HERE, "..", f"{step_name(step)}.py")))
+    def scripts(self):
+        """step_name -> script file name, for every numbered .py and .sh script."""
+        names = os.listdir(os.path.join(HERE, ".."))
+        return {name.rsplit(".", 1)[0]: name for name in names if re.match(r"^\d\d-.*\.(py|sh)$", name)}
 
     def test_every_numbered_script_is_a_scripted_step(self):
-        scripted = {f"{step_name(s)}.py" for s in STEPS if s not in MANUAL_STEPS}
-        numbered = {name for name in os.listdir(os.path.join(HERE, "..")) if re.match(r"^\d\d-.*\.py$", name)}
-        self.assertEqual(numbered, scripted)
+        scripted = {step_name(s) for s in STEPS if s not in MANUAL_STEPS}
+        self.assertEqual(set(self.scripts()), scripted)
+
+    def test_no_step_has_both_a_py_and_a_sh_script(self):
+        names = os.listdir(os.path.join(HERE, ".."))
+        self.assertEqual(len(self.scripts()), len([n for n in names if re.match(r"^\d\d-.*\.(py|sh)$", n)]))
+
+    def test_bash_steps_wait_for_the_previous_scripted_step(self):
+        # lib/sign.sh can't read STEPS: each bash step names its previous step itself, in its sign_step call.
+        for name, script in self.scripts().items():
+            if not script.endswith(".sh"):
+                continue
+            with open(os.path.join(HERE, "..", script), encoding="utf-8") as f:
+                calls = re.findall(r"^sign_step (\S+) ", f.read(), re.MULTILINE)
+            step = name.split("-", 1)[1]
+            self.assertEqual(calls, [step_name(previous_scripted_step(step))])
 
     def test_manual_steps_are_steps(self):
         self.assertLessEqual(MANUAL_STEPS, set(STEPS))

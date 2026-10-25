@@ -7,7 +7,7 @@ DRAFT. Writes only to qBittorrent (via its Web API) and SCRATCH_DIR.
 
     07-seed.py
 
-Needs 05-make-torrent's completion file, and refuses to run twice (lib/workflow.py).
+Needs 06-sign-torrent's completion file, and refuses to run twice (lib/workflow.py).
 
 Adds $SCRATCH_DIR/<ID>.torrent to qBittorrent with save path QBITTORRENT_SAVE_PATH (SEED_DIR as qBittorrent sees
 it; SEED_DIR itself if not set) and automatic torrent management off, so qBittorrent uses $SEED_DIR/<ID>/ (already

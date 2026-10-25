@@ -65,7 +65,7 @@ def main():
         delete_set = json.load(f)
     failed = delete_set.get("failed", [])
     print(f"{fmt_count(len(deleted))} deleted entries in {deleted_log}")
-    print(f"{fmt_count(len(failed))} failed-at-step-20 entries, should still be present")
+    print(f"{fmt_count(len(failed))} paths that failed 11-check-before-delete, should still be present")
 
     section("Fresh listing")
     fresh = {path: (size, mtime) for path, size, mtime in lsjson(remote, recursive=True)}
@@ -83,9 +83,12 @@ def main():
     section("Failed paths untouched")
     missing_failed = [f["path"] for f in failed if "path" in f and f["path"] not in fresh]
     if missing_failed:
-        problems.append(f"{len(missing_failed)} failed-at-step-20 path(s) are gone too: {missing_failed[:LOG_SAMPLE]}")
+        problems.append(
+            f"{len(missing_failed)} path(s) that failed 11-check-before-delete are gone too: "
+            f"{missing_failed[:LOG_SAMPLE]}"
+        )
     else:
-        print(f"All {fmt_count(len(failed))} failed-at-step-20 paths are still there")
+        print(f"All {fmt_count(len(failed))} paths that failed 11-check-before-delete are still there")
 
     section("No other find-time paths disappeared")
     listing_path = os.path.join(workflow.scratch_dir, "find", "listing.jsonl.gz")
@@ -121,9 +124,9 @@ def main():
 
 def find_unexpectedly_gone(original, deleted_paths, failed_paths, fresh):
     """
-    Find-time paths (01-find's listing.jsonl.gz) that are neither in the delete set nor the failed-at-step-09 list,
-    but are missing from a fresh listing anyway: something other than this workflow's confirmed delete set removed
-    them. Sorted for a stable, readable sample.
+    Find-time paths (01-find's listing.jsonl.gz) that are neither in the delete set nor 11-check-before-delete's
+    failed list, but are missing from a fresh listing anyway: something other than this workflow's confirmed delete
+    set removed them. Sorted for a stable, readable sample.
     """
     return sorted(p for p in original if p not in deleted_paths and p not in failed_paths and p not in fresh)
 

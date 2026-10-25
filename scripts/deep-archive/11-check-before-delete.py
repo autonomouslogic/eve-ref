@@ -12,7 +12,8 @@ Needs 09-publish's completion file (update-docs is manual), and refuses to run t
 if the docs page doesn't list the torrent's ID and v1 info-hash: update-docs must come first.
 
 A data file is in the delete set only if all of these hold:
-- it's a data file in the published torrent (not index.json or the README), with the selected size;
+- it's a data file in the published torrent (not index.json, or the README, checksum file or its signature at the
+  torrent's root), with the selected size;
 - it's in the manifest (so its SHA-256 was checked against the torrent at 100%, PLAN 2.14);
 - it's on the bucket right now, in a **fresh** listing, with the same size and modification time recorded when
   it was selected (01-find's files.jsonl).
@@ -59,6 +60,7 @@ from workflow import (  # noqa: E402
     parse_iso,
     qbittorrent_settings,
     rclone,
+    root_file_names,
     section,
 )
 
@@ -194,18 +196,28 @@ def check_published_torrent(workflow, remote, torrent_id):
             "something republished it differently"
         )
     print(f"Published torrent matches: v1 info-hash {published_v1_hash}")
-    root_names = {f"{torrent_id}-README.md"}
-    prefix = torrent_id + "/"
     storage = ti.files()
+    files = [
+        (storage.file_path(i).replace(os.sep, "/"), storage.file_size(i))
+        for i in range(storage.num_files())
+        if not storage.file_flags(i) & lt.file_storage.flag_pad_file
+    ]
+    return torrent_data_files(files, torrent_id)
+
+
+def torrent_data_files(files, torrent_id):
+    """
+    {site path: size} for the torrent's data files, from its (path, size) files without pad files: the root files
+    (root_file_names) and index.json files left out.
+    """
+    root_names = root_file_names(torrent_id)
+    prefix = torrent_id + "/"
     data_files = {}
-    for i in range(storage.num_files()):
-        if storage.file_flags(i) & lt.file_storage.flag_pad_file:
-            continue
-        path = storage.file_path(i).replace(os.sep, "/")
+    for path, size in files:
         rel = path[len(prefix) :] if path.startswith(prefix) else path
         if rel in root_names or rel.rsplit("/", 1)[-1] == "index.json":
             continue
-        data_files[rel] = storage.file_size(i)
+        data_files[rel] = size
     return data_files
 
 

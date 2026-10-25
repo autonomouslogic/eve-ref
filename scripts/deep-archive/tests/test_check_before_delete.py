@@ -1,6 +1,7 @@
 """
-Tests for 11-check-before-delete.py: which of the torrent's files make the delete set (build_delete_set), and that the
-docs page lists the torrent before anything is deleted (docs_page_problems).
+Tests for 11-check-before-delete.py: which of the torrent's files are data files (torrent_data_files) and make the
+delete set (build_delete_set), and that the docs page lists the torrent before anything is deleted
+(docs_page_problems).
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -55,6 +56,20 @@ class BuildDeleteSetTest(unittest.TestCase):
         confirmed, failed = self.build(fresh=None)
         self.assertEqual(confirmed, [])
         self.assertEqual(len(failed), 1)
+
+
+class TorrentDataFilesTest(unittest.TestCase):
+    ID = "everef-eve-online-deep-archive-00"
+
+    def test_root_files_and_index_json_are_not_data_files(self):
+        files = [
+            (f"{self.ID}/{self.ID}-README.md", 1),
+            (f"{self.ID}/{self.ID}.sha256", 2),
+            (f"{self.ID}/{self.ID}.sha256.minisig", 3),
+            (f"{self.ID}/market-orders/history/2023/2023-01-01/index.json", 4),
+            (f"{self.ID}/{PATH}", 10),
+        ]
+        self.assertEqual(check_before_delete.torrent_data_files(files, self.ID), {PATH: 10})
 
 
 class DocsPageProblemsTest(unittest.TestCase):

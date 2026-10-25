@@ -89,6 +89,14 @@ def torrent_sequence(torrent_id):
     return int(m[1]) if m else None
 
 
+def root_file_names(torrent_id):
+    """
+    The files at the root of a torrent, next to the data (PLAN 2.6): its README, checksum file and the checksum file's
+    signature. Not data files: never in the manifest, the .txt file list or the delete set.
+    """
+    return {f"{torrent_id}-README.md", f"{torrent_id}.sha256", f"{torrent_id}.sha256.minisig"}
+
+
 # Cache-Control max-age for everef-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
@@ -108,8 +116,9 @@ def load_comment_template():
     return text
 
 # The workflow's steps, in order (README), numbered by their place here. Each scripted step's script is named after
-# its number and name, e.g. 01-find.py. Manual steps (MANUAL_STEPS) are numbered too, but have no script and no
-# completion file: a script waits for the nearest earlier scripted step.
+# its number and name, e.g. 01-find.py; the signing steps are bash (04-sign-sha256.sh, 06-sign-torrent.sh, through
+# lib/sign.sh), with the same completion files and rules. Manual steps (MANUAL_STEPS) are numbered too, but have no
+# script and no completion file: a script waits for the nearest earlier scripted step.
 STEPS = [
     "preflight",
     "find",
@@ -131,8 +140,6 @@ STEPS = [
 ]
 MANUAL_STEPS = {
     "review",
-    "sign-sha256",
-    "sign-torrent",
     "update-docs",
     "data-index",
     "delete-scratch",
@@ -600,6 +607,60 @@ def classify_path(path):
     while len(dataset_parts) > 1 and dataset_parts[-1] in DATASET_SUFFIXES:
         dataset_parts = dataset_parts[:-1]
     return year, "/".join(dataset_parts)
+
+
+# The minisign public key published at https://everef.net/.well-known/minisign.pub, from this checkout (PLAN 2.6).
+MINISIGN_PUBLIC_KEY = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "..", "..", "..", "ui", "public", ".well-known", "minisign.pub"
+)
+
+# minisign's Docker image, as 04-sign-sha256.sh and 06-sign-torrent.sh run it.
+MINISIGN_IMAGE = "jedisct1/minisign"
+
+
+def verify_signature(path):
+    """
+    Verifies path against path.minisig with minisign, run through Docker, and MINISIGN_PUBLIC_KEY. Fails if the file,
+    its signature or the key is missing, or the signature doesn't verify (e.g. it was left by an earlier run, before
+    the file was remade). For 05-make-torrent (<ID>.sha256) and 09-publish (<ID>.torrent), before they use a signature.
+    """
+    signature = path + ".minisig"
+    name = os.path.basename(path)
+    if not os.path.isfile(path):
+        fail(f"Not found: {path}")
+    if not os.path.isfile(signature):
+        fail(f"Not found: {signature}: sign {name} first")
+    if not os.path.isfile(MINISIGN_PUBLIC_KEY):
+        fail(f"Public key not found: {MINISIGN_PUBLIC_KEY}")
+    folder = os.path.dirname(os.path.realpath(path))
+    key_dir, key_name = os.path.split(os.path.realpath(MINISIGN_PUBLIC_KEY))
+    args = [
+        "docker",
+        "run",
+        "--rm",
+        "-v",
+        f"{folder}:/data:ro",
+        "-v",
+        f"{key_dir}:/pub:ro",
+        MINISIGN_IMAGE,
+        "-V",
+        "-p",
+        f"/pub/{key_name}",
+        "-m",
+        f"/data/{name}",
+        "-x",
+        f"/data/{name}.minisig",
+    ]
+    try:
+        result = subprocess.run(args, capture_output=True, text=True)
+    except FileNotFoundError:
+        fail("Docker is not installed")
+    output = [line for line in (result.stdout + result.stderr).splitlines() if line.strip()]
+    if result.returncode != 0:
+        fail(f"{signature} doesn't verify: {output[-1] if output else f'exit code {result.returncode}'}")
+    print(f"Signature verified: {signature}, against {os.path.realpath(MINISIGN_PUBLIC_KEY)}")
+    for line in output:
+        print(f"  {line}")
 
 
 def render_comment(torrent_id):

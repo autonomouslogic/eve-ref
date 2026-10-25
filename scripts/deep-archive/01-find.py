@@ -37,9 +37,10 @@ modification date (DataIndex rewrites it on every run, so its date says nothing 
 otherwise. Only the folder's own index.json; parent folders' aren't added.
 
 Published torrents: a non-index.json path listed in a published deep-archive/<ID>.txt is simply never a candidate
-again -- it's already archived. If it's still a candidate by the current scan (old enough, not excluded) and also
-still on the site, that's a bug (its delete after an earlier torrent didn't happen, or it reappeared): find aborts
-listing every such path, rather than guessing whether it changed and silently re-selecting it. index.json is the
+again -- it's already archived. If it's still on the site and not skipped (see Skipped below), whatever its date,
+find aborts listing every such path, rather than guessing whether it changed and silently re-selecting it: its
+delete after an earlier torrent didn't happen, it reappeared, or 11-check-before-delete left it on the site because
+it changed (README Appendix E; not handled yet, resolved by hand if it ever happens). index.json is the
 exception: DataIndex rewrites it on every run regardless of the underlying data, so the same folder's index.json can
 legitimately appear in several torrents' file lists over time (one partial archive after another) without anything
 being wrong.
@@ -216,7 +217,8 @@ def main():
             error(f"  {path}")
         fail(
             f"{fmt_count(len(scan.already_archived))} paths a published torrent already holds are still on the "
-            "site: an earlier delete didn't happen, or the path reappeared. Resolve by hand before running find again"
+            "site: an earlier delete didn't happen, the path reappeared, or check-before-delete left it on the site "
+            "(README Appendix E). Resolve by hand before running find again"
         )
     cut = choose_cutoff(scan.candidates, scan.indexes, newest_allowed)
     if cut.cutoff is None:

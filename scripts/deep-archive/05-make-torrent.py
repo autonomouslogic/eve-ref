@@ -8,13 +8,13 @@ SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 
     05-make-torrent.py
 
-Needs 03-load's completion file and 04-sign-sha256's output (SCRATCH_DIR/<ID>.sha256.minisig), and refuses to run
-twice (lib/workflow.py). Slow: hashes every piece of every file (hours for a full torrent).
+Needs 04-sign-sha256's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece of every file (hours for a full torrent).
 
 1. Render README-template.md (ID, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
-2. Copy SCRATCH_DIR/<ID>.sha256 and SCRATCH_DIR/<ID>.sha256.minisig (03-load, 04-sign-sha256) into
-   $SEED_DIR/<ID>/, so they end up inside the torrent too: neither is published standalone, so this is the only
-   way to check a file against them without a torrent client.
+2. Verify SCRATCH_DIR/<ID>.sha256.minisig against SCRATCH_DIR/<ID>.sha256 (03-load, 04-sign-sha256) with minisign
+   and the public key in this checkout (lib/workflow.py's verify_signature), then copy both into $SEED_DIR/<ID>/, so
+   they end up inside the torrent too: neither is published standalone, so this is the only way to check a file
+   against them without a torrent client.
 3. Download the tracker lists (lib/trackers.py): the union of both "best" lists, UDP and HTTP(S) only. Fails if a
    list can't be downloaded or has no usable trackers, or if the union has fewer than MIN_TRACKERS.
 4. Build the torrent from exactly the manifest's files plus the root files (README, .sha256, .sha256.minisig),
@@ -38,7 +38,7 @@ Writes:
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR
 
-Needs libtorrent 2.x, and HTTPS access to raw.githubusercontent.com for the tracker lists.
+Needs libtorrent 2.x, Docker (minisign), and HTTPS access to raw.githubusercontent.com for the tracker lists.
 """
 
 import json
@@ -62,7 +62,9 @@ from workflow import (  # noqa: E402
     fmt_duration,
     ok,
     render_comment,
+    root_file_names,
     section,
+    verify_signature,
 )
 from trackers import TRACKER_SOURCES, TrackersError, combine, fetch_tracker_lists  # noqa: E402
 
@@ -106,7 +108,7 @@ def main():
 
     section("Torrent")
     fs = lt.file_storage()
-    root_names = {readme_name, sha256_name, minisig_name}
+    root_names = root_file_names(torrent_id)
     for path in sorted(files) + sorted(root_names):
         full = os.path.join(content_dir, path)
         if not os.path.isfile(full):
@@ -305,8 +307,8 @@ def write_readme(path, torrent_id, cutoff):
 def copy_checksum_files(scratch_dir, content_dir, torrent_id):
     """
     Copies SCRATCH_DIR/<ID>.sha256 and its .minisig (03-load, 04-sign-sha256) into the torrent's content folder, so
-    they end up inside the torrent as root files. Returns (sha256_name, minisig_name). Fails if either is missing:
-    04-sign-sha256 needs to run first.
+    they end up inside the torrent as root files. Returns (sha256_name, minisig_name). Fails if either is missing
+    (04-sign-sha256 needs to run first), or if the signature doesn't verify against the checksum file.
     """
     sha256_name = f"{torrent_id}.sha256"
     minisig_name = f"{sha256_name}.minisig"
@@ -314,7 +316,9 @@ def copy_checksum_files(scratch_dir, content_dir, torrent_id):
         src = os.path.join(scratch_dir, name)
         if not os.path.isfile(src):
             fail(f"Missing {src}: run 03-load and 04-sign-sha256 first")
-        shutil.copyfile(src, os.path.join(content_dir, name))
+    verify_signature(os.path.join(scratch_dir, sha256_name))
+    for name in (sha256_name, minisig_name):
+        shutil.copyfile(os.path.join(scratch_dir, name), os.path.join(content_dir, name))
     return sha256_name, minisig_name
 
 
