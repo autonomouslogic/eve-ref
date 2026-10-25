@@ -109,7 +109,7 @@ def root_file_names(torrent_id):
     return {f"{torrent_id}-README.md", f"{torrent_id}.sha256", f"{torrent_id}.sha256.minisig"}
 
 
-# Cache-Control max-age for everef-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
+# Cache-Control max-age for everef-eve-online-deep-archive.xml (PLAN 2.7, 2.21): short, like DataIndex's index pages
 # (Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE, 2 minutes), so a new torrent shows up almost at once.
 FEED_CACHE_MAX_AGE_SECONDS = 120
 
@@ -143,6 +143,7 @@ STEPS = [
     "check-seed",
     "publish",
     "update-docs",
+    "index-deep-archive",
     "check-before-delete",
     "delete",
     "check-delete",
@@ -153,6 +154,7 @@ STEPS = [
 MANUAL_STEPS = {
     "review",
     "update-docs",
+    "index-deep-archive",
     "data-index",
     "delete-scratch",
 }
@@ -208,7 +210,7 @@ MIN_BYTES = MAX_BYTES
 # 01-find leaves out the date that would go over it.
 MAX_TORRENT_BYTES = 10_000_000
 
-# qBittorrent's Web API (00-preflight, 07-seed, 08-check-seed, 11-check-before-delete). Torrents are added with save path
+# qBittorrent's Web API (00-preflight, 07-seed, 08-check-seed, 12-check-before-delete). Torrents are added with save path
 # QBITTORRENT_SAVE_PATH (qbittorrent_save_path), SEED_DIR as qBittorrent sees it.
 def qbittorrent_settings():
     """(url, api_key) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
@@ -630,7 +632,7 @@ def classify_path(path):
     - dataset: the directories before that year folder, "/"-joined, with a trailing "history" or "backfills"
       (DATASET_SUFFIXES) removed; the first three directories if there's no year folder. "" at the site root (never
       reached: root-level files are skipped before classification) or directly under a year folder.
-    Used by 01-find's and 11-check-before-delete's dataset breakdowns.
+    Used by 01-find's and 12-check-before-delete's dataset breakdowns.
     """
     dirs = path.split("/")[:-1]
     year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)

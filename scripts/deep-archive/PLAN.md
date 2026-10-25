@@ -7,8 +7,8 @@ Current shape (2026-10-25):
 - **Steps 00-16**, numbered the same in the README, `STEPS` (`lib/workflow.py`) and the script names (2.10); a unit
   test checks the script names against `STEPS`. Scripted: `00-preflight`, `01-find`, `03-load`, `04-sign-sha256`
   (bash), `05-make-torrent`, `06-sign-torrent` (bash), `07-seed`, `08-check-seed`, `09-publish`,
-  `11-check-before-delete`, `12-delete`, `13-check-delete`, `15-check-site`. Manual: `02` review, `10` update-docs,
-  `14` data-index, `16` delete-scratch.
+  `12-check-before-delete`, `13-delete`, `14-check-delete`, `16-check-site`. Manual: `02` review, `10` update-docs,
+  `11` index-deep-archive, `15` data-index, `17` delete-scratch.
 - **One workflow, one torrent, as big as the size limits allow** (2.1, 2.8): the oldest files not archived yet, by
   date (2.2). Sequential torrent IDs, `everef-eve-online-deep-archive-NN` (2.3); the cutoff date is stated in the
   torrent's own README.
@@ -17,7 +17,7 @@ Current shape (2026-10-25):
 - **Inside the torrent** (2.6): the data, a README, a `sha256sum` checksum file and its minisign signature.
   **Published** in `deep-archive/` (2.5): the `.torrent`, its `.txt` file list, the `.torrent`'s own minisign
   signature, and the RSS feed (2.7).
-- **The docs page lists every torrent** (4.2, 4.3): `10` update-docs adds it, and `11-check-before-delete` fails until
+- **The docs page lists every torrent** (4.2, 4.3): `10` update-docs adds it, and `12-check-before-delete` fails until
   the live page lists the torrent's ID and v1 info-hash.
 - **The scripts reach the storage only through rclone** (2.21), with one B2 key; soft deletes only.
 - **No backup** (2.11), **no Internet Archive** (2.12), **no announcements** (2.13). `$SEED_DIR` is EVE Ref's only copy
@@ -449,7 +449,7 @@ folder with the same name in this repo holds the scripts and operator docs; it i
 
 ```
 deep-archive/                       # at the root of data.everef.net
-  everef-deep-archive.xml                          # RSS: all torrents
+  everef-eve-online-deep-archive.xml                          # RSS: all torrents
   everef-eve-online-deep-archive-00.torrent
   everef-eve-online-deep-archive-00.txt         # every data file in the torrent, one site path per line
   everef-eve-online-deep-archive-00.torrent.minisig # signature of the .torrent file itself (2.6)
@@ -645,8 +645,8 @@ moving on. The scripts support the human; they don't replace their judgement.
 - **One script, one step, numbered in order:** `./00-preflight.py`, `./01-find.py`, …
   (`STEPS` in `lib/workflow.py`). Scripts never call the next step. There is no "run everything" script. The two
   signing steps are bash (`04-sign-sha256.sh`, `06-sign-torrent.sh`, through `lib/sign.sh`), with the same rules.
-  Manual steps take a number in the same sequence (`02` review, `10` update-docs, `14` data-index, `16`
-  delete-scratch) without a script or completion file (`MANUAL_STEPS`).
+  Manual steps take a number in the same sequence (`02` review, `10` update-docs, `11` index-deep-archive,
+  `15` data-index, `17` delete-scratch) without a script or completion file (`MANUAL_STEPS`).
 - **Settings in `torrents.env`** (`torrents.env.example`), read for anything the environment doesn't set:
   `SCRATCH_DIR`, `SEED_DIR`, `DATA_BUCKET`, the B2 key (`RCLONE_CONFIG_EVEREF_ACCOUNT`,
   `RCLONE_CONFIG_EVEREF_KEY`), the qBittorrent Web API, `MINISIGN_KEY_PATH` and, optionally, `LOCAL_COPY_DIR` and
@@ -669,9 +669,9 @@ moving on. The scripts support the human; they don't replace their judgement.
   `.txt` it wrote and checks them; `09-publish` checks what data.everef.net serves for what it uploaded. They re-read
   from disk or the site rather than trusting in-memory state, but they're not independent of the action (Review
   notes, R6).
-- **Show, then ask.** Any step that writes outside `$SCRATCH_DIR` and `$SEED_DIR` (the data bucket,
-  qBittorrent) first prints what it will do (counts, bytes, sample paths) and asks for confirmation. `12-delete`
-  needs the torrent ID typed back in, not just `y`.
+- **Show, then ask.** `13-delete` prints what it will delete (counts, bytes, sample paths) and needs the torrent ID
+  typed back in, not just `y`. The other steps that write outside `$SCRATCH_DIR` and `$SEED_DIR` (`07-seed` to
+  qBittorrent, `09-publish` to the bucket's `deep-archive/`, which never overwrites) print what they do and go ahead.
 - **Resumable until complete.** A step that fails or is interrupted writes no completion file and can be run again;
   copies and uploads carry on where they stopped.
 - **Output like the roll-up scripts** (`lib/workflow.py`): `🚀 <step>: <ID>` once, `🔵 <section>` headings,
@@ -680,7 +680,7 @@ moving on. The scripts support the human; they don't replace their judgement.
   line on success. Everything a step prints is also written to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
 - **Notes.** The operator keeps `$SCRATCH_DIR/NOTES.md` for notes on manual steps and decisions. It goes with the
   scratch directory.
-- **One step at a time.** Every step, the bash ones and `12-delete`'s dry run included, holds
+- **One step at a time.** Every step, the bash ones and `13-delete`'s dry run included, holds
   `$SCRATCH_DIR/log/.lock` while it runs (R1).
 
 ### 2.11 Backup: none (removed 2026-10-12)
@@ -798,7 +798,7 @@ and testing.
 ### 2.15 Stale index files after deletion
 
 `DataIndex` regenerates the parent directories correctly (the deleted year vanishes from them), but it **leaves the
-old `index.html`/`index.json` in every emptied directory**. So `12-delete` cleans them up, right after the data:
+old `index.html`/`index.json` in every emptied directory**. So `13-delete` cleans them up, right after the data:
 
 - It lists the bucket again, and checks every folder that held a deleted file, and each of its parent folders up to
   the site root, deepest first.
@@ -819,7 +819,7 @@ other deletes either. It's a Java change, and it needs care so it never deletes 
 Cloudflare can keep serving a deleted file from cache for up to 30 days. Index pages have a 2-minute max-age, so they
 update almost at once. That's accepted.
 
-`15-check-site` therefore checks **many** URLs, not one: a random sample of deleted files spread across datasets and
+`16-check-site` therefore checks **many** URLs, not one: a random sample of deleted files spread across datasets and
 months (e.g. 50), plus the `index.json` of emptied folders. Per URL:
 
 - `404`: pass.
@@ -903,18 +903,18 @@ Revised 2026-10-10. The scripts reach the data bucket **only through rclone**, w
   root is `everef:$DATA_BUCKET`.
 
 One key means every step could write and delete. The safeguards are the steps themselves: only `09-publish` and
-`12-delete` write to the data bucket, only to explicit paths (or `deep-archive/`), after showing what they'll do and
+`13-delete` write to the data bucket, only to explicit paths (or `deep-archive/`), after showing what they'll do and
 asking. (The 2026-10-09 design used a filesystem mount; the first draft of this revision used boto3, then separate
 read, write and backup remotes. All dropped.)
 
 - **No mount, no public-HTTP crawl** for decisions. HTTPS against data.everef.net is only used to check what the site
-  serves (`09-publish`, `15-check-site`). The other remote API is qBittorrent.
+  serves (`09-publish`, `16-check-site`). The other remote API is qBittorrent.
 - **Listings are always fresh.** An rclone listing goes straight to the storage, so `01-find`,
-  `11-check-before-delete`, `12-delete` and `13-check-delete` see what EVE Ref's jobs wrote a moment ago.
+  `12-check-before-delete`, `13-delete` and `14-check-delete` see what EVE Ref's jobs wrote a moment ago.
 - **The modification date is rclone's `ModTime`** everywhere: selection (2.2), load (file mtimes), pre-delete check
   (2.14). On B2 it's the upload time, unless the uploader set `src_last_modified_millis` (check on real files).
 - **Content-Type and Cache-Control** go on the files at upload, like `S3Util` does today: `.torrent` →
-  `application/x-bittorrent`, `.txt` → `text/plain; charset=utf-8`, `everef-deep-archive.xml` → `application/rss+xml` with a short
+  `application/x-bittorrent`, `.txt` → `text/plain; charset=utf-8`, `everef-eve-online-deep-archive.xml` → `application/rss+xml` with a short
   max-age. With rclone that's `--header-upload`. Whether B2 honours both through rclone is still unchecked (open
   question 1); `09-publish` checks the Content-Type it serves over HTTPS after uploading, and fails if it's wrong.
 - The writing steps only ever touch paths from an explicit list (or `deep-archive/`).
@@ -980,7 +980,7 @@ authoritative list.
    no fixed date. Until a file is archived, it stays on data.everef.net. Subscribe to the feed to be notified of new
    torrents.
 5. **How to use them.**
-   - Links: [`deep-archive/`](https://data.everef.net/deep-archive/) directory and the RSS feed `everef-deep-archive.xml`.
+   - Links: [`deep-archive/`](https://data.everef.net/deep-archive/) directory and the RSS feed `everef-eve-online-deep-archive.xml`.
    - **Finding specific data:** every torrent has a matching `.txt` listing every file. Search them, then add the
      torrent and select only the files you need.
    - **Getting the site layout:** content layout "Don't create subfolder" (qBittorrent) puts files in the same
@@ -1007,7 +1007,7 @@ Related one-time changes, all live **before the first deletion**:
 ### 4.3 Per workflow
 
 Step 10 (update-docs, manual) adds the torrent to the page's "Torrents" table, and the docs site is
-deployed. `11-check-before-delete` fails until the live page has the torrent's ID and v1 info-hash, so nothing is
+deployed. `12-check-before-delete` fails until the live page has the torrent's ID and v1 info-hash, so nothing is
 deleted before the torrent is listed. Update the rule text too if the rules changed (excluded datasets, timing, size
 limits).
 
@@ -1063,7 +1063,7 @@ Still open:
 6. ~~How to test reachability from outside?~~ **Decided (2026-10-25): no outside test** (Review notes, R16).
 7. ~~Stale index cleanup: in the delete step (2.15a), in `DataIndex` (2.15b), or both?~~ **Decided (2026-10-24):
    the delete step** deletes the data files, then the folders that leaves empty (on B2: the `index.html`/`index.json`
-   of folders with nothing else in them, 2.15). The full `DataIndex` (step 14) does the final indexing.
+   of folders with nothing else in them, 2.15). The full `DataIndex` (step 15) does the final indexing.
 8. ~~Add a `DataIndex` "Archived data" note to index pages?~~ **Dropped (2026-10-25):** the docs page is enough.
 9. ~~**Small-snapshot datasets** (Appendix B): ~553,700 files (69 %) for ~6 GiB.~~ **Done (2026-10-24):** the
    roll-up rolled them into a few large files and deleted the originals, so they no longer fill the torrents. Still
@@ -1107,7 +1107,7 @@ step and were dropped with it (2.11), and R14 was about an experiment script tha
 
 - **R1. One step at a time. Done.** Two steps started by mistake (e.g. two terminals) could both pass the
   completion-file checks. Every step takes `$SCRATCH_DIR/log/.lock` with `flock`, like the roll-up scripts:
-  `Workflow.begin` for the Python steps (`12-delete`'s dry run included), `00-preflight`, and `lib/sign.sh` for the
+  `Workflow.begin` for the Python steps (`13-delete`'s dry run included), `00-preflight`, and `lib/sign.sh` for the
   bash ones.
 - **R2. The environment wins over `torrents.env`. Done.** `load_env` only fills in what the environment doesn't set,
   so a stale shell export (`DATA_BUCKET`, `SEED_DIR`, `RCLONE_CONFIG_EVEREF_*`) overrides the file. Every step names
@@ -1165,22 +1165,22 @@ step and were dropped with it (2.11), and R14 was about an experiment script tha
 
 **Publish (`09-publish`, merged 2026-10-12)**
 
-- **R19. The feed backup is deleted with the scratch directory.** `09-publish` saves the published `everef-deep-archive.xml` to
+- **R19. The feed backup is deleted with the scratch directory.** `09-publish` saves the published `everef-eve-online-deep-archive.xml` to
   `$SCRATCH_DIR/feed-backup/feed-<UTC time>.xml`, which goes when `$SCRATCH_DIR` is deleted at the end of the
   workflow. Enough to undo a bad rebuild during the workflow; for a longer history, keep it somewhere that persists
-  outside `$SCRATCH_DIR`. `everef-deep-archive.xml` can always be rebuilt from the published `.torrent` files.
-- **R20. Two confirmations, one step.** It asks before uploading the `.torrent`/`.txt` and again before replacing the
-  feed. If it fails between the two, rerunning skips the already-published, identical `.torrent`/`.txt`; a
+  outside `$SCRATCH_DIR`. `everef-eve-online-deep-archive.xml` can always be rebuilt from the published `.torrent` files.
+- **R20. Two uploads, one step.** It uploads the `.torrent`/`.txt`, then replaces the feed, without asking (the
+  diff is printed, and the HTTPS checks verify the result). If it fails between the two, rerunning skips the already-published, identical `.torrent`/`.txt`; a
   different one stops it (never overwritten).
 - **R21. Checks retry for the Cloudflare cache.** The HTTPS checks retry for up to `FEED_CACHE_MAX_AGE_SECONDS` + 60
-  seconds, because Cloudflare may serve the old `everef-deep-archive.xml` (or a cached 404 for the new `.torrent`) right after the
+  seconds, because Cloudflare may serve the old `everef-eve-online-deep-archive.xml` (or a cached 404 for the new `.torrent`) right after the
   upload. A real problem therefore takes a few minutes to report.
 
 **Docs (removed 2026-10-12)**
 
 - **R22. Nothing checks the docs page against the scripts any more.** `check-docs` followed every link on the Deep
   Archive page and printed `MIN_AGE_YEARS`, `TORRENT_EXCLUDE` and the size limits to compare with the page. Now
-  `11-check-before-delete` checks the page is reachable and lists the torrent's ID and v1 info-hash (2026-10-24), but
+  `12-check-before-delete` checks the page is reachable and lists the torrent's ID and v1 info-hash (2026-10-24), but
   not the rules: if a rule changes in `lib/workflow.py` (e.g. a dataset added to `TORRENT_EXCLUDE`) the page has to be
   updated by hand, before the next delete; a broken link on it goes unnoticed.
 
@@ -1195,7 +1195,7 @@ step and were dropped with it (2.11), and R14 was about an experiment script tha
 
 ## Appendix A: If archived data turns out to have changed
 
-If the pre-delete check (`11-check-before-delete`) finds that a file changed on the storage after it was selected:
+If the pre-delete check (`12-check-before-delete`) finds that a file changed on the storage after it was selected:
 - **Don't delete that file.** It isn't the version in the torrent. Everything else that's confirmed is deleted as
   usual (2.14).
 - The torrent stays as it is: it holds the version from when it was made. No replacement torrent.

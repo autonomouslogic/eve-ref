@@ -1,5 +1,5 @@
 """
-Tests for 09-publish.py's feed code: building everef-deep-archive.xml from a torrent's info
+Tests for 09-publish.py's feed code: building everef-eve-online-deep-archive.xml from a torrent's info
 (build_feed, build_magnet, torrent_url), reading a torrent's fields back out of a real .torrent
 (read_torrent), and the diff shown before publishing (print_diff). No network, no rclone: read_torrent's one rclone
 call is replaced with a local file copy.
@@ -219,21 +219,45 @@ class PrintDiffTest(unittest.TestCase):
     def test_no_change(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            publish.print_diff("same\n", "same\n", "everef-deep-archive.xml")
-        self.assertIn("No change to everef-deep-archive.xml", out.getvalue())
+            publish.print_diff("same\n", "same\n", "everef-eve-online-deep-archive.xml")
+        self.assertIn("No change to everef-eve-online-deep-archive.xml", out.getvalue())
 
     def test_shows_a_diff(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            publish.print_diff("old\n", "new\n", "everef-deep-archive.xml")
+            publish.print_diff("old\n", "new\n", "everef-eve-online-deep-archive.xml")
         self.assertIn("-old", out.getvalue())
         self.assertIn("+new", out.getvalue())
 
     def test_first_publish_has_no_old_text(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            publish.print_diff(None, "new\n", "everef-deep-archive.xml")
+            publish.print_diff(None, "new\n", "everef-eve-online-deep-archive.xml")
         self.assertIn("+new", out.getvalue())
+
+
+class CheckStatusTest(unittest.TestCase):
+    def problems(self, served, expected="text/plain; charset=utf-8"):
+        return quietly(publish.check_status, 200, {"Content-Type": served}, b"x", "a.txt", expected)
+
+    def test_same(self):
+        self.assertEqual(self.problems("text/plain; charset=utf-8"), [])
+
+    def test_no_space_before_parameter(self):
+        # What data.everef.net serves for a text/plain; charset=utf-8 upload.
+        self.assertEqual(self.problems("text/plain;charset=utf-8"), [])
+
+    def test_case_ignored(self):
+        self.assertEqual(self.problems("Text/Plain; Charset=UTF-8"), [])
+
+    def test_other_charset(self):
+        self.assertEqual(len(self.problems("text/plain; charset=iso-8859-1")), 1)
+
+    def test_missing_charset(self):
+        self.assertEqual(len(self.problems("text/plain")), 1)
+
+    def test_other_type(self):
+        self.assertEqual(len(self.problems("application/octet-stream", "application/x-bittorrent")), 1)
 
 
 if __name__ == "__main__":

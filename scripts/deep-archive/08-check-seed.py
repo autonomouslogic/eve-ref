@@ -163,6 +163,7 @@ def test_download(workflow, torrent_id):
             "--file-allocation=none",
             "--enable-color=false",
             f"--summary-interval={ARIA2C_SUMMARY_INTERVAL}",
+            "--show-console-readout=false",
             "--console-log-level=warn",
             torrent_path,
         )

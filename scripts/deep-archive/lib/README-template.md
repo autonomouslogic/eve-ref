@@ -1,5 +1,5 @@
-# EVE Ref Deep Archive #{sequence} for EVE Online
-This is an EVE Ref Deep Archive torrent dated up to {cutoff}.
+# EVE Ref EVE Online Deep Archive #{sequence}
+This is an EVE Ref EVE Online Deep Archive torrent dated up to {cutoff}.
 It contains data from [data.everef.net](https://data.everef.net/).
 For more information, see [the docs](https://docs.everef.net/datasets/deep-archive.html).
 

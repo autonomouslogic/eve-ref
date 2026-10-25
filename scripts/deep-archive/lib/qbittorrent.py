@@ -1,6 +1,6 @@
 """
 qbittorrent: a tiny client for qBittorrent's Web API (https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API),
-stdlib only (urllib), for 00-preflight, 07-seed, 08-check-seed and 11-check-before-delete.
+stdlib only (urllib), for 00-preflight, 07-seed, 08-check-seed and 12-check-before-delete.
 """
 
 import json
@@ -20,6 +20,22 @@ def torrent_id(v1_hash, v2_hash):
     this ID, so a hybrid torrent isn't found by its v1 info-hash.
     """
     return v2_hash[:40] if v2_hash else v1_hash
+
+
+def check_added(text):
+    """
+    Raises QbittorrentError unless torrents/add's response says the torrent was added: "Ok." (or nothing) before
+    qBittorrent 5.2, JSON with success_count and failure_count from 5.2 on.
+    """
+    text = text.strip()
+    if text in ("Ok.", ""):
+        return
+    try:
+        result = json.loads(text)
+    except ValueError:
+        raise QbittorrentError(f"Add torrent failed: {text!r}")
+    if not isinstance(result, dict) or result.get("failure_count") != 0 or result.get("success_count") != 1:
+        raise QbittorrentError(f"Add torrent failed: {text!r}")
 
 
 def without_default_port(url):
@@ -81,18 +97,14 @@ class Client:
         )
         body = "".join(parts).encode("utf-8") + torrent_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
         headers = {"Content-Type": f"multipart/form-data; boundary={boundary}"}
-        text = self._request("POST", "/api/v2/torrents/add", data=body, headers=headers)
-        if text.strip() not in ("Ok.", ""):
-            raise QbittorrentError(f"Add torrent failed: {text.strip()!r}")
+        check_added(self._request("POST", "/api/v2/torrents/add", data=body, headers=headers))
 
     def add_torrent_magnet(self, magnet_uri, save_path, category=None):
         fields = {"urls": magnet_uri, "savepath": save_path, "autoTMM": "false"}
         if category:
             fields["category"] = category
         body = urllib.parse.urlencode(fields).encode()
-        text = self._request("POST", "/api/v2/torrents/add", data=body)
-        if text.strip() not in ("Ok.", ""):
-            raise QbittorrentError(f"Add magnet failed: {text.strip()!r}")
+        check_added(self._request("POST", "/api/v2/torrents/add", data=body))
 
     def info(self, info_hash):
         """The torrent's info dict (hashes, progress, state, …), or None if it isn't added."""

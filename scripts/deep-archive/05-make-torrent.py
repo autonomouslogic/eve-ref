@@ -152,7 +152,7 @@ def main():
     total_bytes = sum(files.values()) + sum(
         os.path.getsize(os.path.join(content_dir, name)) for name in root_names
     )
-    print(f"Hashing {fmt_count(num_pieces)} pieces ({fmt_bytes(total_bytes)}) -- this takes hours for a full torrent")
+    print(f"Hashing {fmt_count(num_pieces)} pieces ({fmt_bytes(total_bytes)})")
     lt.set_piece_hashes(ct, workflow.seed_dir)
     data = lt.bencode(ct.generate())
     tmp = torrent_path + ".tmp"

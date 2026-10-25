@@ -2,7 +2,21 @@
 The [Deep Archive](https://data.everef.net/deep-archive) moves old data off
 [data.everef.net](https://data.everef.net/) and into torrent archives.
 
-ℹ️ **To help seed it**, add [the RSS feed](https://data.everef.net/deep-archive/everef-deep-archive.xml) to your torrent client.
+## Published Torrents
+Below is a list of published torrents.
+
+ℹ️ **To help seed it**, add [the RSS feed](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml) to your torrent client.
+
+| Torrent | Files | Size | Magnet | v1 infohash | v2 infohash |
+|---------|-------|------|--------|-------------|-------------|
+|         |       |      |        |             |             |
+
+[See all files](https://data.everef.net/deep-archive).
+
+To download the archives without a torrent client, use [aria2](https://aria2.github.io/):
+```bash
+aria2c https://data.everef.net/deep-archive/everef-eve-online-deep-archive-00.torrent
+```
 
 ## Structure
 Each archive is one torrent file, named `everef-eve-online-deep-archive-NN.torrent`, where `NN` is a sequential number.
@@ -46,15 +60,9 @@ Once a torrent is published, those files are removed from `data.everef.net`.
 The torrent and its seeders become the only remaining source.
 
 Archiving is done on an ad-hoc basis without a set schedule.
-Whenever a new archive has been prepared, it will be added to [everef-deep-archive.xml](https://data.everef.net/deep-archive/everef-deep-archive.xml).
+Whenever a new archive has been prepared, it will be added to [everef-eve-online-deep-archive.xml](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml).
 
 
 ### What _never_ gets archived
 * [`market-history/`](market-history.md) and [`killmails/`](killmails.md), since these effectively function as a database, with old files updated in-place.
 * [`ccp/`](https://data.everef.net/ccp/), CCP's own data (SDE, MER, image collections and so on), for now.* Any `*-latest*` files
-
-## Published Torrents
-Below is a list of published torrents:
-
-| Torrent | v1 info-hash | v2 info-hash | Magnet |
-|---|---|---|---|

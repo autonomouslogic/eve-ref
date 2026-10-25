@@ -6,9 +6,9 @@ delete set from the torrent against a fresh listing of the bucket (PLAN 2.14).
 
 DRAFT. Read-only on the bucket and qBittorrent.
 
-    11-check-before-delete.py
+    12-check-before-delete.py
 
-Needs 09-publish's completion file (update-docs is manual), and refuses to run twice (lib/workflow.py). Fails
+Needs 09-publish's completion file (update-docs and index-deep-archive are manual), and refuses to run twice (lib/workflow.py). Fails
 if the docs page doesn't list the torrent's ID and v1 info-hash: update-docs must come first.
 
 A data file is in the delete set only if all of these hold:
@@ -24,7 +24,7 @@ problem; look before going on (README, "Check before delete").
 Writes, in SCRATCH_DIR:
 
     delete-set.json              torrent_id, confirmed files (path, size, last_modified), bytes, datasets, failed
-    11-check-before-delete.done  completion file
+    12-check-before-delete.done  completion file
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY,

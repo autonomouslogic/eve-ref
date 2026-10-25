@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
 check-delete: a step of the EVE Ref Deep Archive workflow. Checks the delete from scratch, against a fresh
-listing of the bucket -- never trusting 12-delete's own result.
+listing of the bucket -- never trusting 13-delete's own result.
 
 DRAFT. Read-only on the bucket.
 
-    13-check-delete.py
+    14-check-delete.py
 
-Needs 12-delete's completion file, and refuses to run twice (lib/workflow.py).
+Needs 13-delete's completion file, and refuses to run twice (lib/workflow.py).
 
 - Every path in deleted.jsonl (data and index cleanup) is gone from a fresh listing.
 - Every path that failed the pre-delete check (delete-set.json's "failed" list) is still there, untouched.
 - No path that existed when 01-find listed the bucket (find/listing.jsonl.gz), other than the ones just deleted,
-  has disappeared: 12-delete's rclone delete call only ever takes an explicit file list (never a prefix), but this
+  has disappeared: 13-delete's rclone delete call only ever takes an explicit file list (never a prefix), but this
   is the only check that would catch it deleting something else too. It allows the site to have grown (new uploads
   since find ran) and files with new content at the same path (sizes/mtimes aren't compared: the normal scrapers
   keep writing throughout the workflow), only never a find-time path vanishing outside the delete set.
@@ -65,7 +65,7 @@ def main():
         delete_set = json.load(f)
     failed = delete_set.get("failed", [])
     print(f"{fmt_count(len(deleted))} deleted entries in {deleted_log}")
-    print(f"{fmt_count(len(failed))} paths that failed 11-check-before-delete, should still be present")
+    print(f"{fmt_count(len(failed))} paths that failed 12-check-before-delete, should still be present")
 
     section("Fresh listing")
     fresh = {path: (size, mtime) for path, size, mtime in lsjson(remote, recursive=True)}
@@ -84,11 +84,11 @@ def main():
     missing_failed = [f["path"] for f in failed if "path" in f and f["path"] not in fresh]
     if missing_failed:
         problems.append(
-            f"{len(missing_failed)} path(s) that failed 11-check-before-delete are gone too: "
+            f"{len(missing_failed)} path(s) that failed 12-check-before-delete are gone too: "
             f"{missing_failed[:LOG_SAMPLE]}"
         )
     else:
-        print(f"All {fmt_count(len(failed))} paths that failed 11-check-before-delete are still there")
+        print(f"All {fmt_count(len(failed))} paths that failed 12-check-before-delete are still there")
 
     section("No other find-time paths disappeared")
     listing_path = os.path.join(workflow.scratch_dir, "find", "listing.jsonl.gz")
@@ -124,7 +124,7 @@ def main():
 
 def find_unexpectedly_gone(original, deleted_paths, failed_paths, fresh):
     """
-    Find-time paths (01-find's listing.jsonl.gz) that are neither in the delete set nor 11-check-before-delete's
+    Find-time paths (01-find's listing.jsonl.gz) that are neither in the delete set nor 12-check-before-delete's
     failed list, but are missing from a fresh listing anyway: something other than this workflow's confirmed delete
     set removed them. Sorted for a stable, readable sample.
     """

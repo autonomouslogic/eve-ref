@@ -36,7 +36,7 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    in NOTES.md before going on.
 8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file, with each file's size and
    modification time as on disk (only an index.json can differ from the selection). 05-make-torrent and
-   11-check-before-delete use it.
+   12-check-before-delete use it.
 9. Write SCRATCH_DIR/<ID>.sha256 from the manifest: standard `sha256sum` format ("<hex>  <path>", sorted by path,
    "\n" line endings), one line per file. Stays in SCRATCH_DIR for now; 04-sign-sha256 signs it with minisign, and
    05-make-torrent copies both into the torrent's content folder, so they end up inside the torrent, next to the

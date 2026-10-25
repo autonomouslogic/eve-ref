@@ -6,6 +6,7 @@ Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make t
 
 import os
 import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -46,6 +47,31 @@ class ClientAuthTest(unittest.TestCase):
         ):
             with self.subTest(url=url):
                 self.assertEqual([r.host for r in self.requests("qbt_key", url)], [host, host])
+
+
+class AddTorrentTest(unittest.TestCase):
+    def add(self, response):
+        with tempfile.NamedTemporaryFile(suffix=".torrent") as torrent:
+            with patch.object(qbittorrent.urllib.request, "urlopen") as urlopen:
+                urlopen.return_value.__enter__.return_value.read.return_value = response
+                qbittorrent.Client("http://localhost:8080", "qbt_key").add_torrent_file(torrent.name, "/downloads")
+
+    def test_ok_text(self):
+        # qBittorrent before 5.2.
+        self.add(b"Ok.")
+
+    def test_json_success(self):
+        # qBittorrent 5.2+.
+        self.add(b'{"added_torrent_ids":["64d67e474d13c31da81afecb310bac2082dd416e"],"failure_count":0,'
+                 b'"pending_count":0,"success_count":1}')
+
+    def test_json_failure(self):
+        with self.assertRaises(qbittorrent.QbittorrentError):
+            self.add(b'{"added_torrent_ids":[],"failure_count":1,"pending_count":0,"success_count":0}')
+
+    def test_fails_text(self):
+        with self.assertRaises(qbittorrent.QbittorrentError):
+            self.add(b"Fails.")
 
 
 class TorrentIdTest(unittest.TestCase):

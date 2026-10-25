@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 publish: a step of the EVE Ref Deep Archive workflow. Uploads <ID>.torrent, <ID>.txt and <ID>.torrent.minisig to
-the bucket's deep-archive/, rebuilds everef-deep-archive.xml from every published .torrent, and checks what
+the bucket's deep-archive/, rebuilds everef-eve-online-deep-archive.xml from every published .torrent, and checks what
 data.everef.net serves for all of them.
 
-DRAFT. Shows the targets and asks before each upload (lib/workflow.py, "Show, then ask"). Writes to the data bucket.
+DRAFT. Shows the targets, then uploads without asking. Writes to the data bucket.
 
     09-publish.py
 
@@ -13,19 +13,19 @@ Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py
 1. Upload <ID>.torrent, <ID>.txt and <ID>.torrent.minisig to deep-archive/ with the right Content-Type (all three
    from SCRATCH_DIR). The README, the checksum file and its signature stay inside the torrent only -- they're never
    published standalone. <ID>.torrent.minisig (06-sign-torrent) lets someone verify the .torrent file itself,
-   against the minisign key published at /.well-known/minisign.pub, before loading it into a client. Before asking,
+   against the minisign key published at /.well-known/minisign.pub, before loading it into a client. Before uploading,
    verifies <ID>.torrent.minisig against <ID>.torrent with that key (lib/workflow.py's verify_signature), so a
    signature left from before 05-make-torrent was redone is never published. Never overwrites: a file already
    published must be byte-identical to the local one (an earlier attempt that failed later), and is then skipped.
-2. Rebuild everef-deep-archive.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
+2. Rebuild everef-eve-online-deep-archive.xml (RSS 2.0, PLAN 2.7) in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth (PLAN 2.5). Each torrent
    is read with libtorrent: name (the ID), creation date, v1/v2 info-hashes, data
    file count and bytes (the README, checksum file and signature excluded), trackers. Magnet links carry the
    torrent's first MAGNET_TRACKERS trackers; newest first.
-3. Show the diff against what's published, and ask. Before uploading, save the published everef-deep-archive.xml to
+3. Show the diff against what's published. Before uploading, save the published everef-eve-online-deep-archive.xml to
    SCRATCH_DIR/feed-backup/feed-<UTC time>.xml.
 4. Check over HTTPS, never trusting the uploads' own result: <ID>.torrent, <ID>.txt and <ID>.torrent.minisig all
-   return 200 with the right Content-Type and exactly the local bytes; everef-deep-archive.xml is served as
+   return 200 with the right Content-Type and exactly the local bytes; everef-eve-online-deep-archive.xml is served as
    application/rss+xml, is valid XML and has an <item> with this torrent's v1 info-hash as its <guid>. Cloudflare
    may serve the old feed for up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
 5. Print this torrent's URL, v1 and v2 info-hashes, and full magnet link, for the next step (10, update-docs) to copy
@@ -35,7 +35,7 @@ On the first workflow, also add the feed to a qBittorrent RSS reader and check t
 
 Writes, in SCRATCH_DIR:
 
-    feed-backup/feed-<UTC time>.xml   the everef-deep-archive.xml published before this run (none on the first workflow)
+    feed-backup/feed-<UTC time>.xml   the everef-eve-online-deep-archive.xml published before this run (none on the first workflow)
     09-publish.done                   completion file
 
 Environment (or torrents.env, see lib/workflow.py):
@@ -98,7 +98,7 @@ def source_path(workflow, name):
 
 
 # The HTTPS checks retry until they pass or this many seconds have gone by: long enough for Cloudflare's copy of the
-# old everef-deep-archive.xml to expire.
+# old everef-eve-online-deep-archive.xml to expire.
 CHECK_TIMEOUT = FEED_CACHE_MAX_AGE_SECONDS + 60
 CHECK_INTERVAL = 15  # seconds
 
@@ -169,9 +169,6 @@ def upload_torrent(workflow, torrent_id, deep_archive):
     verify_signature(source_path(workflow, f"{torrent_id}.torrent"))
 
     if uploads:
-        typed = input(f"Type {torrent_id} to upload: ")
-        if typed.strip() != torrent_id:
-            fail("Confirmation didn't match, aborting")
         section("Torrent and file list: uploading")
         for local, remote_path, content_type in uploads:
             rclone("copyto", local, remote_path, "--header-upload", f"Content-Type: {content_type}")
@@ -198,7 +195,7 @@ def rclone_cat_bytes(remote_path):
     return result.stdout
 
 
-# Rebuild and upload everef-deep-archive.xml.
+# Rebuild and upload everef-eve-online-deep-archive.xml.
 
 
 def publish_feed(workflow, torrent_id, deep_archive):
@@ -223,26 +220,22 @@ def publish_feed(workflow, torrent_id, deep_archive):
     own_entry = next(e for e in entries if e["id"] == torrent_id)
     feed_xml = build_feed(entries)
 
-    section("Feed: diff of everef-deep-archive.xml")
-    old_xml = fetch_existing(deep_archive, "everef-deep-archive.xml")
-    print_diff(old_xml, feed_xml, "everef-deep-archive.xml")
-
-    typed = input(f"Type {torrent_id} to publish the feed: ")
-    if typed.strip() != torrent_id:
-        fail("Confirmation didn't match, aborting")
+    section("Feed: diff of everef-eve-online-deep-archive.xml")
+    old_xml = fetch_existing(deep_archive, "everef-eve-online-deep-archive.xml")
+    print_diff(old_xml, feed_xml, "everef-eve-online-deep-archive.xml")
 
     section("Feed: backup")
     feed_backup = backup_feed(workflow.scratch_dir, old_xml)
 
     section("Feed: uploading")
-    upload_text(workflow.scratch_dir, deep_archive, "everef-deep-archive.xml", feed_xml, "application/rss+xml")
+    upload_text(workflow.scratch_dir, deep_archive, "everef-eve-online-deep-archive.xml", feed_xml, "application/rss+xml")
     return len(entries), feed_backup, own_entry
 
 
 def backup_feed(scratch_dir, old_xml):
-    """Saves the published everef-deep-archive.xml as SCRATCH_DIR/feed-backup/feed-<UTC time>.xml. Returns its path, or None."""
+    """Saves the published everef-eve-online-deep-archive.xml as SCRATCH_DIR/feed-backup/feed-<UTC time>.xml. Returns its path, or None."""
     if old_xml is None:
-        print("No everef-deep-archive.xml published yet: nothing to back up")
+        print("No everef-eve-online-deep-archive.xml published yet: nothing to back up")
         return None
     backup_dir = os.path.join(scratch_dir, "feed-backup")
     os.makedirs(backup_dir, exist_ok=True)
@@ -250,7 +243,7 @@ def backup_feed(scratch_dir, old_xml):
     path = os.path.join(backup_dir, f"feed-{stamp}.xml")
     with open(path, "w", encoding="utf-8") as f:
         f.write(old_xml)
-    print(f"Saved the published everef-deep-archive.xml to {path}")
+    print(f"Saved the published everef-eve-online-deep-archive.xml to {path}")
     return path
 
 
@@ -393,8 +386,8 @@ def check_published(workflow, torrent_id, v1_hash):
         for name_fmt, content_type in UPLOADS:
             name = name_fmt.format(id=torrent_id)
             problems += check_file(f"{base}/{name}", source_path(workflow, name), content_type)
-        status, headers, body = fetch(f"{base}/everef-deep-archive.xml")
-        problems += check_status(status, headers, body, "everef-deep-archive.xml", "application/rss+xml")
+        status, headers, body = fetch(f"{base}/everef-eve-online-deep-archive.xml")
+        problems += check_status(status, headers, body, "everef-eve-online-deep-archive.xml", "application/rss+xml")
         if body:
             problems += check_feed_item(body, torrent_id, v1_hash)
         if not problems:
@@ -424,9 +417,22 @@ def check_status(status, headers, body, name, expected_content_type):
         return [f"{name}: HTTP {status}"]
     content_type = (headers.get("Content-Type") or "").strip()
     print(f"  200 {content_type}, {len(body)} bytes")
-    if content_type != expected_content_type:
+    if media_type(content_type) != media_type(expected_content_type):
         return [f"{name}: Content-Type {content_type!r}, expected {expected_content_type!r}"]
     return []
+
+
+def media_type(content_type):
+    """
+    A Content-Type as (type, {parameter: value}), lowercased, so equivalent spellings compare equal: the site serves
+    "text/plain;charset=utf-8" for an upload with "text/plain; charset=utf-8".
+    """
+    main, *params = content_type.split(";")
+    parsed = {}
+    for param in params:
+        key, _, value = param.partition("=")
+        parsed[key.strip().lower()] = value.strip().strip('"').lower()
+    return main.strip().lower(), parsed
 
 
 def check_file(url, local_path, expected_content_type):
@@ -444,10 +450,10 @@ def check_feed_item(body, torrent_id, v1_hash):
     try:
         root = ET.fromstring(body)
     except ET.ParseError as e:
-        return [f"everef-deep-archive.xml: not valid XML: {e}"]
+        return [f"everef-eve-online-deep-archive.xml: not valid XML: {e}"]
     guids = {item.findtext("guid") for item in root.iter("item")}
     if v1_hash not in guids:
-        return [f"everef-deep-archive.xml: no <item> with guid {v1_hash} ({torrent_id})"]
+        return [f"everef-eve-online-deep-archive.xml: no <item> with guid {v1_hash} ({torrent_id})"]
     print(f"  <item> with guid {v1_hash} found")
     return []
 

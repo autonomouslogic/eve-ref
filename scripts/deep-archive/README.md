@@ -52,12 +52,13 @@ or anything else looks wrong, stop. Keep notes in `$SCRATCH_DIR/NOTES.md`.
 | 08 Check seed | `./08-check-seed.py` | | |
 | 09 Publish | `./09-publish.py` | **`deep-archive/`**, `feed-backup/` | write |
 | 10 Update docs | manual | | |
-| 11 Check before delete | `./11-check-before-delete.py` | `delete-set.json` | read |
-| 12 Delete | `./12-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl` | write |
-| 13 Check delete | `./13-check-delete.py` | | read |
-| 14 Full DataIndex | manual | | |
-| 15 Check site | `./15-check-site.py` | | |
-| 16 Delete the scratch directory | manual | | |
+| 11 Index deep-archive/ | manual | `deep-archive/` index files | write |
+| 12 Check before delete | `./12-check-before-delete.py` | `delete-set.json` | read |
+| 13 Delete | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl` | write |
+| 14 Check delete | `./14-check-delete.py` | | read |
+| 15 Full DataIndex | manual | | |
+| 16 Check site | `./16-check-site.py` | | |
+| 17 Delete the scratch directory | manual | | |
 
 Paths without a folder are in `$SCRATCH_DIR`.
 
@@ -116,7 +117,7 @@ Give the trackers a few minutes after seed first.
 
 ### 09: Publish
 Verifies the torrent's signature, uploads `<ID>.torrent`, `<ID>.txt` and `<ID>.torrent.minisig` to `deep-archive/`,
-rebuilds `everef-deep-archive.xml`, and checks what the site serves. Asks before each upload, and never overwrites.
+rebuilds `everef-eve-online-deep-archive.xml`, and checks what the site serves. Uploads without asking, and never overwrites.
 - The only difference in the feed is the new `<ID>`.
 - On the first workflow only: add the feed to a qBittorrent RSS reader and check the item shows up.
 
@@ -124,16 +125,23 @@ rebuilds `everef-deep-archive.xml`, and checks what the site serves. Asks before
 Add the torrent to the "Torrents" table on `docs/src/datasets/deep-archive.md`, newest first: its ID linked to its URL,
 the v1 and v2 info-hashes, and the magnet link, all printed by publish. Commit it and deploy the docs site.
 
-### 11: Check before delete
+### 11: Index deep-archive/ (manual)
+From a checkout with production settings in the environment:
+```
+DATA_INDEX_PREFIX=/deep-archive/ DATA_INDEX_RECURSIVE=false ./gradlew dataIndex
+```
+- https://data.everef.net/deep-archive/ lists the new torrent, its `.txt` and signature, and the feed.
+
+### 12: Check before delete
 Checks the docs page lists the torrent, the seeder is clean and the published `.torrent` matches, then builds the
 delete set from the torrent against a fresh listing (PLAN 2.14).
 - Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
 - Note the delete set: files, bytes, datasets.
 
-### 12: Delete
+### 13: Delete
 ```
-./12-delete.py              # dry run, as often as you like
-./12-delete.py --execute    # type the torrent ID to confirm
+./13-delete.py              # dry run, as often as you like
+./13-delete.py --execute    # type the torrent ID to confirm
 ```
 - The dry run shows exactly the delete set from check-before-delete.
 
@@ -141,22 +149,22 @@ delete set from the torrent against a fresh listing (PLAN 2.14).
 empty (PLAN 2.15). Treat it as permanent. Until the full `DataIndex`, jobs that crawl the site (`sync-fuzzwork-ordersets`,
 the market history scrape) may fail on stale links; they recover on their next run after it.
 
-### 13: Check delete
+### 14: Check delete
 - Everything in the delete set is gone, no folder holds only index files, and every other path that was on the
   bucket when `01-find` ran is still there.
 
-### 14: Full DataIndex (manual)
+### 15: Full DataIndex (manual)
 ```
 docker run --rm --env-file <production env> <eve-ref image> data-index
 ```
 Or `./gradlew dataIndex` from a checkout with production settings in the environment. Leave `DATA_INDEX_PREFIX` unset.
 
-### 15: Check site
+### 16: Check site
 - Sampled deleted URLs return 404, or 200 from Cloudflare's cache (PLAN 2.16).
 - The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt`, the signature and the
   feed.
 
-### 16: Delete the scratch directory (manual)
+### 17: Delete the scratch directory (manual)
 Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 
 ---
@@ -171,7 +179,8 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 - **Output**, like the roll-up scripts: `🚀` once, `🔵` sections, `🟡` warnings (the step carries on), `🔴`
   errors (the step stops), `✅` last on success. Everything is also
   logged to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
-- **Show, then ask** before anything that writes to the bucket or qBittorrent.
+- **Show, then ask** before deleting from the bucket (`13-delete`). Other writes (`07-seed`, `09-publish`) show
+  what they do and go ahead.
 - **Checks re-derive everything** from the bucket, disk, qBittorrent or site. Signatures are verified again before
   each use.
 - The two signing steps are bash (`lib/sign.sh`), with the same rules.
@@ -197,7 +206,7 @@ Everything else is fixed in `lib/workflow.py`: size limits, `TORRENT_EXCLUDE`, `
 
 ```
 scripts/deep-archive/
-  00-preflight.py … 15-check-site.py   # the steps; 04 and 06 are .sh
+  00-preflight.py … 16-check-site.py   # the steps; 04 and 06 are .sh
   lib/                                 # shared code (workflow.py, sign.sh, …) and the README and comment templates
   tests/
 
@@ -225,7 +234,7 @@ hide markers in B2's web console is quicker (PLAN 2.14). Then run a full `DataIn
 
 ## Appendix E: If data changed
 
-If `11-check-before-delete` finds a file that changed after it was selected, that file isn't deleted; the rest is.
+If `12-check-before-delete` finds a file that changed after it was selected, that file isn't deleted; the rest is.
 Note it in `NOTES.md`. There is no replacement torrent. The file stays on the site at a path the published `<ID>.txt`
 lists, so the next `01-find` stops with a hard error on it, as on any file check-before-delete leaves on the site.
 That isn't handled yet: resolve it by hand if it ever happens (PLAN Appendix A). Find out why it changed; if the

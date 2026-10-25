@@ -1,5 +1,5 @@
 """
-Tests for 11-check-before-delete.py: which of the torrent's files are data files (torrent_data_files) and make the
+Tests for 12-check-before-delete.py: which of the torrent's files are data files (torrent_data_files) and make the
 delete set (build_delete_set), and that the docs page lists the torrent before anything is deleted
 (docs_page_problems).
 
@@ -14,7 +14,7 @@ import unittest
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 SPEC = importlib.util.spec_from_file_location(
-    "check_before_delete", os.path.join(HERE, "..", "11-check-before-delete.py")
+    "check_before_delete", os.path.join(HERE, "..", "12-check-before-delete.py")
 )
 check_before_delete = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(check_before_delete)
