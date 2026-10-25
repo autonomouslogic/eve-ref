@@ -11,7 +11,7 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
-import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -105,7 +105,7 @@ public class SyncStaticData implements Command {
 	}
 
 	@SneakyThrows
-	private boolean syncFile(StaticDataMeta latest, StandardArchivePathFactory type, String variant) {
+	private boolean syncFile(StaticDataMeta latest, ArchivePathFactory type, String variant) {
 		var latestUri = dataUrl(latest.getBuildNumber(), variant);
 
 		var latestPath = getArchivePath(latest.getReleaseDate(), type, latest.getBuildNumber());
@@ -131,7 +131,7 @@ public class SyncStaticData implements Command {
 	 * @return
 	 */
 	@SneakyThrows
-	private void uploadFile(File outputFile, StandardArchivePathFactory type, int buildNumber) {
+	private void uploadFile(File outputFile, ArchivePathFactory type, int buildNumber) {
 		var latestPath = dataPath.resolve(type.createLatestPath());
 		var filetime = Files.getLastModifiedTime(outputFile.toPath()).toInstant();
 		var archivePath = getArchivePath(filetime, type, buildNumber);
@@ -144,8 +144,7 @@ public class SyncStaticData implements Command {
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 
-	private S3Url getArchivePath(Instant filetime, StandardArchivePathFactory type, int buildNumber)
-			throws IOException {
+	private S3Url getArchivePath(Instant filetime, ArchivePathFactory type, int buildNumber) throws IOException {
 		var archivePathBase = type.createArchivePath(filetime);
 		archivePathBase =
 				archivePathBase.replace("eve-online-static-data-", "eve-online-static-data-" + buildNumber + "-");

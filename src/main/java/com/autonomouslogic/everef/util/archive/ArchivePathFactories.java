@@ -99,27 +99,31 @@ public class ArchivePathFactories {
 			.latestSuffix(".json")
 			.build());
 
-	public static final StandardArchivePathFactory SDE_V2_JSONL = register(StandardArchivePathFactory.builder()
-			.name("sde-v2-jsonl")
-			.folder("ccp/sde")
-			.historyFolder(false)
-			.yearFolder(true)
-			.dateFolder(false)
-			.filename("eve-online-static-data")
-			.fileDateTimeFormatter(null)
-			.suffix("-jsonl.zip")
-			.build());
+	public static final SdeV2ArchivePathFactory SDE_V2_JSONL = register(new SdeV2ArchivePathFactory(
+			StandardArchivePathFactory.builder()
+					.name("sde-v2-jsonl")
+					.folder("ccp/sde")
+					.historyFolder(false)
+					.yearFolder(true)
+					.dateFolder(false)
+					.filename("eve-online-static-data")
+					.fileDateTimeFormatter(null)
+					.suffix("-jsonl.zip")
+					.build(),
+			"jsonl"));
 
-	public static final StandardArchivePathFactory SDE_V2_YAML = register(StandardArchivePathFactory.builder()
-			.name("sde-v2-yaml")
-			.folder("ccp/sde")
-			.historyFolder(false)
-			.yearFolder(true)
-			.dateFolder(false)
-			.filename("eve-online-static-data")
-			.fileDateTimeFormatter(null)
-			.suffix("-yaml.zip")
-			.build());
+	public static final SdeV2ArchivePathFactory SDE_V2_YAML = register(new SdeV2ArchivePathFactory(
+			StandardArchivePathFactory.builder()
+					.name("sde-v2-yaml")
+					.folder("ccp/sde")
+					.historyFolder(false)
+					.yearFolder(true)
+					.dateFolder(false)
+					.filename("eve-online-static-data")
+					.fileDateTimeFormatter(null)
+					.suffix("-yaml.zip")
+					.build(),
+			"yaml"));
 
 	public static final FuzzworkOrdersetArchivePathFactory FUZZWORK_ORDERSET =
 			register(new FuzzworkOrdersetArchivePathFactory());
@@ -284,6 +288,12 @@ public class ArchivePathFactories {
 			.build());
 
 	public static final MerArchivePathFactory MER = register(new MerArchivePathFactory());
+
+	public static final DeepArchiveArchivePathFactory DEEP_ARCHIVE =
+			register(new DeepArchiveArchivePathFactory("everef-eve-online-deep-archive-torrent", ".torrent"));
+
+	public static final DeepArchiveArchivePathFactory DEEP_ARCHIVE_FILES =
+			register(new DeepArchiveArchivePathFactory("everef-eve-online-deep-archive-files", ".txt"));
 
 	public static final StandardArchivePathFactory WARS = register(StandardArchivePathFactory.builder()
 			.folder("wars")

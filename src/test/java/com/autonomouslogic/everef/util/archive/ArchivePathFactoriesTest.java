@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 public class ArchivePathFactoriesTest {
@@ -80,6 +81,51 @@ public class ArchivePathFactoriesTest {
 				Instant.parse("2023-01-01T00:00:00Z"),
 				"ccp/sde/2023/eve-online-static-data-yaml.zip",
 				"ccp/sde/eve-online-static-data-latest-yaml.zip");
+	}
+
+	@Test
+	void shouldMatchDeepArchiveTorrentNames() {
+		var factory = ArchivePathFactories.DEEP_ARCHIVE;
+		var path = "deep-archive/everef-eve-online-deep-archive-00.torrent";
+		assertEquals(0L, (long) factory.parseSequenceNumber(path));
+		assertNull(factory.parseArchiveTime(path));
+
+		var match = ArchivePathFactories.tryMatch(path);
+		assertEquals("everef-eve-online-deep-archive-torrent", match.get().getType());
+		assertEquals(0L, match.get().getSequence().get());
+	}
+
+	@Test
+	void shouldMatchDeepArchiveFilesNames() {
+		var factory = ArchivePathFactories.DEEP_ARCHIVE_FILES;
+		var path = "deep-archive/everef-eve-online-deep-archive-00.txt";
+		assertEquals(0L, (long) factory.parseSequenceNumber(path));
+		assertNull(factory.parseArchiveTime(path));
+
+		var match = ArchivePathFactories.tryMatch(path);
+		assertEquals("everef-eve-online-deep-archive-files", match.get().getType());
+		assertEquals(0L, match.get().getSequence().get());
+	}
+
+	@Test
+	void shouldMatchSdeV2JsonlBuildNumberNames() {
+		var factory = ArchivePathFactories.SDE_V2_JSONL;
+		var path = "ccp/sde/2026/eve-online-static-data-3167101-jsonl.zip";
+		assertNull(factory.parseArchiveTime(path));
+		assertEquals(3167101L, (long) factory.parseSequenceNumber(path));
+
+		var match = ArchivePathFactories.tryMatch(path);
+		assertEquals("sde-v2-jsonl", match.get().getType());
+		assertEquals(Optional.empty(), match.get().getDate());
+		assertEquals(3167101L, match.get().getSequence().get());
+	}
+
+	@Test
+	void shouldMatchSdeV2YamlBuildNumberNames() {
+		var factory = ArchivePathFactories.SDE_V2_YAML;
+		var path = "ccp/sde/2025/eve-online-static-data-3030547-yaml.zip";
+		assertNull(factory.parseArchiveTime(path));
+		assertEquals(3030547L, (long) factory.parseSequenceNumber(path));
 	}
 
 	@Test
