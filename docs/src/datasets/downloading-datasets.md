@@ -1,6 +1,7 @@
 # Downloading Datasets
 Downloading full datasets off [data.everef.net](https://data.everef.net/) is allowed.
 The current host does not charge for bandwidth, so knock yourself out.
+Old data is periodically moved into the [Deep Archive](deep-archive.md).
 
 `data.everef.net` does not return `last-modified` or `etag` headers, so conditional requests based on those headers do not work.
 Use `content-length`/file size instead to avoid downloading the same data multiple times.

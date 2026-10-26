@@ -59,6 +59,12 @@ REMOTE_NAME = "everef"
 # The site folder holding the published torrents and their file lists (NOTES.md "Published files").
 DEEP_ARCHIVE_DIR = "deep-archive"
 
+# Folders under SEED_DIR that aren't torrent content, skipped by anything walking the merged tree (NOTES.md "Merged
+# seed directory"): the torrent being built (03-load to 06-sign-torrent, moved into place by 07-seed), and a signed
+# copy of every published .torrent and its signature (NOTES.md "Open issues").
+STAGING_DIR_NAME = ".staging"
+TORRENTS_DIR_NAME = ".torrents"
+
 # Folders never archived (NOTES.md "Never archived"): paths from the site root. market-history and killmails work
 # as databases, with past files modified in place, which a torrent can't follow. deep-archive holds the torrents themselves.
 # ccp (CCP's own data: SDE, MER, image collections, CSM results, ...) has to stay excluded for now: the docs link its
@@ -108,10 +114,21 @@ def torrent_sequence(torrent_id):
 
 def root_file_names(torrent_id):
     """
-    The files at the root of a torrent, next to the data: its README, checksum file and the checksum file's
-    signature. Not data files: never in the manifest, the .txt file list or the delete set.
+    The files at the root of a torrent, next to the data: its README, checksum file, the checksum file's signature,
+    and the index snapshot tarball (NOTES.md "Index snapshot"). Not data files: never in the manifest, the .txt file
+    list or the delete set.
     """
-    return {f"{torrent_id}-README.md", f"{torrent_id}.sha256", f"{torrent_id}.sha256.minisig"}
+    return {
+        f"{torrent_id}-README.md",
+        f"{torrent_id}.sha256",
+        f"{torrent_id}.sha256.minisig",
+        f"{torrent_id}-index.tar.xz",
+    }
+
+
+def index_tar_name(torrent_id):
+    """The index snapshot tarball's name: <ID>-index.tar.xz (root_file_names)."""
+    return f"{torrent_id}-index.tar.xz"
 
 
 # Cache-Control max-age for everef-eve-online-deep-archive.xml: short, like DataIndex's index pages
@@ -203,11 +220,11 @@ PIECE_SIZE = 32 * MIB
 
 # Data in one torrent, a soft limit: 01-find stops at the first date that reaches it, and takes that whole date, so a
 # torrent can be somewhat over. Roughly what the seeder holds per torrent and what a full download is.
-MAX_BYTES = 990 * GIB
+MAX_BYTES = 5 * GIB
 
-# Least data in one torrent: 01-find aborts if its selection (index.json included) is smaller, so no workflow makes a
-# small torrent. Rerun it once more data has passed MIN_AGE_YEARS.
-MIN_BYTES = 900 * GIB
+# Least data in one torrent: 01-find aborts if its selection is smaller, so no workflow makes a small torrent. Rerun
+# it once more data has passed MIN_AGE_YEARS.
+MIN_BYTES = 5 * GIB
 
 # Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
 # max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs up to about 12 KB high (its
@@ -499,6 +516,19 @@ class Workflow:
             fail(f"{step_name('find')} hasn't completed: no torrent ID yet")
         return done["torrent_id"]
 
+    def content_dir(self, torrent_id):
+        """
+        Where the torrent is built, SEED_DIR/.staging/<ID>/: find through sign-torrent write here, never directly
+        under SEED_DIR, so an abandoned workflow never leaves files outside any torrent in the merged tree
+        (NOTES.md "Merged seed directory"). 07-seed hard-links everything from here into SEED_DIR itself and removes
+        this folder.
+        """
+        return os.path.join(self.seed_dir, STAGING_DIR_NAME, torrent_id)
+
+    def torrents_dir(self):
+        """SEED_DIR/.torrents/: a signed copy of every published .torrent and its signature (TORRENTS_DIR_NAME)."""
+        return os.path.join(self.seed_dir, TORRENTS_DIR_NAME)
+
 
 def local_copy_dir():
     """
@@ -546,8 +576,15 @@ def file_list_problems(text):
     return problems
 
 
+INDEX_NAMES = {"index.json", "index.html"}
+
+
 def site_path_problem(path):
-    """Why a path isn't a data file's full path from the site root, or None."""
+    """
+    Why a path isn't a data file's full path from the site root, or None. index.json/index.html are never data
+    files: DataIndex rewrites them on every run, so they're snapshotted in the index tarball instead
+    (NOTES.md "Index snapshot"), never selected or put in a torrent.
+    """
     if not path:
         return "empty line"
     if path != path.strip():
@@ -561,11 +598,70 @@ def site_path_problem(path):
         return "empty, . or .. path segment"
     if len(parts) == 1:
         return "at the site root: data files never are, and the torrent's root files aren't listed"
+    if parts[-1] in INDEX_NAMES:
+        return f"an index file ({parts[-1]}): never a data file"
     if parts[0].startswith(TORRENT_ID_PREFIX):
         return "starts with a torrent ID: the torrent's root folder isn't part of the path"
     if parts[0] == DEEP_ARCHIVE_DIR:
         return f"under {DEEP_ARCHIVE_DIR}/"
     return None
+
+
+def _merge_key(path):
+    """A path folded for merge_conflicts' case/Unicode check: NFC-normalised, then case-folded."""
+    import unicodedata
+
+    return unicodedata.normalize("NFC", path).casefold()
+
+
+def merge_conflicts(new_paths, existing_paths=()):
+    """
+    Path problems that would stop new_paths (an iterable of site paths) joining existing_paths (another torrent's, or
+    everything already under SEED_DIR) in one merged folder tree (NOTES.md "No path in two torrents"), as strings for
+    reporting. Two kinds, checked within new_paths and between new_paths and existing_paths:
+    - two paths that are the same once Unicode-normalised (NFC) and case-folded: distinct keys on B2, but the same
+      file on a case-insensitive filesystem (Windows, default macOS) or after Unicode normalisation (also macOS,
+      HFS+/APFS);
+    - one path that is also a folder of another (e.g. "a/b" and "a/b/c"): both are valid B2 keys, but a filesystem
+      can't have a file and a folder at the same path.
+    Exact duplicates are a problem for the caller to check directly (e.g. 01-find's already_archived), not here.
+    """
+    problems = []
+    new_paths = list(new_paths)
+    existing_paths = list(existing_paths)
+
+    folded = {}
+    for path in new_paths:
+        key = _merge_key(path)
+        if key in folded and folded[key] != path:
+            problems.append(f"{path!r} and {folded[key]!r} collide (case/Unicode normalisation)")
+        folded.setdefault(key, path)
+    existing_folded = {}
+    for path in existing_paths:
+        existing_folded.setdefault(_merge_key(path), path)
+    for path in new_paths:
+        key = _merge_key(path)
+        other = existing_folded.get(key)
+        if other is not None and other != path:
+            problems.append(f"{path!r} collides with already-archived {other!r} (case/Unicode normalisation)")
+
+    new_set = set(new_paths)
+    all_paths = new_set | set(existing_paths)
+    prefix_of = {}  # a path used as a folder -> one full path it's a folder of
+    for path in all_paths:
+        parts = path.split("/")
+        for i in range(1, len(parts)):
+            prefix_of.setdefault("/".join(parts[:i]), path)
+    reported = set()
+    for path in sorted(all_paths):
+        child = prefix_of.get(path)
+        if child is None or (path not in new_set and child not in new_set):
+            continue  # a file/folder clash only matters if a new path is one side of it
+        pair = tuple(sorted((path, child)))
+        if pair not in reported:
+            reported.add(pair)
+            problems.append(f"{pair[0]!r} is a file, but {pair[1]!r} needs it as a folder: can't be both")
+    return problems
 
 
 def join(base, path):

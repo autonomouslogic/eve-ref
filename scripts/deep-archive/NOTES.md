@@ -36,6 +36,13 @@ to by name from the code (e.g. `NOTES.md "Deletion"`).
 Nothing relies on cutoffs being in order: `TORRENT_INCLUDE` can put older files in a later torrent. Telling a new
 version of a listed path apart would need its modification time in the `.txt`.
 
+Strict, not just exact: `01-find` also aborts on a selected path that's merely *close* to one already archived or
+already on `SEED_DIR` (`merge_conflicts`, "Merged seed directory") -- the same path once case-folded and
+Unicode-normalised, or a path that's also a folder of another path. Both are fine as distinct keys on B2, but not as
+two entries in the same merged folder tree. index.json used to be the one deliberate exception (DataIndex rewrites
+it every run, so the same folder's would legitimately recur); it's not an exception any more because it's never
+selected at all ("Index snapshot").
+
 ### MIN_BYTES and the torrent size limit
 
 `min_bytes_reached` only enforces `MIN_BYTES` when the cutoff was reached by running out of old-enough candidates
@@ -284,6 +291,33 @@ never pick a torrent up twice.
 - The README's licence text is copied from `LICENSE-CCP`: update both together.
 - The public key is on the main site, not the data bucket, so whoever can write to the bucket can't replace it.
 
+## Index snapshot
+
+`index.json` is never selected and never in a torrent ("No path in two torrents" -- DataIndex rewrites it on every
+run, so its size and date say nothing about the archived data, and it would otherwise legitimately recur across
+more than one torrent's file list). What it holds that nothing else does: `etag` (B2's, not reproduced anywhere
+else) and the `type`, `file_time` and `sequence_number` `ArchivePathFactories` worked out from the path (`size` and
+`last_modified` already match the torrent's own per-file length and `mtime`). Dropping it entirely would lose that,
+with no way to recover it once the source file is gone from the bucket -- so `03-load` snapshots the `index.json`
+of every folder it selects a file from into a root file, `<ID>-index.tar.xz`, instead:
+
+- Downloaded **fresh from the bucket** in `03-load`, not through `LOCAL_COPY_DIR`: the snapshot is meant to be the
+  bucket's current state at archive time, and the local copy is explicitly untrusted elsewhere in the same script.
+- Checked for **coverage** before being tarred up: every selected file must appear in its folder's downloaded
+  `index.json`, with the same size and modification time (to the second) as the selection recorded. A file the
+  snapshot doesn't cover fails the step outright, rather than publishing a tarball that's missing data for files it
+  claims to index: the fix is a `DataIndex` run for that prefix (so the folder's `index.json` catches up), then
+  `03-load` again (resumable).
+- **Members named by site path, no prefix:** every member is named exactly as the bucket names it
+  (`wars/history/index.json`), so extracting the tarball into a copy of the site's root puts each `index.json` back in its original place. It's
+  one tarball, not part of the data tree, so unlike a data file it can't collide with another torrent's paths.
+- **PAX format, sorted by path, zeroed uid/gid/uname/gname, mode 0644**, each member's mtime the downloaded file's
+  own: the same inputs always produce the same tarball bytes. No directory entries (consistent with the data
+  torrent's own file list, which has none either).
+- Not in the manifest, the `.txt` file list or the delete set: it's a root file (`root_file_names`), the same
+  category as the README and the checksum file, never a data file.
+- Covered by `<ID>.sha256`, so a copy obtained any other way can still be checked against the published signature.
+
 ## Deletion
 
 On B2 a new upload always gets a new modification time, so size and time detect changes: no MD5/ETag matching
@@ -345,6 +379,42 @@ seeders. There is **no backup**; the data can't be re-scraped. Ruled out:
 
 A second copy, if ever wanted: another seeder, an offline disk off site, or B2 itself.
 
+## Merged seed directory
+
+`$SEED_DIR` holds every torrent's files laid out as one tree matching data.everef.net, with no torrent's own root
+folder: the same thing a user merging several of these torrents into one download folder (the README template's
+"Merging with other EVE Ref Deep Archive torrents") ends up with. Keeping it that way on the seeder itself means the
+first place a path collision would show up is here, caught by `01-find`'s `merge_conflicts` check before a new
+torrent is even built, rather than discovered later by someone merging their own downloads. It also means the
+monthly check (`check-seed-dir.py`, README Appendix C) tests the exact guarantee users rely on.
+
+- **`$SEED_DIR/.staging/<ID>/`**, not `$SEED_DIR/<ID>/`: where `03-load` through `06-sign-torrent` build a torrent's
+  content (`Workflow.content_dir`). Never merge into the live tree directly -- an aborted run would leave files that
+  belong to no torrent mixed in with the only copy of everything already archived, and cleaning that up would mean
+  deleting inside the merged tree itself, not a self-contained folder.
+- **`$SEED_DIR/.torrents/`**: a signed copy of every published `.torrent` and its `.minisig`, copied in by `07-seed`
+  (closing the "Open issues" item asking for exactly this). `check-seed-dir.py` reads these back, verified, as the
+  authoritative list of what SEED_DIR should contain -- it never trusts the files on disk to say what they are.
+- **The merge (`07-seed`, `lib/merge.py`)**: every file is read from the `.torrent`'s own raw bencoded info dict
+  (path, size, `mtime`; libtorrent's typed API doesn't expose `mtime` once loaded), hard-linked from staging to its
+  site path directly under `$SEED_DIR` (root files land at `$SEED_DIR`'s own root, having no further path segments),
+  verified, and only then unlinked from staging. Every step is safe to resume: `os.link` never overwrites an
+  existing target (it fails instead, which is also how a genuine collision that slipped past `01-find` would be
+  caught here, one layer later), and a staging file is never unlinked until its target is confirmed to be the very
+  same inode with at least one more link elsewhere -- the one guard against ever ending up with zero copies of a
+  file. The plan (which file goes where, and the staging file's `(dev, ino)` recorded at the time) is saved to
+  `$SCRATCH_DIR/merge-plan.json`: once a staging file is unlinked, it can no longer be stat'd to rebuild the plan
+  from scratch, so a resumed run has to read it back instead.
+- **qBittorrent content layout: `NoSubfolder`, not `Original`.** The files are already at their final paths directly
+  under the save path by the time the torrent is added, so `Original` (which would look for them under
+  `$SEED_DIR/<ID>/`) would show the torrent as needing a full download. If qBittorrent's resume data for a torrent is
+  ever lost and it has to be re-added, it must be re-added with `NoSubfolder` by hand -- nothing else remembers which
+  layout a given torrent needs.
+- **Known limitation:** Windows-invalid names, reserved names, and trailing dots or spaces (the "Open issues" item
+  already tracking this for one torrent's own file list) matter more once torrents are expected to merge: a
+  collision from two different torrents' paths colliding under such renaming is exactly the kind `merge_conflicts`
+  is meant to catch, but doesn't yet.
+
 ## Script principles
 
 - Scripts never call the next step. No directory or torrent ID arguments: settings come from `torrents.env`,
@@ -360,9 +430,9 @@ A second copy, if ever wanted: another seeder, an offline disk off site, or B2 i
 
 ### Super seeding
 
-`07-seed` turns it on (`torrents/setSuperSeeding`) right after adding the torrent, before the recheck: libtorrent's
+`07-seed` turns it on (`torrents/setSuperSeeding`) right after adding the torrent, before qBittorrent's initial check finishes: libtorrent's
 docs say the flag "has no effect" until the torrent is actually a seed, so setting it early is safe, and it takes
-over automatically once the recheck finishes. The point is the initial bootstrap: EVE Ref is the only seeder at
+over automatically once that check finishes. The point is the initial bootstrap: EVE Ref is the only seeder at
 first, and super seeding gets the swarm distributing the data among peers faster than a single ordinary seed could,
 by only revealing a few pieces to each peer at a time instead of announcing the full set.
 
@@ -376,8 +446,9 @@ for this.
 
 - **Unchecked on real files:** that rclone's `ModTime` on B2 is the upload time for the Java uploads, and that B2 honours
   Content-Type and Cache-Control set through `--header-upload`.
-- **Between load and the torrent**, there's no reason a file would change (nothing else writes to `$SEED_DIR/<ID>/`
-  between the two steps), but `05-make-torrent` checks anyway, for good measure: `content_problems`' cheap size and
+- **Between load and the torrent**, there's no reason a file would change (nothing else writes to the staging folder,
+  `$SEED_DIR/.staging/<ID>/`, between the two steps), but `05-make-torrent` checks anyway, for good measure:
+  `content_problems`' cheap size and
   modification-time check, then `sha256sum -c` on a random sample of `SHA256_SAMPLE_SIZE` files (`sample_sha256sums`)
   rather than a full re-read: `03-load` already did a full `sha256sum -c` against the same checksum file, and the
   piece hashing right after would catch corruption too, so a second full-content pass only cost time; the sample is
@@ -397,12 +468,16 @@ for this.
 From a review of torrent making against libtorrent, qBittorrent and other clients (2026-10-26; "Sources"). The
 format (v1 only), trackers (a fixed list), the `MIN_BYTES`/`.torrent`-limit interaction, and the load-to-torrent gap
 that review raised are decided and implemented (see "Torrent format", "Piece alignment", "Trackers", "Selection"
-and "Known limitations"). What's left:
+and "Known limitations"). Keeping a copy of `<ID>.torrent` and its signature outside `$SCRATCH_DIR`, and case-fold
+collisions across the merged tree, are also done (`$SEED_DIR/.torrents/`, `merge_conflicts`: "Merged seed
+directory"). What's left:
 
-- Keep a copy of `<ID>.torrent` and its signature in `$SEED_DIR`, outside the torrent's folder: `$SCRATCH_DIR` is
-  deleted.
-- Reject Windows-invalid characters, reserved names (`CON`, `NUL`, …), trailing dots or spaces, and case-only
-  collisions in `site_path_problem`: libtorrent renames such files on Windows, and `sha256sum -c` then fails.
+- Reject Windows-invalid characters, reserved names (`CON`, `NUL`, …), and trailing dots or spaces, in
+  `site_path_problem`: libtorrent renames such files on Windows, and `sha256sum -c` then fails. Matters more now
+  that torrents are expected to merge into one tree ("Merged seed directory"): a renamed file from one torrent could
+  collide with another's path, and `merge_conflicts` doesn't check for this yet.
+- `check-seed-dir.py` doesn't check for a torrent in qBittorrent that isn't in `$SEED_DIR/.torrents/` at all (an
+  extra, unexpected torrent sharing `$SEED_DIR` as its save path): only that every known torrent is seeding cleanly.
 
 ## Sources
 

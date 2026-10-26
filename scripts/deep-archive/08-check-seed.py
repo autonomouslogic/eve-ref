@@ -14,7 +14,13 @@ qBittorrent (Web API):
 - 100% progress with **0 bytes downloaded** (any download means the files on disk don't match the torrent: stop
   and investigate, don't just rerun).
 - State is a seeding state (not still checking, not an error).
+- No file still sits under a <ID>/ root folder (torrents/files): confirms 07-seed's merge actually took and the
+  torrent is seeding with content layout NoSubfolder, not Original.
 - At least one tracker reports as working.
+
+SEED_DIR (lib/seed_dir.py's quick_check, NOTES.md "Merged seed directory"): the whole merged tree against every
+signed torrent in SEED_DIR/.torrents/, not just this one -- every file on disk owned by exactly one torrent, no
+collisions once merged.
 
 Test download (aria2c), only once qBittorrent checks out:
 - aria2c gets SCRATCH_DIR/<ID>.torrent (no magnet link) and downloads only <ID>-README.md into a fresh folder,
@@ -27,7 +33,7 @@ It runs on the workflow host, so it proves the torrent can be downloaded, not th
 outside. If the seeder is on the same host, aria2c may have to reach qBittorrent through the host's own public address
 (NAT hairpinning), which some routers don't allow (NOTES.md "Known limitations").
 
-If the recheck is still running, this fails with the current progress; run it again once it finishes.
+If qBittorrent is still checking the torrent, this fails with the current progress; run it again once it finishes.
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_API_KEY
@@ -44,13 +50,16 @@ import sys
 import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
+import seed_dir  # noqa: E402
 from qbittorrent import Client, QbittorrentError  # noqa: E402
 from trackers import TRACKER_SCHEMES  # noqa: E402
 from workflow import (  # noqa: E402
+    TORRENTS_DIR_NAME,
     Workflow,
     error,
     fail,
     fmt_bytes,
+    fmt_count,
     fmt_duration,
     ok,
     qbittorrent_settings,
@@ -98,6 +107,18 @@ def main():
         )
     if info["state"] not in SEEDING_STATES:
         problems.append(f"state is {info['state']!r}, not a seeding state ({sorted(SEEDING_STATES)})")
+    try:
+        files = client.files(qbittorrent_id)
+    except QbittorrentError as e:
+        fail(f"Can't read the torrent's files: {e}")
+    with_root_folder = files_with_root_folder(files, torrent_id)
+    if with_root_folder:
+        problems.append(
+            f"{len(with_root_folder)} file(s) still under a {torrent_id}/ root folder: not merged "
+            "(content layout isn't NoSubfolder, or this was re-added with Original by mistake)"
+        )
+    else:
+        print(f"{len(files)} files, none under a {torrent_id}/ root folder: merged, NoSubfolder confirmed")
 
     section("Trackers")
     try:
@@ -118,6 +139,18 @@ def main():
             error(f"  {problem}")
         fail(f"{len(problems)} problems with the seed")
 
+    section("SEED_DIR inventory")
+    torrents_dir = os.path.join(workflow.seed_dir, TORRENTS_DIR_NAME)
+    try:
+        torrents, disk, inventory_problems = seed_dir.quick_check(workflow.seed_dir, torrents_dir)
+    except seed_dir.SeedDirError as e:
+        fail(str(e))
+    if inventory_problems:
+        for problem in inventory_problems[:20]:
+            error(f"  {problem}")
+        fail(f"{fmt_count(len(inventory_problems))} problems in {workflow.seed_dir} (check-seed-dir.py for more)")
+    print(f"{fmt_count(len(torrents))} torrents, {fmt_count(len(disk))} files, all owned, no collisions")
+
     section("Test download")
     readme_bytes = test_download(workflow, torrent_id)
 
@@ -136,6 +169,12 @@ def main():
     ok(f"Check seed OK for {torrent_id}")
 
 
+def files_with_root_folder(files, torrent_id):
+    """The names (torrents/files, backslash normalised) of any files still under a <ID>/ root folder: not merged."""
+    prefix = torrent_id + "/"
+    return [f["name"] for f in files if f["name"].replace("\\", "/").startswith(prefix)]
+
+
 def working_trackers(trackers):
     """
     The torrent's trackers that qBittorrent's torrents/trackers reports as working. Only real trackers count:
@@ -151,7 +190,10 @@ def test_download(workflow, torrent_id):
     """
     torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
     readme_name = f"{torrent_id}-README.md"
-    seed_copy = os.path.join(workflow.seed_dir, torrent_id, readme_name)
+    # Merged, no subfolder (NOTES.md "Merged seed directory"): the README is directly under SEED_DIR, not
+    # SEED_DIR/<ID>/. The torrent's own internal layout is unaffected by qBittorrent's content layout, so aria2c
+    # (a separate client, downloading straight from the .torrent) still fetches it into download_dir/<ID>/<name>.
+    seed_copy = os.path.join(workflow.seed_dir, readme_name)
     if not os.path.isfile(torrent_path):
         fail(f"Torrent not found: {torrent_path}")
     index = aria2c_file_index(torrent_path, f"{torrent_id}/{readme_name}")

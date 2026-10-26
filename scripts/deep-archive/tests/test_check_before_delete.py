@@ -71,12 +71,12 @@ class BuildDeleteSetTest(unittest.TestCase):
 class TorrentDataFilesTest(unittest.TestCase):
     ID = "everef-eve-online-deep-archive-00"
 
-    def test_root_files_and_index_json_are_not_data_files(self):
+    def test_root_files_are_not_data_files(self):
         files = [
             (f"{self.ID}/{self.ID}-README.md", 1),
             (f"{self.ID}/{self.ID}.sha256", 2),
             (f"{self.ID}/{self.ID}.sha256.minisig", 3),
-            (f"{self.ID}/market-orders/history/2023/2023-01-01/index.json", 4),
+            (f"{self.ID}/{self.ID}-index.tar.xz", 4),
             (f"{self.ID}/{PATH}", 10),
         ]
         self.assertEqual(check_before_delete.torrent_data_files(files, self.ID), {PATH: 10})

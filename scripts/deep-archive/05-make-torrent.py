@@ -3,7 +3,7 @@
 make-torrent: a step of the EVE Ref Deep Archive workflow. Writes the torrent's README, copies in the signed
 checksum file, then makes the v1 .torrent and its file list, and checks both.
 
-DRAFT. Writes $SEED_DIR/<ID>/<ID>-README.md, <ID>.sha256 and <ID>.sha256.minisig (copied in), and
+DRAFT. Writes $SEED_DIR/.staging/<ID>/<ID>-README.md, <ID>.sha256 and <ID>.sha256.minisig (copied in), and
 SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 
     05-make-torrent.py
@@ -11,33 +11,35 @@ SCRATCH_DIR/<ID>.torrent, SCRATCH_DIR/<ID>.txt.
 Needs 04-sign-sha256's completion file, and refuses to run twice (lib/workflow.py). Slow: hashes every piece of every
 file (hours for a full torrent), with a progress line every PROGRESS_INTERVAL seconds.
 
-First checks every manifest file in $SEED_DIR/<ID>/ still has the manifest's size and modification time
+First checks every manifest file in $SEED_DIR/.staging/<ID>/ still has the manifest's size and modification time
 (content_problems; NOTES.md "Known limitations"), so a file changed on disk since 03-load hashed it doesn't go into the
 torrent unnoticed. Then runs sha256sum -c on a random sample of SHA256_SAMPLE_SIZE files from the checksum file
-03-load wrote (lib/workflow.py's sample_sha256sums): a smoke test, not a full re-read, since 03-load's own
-sha256sum -c already checked every byte once and libtorrent's piece hashing below checks it all again. Then:
+03-load wrote, index tarball included (lib/workflow.py's sample_sha256sums): a smoke test, not a full re-read, since
+03-load's own sha256sum -c already checked every byte once and libtorrent's piece hashing below checks it all again.
+Then:
 
-1. Render lib/README-template.md (ID, its two-digit number, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
+1. Render lib/README-template.md (ID, its two-digit number, cutoff) into $SEED_DIR/.staging/<ID>/<ID>-README.md.
 2. Verify SCRATCH_DIR/<ID>.sha256.minisig against SCRATCH_DIR/<ID>.sha256 (03-load, 04-sign-sha256) with minisign
-   and the public key in this checkout (lib/workflow.py's verify_signature), then copy both into $SEED_DIR/<ID>/, so
-   they end up inside the torrent too: neither is published standalone, so this is the only way to check a file
-   against them without a torrent client.
-3. Build the torrent from exactly the manifest's files plus the root files (README, .sha256, .sha256.minisig),
-   sorted by path, with Python libtorrent 2.x: v1 only, PIECE_SIZE pieces, each file's modification time included
-   (the manifest's for a data file, the file's own for a root file), lib/trackers.py's fixed GOOD_TRACKERS (one per
-   tier, in order; 00-preflight already checked they answer), the comment (lib/comment-template.txt with the ID's
-   sequence number filled in), creator "EVE Ref (libtorrent <version>)", no private flag, no web seed. v1 has no
-   piece alignment, so there are no pad files (NOTES.md "Piece alignment").
+   and the public key in this checkout (lib/workflow.py's verify_signature), then copy both into
+   $SEED_DIR/.staging/<ID>/, so they end up inside the torrent too: neither is published standalone, so this is the
+   only way to check a file against them without a torrent client.
+3. Build the torrent from exactly the manifest's files plus the root files (README, .sha256, .sha256.minisig, the
+   index tarball), sorted by path, with Python libtorrent 2.x: v1 only, PIECE_SIZE pieces, each file's modification
+   time included (the manifest's for a data file, the file's own for a root file), lib/trackers.py's fixed
+   GOOD_TRACKERS (one per tier, in order; 00-preflight already checked they answer), the comment
+   (lib/comment-template.txt with the ID's sequence number filled in), creator "EVE Ref (libtorrent <version>)", no
+   private flag, no web seed. v1 has no piece alignment, so there are no pad files (NOTES.md "Piece alignment").
+   Hashed from the staging folder's parent, SEED_DIR/.staging/, since the torrent's paths are "<ID>/...".
 4. Generate SCRATCH_DIR/<ID>.txt from the torrent's own file list, reloaded from the .torrent just written (not the
    file_storage object that built it), the data files only, without the root folder.
 5. Reload the .torrent and the .txt from disk and check them: loads with libtorrent's default limits and within
    MAX_TORRENT_BYTES; piece length PIECE_SIZE; v1 only (no v2 info-hash); name <ID>, not private, no web seeds;
    trackers equal GOOD_TRACKERS, one per tier, in order; the comment; files = the manifest plus the root files, each
-   file's size and modification time, not just the total bytes. Prints the v1 info-hash (copy it into
-   $SCRATCH_DIR/NOTES.md) and records it, and the libtorrent version, in the completion file.
+   file's size and modification time, not just the total bytes. Prints the v1 info-hash and records it,
+   and the libtorrent version, in the completion file.
 
 Writes:
-    $SEED_DIR/<ID>/<ID>-README.md, <ID>.sha256, <ID>.sha256.minisig
+    $SEED_DIR/.staging/<ID>/<ID>-README.md, <ID>.sha256, <ID>.sha256.minisig
     SCRATCH_DIR/<ID>.torrent
     SCRATCH_DIR/<ID>.txt
     05-make-torrent.done     completion file
@@ -100,7 +102,7 @@ def main():
     workflow.begin(STEP)
     torrent_id = workflow.torrent_id()
     cutoff = workflow.read_done("find")["summary"]["cutoff"]
-    content_dir = os.path.join(workflow.seed_dir, torrent_id)
+    content_dir = workflow.content_dir(torrent_id)
     torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
     txt_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.txt")
 
@@ -156,7 +158,10 @@ def main():
         lt, content_dir, torrent_id, files, root_names, expected_mtimes, trackers, comment, creator
     )
     print(f"Hashing {fmt_count(num_pieces)} pieces ({fmt_bytes(total_bytes)})")
-    lt.set_piece_hashes(ct, workflow.seed_dir, hashing_progress(num_pieces, piece_size))
+    # file_storage's paths are "<ID>/...", so the base path for hashing is content_dir's parent (the staging
+    # folder, SEED_DIR/.staging/), not content_dir itself.
+    staging_root = os.path.dirname(content_dir)
+    lt.set_piece_hashes(ct, staging_root, hashing_progress(num_pieces, piece_size))
     data = lt.bencode(ct.generate())
     del fs
     tmp = torrent_path + ".tmp"
@@ -214,7 +219,7 @@ def main():
         },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
-    print(f"Copy into $SCRATCH_DIR/NOTES.md: v1 {v1_hash}")
+    print(f"v1 info-hash: {v1_hash}")
     ok(f"Make torrent OK for {torrent_id}")
 
 

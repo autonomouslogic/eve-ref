@@ -51,17 +51,23 @@ class ClientAuthTest(unittest.TestCase):
 
 
 class AddTorrentTest(unittest.TestCase):
-    def add(self, response):
+    def add(self, response, content_layout="Original"):
         """Adds a torrent, qBittorrent answering with response. Returns the request's body."""
         with tempfile.NamedTemporaryFile(suffix=".torrent") as torrent:
             with patch.object(qbittorrent.urllib.request, "urlopen") as urlopen:
                 urlopen.return_value.__enter__.return_value.read.return_value = response
-                qbittorrent.Client("http://localhost:8080", "qbt_key").add_torrent_file(torrent.name, "/downloads")
+                qbittorrent.Client("http://localhost:8080", "qbt_key").add_torrent_file(
+                    torrent.name, "/downloads", content_layout
+                )
         return urlopen.call_args.args[0].data
 
-    def test_keeps_the_torrents_root_folder(self):
-        # Whatever qBittorrent's default content layout, the files are looked for in /downloads/<torrent name>/.
-        self.assertIn(b'name="contentLayout"\r\n\r\nOriginal\r\n', self.add(b"Ok."))
+    def test_original_keeps_the_torrents_root_folder(self):
+        # The files are looked for in /downloads/<torrent name>/.
+        self.assertIn(b'name="contentLayout"\r\n\r\nOriginal\r\n', self.add(b"Ok.", "Original"))
+
+    def test_no_subfolder_for_the_merged_tree(self):
+        # 07-seed: the files are already directly under save_path, merged out of the torrent's own root folder.
+        self.assertIn(b'name="contentLayout"\r\n\r\nNoSubfolder\r\n', self.add(b"Ok.", "NoSubfolder"))
 
     def test_ok_text(self):
         # qBittorrent before 5.2.
@@ -96,6 +102,17 @@ class SetSuperSeedingTest(unittest.TestCase):
     def test_disabling_posts_value_false(self):
         request = self.set_super_seeding("abc", False)
         self.assertEqual(request.data, b"hashes=abc&value=false")
+
+
+class FilesTest(unittest.TestCase):
+    def test_reads_files(self):
+        with patch.object(qbittorrent.urllib.request, "urlopen") as urlopen:
+            urlopen.return_value.__enter__.return_value.read.return_value = (
+                b'[{"name":"a/b.csv","size":10,"progress":1.0}]'
+            )
+            files = qbittorrent.Client("http://localhost:8080", "qbt_key").files("abc")
+        self.assertEqual(urlopen.call_args.args[0].full_url, "http://localhost:8080/api/v2/torrents/files?hash=abc")
+        self.assertEqual(files, [{"name": "a/b.csv", "size": 10, "progress": 1.0}])
 
 
 class TorrentIdTest(unittest.TestCase):

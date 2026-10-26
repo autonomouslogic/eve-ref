@@ -18,6 +18,8 @@ from unittest.mock import patch
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
+from workflow import root_file_names  # noqa: E402
+
 SPEC = importlib.util.spec_from_file_location("make_torrent", os.path.join(HERE, "..", "05-make-torrent.py"))
 make_torrent = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(make_torrent)
@@ -140,11 +142,7 @@ class EndToEndTest(unittest.TestCase):
             self._write(path, size, mtime)
             self.files[path] = size
             self.mtimes[path] = mtime
-        self.root_names = {
-            f"{self.TORRENT_ID}-README.md",
-            f"{self.TORRENT_ID}.sha256",
-            f"{self.TORRENT_ID}.sha256.minisig",
-        }
+        self.root_names = root_file_names(self.TORRENT_ID)
         for name in self.root_names:
             self._write(name, 20, MTIME + 2)
 

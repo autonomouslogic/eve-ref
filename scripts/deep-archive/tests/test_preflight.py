@@ -23,6 +23,7 @@ class MainTest(unittest.TestCase):
     def run_main(self, check_tools):
         with tempfile.TemporaryDirectory() as tmp:
             env = {"SCRATCH_DIR": os.path.join(tmp, "scratch"), "SEED_DIR": os.path.join(tmp, "seed")}
+            os.makedirs(env["SEED_DIR"])
             with (
                 patch.dict(os.environ, env),
                 patch.multiple(
@@ -49,6 +50,76 @@ class MainTest(unittest.TestCase):
         mocks["check_trackers"].assert_not_called()
         mocks["check_remote"].assert_not_called()
         mocks["check_qbittorrent"].assert_not_called()
+
+
+class CheckStagingTest(unittest.TestCase):
+    def check(self, seed):
+        checks = preflight.Checks()
+        preflight.check_staging(checks, seed)
+        return checks
+
+    def test_missing_folders_are_not_created(self):
+        with tempfile.TemporaryDirectory() as seed:
+            checks = self.check(seed)
+            self.assertEqual(checks.failed, 0)
+            self.assertEqual(os.listdir(seed), [])
+
+    def test_missing_torrents_folder_warns(self):
+        with tempfile.TemporaryDirectory() as seed:
+            os.makedirs(os.path.join(seed, ".staging"))
+            with patch.object(preflight, "warning") as warn:
+                checks = self.check(seed)
+            self.assertEqual(checks.failed, 0)
+            warn.assert_called_once()
+            self.assertIn(".torrents", warn.call_args[0][0])
+
+    def test_existing_torrents_folder_does_not_warn(self):
+        with tempfile.TemporaryDirectory() as seed:
+            os.makedirs(os.path.join(seed, ".staging"))
+            os.makedirs(os.path.join(seed, ".torrents"))
+            with patch.object(preflight, "warning") as warn:
+                self.check(seed)
+            warn.assert_not_called()
+
+    def test_empty_staging_is_fine(self):
+        with tempfile.TemporaryDirectory() as seed:
+            os.makedirs(os.path.join(seed, ".staging"))
+            os.makedirs(os.path.join(seed, ".torrents"))
+            self.assertEqual(self.check(seed).failed, 0)
+
+    def test_nonempty_staging_fails(self):
+        with tempfile.TemporaryDirectory() as seed:
+            staging = os.path.join(seed, ".staging", "everef-eve-online-deep-archive-00")
+            os.makedirs(staging)
+            with open(os.path.join(staging, "a.csv"), "w", encoding="utf-8") as f:
+                f.write("x")
+            self.assertEqual(self.check(seed).failed, 1)
+
+    def test_staging_as_a_file_fails(self):
+        with tempfile.TemporaryDirectory() as seed:
+            with open(os.path.join(seed, ".staging"), "w", encoding="utf-8") as f:
+                f.write("x")
+            self.assertEqual(self.check(seed).failed, 1)
+
+
+class PrepareDirTest(unittest.TestCase):
+    def test_creates_missing_dir_by_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "a", "b")
+            with patch.dict(os.environ, {"SCRATCH_DIR": path}):
+                found, created, problem = preflight.prepare_dir("SCRATCH_DIR")
+            self.assertEqual((found, created, problem), (os.path.realpath(path), True, None))
+            self.assertTrue(os.path.isdir(path))
+
+    def test_missing_dir_with_create_off_is_a_problem_and_not_created(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "seed")
+            with patch.dict(os.environ, {"SEED_DIR": path}):
+                found, created, problem = preflight.prepare_dir("SEED_DIR", create=False)
+            self.assertIsNone(found)
+            self.assertFalse(created)
+            self.assertIn("does not exist", problem)
+            self.assertFalse(os.path.exists(path))
 
 
 class CheckRemoteTest(unittest.TestCase):

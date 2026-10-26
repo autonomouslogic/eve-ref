@@ -38,41 +38,49 @@ run there.
 ## Procedure
 
 Run each step in order, from `scripts/deep-archive/`. The checks are what must hold before moving on; if one doesn't,
-or anything else looks wrong, stop. Keep notes in `$SCRATCH_DIR/NOTES.md`.
+or anything else looks wrong, stop.
 
-| Step | Run | Writes | Bucket |
-|---|---|---|---|
-| 00 Preflight | `./00-preflight.py` | | read |
-| 01 Find | `./01-find.py` | `find/` | read |
-| 02 Review the selection | manual | | |
-| 03 Load | `./03-load.py` | `$SEED_DIR/<ID>/`, `manifest.json`, `<ID>.sha256` | read |
-| 04 Sign the checksum file | `./04-sign-sha256.sh` | `<ID>.sha256.minisig` | |
-| 05 Make torrent | `./05-make-torrent.py` | root files in `$SEED_DIR/<ID>/`, `<ID>.torrent`, `<ID>.txt` | |
-| 06 Sign the torrent file | `./06-sign-torrent.sh` | `<ID>.torrent.minisig` | |
-| 07 Seed | `./07-seed.py` | qBittorrent | |
-| 08 Check seed | `./08-check-seed.py` | | |
-| 09 Publish | `./09-publish.py` | **`deep-archive/`**, `feed-backup/` | write |
-| 10 Update docs | manual | | |
-| 11 Index deep-archive/ | manual | `deep-archive/` index files | write |
-| 12 Check before delete | `./12-check-before-delete.py` | `delete-set.json` | read |
-| 13 Delete | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl` | write |
-| 14 Check delete | `./14-check-delete.py` | | read |
-| 15 Full DataIndex | manual | | |
-| 16 Check site | `./16-check-site.py` | | |
-| 17 Delete the scratch directory | manual | | |
+| Step                              | Run                                | Writes                                                                        | Bucket |
+|-----------------------------------|------------------------------------|-------------------------------------------------------------------------------|--------|
+| 00 Preflight                      | `./00-preflight.py`                |                                                                               | read   |
+| 01 Find                           | `./01-find.py`                     | `find/`                                                                       | read   |
+| 02 Review the selection           | manual                             |                                                                               |        |
+| 03 Load                           | `./03-load.py`                     | `$SEED_DIR/.staging/<ID>/`, `manifest.json`, `<ID>.sha256`                    | read   |
+| 04 Sign the checksum file         | `./04-sign-sha256.sh`              | `<ID>.sha256.minisig`                                                         |        |
+| 05 Make torrent                   | `./05-make-torrent.py`             | root files in `$SEED_DIR/.staging/<ID>/`, `<ID>.torrent`, `<ID>.txt`          |        |
+| 06 Sign the torrent file          | `./06-sign-torrent.sh`             | `<ID>.torrent.minisig`                                                        |        |
+| 07 Seed                           | `./07-seed.py`                     | `$SEED_DIR/.torrents/`, merges `.staging/<ID>/` into `$SEED_DIR`, qBittorrent |        |
+| 08 Check seed                     | `./08-check-seed.py`               |                                                                               |        |
+| 09 Publish                        | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
+| 10 Update docs                    | manual                             |                                                                               |        |
+| 11 Index deep-archive/            | manual                             | `deep-archive/` index files                                                   | write  |
+| 12 Check before delete (UNTESTED) | `./12-check-before-delete.py`      | `delete-set.json`                                                             | read   |
+| 13 Delete (UNTESTED)              | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl`                                  | write  |
+| 14 Check delete (UNTESTED)        | `./14-check-delete.py`             |                                                                               | read   |
+| 15 Full DataIndex                 | manual                             |                                                                               |        |
+| 16 Check site (UNTESTED)          | `./16-check-site.py`               |                                                                               |        |
+| 17 Delete the scratch directory   | manual                             |                                                                               |        |
+
+`check-seed-dir.py` isn't a numbered step: it's a standalone, read-only check of the whole `$SEED_DIR` tree against
+every signed torrent (00 and 08 both run its quick checks inline; Appendix C's monthly maintenance runs it with
+`--full`).
 
 Paths without a folder are in `$SCRATCH_DIR`.
 
 ### 00: Preflight
-Checks the settings, directories, tools, bucket, the fixed trackers' reachability, `LOCAL_COPY_DIR` and qBittorrent,
-and picks the next torrent ID. Reports every problem before aborting.
+Checks the settings, directories (creating `$SCRATCH_DIR` if missing, which is all it writes to; `$SEED_DIR` must
+exist, warning if it has no `.torrents/`, and failing if `.staging/` exists and isn't empty), tools, bucket, the
+fixed trackers' reachability, `LOCAL_COPY_DIR`, qBittorrent, and the merged `$SEED_DIR` tree against its signed
+torrents (`check-seed-dir.py`'s quick checks), and picks the next torrent ID. Reports every problem before aborting.
 
 ### 01: Find
-Selects the oldest files not archived yet, by date, up to the size limits (`01-find.py`'s docstring). Aborts if the
-oldest date alone is too big for one `.torrent`, if the selection is under `MIN_BYTES` (not enough data yet) --
-unless the `.torrent` size limit stopped the selection early, which can happen well under `MIN_BYTES` with a lot of
-small files and isn't treated as a problem -- or if a path a published `<ID>.txt` lists is still on the site
-(Appendix E). In each case nothing is written.
+Selects the oldest files not archived yet, by date, up to the size limits (`01-find.py`'s docstring); `index.json`
+files are never selected, only noted for 03-load to snapshot. Aborts if the oldest date alone is too big for one
+`.torrent`, if the selection is under `MIN_BYTES` (not enough data yet) -- unless the `.torrent` size limit stopped
+the selection early, which can happen well under `MIN_BYTES` with a lot of small files and isn't treated as a
+problem -- if a path a published `<ID>.txt` lists is still on the site (Appendix E), or if a selected path would
+collide with one already archived or already on `$SEED_DIR` once merged into one folder tree (NOTES.md "No path in
+two torrents"). In each case nothing is written.
 
 ### 02: Review the selection (manual)
 Read `$SCRATCH_DIR/find/report.txt`:
@@ -91,40 +99,48 @@ To change the selection: fix `TORRENT_EXCLUDE` (or `TORRENT_INCLUDE`) in `lib/wo
 only the biggest datasets; set it back to `None` once they're archived.
 
 ### 03: Load
-Copies the selection into `$SEED_DIR/<ID>/`: what `LOCAL_COPY_DIR` has first, unchecked, then from the bucket, which
-replaces any file that doesn't match the bucket's size and modification time. Then hashes it, and writes
+Copies the selection into `$SEED_DIR/.staging/<ID>/`: what `LOCAL_COPY_DIR` has first, unchecked (a `cp --reflink=always` pass for the files not yet there, which on
+BtrFS on the same filesystem costs almost no space or time, then rclone for the rest), then from the
+bucket, which replaces any file that doesn't match the bucket's size and modification time. Then hashes it,
+downloads a fresh snapshot of the selected folders' `index.json` and tars it into `<ID>-index.tar.xz`, and writes
 `manifest.json` and `<ID>.sha256`. Resumable.
-- File count and bytes equal the selection; nothing missing, different or extra (changed `index.json` files are
-  ignored: DataIndex rewrites them).
-- No archive test failures, or each one accepted in `$SCRATCH_DIR/NOTES.md` (corrupt files are archived as they are).
-- `sha256sum -c` passed.
+- File count and bytes equal the selection; nothing missing, different or extra.
+- Every selected file is covered by its folder's downloaded `index.json` (size and modification time match); if not,
+  run `DataIndex` for that prefix and load again.
+- No archive test failures, or each one accepted (corrupt files are archived as they are).
+- `sha256sum -c` passed, index tarball included.
 
 ### 04: Sign the checksum file
 Signs `<ID>.sha256` with minisign (asks for the key's passphrase) and verifies the signature.
 
 ### 05: Make torrent
-Checks the content folder still matches the manifest's size and modification time (cheap; 03-load's own
+Checks the staging folder still matches the manifest's size and modification time (cheap; 03-load's own
 `sha256sum -c` already checked every byte), then `sha256sum -c`s a random sample of the checksum file as a smoke
-test, writes the README into the content folder, copies in `<ID>.sha256` and its signature (verified first), and
-makes `<ID>.torrent` (v1 only, NOTES.md "Open issues") and `<ID>.txt`. Trackers are the fixed list in
-`lib/trackers.txt`; no fetch. Slow: hours for a full torrent, with a progress line every 30 seconds. Then checks
-both.
+test, writes the README into the staging folder, copies in `<ID>.sha256` and its signature (verified first), and
+makes `<ID>.torrent` (v1 only, NOTES.md "Open issues"; root files include `<ID>-index.tar.xz`) and `<ID>.txt`.
+Trackers are the fixed list in `lib/trackers.txt`; no fetch. Slow: hours for a full torrent, with a progress line
+every 30 seconds. Then checks both.
 - Read the `.txt` and the README yourself.
-- Copy the v1 info-hash into `$SCRATCH_DIR/NOTES.md`.
 
 ### 06: Sign the torrent file
 Signs `<ID>.torrent` with minisign and verifies the signature. This one is published.
 
 ### 07: Seed
-Adds the torrent to qBittorrent with content layout Original, whatever qBittorrent's default, so it checks the files
-where they are, in `$SEED_DIR/<ID>/`, and turns on super seeding (NOTES.md "Super seeding"): once other seeders have
-turned up, turn it off by hand in the WebUI.
+Copies the signed `.torrent` and its signature into `$SEED_DIR/.torrents/`, merges the staging folder into
+`$SEED_DIR` itself -- every file hard-linked to its site path directly under `$SEED_DIR`, verified, then the staging
+copy removed (NOTES.md "Merged seed directory"; resumable at any point) -- and only then adds the torrent to
+qBittorrent, with content layout **NoSubfolder** (not qBittorrent's Original default: the files are already at their
+final paths), so it checks them where they now are. Turns on super seeding (NOTES.md "Super seeding"): once other
+seeders have turned up, turn it off by hand in the WebUI.
 
 ### 08: Check seed
-Give the trackers a few minutes after seed first. It fails until a tracker reports working, and while the recheck
-runs; running it again is fine.
+Give the trackers a few minutes after seed first. It fails until a tracker reports working, and while qBittorrent is
+checking the torrent; running it again is fine.
 - 100% with **0 bytes downloaded** (any download means the files don't match: stop), seeding, a tracker working.
-- aria2c downloaded the README through the torrent, identical to the seed copy.
+- No file still sits under a `<ID>/` root folder in qBittorrent: confirms the merge and NoSubfolder actually took.
+- The whole `$SEED_DIR` tree still matches every signed torrent (`check-seed-dir.py`'s quick checks), not just this
+  one.
+- aria2c downloaded the README through the torrent, identical to the seed copy (now at `$SEED_DIR/<ID>-README.md`).
 
 ### 09: Publish
 Verifies the torrent's signature, uploads `<ID>.torrent`, `<ID>.txt` and `<ID>.torrent.minisig` to `deep-archive/`,
@@ -183,7 +199,7 @@ Or `./gradlew dataIndex` from a checkout with production settings in the environ
   feed.
 
 ### 17: Delete the scratch directory (manual)
-Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
+Delete `$SCRATCH_DIR`. The merged `$SEED_DIR` tree stays and keeps seeding.
 
 ---
 
@@ -191,8 +207,7 @@ Delete `$SCRATCH_DIR`. `$SEED_DIR/<ID>/` stays and keeps seeding.
 
 - **Completion files.** Each step writes `$SCRATCH_DIR/<NN>-<step>.done` as its last act, only on success. A step
   refuses to start if the previous scripted step's file is missing or its own exists. Manual steps have none.
-- **Redoing a step** is deliberate: delete its completion file and every later one by hand, and note why in
-  `$SCRATCH_DIR/NOTES.md`. A step that failed wrote no completion file and can simply be run again.
+- **Redoing a step** is deliberate: delete its completion file and every later one by hand. A step that failed wrote no completion file and can simply be run again.
 - **One step at a time.** Every step holds `$SCRATCH_DIR/log/.lock` while it runs.
 - **Output**, like the roll-up scripts: `🚀` once, `🔵` sections, `🟡` warnings (the step carries on), `🔴`
   errors (the step stops), `✅` last on success. Everything is also
@@ -211,7 +226,7 @@ step names the settings the environment overrides.
 | Setting | What |
 |---|---|
 | `SCRATCH_DIR` | Work files for the current workflow. Empty when it starts; deleted by hand at the end. |
-| `SEED_DIR` | Torrent content, one folder per torrent, kept for seeding. Separate from `SCRATCH_DIR`. |
+| `SEED_DIR` | Every published torrent's files, merged into one tree matching data.everef.net (no torrent's own root folder), kept for seeding. Separate from `SCRATCH_DIR`. |
 | `DATA_BUCKET` | The data site's bucket on B2. Its root is the site root. |
 | `RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY` | The B2 key. |
 | `QBITTORRENT_URL`, `QBITTORRENT_API_KEY` | qBittorrent's Web API and its API key. |
@@ -227,38 +242,48 @@ setting is ignored, and named); and the trackers, `lib/trackers.txt` (not a sett
 scripts/deep-archive/
   README.md, NOTES.md                  # this process; design notes for working on the scripts
   00-preflight.py … 16-check-site.py   # the steps; 04 and 06 are .sh
-  lib/                                 # shared code (workflow.py, trackers.txt, sign.sh, …), the README and comment templates
+  check-seed-dir.py                    # standalone SEED_DIR inventory check, not a numbered step
+  lib/                                 # shared code (workflow.py, merge.py, seed_dir.py, trackers.txt, sign.sh, …), the README and comment templates
   tests/
 
 $SCRATCH_DIR/                          # one workflow
   <NN>-<step>.done, NOTES.md (the operator's), log/
-  find/, manifest.json, delete-set.json, deleted.jsonl, feed-backup/
+  find/ (files.jsonl, indexes.jsonl, …), manifest.json, delete-set.json, deleted.jsonl, feed-backup/
   <ID>.sha256, <ID>.sha256.minisig     # copied into the torrent, never published
   <ID>.torrent, <ID>.txt, <ID>.torrent.minisig   # published
+  merge-plan.json                      # 07-seed's merge plan, for resuming
 
 $SEED_DIR/
-  everef-eve-online-deep-archive-NN/   # one per torrent, still seeding
+  <every torrent's files, merged, no root folder>   # laid out like data.everef.net
+  <ID>-README.md, <ID>.sha256, <ID>.sha256.minisig, <ID>-index.tar.xz   # each torrent's root files
+  .staging/<ID>/                       # a torrent being built (03-load to 06-sign-torrent); empty between workflows
+  .torrents/<ID>.torrent, <ID>.torrent.minisig   # a signed copy of every published torrent
 ```
 
 ## Appendix C: Maintenance
 
-`$SEED_DIR` is EVE Ref's only copy of the archived data (no backup: NOTES.md "Durability"). Monthly, force a recheck
-of every torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding. If one finds damage, qBittorrent can
-re-download it from other seeders; if there are none, those files are lost.
+`$SEED_DIR` is EVE Ref's only copy of the archived data (no backup: NOTES.md "Durability"). Monthly:
 
-While there, check for torrents still in super seeding mode (NOTES.md "Super seeding") with other seeders already
-on them, and turn it off in the WebUI: it's meant for bootstrapping a brand new swarm, not for the life of the seed.
+- `./check-seed-dir.py --full`: every file on disk owned by exactly one torrent with no collisions, qBittorrent
+  seeding each one cleanly, and `sha256sum -c` passing for every torrent from the `$SEED_DIR` root. If a problem
+  turns up, it names which torrent and path; investigate before doing anything else.
+- Force a recheck of every torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding. If one finds
+  damage, qBittorrent can re-download it from other seeders; if there are none, those files are lost.
+- Check for torrents still in super seeding mode (NOTES.md "Super seeding") with other seeders already on them, and
+  turn it off in the WebUI: it's meant for bootstrapping a brand new swarm, not for the life of the seed.
 
 ## Appendix D: Rollback
 
-There is no script. Re-upload the deleted files from `$SEED_DIR/<ID>/` (or other seeders) with rclone, which keeps the
-modification times, using the published `<ID>.txt` as the list. While B2 still holds the hidden versions, removing the
-hide markers in B2's web console is quicker (the bucket purges them after about 2 days). Then run a full `DataIndex` and check the files are served.
+There is no script. Re-upload the deleted files from `$SEED_DIR` (or other seeders) with rclone, which keeps the
+modification times, using the published `<ID>.txt` as the list (its paths are already relative to `$SEED_DIR`, with
+no torrent root folder to strip): `rclone copy "$SEED_DIR" <remote> --files-from-raw <ID>.txt`. While B2 still holds
+the hidden versions, removing the hide markers in B2's web console is quicker (the bucket purges them after about 2
+days). Then run a full `DataIndex` and check the files are served.
 
 ## Appendix E: If data changed
 
 If `12-check-before-delete` finds a file that changed after it was selected, that file isn't deleted; the rest is.
-Note it in `$SCRATCH_DIR/NOTES.md`. There is no replacement torrent. The file stays on the site at a path the published `<ID>.txt`
+There is no replacement torrent. The file stays on the site at a path the published `<ID>.txt`
 lists, so the next `01-find` stops with a hard error on it, as on any file check-before-delete leaves on the site.
 That isn't handled: resolve it by hand before running `01-find` again. Find out why it changed; if the dataset still
 changes after the minimum age, add it to `TORRENT_EXCLUDE`.

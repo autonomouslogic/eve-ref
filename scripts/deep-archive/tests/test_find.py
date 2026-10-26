@@ -1,7 +1,7 @@
 """
 Tests for 01-find.py's selection logic: how a file is dated (file_date, Obj), what is skipped (skip_reason), how
-published torrents and index.json files are handled (classify_all, folder_indexes), and how the cutoff is chosen
-(choose_cutoff).
+published torrents and index.json files are handled (classify_all, folder_indexes), how the cutoff is chosen
+(choose_cutoff), and the merged SEED_DIR tree (existing_seed_paths).
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -11,6 +11,7 @@ import datetime
 import importlib.util
 import io
 import os
+import tempfile
 import unittest
 from unittest import mock
 
@@ -327,12 +328,12 @@ class MinBytesReachedTest(unittest.TestCase):
 class ChooseCutoffTest(unittest.TestCase):
     NEWEST_ALLOWED = date(2024, 10, 12)
 
-    def choose(self, candidates, indexes=None, max_bytes=10_000, max_torrent_bytes=10_000_000):
+    def choose(self, candidates, max_bytes=10_000, max_torrent_bytes=10_000_000):
         with mock.patch.object(find, "MAX_BYTES", max_bytes), mock.patch.object(
             find, "MAX_TORRENT_BYTES", max_torrent_bytes
         ):
             candidates = sorted(candidates, key=lambda o: (o.date, o.mtime, o.path))
-            return quietly(find.choose_cutoff, candidates, indexes or {}, self.NEWEST_ALLOWED)
+            return quietly(find.choose_cutoff, candidates, self.NEWEST_ALLOWED)
 
     def test_everything_fits(self):
         cut = self.choose([obj("d/a.json", modified=(2022, 1, 1)), obj("d/b.json", modified=(2022, 1, 2))])
@@ -421,25 +422,6 @@ class ChooseCutoffTest(unittest.TestCase):
         self.assertEqual(cut.reason, "torrent")
         self.assertEqual(cut.cutoff, date(2022, 1, 4))
 
-    def test_index_json_counts_on_its_folders_first_date(self):
-        indexes = {"d": obj("d/index.json", size=500, modified=(2026, 1, 1))}
-        candidates = [
-            obj("d/a.json", size=400, modified=(2022, 1, 1)),
-            obj("e/b.json", size=400, modified=(2022, 1, 5)),
-        ]
-        # Without the index: 800 bytes, under the limit. With it, counted on 2022-01-01: 1300, reached on 2022-01-05.
-        cut = self.choose(candidates, indexes, max_bytes=1000)
-        self.assertEqual(cut.reason, "bytes")
-        self.assertEqual(cut.over_date, date(2022, 1, 5))
-        self.assertEqual(cut.over_bytes, 1300)
-        self.assertEqual(cut.cutoff, date(2022, 1, 5))
-
-    def test_index_json_counted_once_per_folder(self):
-        indexes = {"d": obj("d/index.json", size=100)}
-        candidates = [obj("d/a.json", size=10, modified=(2022, 1, 1)), obj("d/b.json", size=10, modified=(2022, 1, 2))]
-        cut = self.choose(candidates, indexes, max_bytes=125)
-        self.assertEqual(cut.reason, "age")
-
     def test_no_candidates(self):
         cut = self.choose([])
         self.assertIsNone(cut.cutoff)
@@ -449,6 +431,43 @@ class ChooseCutoffTest(unittest.TestCase):
         cut = self.choose([obj("d/a.json", size=10, modified=(2025, 1, 1))])
         self.assertIsNone(cut.cutoff)
         self.assertEqual(cut.too_new, [1, 10])
+
+
+class ExistingSeedPathsTest(unittest.TestCase):
+    """existing_seed_paths: every data path already under SEED_DIR, for the merge check against a new selection."""
+
+    def write(self, root, rel):
+        path = os.path.join(root, *rel.split("/"))
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("x")
+
+    def test_data_paths_found(self):
+        with tempfile.TemporaryDirectory() as seed_dir:
+            self.write(seed_dir, "market-orders/history/2022/a.csv.bz2")
+            self.write(seed_dir, "fuzzwork/ordersets/b.csv.gz")
+            self.assertEqual(
+                sorted(find.existing_seed_paths(seed_dir)),
+                ["fuzzwork/ordersets/b.csv.gz", "market-orders/history/2022/a.csv.bz2"],
+            )
+
+    def test_staging_and_torrents_folders_skipped(self):
+        with tempfile.TemporaryDirectory() as seed_dir:
+            self.write(seed_dir, ".staging/everef-eve-online-deep-archive-00/a.csv.bz2")
+            self.write(seed_dir, ".torrents/everef-eve-online-deep-archive-00.torrent")
+            self.write(seed_dir, "market-orders/a.csv.bz2")
+            self.assertEqual(find.existing_seed_paths(seed_dir), ["market-orders/a.csv.bz2"])
+
+    def test_root_files_skipped(self):
+        with tempfile.TemporaryDirectory() as seed_dir:
+            self.write(seed_dir, "everef-eve-online-deep-archive-00-README.md")
+            self.write(seed_dir, "everef-eve-online-deep-archive-00.sha256")
+            self.write(seed_dir, "market-orders/a.csv.bz2")
+            self.assertEqual(find.existing_seed_paths(seed_dir), ["market-orders/a.csv.bz2"])
+
+    def test_empty_seed_dir(self):
+        with tempfile.TemporaryDirectory() as seed_dir:
+            self.assertEqual(find.existing_seed_paths(seed_dir), [])
 
 
 if __name__ == "__main__":

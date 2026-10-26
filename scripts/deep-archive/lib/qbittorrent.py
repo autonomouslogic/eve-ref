@@ -83,10 +83,12 @@ class Client:
         """Versions qBittorrent was built with: qt, libtorrent, boost, openssl, bitness."""
         return json.loads(self._request("GET", "/api/v2/app/buildInfo"))
 
-    def add_torrent_file(self, torrent_path, save_path, category=None):
+    def add_torrent_file(self, torrent_path, save_path, content_layout, category=None):
         """
-        Adds a .torrent by multipart upload, with autoTMM off so save_path is used (checks the files in place), and
-        content layout Original, whatever qBittorrent's default: the files go under save_path/<torrent name>/.
+        Adds a .torrent by multipart upload, with autoTMM off so save_path is used (checks the files in place).
+        content_layout is "NoSubfolder" for the merged SEED_DIR tree (07-seed: the files are already directly under
+        save_path, having been merged out of the torrent's own root folder) or "Original" (the files are under
+        save_path/<torrent name>/, qBittorrent's own default) for anything else that adds a torrent this way.
         """
         boundary = "----everef-deep-archive"
         with open(torrent_path, "rb") as f:
@@ -95,7 +97,7 @@ class Client:
             ("savepath", save_path),
             ("autoTMM", "false"),
             ("skip_checking", "false"),
-            ("contentLayout", "Original"),
+            ("contentLayout", content_layout),
         ]
         if category:
             fields.append(("category", category))
@@ -119,6 +121,11 @@ class Client:
 
     def trackers(self, info_hash):
         text = self._request("GET", "/api/v2/torrents/trackers", params={"hash": info_hash})
+        return json.loads(text)
+
+    def files(self, info_hash):
+        """The torrent's files (name, size, progress, …): torrents/files, name reflecting the content layout."""
+        text = self._request("GET", "/api/v2/torrents/files", params={"hash": info_hash})
         return json.loads(text)
 
     def recheck(self, info_hash):

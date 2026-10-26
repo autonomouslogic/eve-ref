@@ -1,6 +1,7 @@
 """
 Tests for 08-check-seed.py: which rows of qBittorrent's torrents/trackers count as a working tracker
-(working_trackers).
+(working_trackers), and which of its torrents/files are still under a root folder (files_with_root_folder,
+NOTES.md "Merged seed directory").
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -46,6 +47,28 @@ class WorkingTrackersTest(unittest.TestCase):
         # 1: not contacted yet, 3: updating, 4: not working.
         trackers = [tracker(f"udp://t{status}.example.com:1337/announce", status) for status in (1, 3, 4)]
         self.assertEqual(check_seed.working_trackers(STICKY + trackers), [])
+
+
+class FilesWithRootFolderTest(unittest.TestCase):
+    TORRENT_ID = "everef-eve-online-deep-archive-00"
+
+    def test_merged_files_have_no_root_folder(self):
+        files = [{"name": "market-orders/a.csv"}, {"name": f"{self.TORRENT_ID}-README.md"}]
+        self.assertEqual(check_seed.files_with_root_folder(files, self.TORRENT_ID), [])
+
+    def test_a_file_still_under_the_root_folder_is_flagged(self):
+        files = [{"name": f"{self.TORRENT_ID}/market-orders/a.csv"}]
+        self.assertEqual(
+            check_seed.files_with_root_folder(files, self.TORRENT_ID), [f"{self.TORRENT_ID}/market-orders/a.csv"]
+        )
+
+    def test_backslash_names_are_normalised(self):
+        files = [{"name": f"{self.TORRENT_ID}\\market-orders\\a.csv"}]
+        self.assertEqual(len(check_seed.files_with_root_folder(files, self.TORRENT_ID)), 1)
+
+    def test_a_different_torrents_prefix_is_not_a_false_positive(self):
+        files = [{"name": "everef-eve-online-deep-archive-001-not-really-an-id/a.csv"}]
+        self.assertEqual(check_seed.files_with_root_folder(files, self.TORRENT_ID), [])
 
 
 if __name__ == "__main__":

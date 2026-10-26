@@ -30,13 +30,16 @@ from workflow import (  # noqa: E402
     file_list_problems,
     format_torrent_id,
     in_folders,
+    index_tar_name,
     iso,
     load_env,
+    merge_conflicts,
     parse_iso,
     previous_scripted_step,
     print_env_overrides,
     read_listing_gz,
     render_comment,
+    root_file_names,
     site_path_problem,
     step_name,
     torrent_sequence,
@@ -172,6 +175,68 @@ class FileListProblemsTest(unittest.TestCase):
 
     def test_dot_segment(self):
         self.assertIn("segment", site_path_problem("a/../b.txt"))
+
+    def test_index_json(self):
+        self.assertIn("index file", site_path_problem("a/b/index.json"))
+
+    def test_index_html(self):
+        self.assertIn("index file", site_path_problem("a/index.html"))
+
+
+class RootFileNamesTest(unittest.TestCase):
+    def test_includes_index_tarball(self):
+        torrent_id = "everef-eve-online-deep-archive-00"
+        names = root_file_names(torrent_id)
+        self.assertIn(f"{torrent_id}-index.tar.xz", names)
+        self.assertEqual(index_tar_name(torrent_id), f"{torrent_id}-index.tar.xz")
+
+    def test_all_four_root_files(self):
+        names = root_file_names("everef-eve-online-deep-archive-00")
+        self.assertEqual(len(names), 4)
+
+
+class MergeConflictsTest(unittest.TestCase):
+    def test_no_conflicts(self):
+        self.assertEqual(merge_conflicts(["a/b.txt", "c/d.txt"], ["e/f.txt"]), [])
+
+    def test_case_fold_collision_within_new(self):
+        problems = merge_conflicts(["a/B.txt", "a/b.txt"])
+        self.assertEqual(len(problems), 1)
+        self.assertIn("collide", problems[0])
+
+    def test_unicode_normalisation_collision(self):
+        # "é" (e + combining acute) vs "é" (é precomposed): same text, different bytes.
+        problems = merge_conflicts(["a/café.txt", "a/café.txt"])
+        self.assertEqual(len(problems), 1)
+
+    def test_case_fold_collision_against_existing(self):
+        problems = merge_conflicts(["a/B.txt"], ["a/b.txt"])
+        self.assertIn("already-archived", problems[0])
+
+    def test_identical_path_in_both_is_not_a_conflict(self):
+        # Exact duplicates are the caller's own problem (already_archived), not merge_conflicts'.
+        self.assertEqual(merge_conflicts(["a/b.txt"], ["a/b.txt"]), [])
+
+    def test_file_folder_clash_new_is_the_file(self):
+        problems = merge_conflicts(["a/b"], ["a/b/c"])
+        self.assertEqual(len(problems), 1)
+        self.assertIn("a/b", problems[0])
+        self.assertIn("a/b/c", problems[0])
+
+    def test_file_folder_clash_new_is_the_folder_contents(self):
+        problems = merge_conflicts(["a/b/c"], ["a/b"])
+        self.assertEqual(len(problems), 1)
+
+    def test_file_folder_clash_within_new(self):
+        problems = merge_conflicts(["a/b", "a/b/c"])
+        self.assertEqual(len(problems), 1)
+
+    def test_clash_between_two_existing_paths_is_not_reported(self):
+        # Already-archived paths are assumed clean with each other; only new paths matter here.
+        self.assertEqual(merge_conflicts([], ["a/b", "a/b/c"]), [])
+
+    def test_unrelated_paths_are_not_folder_conflicts(self):
+        self.assertEqual(merge_conflicts(["a/b", "a/bc"]), [])
 
 
 class ReadListingGzTest(unittest.TestCase):

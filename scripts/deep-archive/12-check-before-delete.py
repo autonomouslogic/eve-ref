@@ -12,8 +12,8 @@ Needs 09-publish's completion file (update-docs and index-deep-archive are manua
 if the docs page doesn't list the torrent's ID and v1 info-hash: update-docs must come first.
 
 A data file is in the delete set only if all of these hold:
-- it's a data file in the published torrent (not index.json, or the README, checksum file or its signature at the
-  torrent's root);
+- it's a data file in the published torrent (not the README, checksum file, its signature or the index tarball at
+  the torrent's root; index.json is never in a torrent at all, NOTES.md "Index snapshot");
 - it's in the manifest (so its SHA-256 was checked against the torrent at 100%);
 - it's on the bucket right now, in a **fresh** listing, with the size the torrent gives it, and the same size and
   modification time recorded when it was selected (01-find's files.jsonl).
@@ -212,14 +212,15 @@ def check_published_torrent(workflow, remote, torrent_id):
 def torrent_data_files(files, torrent_id):
     """
     {site path: size} for the torrent's data files, from its (path, size) files without pad files: the root files
-    (root_file_names) and index.json files left out.
+    (root_file_names: README, checksum file, its signature, the index tarball) left out. index.json is never in a
+    torrent at all any more (NOTES.md "Index snapshot"), so there's nothing left to exclude for it specifically.
     """
     root_names = root_file_names(torrent_id)
     prefix = torrent_id + "/"
     data_files = {}
     for path, size in files:
         rel = path[len(prefix) :] if path.startswith(prefix) else path
-        if rel in root_names or rel.rsplit("/", 1)[-1] == "index.json":
+        if rel in root_names:
             continue
         data_files[rel] = size
     return data_files

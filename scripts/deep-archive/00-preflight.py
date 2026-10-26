@@ -2,7 +2,7 @@
 """
 preflight: a step of the EVE Ref Deep Archive workflow. Basic checks before a workflow starts.
 
-DRAFT. Read-only, apart from its own completion file.
+DRAFT. Read-only, apart from SCRATCH_DIR (its completion file and logs).
 
     00-preflight.py
 
@@ -14,10 +14,16 @@ directory must be empty.
 Checks:
 - the settings are there: SCRATCH_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY
   (environment or torrents.env, see lib/workflow.py); settings the environment overrides are named (not a failure);
-- SCRATCH_DIR and SEED_DIR exist (created, with their parents, if missing) and are writable;
+- SCRATCH_DIR exists (created, with its parents, if missing) and SEED_DIR exists, and both are writable: SCRATCH_DIR
+  is all preflight writes to;
 - SCRATCH_DIR is empty (log/ aside): one workflow per scratch directory;
 - SEED_DIR has room for the largest possible torrent (MAX_BYTES);
 - SCRATCH_DIR and SEED_DIR are separate;
+- SEED_DIR/.staging/ is empty or doesn't exist: not an abandoned workflow's staged files, left outside any torrent in
+  the merged tree (NOTES.md "Merged seed directory"); SEED_DIR/.torrents/ not existing is a warning, in case SEED_DIR
+  is the wrong directory;
+- the merged tree matches its signed torrents: every file on disk owned by exactly one torrent, no collisions once
+  merged (lib/seed_dir.py's quick_check, check-seed-dir.py);
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable; also picks the
   next torrent ID (one past the highest published one, or 00 if there are none), for 01-find to use;
@@ -38,10 +44,13 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
+import seed_dir  # noqa: E402
 from workflow import (  # noqa: E402
     DEEP_ARCHIVE_DIR,
     MAX_BYTES,
     MIN_LIBTORRENT_VERSION,
+    STAGING_DIR_NAME,
+    TORRENTS_DIR_NAME,
     Workflow,
     data_remote,
     error,
@@ -108,12 +117,10 @@ def main():
             checks.fail(f"SCRATCH_DIR isn't empty: {len(scratch_entries)} entries, e.g. {scratch_entries[0]}")
         else:
             print(f"SCRATCH_DIR: {scratch}, empty")
-    seed, seed_created, seed_problem = prepare_dir("SEED_DIR")
+    seed, _, seed_problem = prepare_dir("SEED_DIR", create=False)
     if seed is None:
         checks.fail(seed_problem)
     else:
-        if seed_created:
-            print(f"Created SEED_DIR: {seed}")
         free = shutil.disk_usage(seed).free
         if free < MAX_BYTES:
             checks.fail(
@@ -127,6 +134,9 @@ def main():
         else:
             print("SCRATCH_DIR and SEED_DIR are separate")
     check_local_copy(checks, scratch, seed)
+    if seed:
+        check_staging(checks, seed)
+        check_seed_dir_inventory(checks, seed)
 
     section("Tools")
     failed_before_tools = checks.failed
@@ -151,10 +161,11 @@ def main():
     ok("Preflight OK")
 
 
-def prepare_dir(name):
+def prepare_dir(name, create=True):
     """
-    (path, created, None) for the setting's directory, creating it and its parents if it doesn't exist; or
-    (None, False, problem) if it isn't set, can't be created, isn't a directory, or isn't writable.
+    (path, created, None) for the setting's directory, creating it and its parents if it doesn't exist and create is
+    set; or (None, False, problem) if it isn't set, doesn't exist (create not set), can't be created, isn't a
+    directory, or isn't writable.
     """
     value = os.environ.get(name)
     if not value:
@@ -162,6 +173,8 @@ def prepare_dir(name):
     path = os.path.realpath(value)
     created = False
     if not os.path.exists(path):
+        if not create:
+            return None, False, f"{name} does not exist: {path}"
         try:
             os.makedirs(path)
             created = True
@@ -194,6 +207,51 @@ def check_local_copy(checks, scratch, seed):
             checks.fail(f"LOCAL_COPY_DIR and {name} must not be inside each other")
             return
     print(f"LOCAL_COPY_DIR: {local}, load copies what it has, the bucket replaces any that don't match")
+
+
+def check_staging(checks, seed):
+    """
+    SEED_DIR/.staging/ and SEED_DIR/.torrents/ (NOTES.md "Merged seed directory"), read-only: the later steps create
+    them. A missing .torrents/ warns, in case SEED_DIR is the wrong directory. If .staging/ exists it must be empty --
+    anything in it is an abandoned workflow's staged files, left outside any torrent in the merged tree, and must be
+    resolved by hand before a new one starts.
+    """
+    staging = os.path.join(seed, STAGING_DIR_NAME)
+    torrents = os.path.join(seed, TORRENTS_DIR_NAME)
+    if not os.path.isdir(torrents):
+        warning(f"SEED_DIR/{TORRENTS_DIR_NAME} not found in {seed}: is SEED_DIR the right directory?")
+    for path, name in ((staging, STAGING_DIR_NAME), (torrents, TORRENTS_DIR_NAME)):
+        if os.path.exists(path) and not os.path.isdir(path):
+            checks.fail(f"SEED_DIR/{name} exists and isn't a directory: {path}")
+            return
+    entries = os.listdir(staging) if os.path.isdir(staging) else []
+    if entries:
+        checks.fail(
+            f"SEED_DIR/{STAGING_DIR_NAME} isn't empty: {len(entries)} entries, e.g. {entries[0]} "
+            "(an earlier workflow's staged files, left behind; resolve by hand)"
+        )
+    else:
+        print(f"SEED_DIR/{STAGING_DIR_NAME}: empty")
+
+
+def check_seed_dir_inventory(checks, seed):
+    """
+    The merged tree against its signed torrents (lib/seed_dir.py's quick_check, NOTES.md "Merged seed directory"):
+    every file on disk owned by exactly one torrent, no collisions once merged. qBittorrent isn't checked here --
+    check_qbittorrent above already did, for this run's own torrent, and check-seed-dir.py covers the rest.
+    """
+    torrents_dir = os.path.join(seed, TORRENTS_DIR_NAME)
+    try:
+        torrents, disk, problems = seed_dir.quick_check(seed, torrents_dir)
+    except seed_dir.SeedDirError as e:
+        checks.fail(str(e))
+        return
+    if problems:
+        for problem in problems[:10]:
+            error(f"  {problem}")
+        checks.fail(f"SEED_DIR inventory: {len(problems)} problems (check-seed-dir.py for the full list)")
+    else:
+        print(f"SEED_DIR inventory: {len(torrents)} torrents, {len(disk)} files, all owned, no collisions")
 
 
 def check_qbittorrent(checks, seed):
