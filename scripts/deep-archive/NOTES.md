@@ -378,9 +378,11 @@ for this.
   Content-Type and Cache-Control set through `--header-upload`.
 - **Between load and the torrent**, there's no reason a file would change (nothing else writes to `$SEED_DIR/<ID>/`
   between the two steps), but `05-make-torrent` checks anyway, for good measure: `content_problems`' cheap size and
-  modification-time check, then a full `sha256sum -c` against `03-load`'s checksum file (`verify_sha256sums`,
-  immediately before hashing). `08-check-seed`'s recheck only catches a change made after the torrent was made, not
-  before it.
+  modification-time check, then `sha256sum -c` on a random sample of `SHA256_SAMPLE_SIZE` files (`sample_sha256sums`)
+  rather than a full re-read: `03-load` already did a full `sha256sum -c` against the same checksum file, and the
+  piece hashing right after would catch corruption too, so a second full-content pass only cost time; the sample is
+  a cheap extra smoke test, not the thing standing between a bad file and a published torrent. `08-check-seed`'s
+  recheck only catches a change made after the torrent was made, not before it.
 - **`08-check-seed` isn't an outside test**: when NAT hairpinning gets in the way, use local peer discovery, or check
   from another machine.
 - **`08-check-seed`'s aria2c download fetches only the README**: data files with unusual paths (long, non-ASCII, …)

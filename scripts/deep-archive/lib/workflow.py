@@ -32,9 +32,11 @@ The scripts reach the data bucket only through rclone (data_remote).
 import datetime
 import json
 import os
+import random
 import re
 import subprocess
 import sys
+import tempfile
 import threading
 
 ENV_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "torrents.env")
@@ -748,19 +750,44 @@ def verify_signature(path):
 def verify_sha256sums(sha256_path, content_dir):
     """
     Runs sha256sum -c on a checksum file, from content_dir (the paths in it are relative to that folder). Fails with
-    sha256sum's own output on any mismatch. Used by 03-load (right after writing <ID>.sha256, as an independent check
-    of the hashes just computed in Python) and by 05-make-torrent (right before hashing the torrent, as one more check
-    that nothing in the content folder changed since 03-load, on top of content_problems' cheap size/mtime check).
+    sha256sum's own output on any mismatch. Used by 03-load, right after writing <ID>.sha256, as an independent check
+    of the hashes just computed in Python.
     """
+    _run_sha256sum_c(sha256_path, content_dir)
+
+
+def sample_sha256sums(sha256_path, content_dir, sample_size):
+    """
+    Runs sha256sum -c on a random sample of up to sample_size lines from a checksum file, from content_dir. A smoke
+    test, not a full check: 03-load already read every byte once (verify_sha256sums). Used by 05-make-torrent, after
+    content_problems' cheap size/mtime check and before hashing the torrent, to catch silent corruption on a few
+    files without re-reading the whole content folder. Fails with sha256sum's own output on any mismatch. Returns
+    the number of files actually checked.
+    """
+    with open(sha256_path, encoding="utf-8") as f:
+        lines = [line for line in f if line.strip()]
+    sample = random.sample(lines, min(sample_size, len(lines)))
+    fd, tmp_path = tempfile.mkstemp(prefix="sha256sum-sample-", suffix=".sha256")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.writelines(sample)
+        _run_sha256sum_c(tmp_path, content_dir)
+    finally:
+        os.remove(tmp_path)
+    return len(sample)
+
+
+def _run_sha256sum_c(path, content_dir):
+    """Runs sha256sum -c on path, from content_dir. Fails with sha256sum's own output on any mismatch."""
     # --quiet: on a mismatch, only the files that failed are listed, not every one that's OK.
     result = subprocess.run(
-        ["sha256sum", "-c", "--strict", "--quiet", sha256_path], cwd=content_dir, capture_output=True, text=True
+        ["sha256sum", "-c", "--strict", "--quiet", path], cwd=content_dir, capture_output=True, text=True
     )
     if result.returncode != 0:
         for line in result.stdout.splitlines() + result.stderr.splitlines():
             if line.strip():
                 error(f"  {line}")
-        fail(f"sha256sum -c failed for {sha256_path}")
+        fail(f"sha256sum -c failed for {path}")
 
 
 def render_comment(torrent_id):

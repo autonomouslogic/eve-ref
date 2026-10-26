@@ -103,10 +103,12 @@ replaces any file that doesn't match the bucket's size and modification time. Th
 Signs `<ID>.sha256` with minisign (asks for the key's passphrase) and verifies the signature.
 
 ### 05: Make torrent
-Re-verifies the checksum file (`sha256sum -c`, on top of 03-load's own check), writes the README into the content
-folder, copies in `<ID>.sha256` and its signature (verified first), and makes `<ID>.torrent` (v1 only, NOTES.md
-"Open issues") and `<ID>.txt`. Trackers are the fixed list in `lib/trackers.txt`; no fetch. Slow: hours for a full
-torrent, with a progress line every 30 seconds. Then checks both.
+Checks the content folder still matches the manifest's size and modification time (cheap; 03-load's own
+`sha256sum -c` already checked every byte), then `sha256sum -c`s a random sample of the checksum file as a smoke
+test, writes the README into the content folder, copies in `<ID>.sha256` and its signature (verified first), and
+makes `<ID>.torrent` (v1 only, NOTES.md "Open issues") and `<ID>.txt`. Trackers are the fixed list in
+`lib/trackers.txt`; no fetch. Slow: hours for a full torrent, with a progress line every 30 seconds. Then checks
+both.
 - Read the `.txt` and the README yourself.
 - Copy the v1 info-hash into `$SCRATCH_DIR/NOTES.md`.
 

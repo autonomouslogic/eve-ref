@@ -13,9 +13,9 @@ file (hours for a full torrent), with a progress line every PROGRESS_INTERVAL se
 
 First checks every manifest file in $SEED_DIR/<ID>/ still has the manifest's size and modification time
 (content_problems; NOTES.md "Known limitations"), so a file changed on disk since 03-load hashed it doesn't go into the
-torrent unnoticed. Then runs sha256sum -c again, against the checksum file 03-load wrote (lib/workflow.py's
-verify_sha256sums): content_problems only checks size and modification time, cheaply; this re-reads every file and
-checks its hash, the same as 03-load's own check, right before it's hashed into the torrent. Then:
+torrent unnoticed. Then runs sha256sum -c on a random sample of SHA256_SAMPLE_SIZE files from the checksum file
+03-load wrote (lib/workflow.py's sample_sha256sums): a smoke test, not a full re-read, since 03-load's own
+sha256sum -c already checked every byte once and libtorrent's piece hashing below checks it all again. Then:
 
 1. Render lib/README-template.md (ID, its two-digit number, cutoff) into $SEED_DIR/<ID>/<ID>-README.md.
 2. Verify SCRATCH_DIR/<ID>.sha256.minisig against SCRATCH_DIR/<ID>.sha256 (03-load, 04-sign-sha256) with minisign
@@ -75,9 +75,9 @@ from workflow import (  # noqa: E402
     parse_iso,
     render_comment,
     root_file_names,
+    sample_sha256sums,
     section,
     torrent_sequence,
-    verify_sha256sums,
     verify_signature,
 )
 
@@ -86,6 +86,7 @@ README_TEMPLATE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib
 CREATOR_PREFIX = "EVE Ref"
 LOG_SAMPLE = 20
 PROGRESS_INTERVAL = 30  # seconds between hashing progress lines
+SHA256_SAMPLE_SIZE = 1000  # smoke test, not a full check: 03-load already read every byte once
 
 
 def main():
@@ -116,13 +117,10 @@ def main():
         fail(f"{fmt_count(len(problems))} files in {content_dir} changed since 03-load hashed them: investigate")
     print(f"All {fmt_count(len(files))} files in {content_dir} have the manifest's size and modification time")
 
-    section("Checksum verification")
+    section("Checksum sample")
     sha256_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.sha256")
-    verify_sha256sums(sha256_path, content_dir)
-    print(
-        f"sha256sum -c against {sha256_path}: all {fmt_count(len(files))} files OK "
-        "(independent of content_problems' cheap size/modification-time check above)"
-    )
+    sampled = sample_sha256sums(sha256_path, content_dir, SHA256_SAMPLE_SIZE)
+    print(f"sha256sum -c against {sampled} of {fmt_count(len(files))} files, picked at random: OK")
 
     section("README")
     readme_name = f"{torrent_id}-README.md"

@@ -28,9 +28,10 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    (an index.json only has to be there: DataIndex rewrites it on every run), and nothing else is. Any problem aborts the step without a completion file; running it again carries on where it
    stopped.
 7. Read every selected file once, computing its SHA-256 and, for .bz2 and .gz files, testing that the compressed
-   stream decompresses cleanly (tolerating concatenated streams). An archive test failure is reported but doesn't
-   fail the step: corrupt files are archived as they are (README, "Load"); the operator decides whether to accept it
-   in $SCRATCH_DIR/NOTES.md before going on.
+   stream decompresses cleanly (tolerating concatenated streams). HASH_WORKERS files at a time: hashlib releases the
+   GIL during update(), so threads parallelize the CPU work (NOTES.md "Torrent size": ~800 MB/s at 6 threads against
+   186 MB/s on one). An archive test failure is reported but doesn't fail the step: corrupt files are archived as
+   they are (README, "Load"); the operator decides whether to accept it in $SCRATCH_DIR/NOTES.md before going on.
 8. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file, with each file's size and
    modification time as on disk (only an index.json can differ from the selection). 05-make-torrent and
    12-check-before-delete use it.
@@ -69,6 +70,7 @@ import shutil
 import sys
 import time
 import zlib
+from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
@@ -100,6 +102,7 @@ STATS_INTERVAL = "30s"
 
 # Hashing.
 CHUNK_SIZE = 4 * MIB
+HASH_WORKERS = os.cpu_count() or 4  # hashlib releases the GIL; NOTES.md "Torrent size" measured ~4.3x at 6 threads
 PROGRESS_INTERVAL = 30  # seconds
 
 LOG_SAMPLE = 20
@@ -214,28 +217,32 @@ def main():
     hashing_started = time.monotonic()
     last_progress = hashing_started
     hashed_bytes = 0
-    for index, f in enumerate(sorted(files, key=lambda s: s.path), 1):
-        full = os.path.join(content_dir, f.path)
-        digest, archive_error = hash_and_test(full)
-        # As on disk: the same as selected, except for an index.json that changed since (compare).
-        stat = os.stat(full)
-        manifest_files.append(
-            {"path": f.path, "size": stat.st_size, "last_modified": iso(stat.st_mtime), "sha256": digest}
-        )
-        hashed_bytes += stat.st_size
-        if archive_error is not None:
-            archive_failures.append(f"{f.path}: {archive_error}")
-        now = time.monotonic()
-        if now - last_progress >= PROGRESS_INTERVAL or index == len(files):
-            elapsed = now - hashing_started
-            speed = hashed_bytes / elapsed if elapsed > 0 else 0
-            eta = (total - hashed_bytes) / speed if speed > 0 else 0
-            print(
-                f"{fmt_count(index)}/{fmt_count(len(files))} files, "
-                f"{fmt_bytes(hashed_bytes)}/{fmt_bytes(total)}, {fmt_duration(elapsed)} elapsed, "
-                f"{fmt_bytes(speed)}/s, ETA {fmt_duration(eta)}"
+    sorted_files = sorted(files, key=lambda s: s.path)
+    print(f"{HASH_WORKERS} threads")
+    with ThreadPoolExecutor(max_workers=HASH_WORKERS) as executor:
+        for index, (f, digest, archive_error) in enumerate(
+            executor.map(lambda f: (f, *hash_and_test(os.path.join(content_dir, f.path))), sorted_files), 1
+        ):
+            full = os.path.join(content_dir, f.path)
+            # As on disk: the same as selected, except for an index.json that changed since (compare).
+            stat = os.stat(full)
+            manifest_files.append(
+                {"path": f.path, "size": stat.st_size, "last_modified": iso(stat.st_mtime), "sha256": digest}
             )
-            last_progress = now
+            hashed_bytes += stat.st_size
+            if archive_error is not None:
+                archive_failures.append(f"{f.path}: {archive_error}")
+            now = time.monotonic()
+            if now - last_progress >= PROGRESS_INTERVAL or index == len(sorted_files):
+                elapsed = now - hashing_started
+                speed = hashed_bytes / elapsed if elapsed > 0 else 0
+                eta = (total - hashed_bytes) / speed if speed > 0 else 0
+                print(
+                    f"{fmt_count(index)}/{fmt_count(len(sorted_files))} files, "
+                    f"{fmt_bytes(hashed_bytes)}/{fmt_bytes(total)}, {fmt_duration(elapsed)} elapsed, "
+                    f"{fmt_bytes(speed)}/s, ETA {fmt_duration(eta)}"
+                )
+                last_progress = now
 
     if archive_failures:
         section("Archive test failures")
