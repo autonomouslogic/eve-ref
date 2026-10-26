@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.83.5](https://github.com/autonomouslogic/eve-ref/compare/2.83.4...2.83.5) (2026-10-26)
+
+
+### Bug Fixes
+
+* Added data index names ([06d4040](https://github.com/autonomouslogic/eve-ref/commit/06d4040bfdf76612a027cbed16f3f643bec919c6))
+* Added support for new SDE v2 build-numbered filenames and deep archive torrent matching ([3cb1d9d](https://github.com/autonomouslogic/eve-ref/commit/3cb1d9dd6ec2b0fe7be2dc49ae692ba1b7cc48d1))
+
+
+### Tests
+
+* Updated test resources ([b5a4b3a](https://github.com/autonomouslogic/eve-ref/commit/b5a4b3a58d7d1ae58c7f7ff27c6b576cc9bdb2bc))
+
 ## [2.83.4](https://github.com/autonomouslogic/eve-ref/compare/2.83.3...2.83.4) (2026-10-24)
 
 
