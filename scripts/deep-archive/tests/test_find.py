@@ -305,6 +305,25 @@ class FolderIndexesTest(unittest.TestCase):
         self.assertEqual([o.path for o in find.folder_indexes(files, indexes)], ["d/index.json", "e/index.json"])
 
 
+class MinBytesReachedTest(unittest.TestCase):
+    def reached(self, selected_bytes, cutoff_reason):
+        with mock.patch.object(find, "MIN_BYTES", 1000):
+            return find.min_bytes_reached(selected_bytes, cutoff_reason)
+
+    def test_enough_data_is_always_reached(self):
+        self.assertTrue(self.reached(1000, "age"))
+        self.assertTrue(self.reached(1000, "bytes"))
+        self.assertTrue(self.reached(1000, "torrent"))
+
+    def test_not_enough_data_fails_on_age(self):
+        self.assertFalse(self.reached(500, "age"))
+
+    def test_the_torrent_size_limit_is_exempt(self):
+        # A lot of small files can hit MAX_TORRENT_BYTES well under MIN_BYTES: that's the size limit working as
+        # intended, not a sign there isn't enough data yet.
+        self.assertTrue(self.reached(500, "torrent"))
+
+
 class ChooseCutoffTest(unittest.TestCase):
     NEWEST_ALLOWED = date(2024, 10, 12)
 

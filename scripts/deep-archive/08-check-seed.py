@@ -18,8 +18,8 @@ qBittorrent (Web API):
 
 Test download (aria2c), only once qBittorrent checks out:
 - aria2c gets SCRATCH_DIR/<ID>.torrent (no magnet link) and downloads only <ID>-README.md into a fresh folder,
-  finding peers through the trackers and DHT. aria2c doesn't support BitTorrent v2, so it joins the hybrid
-  torrent's v1 swarm; the README's index is taken from aria2c --show-files, where the v1 pad files count as files.
+  finding peers through the trackers and DHT. The torrent is v1 only (NOTES.md "Open issues"), which is also all
+  aria2c supports; the README's index is taken from aria2c --show-files.
 - aria2c checks the piece hashes itself; the downloaded README must also be byte-identical to SEED_DIR's copy.
 - Gives up after STALL_TIMEOUT seconds without download progress (aria2c --bt-stop-timeout).
 
@@ -195,8 +195,8 @@ ARIA2C_FILE_RE = re.compile(r"^\s*(\d+)\|(.+)$")
 
 def aria2c_file_index(torrent_path, wanted):
     """
-    aria2c's 1-based index of a file (path under the torrent's root folder) in its --show-files listing: the v1 file
-    list, pad files included, which is what --select-file counts.
+    aria2c's 1-based index of a file (path under the torrent's root folder) in its --show-files listing, the file
+    list --select-file counts against.
     """
     try:
         result = subprocess.run(["aria2c", "--show-files", torrent_path], capture_output=True, text=True)

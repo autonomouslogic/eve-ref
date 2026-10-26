@@ -23,9 +23,10 @@ Checks:
   next torrent ID (one past the highest published one, or 00 if there are none), for 01-find to use;
 - the other required tools: libtorrent 2.x, aria2c, sha256sum (03-load uses it to verify the checksum file it just
   wrote), Docker (04-sign-sha256 and 06-sign-torrent run minisign through it);
-- qBittorrent's Web API answers at QBITTORRENT_URL with QBITTORRENT_API_KEY, and runs libtorrent 2.x;
-- the tracker lists make-torrent downloads (lib/trackers.py) are reachable, each has UDP or HTTP(S) trackers, and
-  together they have at least MIN_TRACKERS;
+- qBittorrent's Web API answers at QBITTORRENT_URL with QBITTORRENT_API_KEY, and runs libtorrent 2.x (a warning, not
+  a failure, if it's older than 2.0.15: NOTES.md "libtorrent" lists the fixes since);
+- at least MIN_WORKING_TRACKERS of the fixed trackers (lib/trackers.py's GOOD_TRACKERS) answer a BEP 15 connect
+  request;
 - LOCAL_COPY_DIR, if set, is a readable folder laid out like the bucket (index.json at the top), apart from
   SCRATCH_DIR and SEED_DIR.
 """
@@ -40,6 +41,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "li
 from workflow import (  # noqa: E402
     DEEP_ARCHIVE_DIR,
     MAX_BYTES,
+    MIN_LIBTORRENT_VERSION,
     Workflow,
     data_remote,
     error,
@@ -52,15 +54,18 @@ from workflow import (  # noqa: E402
     local_copy_dir,
     lock,
     ok,
+    parse_version,
     print_env_overrides,
     qbittorrent_save_path,
     qbittorrent_settings,
     section,
     start_log,
     torrent_sequence,
+    warning,
 )
 from qbittorrent import Client, QbittorrentError  # noqa: E402
-from trackers import MIN_TRACKERS, TrackersError, combine, fetch_tracker_lists  # noqa: E402
+from trackers import GOOD_TRACKERS, MIN_WORKING_TRACKERS  # noqa: E402
+from trackers import check_trackers as check_tracker_connectivity  # noqa: E402
 
 STEP = "preflight"
 
@@ -192,7 +197,12 @@ def check_local_copy(checks, scratch, seed):
 
 
 def check_qbittorrent(checks, seed):
-    """qBittorrent's Web API answers with the configured API key, and runs libtorrent 2.x (needed to seed v2)."""
+    """
+    qBittorrent's Web API answers with the configured API key, and runs libtorrent 2.x (needed to seed v2, kept as a
+    requirement even though make-torrent now makes v1-only torrents: a v1+v2 torrent made by hand, or by an earlier
+    workflow, must still seed). A libtorrent older than MIN_LIBTORRENT_VERSION is a warning, not a failure: it seeds
+    fine, but misses fixes that matter to re-seeding and rechecking (NOTES.md "libtorrent").
+    """
     if not os.environ.get("QBITTORRENT_URL", "").strip():
         checks.fail("QBITTORRENT_URL is not set (environment or torrents.env)")
         return
@@ -206,8 +216,15 @@ def check_qbittorrent(checks, seed):
         return
     libtorrent = str(build.get("libtorrent", ""))
     print(f"{url}: qBittorrent {version}, libtorrent {libtorrent}")
-    if not libtorrent.split(".")[0].isdigit() or int(libtorrent.split(".")[0]) < 2:
+    parsed = parse_version(libtorrent)
+    if not parsed or parsed[0] < 2:
         checks.fail(f"qBittorrent must run libtorrent 2.x to seed hybrid v1+v2 torrents, found {libtorrent!r}")
+    elif parsed < MIN_LIBTORRENT_VERSION:
+        warning(
+            f"qBittorrent's libtorrent {libtorrent} is older than "
+            f"{'.'.join(str(p) for p in MIN_LIBTORRENT_VERSION)}: missing fixes that matter to re-seeding and "
+            "rechecking (NOTES.md \"libtorrent\"). Not a failure, but worth upgrading"
+        )
     if seed:
         print(f"Save path for new torrents: {qbittorrent_save_path(seed)} (QBITTORRENT_SAVE_PATH, or SEED_DIR)")
 
@@ -235,7 +252,8 @@ def check_tools(checks):
 
         version = libtorrent.__version__
         if int(version.split(".")[0]) < 2:
-            checks.fail(f"libtorrent must be 2.x for hybrid v1+v2 torrents, found {version}")
+            checks.fail(f"libtorrent must be 2.x (make-torrent uses its v1_only and modification_time flags), "
+                        f"found {version}")
         else:
             print(f"libtorrent {version}")
     except ImportError:
@@ -257,16 +275,27 @@ def check_tools(checks):
 
 
 def check_trackers(checks):
-    """The tracker lists make-torrent downloads are reachable and give enough trackers today (lib/trackers.py)."""
-    try:
-        lists = fetch_tracker_lists()
-        trackers, counts = combine([(name, text) for name, _, text in lists])
-    except TrackersError as e:
-        checks.fail(f"{e} (make-torrent would fail)")
-        return
-    for name, usable, _ in counts:
-        print(f"{name}: {usable} UDP or HTTP(S) trackers")
-    print(f"{len(trackers)} trackers together (at least {MIN_TRACKERS} needed)")
+    """
+    GOOD_TRACKERS (lib/trackers.py), the fixed list make-torrent uses, answer a BEP 15 connect request: at least
+    MIN_WORKING_TRACKERS of them, or this fails (the torrent would still be made with a mostly-dead tracker list).
+    """
+    results = check_tracker_connectivity(GOOD_TRACKERS)
+    working = 0
+    for url, reachable, reason in results:
+        if reachable is None:
+            print(f"{url}: not checked ({reason})")
+        elif reachable:
+            working += 1
+            print(f"{url}: OK")
+        else:
+            print(f"{url}: not reachable ({reason})")
+    if working < MIN_WORKING_TRACKERS:
+        checks.fail(
+            f"Only {working} of {len(GOOD_TRACKERS)} trackers answered, need at least {MIN_WORKING_TRACKERS}: "
+            "review lib/trackers.py's GOOD_TRACKERS"
+        )
+    else:
+        print(f"{working} of {len(GOOD_TRACKERS)} trackers answered (at least {MIN_WORKING_TRACKERS} needed)")
 
 
 def check_remote(checks):

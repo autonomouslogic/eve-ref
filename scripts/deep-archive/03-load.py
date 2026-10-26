@@ -20,13 +20,10 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
 3. Check there's room in SEED_DIR for what's left to copy.
 4. If LOCAL_COPY_DIR is set: rclone copy --files-from-raw every file still to copy that the local copy has into
    SEED_DIR/<ID>/, as it is, unchecked. The local copy is only a shortcut, never trusted: old, changed or missing
-   files in it are expected, and step 5 replaces any that don't match the bucket. Files the bucket has no SHA-1 for
-   (bucket_sha1s) are never taken from it, as step 5 could only compare their size.
-5. rclone copy --checksum --files-from-raw the whole selection from the bucket into SEED_DIR/<ID>/: rclone compares
-   every file already there with the bucket by SHA-1 (by size where B2 has none) and downloads those that differ or
-   are missing, keeping the bucket's modification times, and checks each download's SHA-1 where B2 has one. Then a
-   normal rclone copy: --checksum leaves the modification time of a file whose content matches as it is, so this sets
-   the bucket's on any file where it differs (after checking the SHA-1 matches), without downloading it.
+   files in it are expected, and step 5 replaces any that don't match the bucket.
+5. rclone copy --files-from-raw the whole selection from the bucket into SEED_DIR/<ID>/: rclone compares every file
+   already there with the bucket by size and modification time, and downloads those that differ or are missing,
+   keeping the bucket's modification times.
 6. Walk the content folder again and check every listed file is on disk with the listed size and modification time
    (an index.json only has to be there: DataIndex rewrites it on every run), and nothing else is. Any problem aborts the step without a completion file; running it again carries on where it
    stopped.
@@ -49,7 +46,6 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
 Writes, in SCRATCH_DIR:
 
     load/
-      hash-files-from.txt   the paths whose SHA-1 is listed from the bucket, with LOCAL_COPY_DIR
       local-files-from.txt  the paths copied from the local copy
       files-from.txt        the whole selection, for the copy from the bucket
     manifest.json           the selection plus a SHA-256 for every file (torrent_id, generated_at, files)
@@ -70,7 +66,6 @@ import hashlib
 import json
 import os
 import shutil
-import subprocess
 import sys
 import time
 import zlib
@@ -89,10 +84,10 @@ from workflow import (  # noqa: E402
     local_copy_dir,
     ok,
     parse_iso,
-    rclone,
     rclone_run,
     section,
     site_path_problem,
+    verify_sha256sums,
     warning,
 )
 
@@ -176,8 +171,7 @@ def main():
     from_local = []
     if local_dir is not None and to_copy:
         section("Local copy")
-        sha1s = bucket_sha1s(remote, to_copy, load_dir)
-        from_local = [f for f in to_copy if f.path in sha1s and os.path.isfile(os.path.join(local_dir, f.path))]
+        from_local = [f for f in to_copy if os.path.isfile(os.path.join(local_dir, f.path))]
         print(
             f"{fmt_count(len(from_local))} files ({fmt_bytes(sum(f.size for f in from_local))}) in the local copy, "
             f"copied unchecked: the bucket copy replaces any that don't match"
@@ -192,19 +186,12 @@ def main():
     section("Bucket")
     files_from = write_files_from(os.path.join(load_dir, "files-from.txt"), files)
     print(
-        f"rclone copy --checksum {remote} -> {content_dir}: all {fmt_count(len(files))} files, downloading those not "
-        f"already there with the bucket's SHA-1, {TRANSFERS} transfers, list in {files_from}"
+        f"rclone copy {remote} -> {content_dir}: all {fmt_count(len(files))} files, "
+        f"size and mtime, {TRANSFERS} transfers, list in {files_from}"
     )
     download_started = time.monotonic()
-    rclone_copy(remote, content_dir, files_from, "--checksum")
-    print(f"rclone finished in {fmt_duration(time.monotonic() - download_started)}")
-    # --checksum never updates a modification time when the content matches (e.g. a local copy file the bucket has
-    # re-uploaded unchanged). A normal pass does: for a file with the same size and another modification time, rclone
-    # compares the SHA-1 and, if it matches, sets the bucket's modification time without downloading.
-    print(f"rclone copy {remote} -> {content_dir}: modification times")
-    times_started = time.monotonic()
     rclone_copy(remote, content_dir, files_from)
-    print(f"rclone finished in {fmt_duration(time.monotonic() - times_started)}")
+    print(f"rclone finished in {fmt_duration(time.monotonic() - download_started)}")
 
     section("Result")
     state = compare(content_dir, files)
@@ -240,9 +227,13 @@ def main():
             archive_failures.append(f"{f.path}: {archive_error}")
         now = time.monotonic()
         if now - last_progress >= PROGRESS_INTERVAL or index == len(files):
+            elapsed = now - hashing_started
+            speed = hashed_bytes / elapsed if elapsed > 0 else 0
+            eta = (total - hashed_bytes) / speed if speed > 0 else 0
             print(
                 f"{fmt_count(index)}/{fmt_count(len(files))} files, "
-                f"{fmt_bytes(hashed_bytes)}/{fmt_bytes(total)}, {fmt_duration(now - hashing_started)} elapsed"
+                f"{fmt_bytes(hashed_bytes)}/{fmt_bytes(total)}, {fmt_duration(elapsed)} elapsed, "
+                f"{fmt_bytes(speed)}/s, ETA {fmt_duration(eta)}"
             )
             last_progress = now
 
@@ -296,25 +287,6 @@ def main():
     ok(f"Load OK for {torrent_id}")
 
 
-def bucket_sha1s(remote, files, load_dir):
-    """
-    {path: SHA-1} for the files the bucket has a SHA-1 for. B2 has none for some (large files uploaded in parts), and
-    rclone copy --checksum can only compare those by size, so they're never taken from the local copy.
-    """
-    files_from = write_files_from(os.path.join(load_dir, "hash-files-from.txt"), files)
-    out = rclone(
-        "lsjson", remote, "--recursive", "--files-only", "--no-mimetype", "--hash", "--hash-type", "sha1",
-        "--files-from-raw", files_from,
-    )
-    sha1s = {}
-    for entry in json.loads(out):
-        sha1 = (entry.get("Hashes") or {}).get("sha1")
-        if sha1:
-            sha1s[entry["Path"]] = sha1
-    print(f"The bucket has a SHA-1 for {fmt_count(len(sha1s))} of {fmt_count(len(files))} files")
-    return sha1s
-
-
 def write_sha256sums(path, manifest_files):
     """Writes the standard sha256sum format: "<hex>  <path>", sorted by path, one line per file."""
     tmp = path + ".tmp"
@@ -322,20 +294,6 @@ def write_sha256sums(path, manifest_files):
         for entry in sorted(manifest_files, key=lambda e: e["path"]):
             f.write(f"{entry['sha256']}  {entry['path']}\n")
     os.rename(tmp, path)
-
-
-def verify_sha256sums(sha256_path, content_dir):
-    """Runs sha256sum -c on the just-written checksum file, from content_dir (the paths are relative to it). Fails
-    with sha256sum's own output on any mismatch: a second, independent check of the hashes just computed in Python."""
-    # --quiet: on a mismatch, only the files that failed are listed, not every one that's OK.
-    result = subprocess.run(
-        ["sha256sum", "-c", "--strict", "--quiet", sha256_path], cwd=content_dir, capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        for line in result.stdout.splitlines() + result.stderr.splitlines():
-            if line.strip():
-                error(f"  {line}")
-        fail(f"sha256sum -c failed for {sha256_path}")
 
 
 def write_files_from(path, files):

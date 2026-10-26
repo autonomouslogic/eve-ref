@@ -81,6 +81,23 @@ class AddTorrentTest(unittest.TestCase):
             self.add(b"Fails.")
 
 
+class SetSuperSeedingTest(unittest.TestCase):
+    def set_super_seeding(self, info_hash, enable):
+        with patch.object(qbittorrent.urllib.request, "urlopen") as urlopen:
+            urlopen.return_value.__enter__.return_value.read.return_value = b""
+            qbittorrent.Client("http://localhost:8080", "qbt_key").set_super_seeding(info_hash, enable)
+        return urlopen.call_args.args[0]
+
+    def test_enabling_posts_hashes_and_value_true(self):
+        request = self.set_super_seeding("abc", True)
+        self.assertEqual(request.full_url, "http://localhost:8080/api/v2/torrents/setSuperSeeding")
+        self.assertEqual(request.data, b"hashes=abc&value=true")
+
+    def test_disabling_posts_value_false(self):
+        request = self.set_super_seeding("abc", False)
+        self.assertEqual(request.data, b"hashes=abc&value=false")
+
+
 class TorrentIdTest(unittest.TestCase):
     V1 = "a" * 40
     V2 = "0123456789abcdef" * 4

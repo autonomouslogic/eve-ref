@@ -231,6 +231,23 @@ def qbittorrent_save_path(seed_dir):
     return os.environ.get("QBITTORRENT_SAVE_PATH", "").strip() or seed_dir
 
 
+# The libtorrent version qBittorrent should run, below which 00-preflight warns (NOTES.md "libtorrent"): 2.0.15 has
+# the 2026 merkle tree and hash picker fixes, and 2.0.14 the mmap write-corruption fix that matters to re-seeding and
+# the monthly recheck (README Appendix C).
+MIN_LIBTORRENT_VERSION = (2, 0, 15)
+
+
+def parse_version(value):
+    """A dotted version string as a tuple of its leading numeric components, e.g. "2.0.15.0" -> (2, 0, 15, 0); the
+    empty tuple if it has none. Stops at the first non-numeric component, so "2.0.15-rc1" -> (2, 0, 15)."""
+    parts = []
+    for part in value.split("."):
+        if not part.isdigit():
+            break
+        parts.append(int(part))
+    return tuple(parts)
+
+
 def step_name(step):
     """
     The step with its number, e.g. 01-find: the name of its script (.py) and its completion file (.done).
@@ -726,6 +743,24 @@ def verify_signature(path):
     print(f"Signature verified: {signature}, against {os.path.realpath(MINISIGN_PUBLIC_KEY)}")
     for line in output:
         print(f"  {line}")
+
+
+def verify_sha256sums(sha256_path, content_dir):
+    """
+    Runs sha256sum -c on a checksum file, from content_dir (the paths in it are relative to that folder). Fails with
+    sha256sum's own output on any mismatch. Used by 03-load (right after writing <ID>.sha256, as an independent check
+    of the hashes just computed in Python) and by 05-make-torrent (right before hashing the torrent, as one more check
+    that nothing in the content folder changed since 03-load, on top of content_problems' cheap size/mtime check).
+    """
+    # --quiet: on a mismatch, only the files that failed are listed, not every one that's OK.
+    result = subprocess.run(
+        ["sha256sum", "-c", "--strict", "--quiet", sha256_path], cwd=content_dir, capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        for line in result.stdout.splitlines() + result.stderr.splitlines():
+            if line.strip():
+                error(f"  {line}")
+        fail(f"sha256sum -c failed for {sha256_path}")
 
 
 def render_comment(torrent_id):

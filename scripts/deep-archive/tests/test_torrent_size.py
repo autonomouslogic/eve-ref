@@ -5,11 +5,11 @@ reading any data (NOTES.md "Torrent size").
 TorrentSizeTest covers the class on its own: it never shrinks as files are added, and an empty torrent is just the
 fixed allowance.
 
-RealTorrentTest is the real check: it builds an actual hybrid v1+v2 .torrent with libtorrent (small files chosen to
-exercise v1 pad files, v2 piece layers for multi-piece files, and nested directories), and compares its real bencoded
-size against TorrentSize's estimate for the same files. The estimate only has to be in the right ballpark (it's a
-limit check, not an exact prediction), so the tolerance here is generous -- but it must never undershoot the real
-size, since 01-find relies on it to stay under MAX_TORRENT_BYTES.
+RealTorrentTest is the real check: it builds an actual v1 .torrent with libtorrent, with the same flags
+05-make-torrent.py uses (v1_only, modification_time), and compares its real bencoded size against TorrentSize's
+estimate for the same files. The estimate only has to be in the right ballpark (it's a limit check, not an exact
+prediction), so the tolerance here is generous -- but it must never undershoot the real size, since 01-find relies on
+it to stay under MAX_TORRENT_BYTES.
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive). The real-torrent
 test is skipped if the libtorrent Python bindings aren't installed (they aren't required for the other tests, or for
@@ -35,6 +35,7 @@ except ImportError:
     LIBTORRENT = False
 
 PIECE_SIZE = 16 * 1024  # small, so hashing a handful of KB of real files is instant
+MTIME = 1_700_000_000  # any non-zero POSIX timestamp
 
 
 class TorrentSizeTest(unittest.TestCase):
@@ -65,15 +66,12 @@ class TorrentSizeTest(unittest.TestCase):
         long_path.add("a/much/deeper/directory/structure/a.bin", 100)
         self.assertGreater(long_path.bytes, short.bytes)
 
-    def test_a_shared_directory_is_only_counted_once(self):
-        separate_dirs = TorrentSize(PIECE_SIZE)
-        separate_dirs.add("a/one.bin", 100)
-        separate_dirs.add("b/two.bin", 100)
-        shared_dir = TorrentSize(PIECE_SIZE)
-        shared_dir.add("a/one.bin", 100)
-        shared_dir.add("a/two.bin", 100)
-        # The v2 file tree node for "a" is paid for once, not twice, so sharing a directory costs less.
-        self.assertLess(shared_dir.bytes, separate_dirs.bytes)
+    def test_pieces_come_from_the_running_total_not_per_file(self):
+        # v1 has no per-file piece alignment (NOTES.md "Piece alignment"): several small files can share one piece.
+        shared = TorrentSize(PIECE_SIZE)
+        shared.add("a.bin", PIECE_SIZE // 4)
+        shared.add("b.bin", PIECE_SIZE // 4)
+        self.assertEqual(shared.pieces, 1)
 
     def test_files_can_be_added_in_any_order(self):
         forward = TorrentSize(PIECE_SIZE)
@@ -84,11 +82,12 @@ class TorrentSizeTest(unittest.TestCase):
             backward.add(path, size)
         self.assertEqual(forward.bytes, backward.bytes)
         self.assertEqual(forward.pieces, backward.pieces)
+        self.assertEqual(forward.files, backward.files)
 
 
 @unittest.skipUnless(LIBTORRENT, "libtorrent Python bindings aren't installed")
 class RealTorrentTest(unittest.TestCase):
-    """Builds a real torrent and compares its actual size against TorrentSize's estimate for the same files."""
+    """Builds a real v1 torrent (05-make-torrent.py's flags) and compares its actual size against the estimate."""
 
     def _build(self, files, readme_bytes=b"EVE Ref Deep Archive test README\n"):
         """
@@ -106,15 +105,17 @@ class RealTorrentTest(unittest.TestCase):
                     # Repeating, not random, content: piece hashing doesn't care, and it keeps the test fast and
                     # deterministic.
                     f.write((b"EVE Ref deep archive test data. " * (size // 32 + 1))[:size])
+                os.utime(full, (MTIME, MTIME))
             readme_path = os.path.join(content_dir, f"{name}-README.md")
             with open(readme_path, "wb") as f:
                 f.write(readme_bytes)
+            os.utime(readme_path, (MTIME, MTIME))
 
             fs = lt.file_storage()
             for path in sorted(files) + [f"{name}-README.md"]:
                 full = os.path.join(content_dir, path)
-                fs.add_file(f"{name}/{path}", os.path.getsize(full))
-            ct = lt.create_torrent(fs, PIECE_SIZE)
+                fs.add_file(f"{name}/{path}", os.path.getsize(full), 0, MTIME)
+            ct = lt.create_torrent(fs, PIECE_SIZE, lt.create_torrent.v1_only | lt.create_torrent.modification_time)
             for tier, tracker in enumerate(
                 ["udp://tracker1.example.com:1337/announce", "udp://tracker2.example.com:1337/announce"]
             ):
@@ -125,13 +126,13 @@ class RealTorrentTest(unittest.TestCase):
                 "What this is, how to use it and how to help seed: https://docs.everef.net/datasets/deep-archive.html\n"
                 "File list: https://data.everef.net/deep-archive/everef-eve-online-deep-archive-2024-01-01.txt"
             )
-            ct.set_creator("EVE Ref")
+            ct.set_creator("EVE Ref (libtorrent test)")
             lt.set_piece_hashes(ct, parent)
             actual_bytes = len(lt.bencode(ct.generate()))
 
         estimate = TorrentSize(PIECE_SIZE)
         for path, size in files.items():
-            estimate.add(path, size)
+            estimate.add(path, size, MTIME)
         return actual_bytes, estimate
 
     def test_estimate_is_close_to_a_real_torrent(self):
@@ -140,8 +141,8 @@ class RealTorrentTest(unittest.TestCase):
             "a/one-byte.bin": 1,
             "b/exactly-one-piece.bin": PIECE_SIZE,
             "b/one-byte-under-a-piece.bin": PIECE_SIZE - 1,
-            "b/one-byte-over-a-piece.bin": PIECE_SIZE + 1,  # needs a v1 pad file
-            "c/d/several-pieces.bin": PIECE_SIZE * 5,  # multi-piece: exercises the v2 piece layer
+            "b/one-byte-over-a-piece.bin": PIECE_SIZE + 1,
+            "c/d/several-pieces.bin": PIECE_SIZE * 5,  # multi-piece
             "e/unicode-éè.bin": 10,  # non-ASCII byte length in the path matters to the estimate
         }
         actual_bytes, estimate = self._build(files)
@@ -168,6 +169,16 @@ class RealTorrentTest(unittest.TestCase):
         actual_bytes, estimate = self._build(files)
         self.assertGreaterEqual(estimate.bytes, actual_bytes)
         self.assertLess(estimate.bytes - actual_bytes, FIXED_BYTES)
+
+    def test_estimate_scales_with_many_tiny_files(self):
+        # Many tiny files sharing pieces (no padding, unlike a hybrid torrent): checks the estimate's running-total
+        # piece count, not a per-file one, still never undershoots.
+        files = {f"incursions/history/2022/{day:03d}/incursions.json": 200 for day in range(1, 201)}
+        actual_bytes, estimate = self._build(files)
+        self.assertGreaterEqual(estimate.bytes, actual_bytes)
+        self.assertLess(estimate.bytes - actual_bytes, FIXED_BYTES)
+        # No padding: the pieces are shared, nowhere near one per file.
+        self.assertLess(estimate.pieces, len(files))
 
 
 if __name__ == "__main__":

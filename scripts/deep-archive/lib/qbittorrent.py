@@ -123,3 +123,15 @@ class Client:
 
     def recheck(self, info_hash):
         self._request("POST", "/api/v2/torrents/recheck", data=urllib.parse.urlencode({"hashes": info_hash}).encode())
+
+    def set_super_seeding(self, info_hash, enable):
+        """
+        Turns super seeding on or off. Only takes effect once the torrent is a seed (libtorrent: "If the torrent is
+        not a seed, this flag has no effect."), so it's safe to call right after adding a torrent that still has to
+        be (re)checked.
+        """
+        self._request(
+            "POST",
+            "/api/v2/torrents/setSuperSeeding",
+            data=urllib.parse.urlencode({"hashes": info_hash, "value": "true" if enable else "false"}).encode(),
+        )

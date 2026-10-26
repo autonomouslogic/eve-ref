@@ -23,7 +23,9 @@ How the cutoff is chosen:
    - MAX_BYTES is soft: the first date that takes the data to it or over is the cutoff. The torrent can be over it.
    If neither is reached, the cutoff is the newest allowed date.
 5. Select every candidate dated on or before the cutoff, and the index.json of every folder they're in.
-6. Abort if the selection holds less than MIN_BYTES (lib/workflow.py): not enough data for a torrent yet.
+6. Abort if the selection holds less than MIN_BYTES (lib/workflow.py) -- unless the cutoff was reached because the
+   .torrent estimate hit MAX_TORRENT_BYTES (min_bytes_reached): that's the size limit working as intended, a lot of
+   small files reaching it well under MIN_BYTES, not a sign there isn't enough data yet.
 
 Dates: a file's date is the earliest of:
 - its modification date (UTC);
@@ -228,7 +230,7 @@ def main():
     data = [o for o in scan.candidates if o.date <= cut.cutoff]
     selected = data + folder_indexes(data, scan.indexes)
     selected_bytes = sum(o.size for o in selected)
-    if selected_bytes < MIN_BYTES:
+    if not min_bytes_reached(selected_bytes, cut.reason):
         fail(
             f"Only {fmt_bytes(selected_bytes)} ({fmt_count(len(selected))} files, up to {cut.cutoff}) to archive, "
             f"less than MIN_BYTES ({fmt_bytes(MIN_BYTES)}): not enough data for a torrent yet"
@@ -523,6 +525,17 @@ def choose_cutoff(candidates, indexes, newest_allowed):
     return cut
 
 
+def min_bytes_reached(selected_bytes, cutoff_reason):
+    """
+    Whether the selection has enough data for a torrent, or doesn't need to: MAX_TORRENT_BYTES stopping the
+    selection early (cutoff_reason == "torrent") is a size limit working as intended -- a torrent of mostly small
+    files can hit it with far less than MIN_BYTES of data -- not a sign that there isn't enough data yet. MAX_BYTES
+    reaching MIN_BYTES is implied by its own definition (MIN_BYTES <= MAX_BYTES), so this only really bites when
+    cutoff_reason is "age": every old-enough candidate was selected and it still isn't MIN_BYTES.
+    """
+    return cutoff_reason == "torrent" or selected_bytes >= MIN_BYTES
+
+
 def add(counter, size):
     counter[0] += 1
     counter[1] += size
@@ -595,6 +608,11 @@ def build_summary(
         flags.append(
             f"limits not reached: everything dated up to {newest_allowed} fits. The torrent is smaller than it "
             "could be; consider waiting"
+        )
+    if cut.reason == "torrent" and total < MIN_BYTES:
+        flags.append(
+            f"the .torrent size limit was reached with only {fmt_bytes(total)}, less than MIN_BYTES "
+            f"({fmt_bytes(MIN_BYTES)}): a smaller torrent than usual, not a sign of a problem (min_bytes_reached)"
         )
     if scan.empty:
         flags.append(f"empty files: {len(scan.empty)}")

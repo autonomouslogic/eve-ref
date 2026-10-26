@@ -36,10 +36,20 @@ to by name from the code (e.g. `NOTES.md "Deletion"`).
 Nothing relies on cutoffs being in order: `TORRENT_INCLUDE` can put older files in a later torrent. Telling a new
 version of a listed path apart would need its modification time in the `.txt`.
 
+### MIN_BYTES and the torrent size limit
+
+`min_bytes_reached` only enforces `MIN_BYTES` when the cutoff was reached by running out of old-enough candidates
+(`cut.reason == "age"`). A selection that instead stopped because the `.torrent` estimate hit `MAX_TORRENT_BYTES`
+(`cut.reason == "torrent"`) is exempt: a lot of small files can reach that hard limit with far less than
+`MIN_BYTES` of data (measured in "Torrent size": about 470 GiB of typical files), and that's the size limit working
+as intended, not a sign there isn't enough data yet. `cut.reason == "bytes"` never needs the exemption, since
+`MAX_BYTES >= MIN_BYTES` by definition.
+
 ## Torrent size
 
 libtorrent's defaults also cap a torrent at 2,097,152 pieces, far off at `PIECE_SIZE`. qBittorrent raises some of its
-limits in its advanced settings; other clients may not, so libtorrent's defaults are the target.
+limits in its advanced settings (by default a 100 MiB `.torrent` and 10,000,000 bdecode tokens, against libtorrent's
+10,000,000 bytes and 3,000,000 tokens); other clients may not, so libtorrent's defaults are the target.
 
 Measured (2026-10-08, 16 MiB pieces):
 
@@ -54,25 +64,207 @@ Small files are the problem, not bytes. The small-snapshot datasets (`incursions
 `sovereignty-*`/`system-*`/`industry-*` sets, …) were most of the file count for a fraction of a percent of the bytes,
 until the roll-up merged them into a few large files.
 
+Worked out (2026-10-26, 32 MiB pieces) from file sizes sampled on data.everef.net: market-orders about 17.3 MB per
+file, fuzzwork ordersets 24.4 MB, public-contracts 5.2 MB, esi-scrape 76 MB. For 990 GiB laid out like those datasets
+(one file of each of the first three every 30 minutes, an esi-scrape file a day: 66,265 files), hybrid sizes from
+`lib/torrent_size.py` (checked against a real libtorrent hybrid of 580 of the files: 184,122 bytes, estimate 184,348),
+v1-only sizes from libtorrent itself:
+
+| Format  | Piece size | `.torrent` | Pad files                   |
+|---------|------------|------------|-----------------------------|
+| Hybrid  | 32 MiB     | 21.1 MB    | 1,108 GiB, 112% of the data |
+| Hybrid  | 16 MiB     | 26.5 MB    | 758 GiB, 77%                |
+| v1 only | 32 MiB     | 8.7 MB     | none                        |
+| v1 only | 16 MiB     | 9.3 MB     | none                        |
+
+- Hybrid costs about **317 bytes per file** of these sizes, v1 about 131. 32 MiB is the most compact hybrid piece size
+  for them: a file smaller than a piece gets no v2 piece layer.
+- **A 10 MB hybrid holds about 31,000 of these files, roughly 470 GiB: less than `MIN_BYTES`.** Decided against
+  hybrid partly for this reason (below, "Piece alignment"); `01-find` also no longer treats the `.torrent` limit
+  stopping the selection early as "not enough data" (`min_bytes_reached`, "Selection").
+- Pad files cost libtorrent clients nothing; other clients download them ("Pad files in other clients"); EVE Ref's
+  v1-only torrents have none either way.
+- libtorrent's automatic piece size is 16 MiB at this size (its table stops there, from about 655 GiB). Its creator
+  refuses pieces over 128 MiB since 2.0.11, qBittorrent offers 16 KiB to 128 MiB, and qBittorrent's libtorrent 1.2
+  builds can't load 256 MiB pieces ([qBittorrent #23494](https://github.com/qbittorrent/qBittorrent/issues/23494)).
+
 ## Torrent format
 
-- **Hybrid v1+v2**: v1 for client compatibility, v2 for per-file SHA-256.
-- Made with Python **libtorrent 2.x**, the same library as qBittorrent. Not `mktorrent`: v1 only.
+- **v1 only**, decided after a review of libtorrent, qBittorrent and other clients (2026-10-26; "Sources"). Hybrid
+  v1+v2 was the format up to then; "Piece alignment" and "Pad files in other clients" are what that review found,
+  and the decision itself is below them, under "Piece alignment".
+- Made with Python **libtorrent 2.x**, the same library as qBittorrent. Not `mktorrent`: it can't make v2 or
+  modification-time fields (below), and hasn't had a release since 2017.
+- Every file's **modification time** is included (`create_torrent.modification_time`): the manifest's for a data
+  file, the file's own for a root file (README, checksum file, signature). Off by default in libtorrent, because a
+  file re-created elsewhere with a different mtime would get a different info-hash -- not a risk here, since EVE Ref
+  is the only creator and a file's mtime is the site's original upload time, carried through `03-load`. Lets a
+  downloader see a file's original date without opening it; doesn't change what's checked (the piece hashes do that,
+  mtime or not).
 - **No web seed**: the files are deleted from data.everef.net and a torrent can't change, so it would be a dead URL.
 - The comment is outside the info dictionary and magnet-link users don't get it: the README inside the torrent carries
   the same link.
 
+### libtorrent
+
+From the source (RC_2_0 at 2.0.15, and 2.1; exact commits under "Sources"):
+
+- `create_torrent` keeps the `file_storage` by reference and, for hybrid and v2, changes it in place: files sorted by
+  path component (`a/y` before `a-b/x`, unlike the `.txt`'s whole-string order), and a `.pad/<size>` pad file after
+  every file, the last one included (tail padding, since 2.0.8; `canonical_files_no_tail_padding` gives the old layout
+  and another info-hash). Pad files of the same size share a path.
+- The Python `set_piece_hashes` runs with default settings: one hashing thread (the default since 2.0.7), which Python
+  can't change. Hybrid hashing measured 330 MB/s on an i5-10400 (no SHA-NI), data in the page cache, the same at 16 and
+  32 MiB: about 55 minutes per 990 GiB at best. v1 only measured 990 MB/s, about 18 minutes. Its callback gets a
+  running count of hashed pieces, not a piece index.
+- The bindings have `set_hash` but not `set_hash2`, in 2.0 and 2.1: v2 hashes can't be supplied from Python, only
+  checked.
+- Per-file v1 piece hashes (SHA-1 of each piece of the file, the last one zero-filled to the piece size) and v2 pieces
+  roots (BEP 52's merkle tree of SHA-256 over 16 KiB blocks, filled to a power of two with zero hashes) computed with
+  `hashlib` match libtorrent's exactly, tail padding included. Both, with the plain SHA-256, in one read at 32 MiB:
+  186 MB/s on one thread, about 800 MB/s on six.
+- The layout hasn't changed since 2.0.10 (February 2024, what Ubuntu 24.04 ships). 2.0.12 fixed error handling when
+  hashing through mmap: on 2.0.10 a read error during `set_piece_hashes` can crash the process instead of raising.
+  2.0.14 and 2.0.15 (August and September 2026) fixed v2 merkle tree and hash picker bugs, and a write corruption in
+  mmap storage: these matter to the seeder, not to making torrents.
+- 2.1 is out: it deprecates `create_torrent(file_storage&)` for `list_files()` and `create_file_entry`, makes
+  `file_storage` "more immutable", and deprecates creator, comment and creation date (#7864). CI installs whatever
+  `ubuntu-latest` ships.
+- The docs call `v1_only` "mainly for tests, not recommended for production use": libtorrent pushing v2, not a defect.
+- **`create_torrent` keeps a C++ reference to the `file_storage`, not a copy** (the docs say so: "The file_storage
+  and torrent_info objects must stay alive for the entire duration of the create_torrent object"), and the Python
+  binding doesn't protect against it. Building the `file_storage` in a helper function and returning only the
+  `create_torrent` crashes (a segfault, or `RuntimeError: Bad address`) once Python garbage-collects the
+  `file_storage` after the helper returns, while the `create_torrent` still holds the now-dangling reference. Caught
+  by `05-make-torrent`'s end-to-end test; the fix is returning the `file_storage` too and keeping it referenced
+  until `generate()`.
+
+### qBittorrent
+
+From the source (master, 5.4.0 in development; exact commit under "Sources"):
+
+- Its torrent creator makes the same kind of libtorrent calls as `05-make-torrent`, but defaults differ:
+  `create_torrent` (hybrid by default, not v1 only), trackers (all in tier 0 unless separated by blank lines, not a
+  fixed checked list), the same single-threaded `set_piece_hashes`, creator, comment, `generate()`, and an optional
+  `source` key in the info dictionary. It walks the folder (natural sort, dotfiles skipped) and doesn't check its
+  result. Piece size: libtorrent's automatic one, or 16 KiB to 128 MiB.
+- Its defaults: one hashing thread, announce to all tiers but not to every tracker in a tier, and the limits in
+  "Torrent size".
+
+### Piece alignment
+
+Pad files make every file start at a piece boundary. In v1 (BEP 3) files are back to back, so a piece can hold the end
+of one file and the start of the next. Aligned, every piece holds one file's bytes only, and a file's piece hashes
+depend on nothing but its content and the piece size.
+
+Required or not:
+
+- **v1**: optional. BitComet added padding files in 2007 (0.85); BEP 47 (2016) made them a standard, and says "the
+  presence of padding files does not imply that all files are piece-aligned".
+- **v2**: built in. BEP 52 hashes each file as its own merkle tree ("identical files always result in the same root
+  hash"), so no piece can span two files.
+- **Hybrid**: required for more than one file. BEP 52's "Upgrade Path": the v1 `pieces` and `files` "must be generated
+  to describe the same data in the same order", and "since the old format did not align files to piece boundaries a
+  multifile torrent must use BEP 47 padding files to achieve identical alignment". Piece N is then the same bytes in
+  both swarms, one copy on disk serves both, and every piece is checked against both hashes.
+
+What it's for:
+
+- **Reusing data across torrents.** BEP 47's whole rationale is one line: "Piece-aligned files simplify deduplication
+  [BEP 38] and the operations on mutable torrents [BEP 39]." BEP 38 reuses pieces whose hash matches another
+  torrent's, which "greatly favors torrents with piece-aligned files": unaligned, the same file only gets the same
+  piece hashes if it sits at the same offset modulo the piece size. BEP 39 replaces a torrent with a newer version,
+  which can then reuse its unchanged files. libtorrent 1.2's `mutable_torrent_support` aligned every file to the piece
+  size "because piece hashes are compared to determine whether files are identical". BitComet's padding was for the same
+  thing (Long-Term Seeding: getting a file from users who have it from another torrent) and for getting single files
+  from HTTP, FTP and eD2k sources
+  ([TorrentFreak, 2007](https://torrentfreak.com/bitcomet-pollutes-bittorrent-with-junk-data/)).
+- **Tail padding** follows from it: libtorrent pads the last file as well, "in order to match an equivalent
+  tail-padded file" (its 2016 code comment), so a file's last piece hash doesn't depend on the file being last. BEP
+  52's reference creator does it for multi-file torrents. libtorrent 1.1 and 1.2 did it only with
+  `mutable_torrent_support`, 2.0 to 2.0.7 not at all, 2.0.8 on always. Single-file torrents aren't padded.
+- **Files on their own.** A selected file is exactly its own pieces, and a complete file verifies without its
+  neighbours. Unaligned, a file's first and last pieces also hold bytes of the files next to it, which get downloaded
+  too (libtorrent keeps them in a `.parts` file).
+- **Web seeds**: a piece spanning files needs requests to more than one URL. libtorrent's manual ("HTTP seeding"): when
+  a web seed redirects files to different hosts, they must be piece-aligned.
+- **Disk I/O**: every piece read or write touches one file. libtorrent's old `optimize_alignment` padded "for optimized
+  disk-I/O", and 0.15 added unbuffered I/O for aligned files.
+
+For these torrents, beyond hybrid needing it, only partial downloads are left: no path is in two torrents ("No path in
+two torrents"), a published torrent never changes, and there's no web seed. For "Torrent size"'s 990 GiB layout, the
+bytes downloaded per byte wanted (hybrid in a libtorrent client: always 1, as pad files are never fetched):
+
+| Selection              | v1 only, 16 MiB | v1 only, 32 MiB |
+|------------------------|-----------------|-----------------|
+| One market-orders file | 1.97            | 2.94            |
+| One day of them        | 1.020           | 1.040           |
+| One month of them      | 1.0007          | 1.0014          |
+
+A dataset's files sit together in path order, so v1 only costs extra at the two ends of a selection: a lot for a
+single file, little for a date range. A client without pad file support pays on everything instead: 2.1 for the whole
+32 MiB hybrid ("Pad files in other clients").
+
+**Decided: v1 only** (NOTES.md "Torrent format"). None of alignment's reasons apply to these torrents: nothing is
+ever in two torrents, a published torrent never changes, and there's no web seed, so there's nothing to deduplicate
+and no mutable-torrent update to make. What's left is the single-file and partial-run cost above, real but small,
+against hybrid's cost: about 2.4 times the `.torrent` bytes per file, pad files other clients download and store
+("Pad files in other clients"), a third the hashing speed ("libtorrent"), and the hybrid-only code paths (pad
+filtering, the v2-only parts of libtorrent that needed a 2026 run of fixes). `05-make-torrent` makes `v1_only`
+torrents; see "Open issues" for what's still unresolved.
+
+### Pad files in other clients
+
+Historical: EVE Ref's torrents are v1 only (decided under "Piece alignment"), so they have no pad files. Kept for
+why: a hybrid torrent's v1 file list holds the pad files (BEP 52 requires BEP 47 padding). Clients that know BEP 47
+never download or store them; the rest download the zeros and keep them in a `.pad/` folder.
+
+- **Transmission 4.x** doesn't know them ([#3387](https://github.com/transmission/transmission/issues/3387), open as of
+  May 2026). Ubuntu 24.04's 4.0.5 lists `.pad/*` as ordinary files: 1.57 MB in all for 0.70 MB of data, in a
+  scaled-down copy of these torrents. With "Torrent size"'s 32 MiB hybrid, a Transmission user downloads and stores more
+  than twice the data.
+- **aria2** 1.37 doesn't either ([#2312](https://github.com/aria2/aria2/issues/2312), open): it fetches the pad files
+  and can stall. `08-check-seed` still works, as qBittorrent serves the zeros.
+- **rTorrent** before 0.15.2 (Ubuntu 24.04 ships 0.9.8) refuses a torrent with two files on the same path
+  ([#1156](https://github.com/rakshasa/rtorrent/issues/1156)), which libtorrent's `.pad/<size>` names all but
+  guarantee at this scale. The repeats are BEP 47's recommendation, on purpose: a client without BEP 47 then writes
+  every padding file into one folder, "potentially re-using padding files from other torrents".
+- libtorrent clients (qBittorrent, Deluge) handle them. BiglyBT supports hybrid torrents since 2.5; its pad handling
+  is unchecked.
+
 ### Trackers
 
+**Decided: a fixed, hand-picked list** (`lib/trackers.txt`, loaded by `lib/trackers.py`), not fetched from anywhere
+at run time. `00-preflight` checks each is reachable (a BEP 15 connect request, `check_trackers`), and fails if
+fewer than `MIN_WORKING_TRACKERS` answer; `05-make-torrent` just uses the list, trusting that check.
+
+Why not fetch a list (ngosang/XIU2's, as it used to): a `.torrent` can't change once published, so a tracker domain
+that lapses can be registered by anyone, who then gets the announces of everyone still sharing the torrent (their
+IPs and the info-hash) and can hand out junk peers. The lists also decay fast and carry domains not worth that risk:
+
+- Of ngosang's best 20 from 1, 2 and 3 years earlier, only 7–9 were still listed. The same 7 survived every time:
+  `opentrackr.org:1337`, `open.stealth.si:80`, `tracker.torrent.eu.org:451`, `open.demonii.com:1337`,
+  `exodus.desync.com:6969`, `explodie.org:6969`, `tracker-udp.gbitt.info:80` -- exactly `lib/trackers.txt`'s list.
+  DHT and PEX carry the swarm once trackers die, so even these seven matter less over time.
+- Both lists include piracy-branded domains, and XIU2's has `bt1/bt2.archive.org` and a WebSocket tracker. On
+  2026-10-26 their union was 69 trackers (41 UDP, 14 HTTP, 14 HTTPS), among them `wareztorrent.com`,
+  `foreverpirates.co`, nyaa trackers, a `duckdns.org` host, `.xyz`, `.top` and `.ga` domains, and personal servers.
+
+Potential sources, if the fixed list ever needs refreshing by hand: the "best" lists from
+[ngosang/trackerslist](https://github.com/ngosang/trackerslist) and
+[XIU2/TrackersListCollection](https://github.com/XIU2/TrackersListCollection), UDP and HTTP(S) entries only (the
+rest -- WebSocket, I2P, Yggdrasil -- need a client feature EVE Ref can't assume).
+
+Client behaviour, unrelated to where the list comes from:
+
 - Clients follow BEP 12: shuffle a tier, use the first tracker that answers, only move on if the tier fails.
-  qBittorrent announces to all tiers by default, so one per tier reaches every tracker.
+  qBittorrent announces to all tiers by default, so one per tier reaches every tracker. libtorrent's own default
+  (Deluge and other libtorrent clients) stops at the first tier with a working tracker: there, the tiers are fallbacks.
 - Trackers sit outside the info dictionary: not part of the info-hash, and clients merge tracker lists when the same
   torrent is added again.
-- The lists decay fast: of ngosang's best 20 from 1, 2 and 3 years earlier, only 7–9 were still listed. The same 7
-  survived every time (`opentrackr.org:1337`, `open.stealth.si:80`, `tracker.torrent.eu.org:451`,
-  `open.demonii.com:1337`, `exodus.desync.com:6969`, `explodie.org:6969`, `tracker-udp.gbitt.info:80`). DHT and PEX
-  carry the swarm once trackers die.
-- Both lists include piracy-branded domains, and XIU2's has `bt1/bt2.archive.org` and a WebSocket tracker.
+
+An EVE Ref tracker (opentracker, under everef.net), in tier 0, would last as long as the seeder, on a domain nobody
+else can register -- not done; would need its own hosting and upkeep.
 
 ## Published files
 
@@ -166,17 +358,118 @@ A second copy, if ever wanted: another seeder, an offline disk off site, or B2 i
   torrent (e.g. to redo `07-seed`) is done by hand.
 - Any script change that changes behaviour or output updates `README.md` in the same commit.
 
+### Super seeding
+
+`07-seed` turns it on (`torrents/setSuperSeeding`) right after adding the torrent, before the recheck: libtorrent's
+docs say the flag "has no effect" until the torrent is actually a seed, so setting it early is safe, and it takes
+over automatically once the recheck finishes. The point is the initial bootstrap: EVE Ref is the only seeder at
+first, and super seeding gets the swarm distributing the data among peers faster than a single ordinary seed could,
+by only revealing a few pieces to each peer at a time instead of announcing the full set.
+
+Turning it off again is left to the operator, by hand in the WebUI (same reasoning as "Nothing removes or stops a
+torrent": lifecycle changes after the initial add are deliberate, not scripted). Once other seeders have the data,
+super seeding stops helping and should be turned off; this seed runs for years ("Durability"), so it shouldn't be
+left in a mode meant for bootstrapping a brand new swarm. README Appendix C's monthly recheck is also when to check
+for this.
+
 ## Known limitations
 
 - **Unchecked on real files:** that rclone's `ModTime` on B2 is the upload time for the Java uploads, and that B2 honours
   Content-Type and Cache-Control set through `--header-upload`.
-- **Between load and the torrent**, only each file's size and modification time are checked: silent corruption that
-  keeps both isn't caught until `08-check-seed`'s recheck; a full guard would be another read of all the data.
+- **Between load and the torrent**, there's no reason a file would change (nothing else writes to `$SEED_DIR/<ID>/`
+  between the two steps), but `05-make-torrent` checks anyway, for good measure: `content_problems`' cheap size and
+  modification-time check, then a full `sha256sum -c` against `03-load`'s checksum file (`verify_sha256sums`,
+  immediately before hashing). `08-check-seed`'s recheck only catches a change made after the torrent was made, not
+  before it.
 - **`08-check-seed` isn't an outside test**: when NAT hairpinning gets in the way, use local peer discovery, or check
   from another machine.
-- **aria2c is v1 only** and fetches only the README: v2-only clients, magnet metadata and data files with unusual
-  paths go untested.
+- **`08-check-seed`'s aria2c download fetches only the README**: data files with unusual paths (long, non-ASCII, …)
+  go untested by it.
 - **The docs page's rules aren't checked.** `12-check-before-delete` checks the page lists the torrent, not that its
   rules match `lib/workflow.py`, or its links.
 - **The feed backup** in `$SCRATCH_DIR/feed-backup/` goes with the scratch directory. The feed can always be rebuilt
   from the published `.torrent` files.
+
+## Open issues
+
+From a review of torrent making against libtorrent, qBittorrent and other clients (2026-10-26; "Sources"). The
+format (v1 only), trackers (a fixed list), the `MIN_BYTES`/`.torrent`-limit interaction, and the load-to-torrent gap
+that review raised are decided and implemented (see "Torrent format", "Piece alignment", "Trackers", "Selection"
+and "Known limitations"). What's left:
+
+- Keep a copy of `<ID>.torrent` and its signature in `$SEED_DIR`, outside the torrent's folder: `$SCRATCH_DIR` is
+  deleted.
+- Reject Windows-invalid characters, reserved names (`CON`, `NUL`, …), trailing dots or spaces, and case-only
+  collisions in `site_path_problem`: libtorrent renames such files on Windows, and `sha256sum -c` then fails.
+
+## Sources
+
+For the research of 2026-10-26 in "Torrent size", "Torrent format" and "Open issues". Source code was read at the
+commits given; web pages as of that day.
+
+Specifications, from [bittorrent.org](https://github.com/bittorrent/bittorrent.org) at `7b7b41f4`:
+
+- [BEP 3](https://www.bittorrent.org/beps/bep_0003.html) (v1), [BEP 12](https://www.bittorrent.org/beps/bep_0012.html)
+  (tracker tiers), [BEP 15](https://www.bittorrent.org/beps/bep_0015.html) (UDP trackers),
+  [BEP 19](https://www.bittorrent.org/beps/bep_0019.html) (web seeds).
+- [BEP 38](https://www.bittorrent.org/beps/bep_0038.html) (reusing local data),
+  [BEP 39](https://www.bittorrent.org/beps/bep_0039.html) (updating torrents),
+  [BEP 47](https://www.bittorrent.org/beps/bep_0047.html) (pad files and file attributes).
+- [BEP 52](https://www.bittorrent.org/beps/bep_0052.html) (v2 and hybrid), and its
+  [reference torrent creator](https://www.bittorrent.org/beps/bep_0052_torrent_creator.py) (tail padding).
+
+libtorrent, from [arvidn/libtorrent](https://github.com/arvidn/libtorrent):
+
+- RC_2_0 at `eb397173` (2026-10-18: 2.0.15 and unreleased fixes): `src/create_torrent.cpp` (`set_piece_hashes`, the
+  automatic piece size, the 128 MiB limit, `generate()`), `src/file_storage.cpp` (`canonicalize_impl`),
+  `src/settings_pack.cpp` (hashing threads, announce defaults), `include/libtorrent/torrent_info.hpp` (load limits),
+  `include/libtorrent/create_torrent.hpp` (the flags' docs), `bindings/python/src/create_torrent.cpp`,
+  `docs/manual.rst` ("HTTP seeding"), `docs/upgrade_to_2.0.rst`, `ChangeLog`, and the release tags' dates.
+- Commits `acf77a53` (2016, 1.1.2: "The last file must be padded too"), `74d82a0c` (2022, 2.0.8: tail padding back),
+  `56732459` (2.0.12: errors while hashing through mmap), `3f95bf4d` (2.0.14: mmap write corruption), and the 2.0.10
+  to 2.0.15 diff of `src/create_torrent.cpp` and `src/file_storage.cpp` (layout unchanged).
+- v1.2.19's `src/create_torrent.cpp` (`mutable_torrent_support`), and master at `14fef2ae` (2.1):
+  `include/libtorrent/create_torrent.hpp` and `bindings/python/src/create_torrent.cpp`.
+- [Reference: Create Torrents](https://www.libtorrent.org/reference-Create_Torrents.html) (2.1.0),
+  [2.1.0 release notes](https://newreleases.io/project/github/arvidn/libtorrent/release/v2.1.0),
+  [blog: BitTorrent v2](https://blog.libtorrent.org/2020/09/bittorrent-v2/).
+
+qBittorrent, from [qbittorrent/qBittorrent](https://github.com/qbittorrent/qBittorrent) master at `408efd10`
+(2026-10-25): `src/base/bittorrent/torrentcreator.cpp` and `.h`, `src/base/bittorrent/sessionimpl.cpp` (announce and
+hashing defaults), `src/base/preferences.cpp` (load limits), `src/gui/torrentcreatordialog.cpp` (piece sizes); issue
+[#23494](https://github.com/qbittorrent/qBittorrent/issues/23494).
+
+Other clients:
+
+- Issues: Transmission [#3387](https://github.com/transmission/transmission/issues/3387), aria2
+  [#2312](https://github.com/aria2/aria2/issues/2312), rTorrent
+  [#1156](https://github.com/rakshasa/rtorrent/issues/1156).
+- Ubuntu 24.04 versions, from `apt-cache policy`: transmission 4.0.5, rtorrent 0.9.8, aria2 1.37.0, deluge 2.1.2,
+  qbittorrent-nox 4.6.3, python3-libtorrent 2.0.10.
+- Ubuntu's own torrents, from [releases.ubuntu.com](https://releases.ubuntu.com/): `ubuntu-26.10-desktop-amd64`,
+  `ubuntu-26.04.1-live-server-amd64` and `ubuntu-24.04.5.1-desktop-amd64` (`.iso.torrent`), read with libtorrent.
+  [mktorrent](https://github.com/pobrn/mktorrent): last release 1.1 (January 2017), last commit January 2021, v2
+  support asked for in [#29](https://github.com/pobrn/mktorrent/issues/29), open since 2019.
+
+Trackers and history:
+
+- The two lists considered as "potential sources" ("Trackers"), as downloaded that day (before the fixed-list
+  decision): [ngosang/trackerslist](https://github.com/ngosang/trackerslist) and
+  [XIU2/TrackersListCollection](https://github.com/XIU2/TrackersListCollection), and ngosang's README.
+- How a lapsed domain can end up elsewhere: ExtraTorrent.ag, parked and redirecting to a domain flagged as malicious
+  for a day in May 2018
+  ([TorrentFreak](https://torrentfreak.com/extratorrent-replacement-displays-warning-on-predecessors-shutdown-anniversary-180518/)).
+- BitComet's padding files:
+  [TorrentFreak, 2007](https://torrentfreak.com/bitcomet-pollutes-bittorrent-with-junk-data/),
+  [Wikipedia](https://en.wikipedia.org/wiki/BitComet) (0.85, early 2007, for "Long-Term Seeding").
+
+Data and measurements:
+
+- File sizes: data.everef.net's `index.json` listings for `market-orders/history` (2022, 2023), `fuzzwork/ordersets`,
+  `public-contracts/history/2023` and `esi-scrape`, a few folders each.
+- Measured in an Ubuntu 24.04 container on an i5-10400 with Python 3.12 and libtorrent 2.0.10's bindings (the scripts
+  weren't kept): `set_piece_hashes` on a 2 GiB random file in the page cache, hybrid and v1 only; `lib/torrent_size.py`
+  against a real hybrid of 580 sparse files; v1-only sizes at 8, 16 and 32 MiB from `create_torrent` with `v1_only`
+  and dummy `set_hash` values; the `hashlib` hashes against `hash_for_piece` and `files().root` for empty, one-byte,
+  one-piece and multi-piece files; `transmission-show` 4.0.5 on a hybrid scaled down to 256 KiB pieces; partial
+  downloads from the pieces that each file's offset and size cover in the 990 GiB layout.

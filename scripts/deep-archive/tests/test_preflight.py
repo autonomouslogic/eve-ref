@@ -10,7 +10,7 @@ import os
 import sys
 import tempfile
 import unittest
-from unittest.mock import DEFAULT, patch
+from unittest.mock import DEFAULT, Mock, patch
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
@@ -105,6 +105,69 @@ class CheckRemoteTest(unittest.TestCase):
         listing = json.dumps([{"Path": "everef-eve-online-deep-archive-99.torrent"}])
         next_id, checks = self.check_remote([self.index_result(), (listing, None)])
         self.assertIsNone(next_id)
+        self.assertEqual(checks.failed, 1)
+
+
+class CheckQbittorrentTest(unittest.TestCase):
+    """qBittorrent must run libtorrent 2.x (a failure); older than MIN_LIBTORRENT_VERSION is only a warning."""
+
+    def check(self, libtorrent_version):
+        checks = preflight.Checks()
+        env = {"QBITTORRENT_URL": "http://localhost:8080"}
+        client = Mock()
+        client.version.return_value = "v5.0.0"
+        client.build_info.return_value = {"libtorrent": libtorrent_version}
+        with (
+            patch.dict(os.environ, env),
+            patch.object(preflight, "Client", return_value=client),
+        ):
+            preflight.check_qbittorrent(checks, seed=None)
+        return checks
+
+    def test_libtorrent_1_x_fails(self):
+        checks = self.check("1.2.19.0")
+        self.assertEqual(checks.failed, 1)
+
+    def test_not_a_version_fails(self):
+        checks = self.check("")
+        self.assertEqual(checks.failed, 1)
+
+    def test_recent_libtorrent_2_x_has_no_problems(self):
+        checks = self.check("2.0.15.0")
+        self.assertEqual(checks.failed, 0)
+
+    def test_old_libtorrent_2_x_warns_but_does_not_fail(self):
+        with patch.object(preflight, "warning") as warn:
+            checks = self.check("2.0.10.0")
+        self.assertEqual(checks.failed, 0)
+        warn.assert_called_once()
+        self.assertIn("2.0.10.0", warn.call_args[0][0])
+
+
+class CheckTrackersTest(unittest.TestCase):
+    def check(self, results, min_working=3):
+        checks = preflight.Checks()
+        with (
+            patch.object(preflight, "check_tracker_connectivity", return_value=results),
+            patch.object(preflight, "GOOD_TRACKERS", [r[0] for r in results]),
+            patch.object(preflight, "MIN_WORKING_TRACKERS", min_working),
+        ):
+            preflight.check_trackers(checks)
+        return checks
+
+    def test_enough_working_passes(self):
+        results = [("udp://a/announce", True, None), ("udp://b/announce", True, None), ("udp://c/announce", False, "timeout")]
+        checks = self.check(results, min_working=2)
+        self.assertEqual(checks.failed, 0)
+
+    def test_too_few_working_fails(self):
+        results = [("udp://a/announce", True, None), ("udp://b/announce", False, "timeout")]
+        checks = self.check(results, min_working=2)
+        self.assertEqual(checks.failed, 1)
+
+    def test_unchecked_trackers_do_not_count_as_working(self):
+        results = [("https://a/announce", None, "not UDP: not checked")]
+        checks = self.check(results, min_working=1)
         self.assertEqual(checks.failed, 1)
 
 

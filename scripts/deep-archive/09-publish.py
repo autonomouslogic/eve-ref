@@ -20,17 +20,17 @@ Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py
    the uploads themselves run with rclone --immutable.
 2. Rebuild everef-eve-online-deep-archive.xml (RSS 2.0, NOTES.md "Feed") in full, from every published .torrent in
    deep-archive/ -- never from local state, so the bucket stays the single source of truth. Each torrent
-   is read with libtorrent: name (the ID), creation date, v1/v2 info-hashes, data
-   file count and bytes (the README, checksum file and signature excluded), trackers. Magnet links carry the
-   torrent's first MAGNET_TRACKERS trackers; newest first.
+   is read with libtorrent: name (the ID), creation date, v1 info-hash (and v2, if the torrent has one: this isn't
+   assumed), data file count and bytes (the README, checksum file and signature excluded), trackers. Magnet links
+   carry the torrent's first MAGNET_TRACKERS trackers; newest first.
 3. Show the diff against what's published. Before uploading, save the published everef-eve-online-deep-archive.xml to
    SCRATCH_DIR/feed-backup/feed-<UTC time>.xml.
 4. Check over HTTPS, never trusting the uploads' own result: <ID>.torrent, <ID>.txt and <ID>.torrent.minisig all
    return 200 with the right Content-Type and exactly the local bytes; everef-eve-online-deep-archive.xml is served as
    application/rss+xml, is valid XML and has an <item> with this torrent's v1 info-hash as its <guid>. Cloudflare
    may serve the old feed for up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
-5. Print this torrent's URL, v1 and v2 info-hashes, data size and file count (the README, checksum file and its
-   signature excluded), and full magnet link, for the next step (10, update-docs) to copy
+5. Print this torrent's URL, v1 info-hash (and v2, if it has one), data size and file count (the README, checksum
+   file and its signature excluded), and full magnet link, for the next step (10, update-docs) to copy
    into the docs site's deep-archive.md page.
 
 On the first workflow, also add the feed to a qBittorrent RSS reader and check the item shows up (manual, README).
