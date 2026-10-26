@@ -67,7 +67,7 @@ class HashingProgressTest(unittest.TestCase):
     def lines(self, num_pieces, calls, interval):
         out = io.StringIO()
         with patch.object(make_torrent, "PROGRESS_INTERVAL", interval), contextlib.redirect_stdout(out):
-            progress = make_torrent.hashing_progress(num_pieces)
+            progress = make_torrent.hashing_progress(num_pieces, 16 * 1024)
             for piece in calls:
                 progress(piece)
         return [line.split(",")[0] for line in out.getvalue().splitlines()]

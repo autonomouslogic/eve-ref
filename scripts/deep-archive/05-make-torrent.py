@@ -109,7 +109,7 @@ def main():
     files, mtimes = read_manifest(manifest_path, torrent_id)
     print(f"{fmt_count(len(files))} files in {manifest_path}")
 
-    section("Content folder")
+    section("Checking content")
     problems = content_problems(content_dir, files, mtimes)
     if problems:
         for problem in problems[:LOG_SAMPLE]:
@@ -135,7 +135,7 @@ def main():
     trackers = list(GOOD_TRACKERS)
     for tracker in trackers:
         print(f"  {tracker}")
-    print(f"{len(trackers)} trackers (lib/trackers.py's GOOD_TRACKERS; 00-preflight already checked they answer)")
+    print(f"{len(trackers)} trackers")
 
     section("Torrent")
     # A signature from an earlier run is of the old .torrent: remove it, so 06-sign-torrent has to sign this one.
@@ -156,7 +156,7 @@ def main():
         lt, content_dir, torrent_id, files, root_names, expected_mtimes, trackers, comment, creator
     )
     print(f"Hashing {fmt_count(num_pieces)} pieces ({fmt_bytes(total_bytes)})")
-    lt.set_piece_hashes(ct, workflow.seed_dir, hashing_progress(num_pieces))
+    lt.set_piece_hashes(ct, workflow.seed_dir, hashing_progress(num_pieces, piece_size))
     data = lt.bencode(ct.generate())
     del fs
     tmp = torrent_path + ".tmp"
@@ -218,10 +218,10 @@ def main():
     ok(f"Make torrent OK for {torrent_id}")
 
 
-def hashing_progress(num_pieces):
+def hashing_progress(num_pieces, piece_size):
     """
-    A set_piece_hashes callback, which libtorrent calls once per piece hashed (not in piece order): prints the count
-    every PROGRESS_INTERVAL seconds, and once all are done.
+    A set_piece_hashes callback, which libtorrent calls once per piece hashed (not in piece order): prints the count,
+    rate and ETA every PROGRESS_INTERVAL seconds, and once all are done.
     """
     started = time.monotonic()
     state = {"done": 0, "printed": started}
@@ -231,8 +231,12 @@ def hashing_progress(num_pieces):
         now = time.monotonic()
         if now - state["printed"] >= PROGRESS_INTERVAL or state["done"] == num_pieces:
             state["printed"] = now
+            elapsed = now - started
+            speed = state["done"] * piece_size / elapsed if elapsed > 0 else 0
+            eta = (num_pieces - state["done"]) * piece_size / speed if speed > 0 else 0
             print(
-                f"{fmt_count(state['done'])}/{fmt_count(num_pieces)} pieces, {fmt_duration(now - started)} elapsed",
+                f"{fmt_count(state['done'])}/{fmt_count(num_pieces)} pieces, {fmt_duration(elapsed)} elapsed, "
+                f"{fmt_bytes(speed)}/s, ETA {fmt_duration(eta)}",
                 flush=True,
             )
 
