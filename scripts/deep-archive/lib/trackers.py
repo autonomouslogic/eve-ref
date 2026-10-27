@@ -1,6 +1,6 @@
 """
 trackers: the trackers for a new torrent (NOTES.md "Trackers"): a small, fixed list of long-lived public UDP
-trackers, picked by hand, not fetched from anywhere at run time. Also a BEP 15 connectivity check for 00-preflight.
+and HTTP trackers, picked by hand, not fetched from anywhere at run time. Also a connectivity check for 00-preflight: BEP 15 connect for UDP, BEP 3 announce for HTTP(S).
 
 stdlib only, for 00-preflight and 05-make-torrent.
 """
@@ -9,7 +9,9 @@ import os
 import secrets
 import socket
 import struct
+import urllib.error
 import urllib.parse
+import urllib.request
 
 # The fixed tracker list, one URL per line, blank lines and # comments ignored (NOTES.md "Trackers"): picked by hand
 # for longevity, not fetched or ranked from anywhere, so the list a torrent is made with never depends on what a
@@ -42,16 +44,26 @@ CONNECT_MAGIC = 0x41727101980
 CONNECT_ACTION = 0
 CONNECT_TIMEOUT = 5  # seconds
 
+# HTTP(S) trackers: a BEP 3 announce for a random info-hash. Any bencoded dictionary back, even a "failure reason",
+# shows a tracker is there and speaking the protocol.
+HTTP_MAX_RESPONSE = 4096
+
 
 def check_tracker(url, timeout=CONNECT_TIMEOUT):
     """
-    Whether a udp:// tracker answers a BEP 15 connect request. Returns (True, None) if it does, or (False, reason)
-    if it doesn't answer, answers wrong, or isn't UDP (there's no connectivity check this cheap for HTTP(S)
-    trackers, so those are reported as unchecked, not failed).
+    Whether a tracker answers. Returns (True, None) if it does, or (False, reason) if it doesn't answer or answers
+    wrong. udp:// trackers get a BEP 15 connect request; http:// and https:// trackers get a BEP 3 announce for a
+    random info-hash. Any other scheme is reported as unchecked, (None, reason), not failed.
     """
     parts = urllib.parse.urlsplit(url)
-    if parts.scheme != "udp":
-        return None, "not UDP: not checked"
+    if parts.scheme == "udp":
+        return check_udp_tracker(parts, timeout)
+    if parts.scheme in ("http", "https"):
+        return check_http_tracker(url, timeout)
+    return None, "not UDP, HTTP or HTTPS: not checked"
+
+
+def check_udp_tracker(parts, timeout):
     if not parts.hostname or not parts.port:
         return False, "no host or port in the URL"
     transaction_id = secrets.randbits(32)
@@ -71,7 +83,36 @@ def check_tracker(url, timeout=CONNECT_TIMEOUT):
     return True, None
 
 
+def check_http_tracker(url, timeout):
+    parts = urllib.parse.urlsplit(url)
+    if not parts.hostname:
+        return False, "no host in the URL"
+    query = urllib.parse.urlencode(
+        {
+            "info_hash": secrets.token_bytes(20),
+            "peer_id": b"-EV0001-" + secrets.token_bytes(12),
+            "port": 6881,
+            "uploaded": 0,
+            "downloaded": 0,
+            "left": 1,
+            "compact": 1,
+            "numwant": 0,
+        }
+    )
+    separator = "&" if parts.query else "?"
+    try:
+        with urllib.request.urlopen(f"{url}{separator}{query}", timeout=timeout) as response:
+            body = response.read(HTTP_MAX_RESPONSE)
+    except urllib.error.HTTPError as e:
+        return False, f"HTTP {e.code}"
+    except (OSError, ValueError) as e:
+        return False, str(e) or type(e).__name__
+    if not body.startswith(b"d"):
+        return False, "response isn't a bencoded dictionary"
+    return True, None
+
+
 def check_trackers(trackers, timeout=CONNECT_TIMEOUT):
     """[(url, ok, reason)] for every tracker, in order: check_tracker's result for each. ok is None for a tracker
-    this can't check (not UDP)."""
+    this can't check (not UDP, HTTP or HTTPS)."""
     return [(url, *check_tracker(url, timeout)) for url in trackers]

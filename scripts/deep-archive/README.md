@@ -40,27 +40,28 @@ run there.
 Run each step in order, from `scripts/deep-archive/`. The checks are what must hold before moving on; if one doesn't,
 or anything else looks wrong, stop.
 
-| Step                                    | Run                                | Writes                                                                        | Bucket |
-|-----------------------------------------|------------------------------------|-------------------------------------------------------------------------------|--------|
-| 00 Preflight                            | `./00-preflight.py`                |                                                                               | read   |
-| 01 Find                                 | `./01-find.py`                     | `find/`                                                                       | read   |
-| 02 Review the selection                 | manual                             |                                                                               |        |
-| 03 Load                                 | `./03-load.py`                     | `$SEED_DIR/.staging/<ID>/`, `manifest.json`, `<ID>.sha256`                    | read   |
-| 04 Sign the checksum file               | `./04-sign-sha256.sh`              | `<ID>.sha256.minisig`                                                         |        |
-| 05 Make torrent                         | `./05-make-torrent.py`             | root files in `$SEED_DIR/.staging/<ID>/`, `<ID>.torrent`, `<ID>.txt`          |        |
-| 06 Sign the torrent file                | `./06-sign-torrent.sh`             | `<ID>.torrent.minisig`                                                        |        |
-| 07 Seed                                 | `./07-seed.py`                     | `$SEED_DIR/.torrents/`, merges `.staging/<ID>/` into `$SEED_DIR`, qBittorrent |        |
-| 08 Check seed                           | `./08-check-seed.py`               |                                                                               |        |
-| 09 Publish                              | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
-| 10 Update docs                          | manual                             |                                                                               |        |
-| 11 Index deep-archive/                  | manual                             | `deep-archive/` index files                                                   | write  |
-| _Wait for files to be seeded by others_ |                                    |                                                                               |        |
-| 12 Check before delete (UNTESTED)       | `./12-check-before-delete.py`      | `delete-set.json`                                                             | read   |
-| 13 Delete (UNTESTED)                    | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl`                                  | write  |
-| 14 Check delete (UNTESTED)              | `./14-check-delete.py`             |                                                                               | read   |
-| 15 Full DataIndex                       | manual                             |                                                                               |        |
-| 16 Check site (UNTESTED)                | `./16-check-site.py`               |                                                                               |        |
-| 17 Delete the scratch directory         | manual                             |                                                                               |        |
+| Step                                                  | Run                                | Writes                                                                        | Bucket |
+|-------------------------------------------------------|------------------------------------|-------------------------------------------------------------------------------|--------|
+| 00 Preflight                                          | `./00-preflight.py`                |                                                                               | read   |
+| 01 Find                                               | `./01-find.py`                     | `find/`                                                                       | read   |
+| 02 Review the selection                               | manual                             |                                                                               |        |
+| 03 Load                                               | `./03-load.py`                     | `$SEED_DIR/.staging/<ID>/`, `manifest.json`, `<ID>.sha256`                    | read   |
+| 04 Sign the checksum file                             | `./04-sign-sha256.sh`              | `<ID>.sha256.minisig`                                                         |        |
+| 05 Make torrent                                       | `./05-make-torrent.py`             | root files in `$SEED_DIR/.staging/<ID>/`, `<ID>.torrent`, `<ID>.txt`          |        |
+| 06 Sign the torrent file                              | `./06-sign-torrent.sh`             | `<ID>.torrent.minisig`                                                        |        |
+| 07 Seed                                               | `./07-seed.py`                     | `$SEED_DIR/.torrents/`, merges `.staging/<ID>/` into `$SEED_DIR`, qBittorrent |        |
+| 08 Check seed                                         | `./08-check-seed.py`               |                                                                               |        |
+| 09 Publish                                            | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
+| 09(a) Upload to [torrage.info](https://torrage.info/) | manual                             |                                                                               |        |
+| 10 Update docs                                        | manual                             |                                                                               |        |
+| 11 Index deep-archive/                                | manual                             | `deep-archive/` index files                                                   | write  |
+| _Wait for files to be seeded by others_               |                                    |                                                                               |        |
+| 12 Check before delete (UNTESTED)                     | `./12-check-before-delete.py`      | `delete-set.json`                                                             | read   |
+| 13 Delete (UNTESTED)                                  | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl`                                  | write  |
+| 14 Check delete (UNTESTED)                            | `./14-check-delete.py`             |                                                                               | read   |
+| 15 Full DataIndex                                     | manual                             |                                                                               |        |
+| 16 Check site (UNTESTED)                              | `./16-check-site.py`               |                                                                               |        |
+| 17 Delete the scratch directory                       | manual                             |                                                                               |        |
 
 `check-seed-dir.py` isn't a numbered step: it's a standalone, read-only check of the whole `$SEED_DIR` tree against
 every signed torrent (00 and 08 both run its quick checks inline; Appendix C's monthly maintenance runs it with
@@ -131,8 +132,7 @@ Copies the signed `.torrent` and its signature into `$SEED_DIR/.torrents/`, merg
 `$SEED_DIR` itself -- every file hard-linked to its site path directly under `$SEED_DIR`, verified, then the staging
 copy removed (NOTES.md "Merged seed directory"; resumable at any point) -- and only then adds the torrent to
 qBittorrent, with content layout **NoSubfolder** (not qBittorrent's Original default: the files are already at their
-final paths), so it checks them where they now are. Turns on super seeding (NOTES.md "Super seeding"): once other
-seeders have turned up, turn it off by hand in the WebUI.
+final paths), so it checks them where they now are. Does not turn on super seeding (NOTES.md "Super seeding").
 
 ### 08: Check seed
 Give the trackers a few minutes after seed first. It fails until a tracker reports working, and while qBittorrent is
@@ -152,10 +152,12 @@ saved in `feed-backup/`.
 - On the first workflow only: add the feed to a qBittorrent RSS reader and check the item shows up.
 
 ### 10: Update docs (manual)
-Add the torrent to the "Published Torrents" table on `docs/src/datasets/deep-archive.md`, newest first: the `.torrent`
+Add the torrent to the "Published Torrents" table on `docs/src/datasets/deep-archive.md`, newest last: the `.torrent`
 and `.txt` links, the size and the magnet link, as publish prints them. If the rules in `lib/workflow.py` changed
 (`TORRENT_EXCLUDE`, `MIN_AGE_YEARS`, size limits), update the page's rule text too: nothing checks it. Commit it and
 deploy the docs site.
+
+Include the torrage.info link as a backup.
 
 ### 11: Index deep-archive/ (manual)
 From a checkout with production settings in the environment:
@@ -271,8 +273,6 @@ $SEED_DIR/
   turns up, it names which torrent and path; investigate before doing anything else.
 - Force a recheck of every torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding. If one finds
   damage, qBittorrent can re-download it from other seeders; if there are none, those files are lost.
-- Check for torrents still in super seeding mode (NOTES.md "Super seeding") with other seeders already on them, and
-  turn it off in the WebUI: it's meant for bootstrapping a brand new swarm, not for the life of the seed.
 
 ## Appendix D: Rollback
 

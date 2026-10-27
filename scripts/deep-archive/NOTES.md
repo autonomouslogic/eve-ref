@@ -242,8 +242,15 @@ never download or store them; the rest download the zeros and keep them in a `.p
 ### Trackers
 
 **Decided: a fixed, hand-picked list** (`lib/trackers.txt`, loaded by `lib/trackers.py`), not fetched from anywhere
-at run time. `00-preflight` checks each is reachable (a BEP 15 connect request, `check_trackers`), and fails if
+at run time. `00-preflight` checks each is reachable (a BEP 15 connect request for UDP, a BEP 3 announce for HTTP(S);
+`check_trackers`), and fails if
 fewer than `MIN_WORKING_TRACKERS` answer; `05-make-torrent` just uses the list, trusting that check.
+
+The list is seven UDP trackers plus three plain-HTTP ones (`tracker.opentrackr.org:1337`, `open.tracker.cl:1337`,
+`tracker.dler.org:6969`), for people whose network blocks UDP. Picked from ngosang's HTTP list on 2026-10-27 as the
+ones run by operators already trusted for UDP or long-listed; each answered a real announce with a valid bencoded
+reply. `00-preflight` checks them with a BEP 3 announce for a random info-hash (any bencoded reply counts), so they count toward `MIN_WORKING_TRACKERS` like the UDP ones. No HTTPS
+tracker was stable enough to add (the HTTPS entries on those lists are mostly short-lived or piracy-branded domains).
 
 Why not fetch a list (ngosang/XIU2's, as it used to): a `.torrent` can't change once published, so a tracker domain
 that lapses can be registered by anyone, who then gets the announces of everyone still sharing the torrent (their
@@ -444,17 +451,9 @@ monthly check (`check-seed-dir.py`, README Appendix C) tests the exact guarantee
 
 ### Super seeding
 
-`07-seed` turns it on (`torrents/setSuperSeeding`) right after adding the torrent, before qBittorrent's initial check finishes: libtorrent's
-docs say the flag "has no effect" until the torrent is actually a seed, so setting it early is safe, and it takes
-over automatically once that check finishes. The point is the initial bootstrap: EVE Ref is the only seeder at
-first, and super seeding gets the swarm distributing the data among peers faster than a single ordinary seed could,
-by only revealing a few pieces to each peer at a time instead of announcing the full set.
-
-Turning it off again is left to the operator, by hand in the WebUI (same reasoning as "Nothing removes or stops a
-torrent": lifecycle changes after the initial add are deliberate, not scripted). Once other seeders have the data,
-super seeding stops helping and should be turned off; this seed runs for years ("Durability"), so it shouldn't be
-left in a mode meant for bootstrapping a brand new swarm. README Appendix C's monthly recheck is also when to check
-for this.
+`07-seed` does not turn it on. It's meant for bootstrapping a brand new swarm, and this seed runs for years
+("Durability"), so it stays in ordinary seeding mode. `lib/qbittorrent.py` keeps `set_super_seeding` for doing it by
+hand if ever needed.
 
 ## Known limitations
 

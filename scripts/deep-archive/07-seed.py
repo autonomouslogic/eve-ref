@@ -34,10 +34,8 @@ Needs 06-sign-torrent's completion file, and refuses to run twice (lib/workflow.
    under the save path, step 4 having merged them out of the torrent's own root folder).
 7. Read the torrent's files back from qBittorrent (torrents/files) and check their names are exactly step 2's
    relative paths, with no root folder: confirms NoSubfolder actually took.
-8. Wait for qBittorrent to report the torrent, turn on super seeding and wait SUPER_SEEDING_DELAY for qBittorrent to
-   report it (a warning, not a failure, if it doesn't; NOTES.md "Super seeding": has no effect until the initial
-   check qBittorrent runs on the added torrent finishes and it's actually a seed, so the order doesn't matter).
-   No recheck is triggered: qBittorrent checks the files when the torrent is added.
+8. Wait for qBittorrent to report the torrent. Super seeding is left off (NOTES.md "Super seeding"). No recheck is
+   triggered: qBittorrent checks the files when the torrent is added.
 
 If qBittorrent's resume data for this torrent is ever lost and it has to be re-added, it must be re-added with
 content layout NoSubfolder, never Original (qBittorrent's own default): Original would look for the files under
@@ -79,13 +77,11 @@ from workflow import (  # noqa: E402
     qbittorrent_settings,
     section,
     verify_signature,
-    warning,
 )
 
 STEP = "seed"
 WAIT_TIMEOUT = 60  # seconds, for qBittorrent to report the torrent after adding it
 WAIT_INTERVAL = 2
-SUPER_SEEDING_DELAY = 5  # seconds, for qBittorrent to report super seeding after it's turned on
 LOG_SAMPLE = 20
 
 
@@ -176,22 +172,6 @@ def main():
     check_no_subfolder(client, qbittorrent_id, entries)
     print(f"qBittorrent reports {fmt_count(len(entries))} files with no subfolder, matching the merged layout")
 
-    section("Super seeding")
-    try:
-        client.set_super_seeding(qbittorrent_id, True)
-        print(f"Waiting {SUPER_SEEDING_DELAY}s for qBittorrent to apply it")
-        time.sleep(SUPER_SEEDING_DELAY)
-        info = client.info(qbittorrent_id)
-    except QbittorrentError as e:
-        fail(f"Turning on super seeding failed: {e}")
-    super_seeding = info is not None and bool(info.get("super_seeding"))
-    if super_seeding:
-        print(
-            "Super seeding on"
-        )
-    else:
-        warning(f"qBittorrent doesn't report super seeding as on for {qbittorrent_id}: check it by hand in the WebUI")
-
     print("qBittorrent checks the files itself when a torrent is added. Run 08-check-seed once it reaches 100%.")
 
     workflow.complete(
@@ -203,7 +183,6 @@ def main():
             "save_path": save_path,
             "content_layout": "NoSubfolder",
             "merged_files": len(plan),
-            "super_seeding": super_seeding,
         },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")

@@ -266,7 +266,7 @@ class CheckTrackersTest(unittest.TestCase):
         self.assertEqual(checks.failed, 1)
 
     def test_unchecked_trackers_do_not_count_as_working(self):
-        results = [("https://a/announce", None, "not UDP: not checked")]
+        results = [("wss://a/announce", None, "not UDP, HTTP or HTTPS: not checked")]
         checks = self.check(results, min_working=1)
         self.assertEqual(checks.failed, 1)
 

@@ -1,6 +1,6 @@
 """
-Tests for lib/trackers.py: the BEP 15 connect check (check_tracker, check_trackers) against a fake UDP tracker on
-localhost. No real network access.
+Tests for lib/trackers.py: the BEP 15 connect check and the BEP 3 announce check (check_tracker, check_trackers)
+against fake trackers on localhost. No real network access.
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -12,6 +12,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
@@ -54,6 +55,73 @@ class FakeTracker:
     def close(self):
         self.sock.close()
         self.thread.join(timeout=TIMEOUT * 4)
+
+
+class FakeHttpTracker:
+    """An HTTP server on localhost that answers announces with a fixed status and body, in a background thread."""
+
+    def __init__(self, status=200, body=b"d8:intervali1800e5:peers0:e"):
+        outer = self
+        outer.requests = []
+
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                outer.requests.append(self.path)
+                self.send_response(status)
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *args):
+                pass
+
+        self.server = HTTPServer(("127.0.0.1", 0), Handler)
+        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        self.thread.start()
+
+    @property
+    def url(self):
+        return f"http://127.0.0.1:{self.server.server_address[1]}/announce"
+
+    def close(self):
+        self.server.shutdown()
+        self.server.server_close()
+        self.thread.join(timeout=TIMEOUT * 4)
+
+
+class CheckHttpTrackerTest(unittest.TestCase):
+    def check(self, **kwargs):
+        tracker = FakeHttpTracker(**kwargs)
+        try:
+            return check_tracker(tracker.url, timeout=TIMEOUT), tracker.requests
+        finally:
+            tracker.close()
+
+    def test_a_working_tracker_answers(self):
+        result, requests = self.check()
+        self.assertEqual(result, (True, None))
+        self.assertEqual(len(requests), 1)
+        self.assertTrue(requests[0].startswith("/announce?info_hash="))
+
+    def test_failure_reason_still_counts_as_alive(self):
+        result, _ = self.check(body=b"d14:failure reason7:unknowne")
+        self.assertEqual(result, (True, None))
+
+    def test_http_error_fails(self):
+        result, _ = self.check(status=503, body=b"")
+        self.assertEqual(result, (False, "HTTP 503"))
+
+    def test_non_bencoded_response_fails(self):
+        result, _ = self.check(body=b"<html>hello</html>")
+        self.assertEqual(result, (False, "response isn't a bencoded dictionary"))
+
+    def test_nothing_listening_fails(self):
+        tracker = FakeHttpTracker()
+        url = tracker.url
+        tracker.close()
+        ok, reason = check_tracker(url, timeout=TIMEOUT)
+        self.assertFalse(ok)
+        self.assertTrue(reason)
 
 
 class CheckTrackerTest(unittest.TestCase):
@@ -104,8 +172,10 @@ class CheckTrackerTest(unittest.TestCase):
         self.assertFalse(ok)
         self.assertTrue(reason)
 
-    def test_non_udp_is_unchecked(self):
-        self.assertEqual(check_tracker("https://example.org/announce"), (None, "not UDP: not checked"))
+    def test_other_scheme_is_unchecked(self):
+        self.assertEqual(
+            check_tracker("wss://example.org/announce"), (None, "not UDP, HTTP or HTTPS: not checked")
+        )
 
     def test_no_port_fails(self):
         ok, reason = check_tracker("udp://example.org/announce")
@@ -127,10 +197,13 @@ class CheckTrackersTest(unittest.TestCase):
 
 
 class GoodTrackersTest(unittest.TestCase):
-    def test_all_udp(self):
-        # check_tracker only checks UDP trackers; every entry in the fixed list must be checkable.
+    def test_schemes(self):
         for url in GOOD_TRACKERS:
-            self.assertTrue(url.startswith("udp://"), url)
+            self.assertTrue(url.startswith(("udp://", "http://")), url)
+
+    def test_has_udp_and_http(self):
+        self.assertTrue(any(url.startswith("udp://") for url in GOOD_TRACKERS))
+        self.assertTrue(any(url.startswith("http://") for url in GOOD_TRACKERS))
 
     def test_no_duplicates(self):
         self.assertEqual(len(GOOD_TRACKERS), len(set(GOOD_TRACKERS)))

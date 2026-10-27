@@ -1,11 +1,15 @@
 # EVE Ref Deep Archive: fixed tracker list (lib/trackers.py, NOTES.md "Trackers").
-# One UDP tracker per line, picked by hand for longevity, not fetched or ranked from anywhere. 00-preflight checks
-# each is reachable (BEP 15 connect). If one stops answering, remove or replace it by hand -- don't add a
-# piracy-branded or short-lived domain back.
+# One tracker per line, picked by hand for longevity, not fetched or ranked from anywhere. The HTTP ones are for
+# clients on networks that block UDP. 00-preflight checks each is reachable (BEP 15 connect for UDP, BEP 3 announce
+# for HTTP). If one stops answering, remove or replace it by hand -- don't add a piracy-branded or short-lived
+# domain back.
 udp://tracker.opentrackr.org:1337/announce
+http://tracker.opentrackr.org:1337/announce
+http://open.tracker.cl:1337/announce
 udp://open.stealth.si:80/announce
 udp://tracker.torrent.eu.org:451/announce
 udp://open.demonii.com:1337/announce
 udp://exodus.desync.com:6969/announce
 udp://explodie.org:6969/announce
 udp://tracker-udp.gbitt.info:80/announce
+http://tracker.dler.org:6969/announce

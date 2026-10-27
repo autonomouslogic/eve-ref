@@ -31,8 +31,8 @@ Checks:
   wrote), Docker (04-sign-sha256 and 06-sign-torrent run minisign through it);
 - qBittorrent's Web API answers at QBITTORRENT_URL with QBITTORRENT_API_KEY, and runs libtorrent 2.x (a warning, not
   a failure, if it's older than 2.0.15: NOTES.md "libtorrent" lists the fixes since);
-- at least MIN_WORKING_TRACKERS of the fixed trackers (lib/trackers.py's GOOD_TRACKERS) answer a BEP 15 connect
-  request;
+- at least MIN_WORKING_TRACKERS of the fixed trackers (lib/trackers.py's GOOD_TRACKERS) answer (BEP 15 connect for
+  UDP, BEP 3 announce for HTTP);
 - LOCAL_COPY_DIR, if set, is a readable folder laid out like the bucket (index.json at the top), apart from
   SCRATCH_DIR and SEED_DIR.
 """
@@ -332,7 +332,7 @@ def check_tools(checks):
 
 def check_trackers(checks):
     """
-    GOOD_TRACKERS (lib/trackers.py), the fixed list make-torrent uses, answer a BEP 15 connect request: at least
+    GOOD_TRACKERS (lib/trackers.py), the fixed list make-torrent uses, answer (BEP 15 connect for UDP, BEP 3 announce for HTTP(S)): at least
     MIN_WORKING_TRACKERS of them, or this fails (the torrent would still be made with a mostly-dead tracker list).
     """
     results = check_tracker_connectivity(GOOD_TRACKERS)
