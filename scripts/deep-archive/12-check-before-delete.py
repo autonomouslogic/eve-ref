@@ -45,6 +45,7 @@ from collections import defaultdict
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from qbittorrent import Client, QbittorrentError  # noqa: E402
 from workflow import (  # noqa: E402
+    refuse_to_run,
     DEEP_ARCHIVE_DIR,
     Workflow,
     classify_path,
@@ -285,4 +286,5 @@ def dataset_of(path):
 
 
 if __name__ == "__main__":
+    refuse_to_run("check-before-delete")
     main()

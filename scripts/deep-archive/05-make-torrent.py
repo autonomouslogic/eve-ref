@@ -24,7 +24,8 @@ Then:
    $SEED_DIR/.staging/<ID>/, so they end up inside the torrent too: neither is published standalone, so this is the
    only way to check a file against them without a torrent client.
 3. Build the torrent from exactly the manifest's files plus the root files (README, .sha256, .sha256.minisig, the
-   index tarball), sorted by path, with Python libtorrent 2.x: v1 only, PIECE_SIZE pieces, each file's modification
+   index tarball) in the order of torrent_file_order (the root files first, the README the very first file, then the
+   data files sorted by path), with Python libtorrent 2.x: v1 only, PIECE_SIZE pieces, each file's modification
    time included (the manifest's for a data file, the file's own for a root file), lib/trackers.py's fixed
    GOOD_TRACKERS (one per tier, in order; 00-preflight already checked they answer), the comment
    (lib/comment-template.txt with the ID's sequence number filled in), creator "EVE Ref (libtorrent <version>)", no
@@ -248,11 +249,20 @@ def hashing_progress(num_pieces, piece_size):
     return progress
 
 
+def torrent_file_order(torrent_id, files, root_names):
+    """
+    The paths (without the torrent's root folder) in the order they go into the torrent: the root files first, the
+    README the very first file of all, then the data files sorted by path.
+    """
+    readme = f"{torrent_id}-README.md"
+    return sorted(root_names, key=lambda name: (name != readme, name)) + sorted(files)
+
+
 def build_torrent(lt, content_dir, torrent_id, files, root_names, expected_mtimes, trackers, comment, creator):
     """
-    The create_torrent, set up and ready for set_piece_hashes: every manifest file plus the root files, sorted by
-    path, each with its modification time (expected_mtimes, keyed by path without the torrent's root folder); v1
-    only, PIECE_SIZE pieces, trackers one per tier, comment, creator, no private flag. Returns
+    The create_torrent, set up and ready for set_piece_hashes: every manifest file plus the root files, in
+    torrent_file_order, each with its modification time (expected_mtimes, keyed by path without the torrent's root
+    folder); v1 only, PIECE_SIZE pieces, trackers one per tier, comment, creator, no private flag. Returns
     (create_torrent, file_storage, piece_size, num_pieces, total_bytes).
 
     create_torrent only keeps a reference to the file_storage, not a copy (libtorrent's docs: "The file_storage and
@@ -261,7 +271,7 @@ def build_torrent(lt, content_dir, torrent_id, files, root_names, expected_mtime
     and generate() -- or the create_torrent is left holding a dangling reference.
     """
     fs = lt.file_storage()
-    for path in sorted(files) + sorted(root_names):
+    for path in torrent_file_order(torrent_id, files, root_names):
         full = os.path.join(content_dir, path)
         if not os.path.isfile(full):
             fail(f"Missing file for the torrent: {full}")
@@ -330,6 +340,7 @@ def check_torrent(
     data_paths = set()
     torrent_bytes = 0
     size_mismatches = []
+    in_torrent_order = []
     expected_file_bytes = {**files, **{name: os.path.getsize(os.path.join(content_dir, name)) for name in root_names}}
     for i in range(storage.num_files()):
         path = storage.file_path(i).replace(os.sep, "/")
@@ -337,12 +348,19 @@ def check_torrent(
             problems.append(f"file outside the torrent's root folder: {path}")
             continue
         rel = path[len(prefix) :]
+        in_torrent_order.append(rel)
         torrent_bytes += storage.file_size(i)
         expected_size = expected_file_bytes.get(rel)
         if expected_size is not None and storage.file_size(i) != expected_size:
             size_mismatches.append(f"{rel}: {storage.file_size(i)} bytes in the torrent, expected {expected_size}")
         if rel not in root_names:
             data_paths.add(rel)
+    expected_order = torrent_file_order(torrent_id, files, root_names)
+    if in_torrent_order != expected_order:
+        problems.append(
+            "files aren't in the expected order (root files first, the README the very first file, then the data "
+            f"files sorted by path): starts with {in_torrent_order[:len(root_names) + 1]}"
+        )
     if size_mismatches:
         problems.append(f"files with the wrong size: {len(size_mismatches)}, e.g. {size_mismatches[:LOG_SAMPLE]}")
     mtime_mismatches = file_mtime_problems(data, expected_mtimes)

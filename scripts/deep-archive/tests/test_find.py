@@ -226,6 +226,33 @@ class LoadPublishedListsTest(unittest.TestCase):
         self.assertEqual(self.load([], {}), {})
 
 
+class LoadLocalTorrentsTest(unittest.TestCase):
+    """load_local_torrents maps path -> torrent ID from the <ID>.torrent files in SEED_DIR/.torrents/."""
+
+    def load(self, entries):
+        with tempfile.TemporaryDirectory() as torrents_dir:
+            for name in entries:
+                with open(os.path.join(torrents_dir, name), "wb") as f:
+                    f.write(b"")
+            read = lambda path: entries[os.path.basename(path)]  # noqa: E731
+            with mock.patch.object(find.seed_dir, "read_torrent_entries", side_effect=read):
+                return quietly(find.load_local_torrents, torrents_dir)
+
+    def test_reads_paths_from_every_torrent_with_the_later_one_winning(self):
+        id0, id1 = "everef-eve-online-deep-archive-00", "everef-eve-online-deep-archive-01"
+        local = self.load(
+            {
+                f"{id0}.torrent": (id0, {"a/b.json": (1, 2), "a/c.json": (1, 2)}),
+                f"{id1}.torrent": (id1, {"a/c.json": (1, 2), "d/e.json": (1, 2)}),
+            }
+        )
+        self.assertEqual(local, {"a/b.json": id0, "a/c.json": id1, "d/e.json": id1})
+
+    def test_no_torrents_folder_or_torrents(self):
+        self.assertEqual(self.load({}), {})
+        self.assertEqual(quietly(find.load_local_torrents, "/nonexistent/torrents"), {})
+
+
 class YearsBeforeTest(unittest.TestCase):
     def test_years_before(self):
         self.assertEqual(find.years_before(date(2026, 10, 12), 2), date(2024, 10, 12))
@@ -281,8 +308,8 @@ class ClassifyAllTest(unittest.TestCase):
         self.assertEqual([o.path for o in scan.candidates], ["d/a.json"])
         self.assertEqual(scan.empty, ["d/a.json"])
 
-    def test_published_path_still_on_site_is_an_error(self):
-        # No cutoff cleverness: a non-index path a published torrent already holds, still a candidate, is a bug.
+    def test_published_path_still_on_site_is_skipped(self):
+        # Data stays on the site until much later: a path an earlier torrent holds is never a candidate again.
         torrent_id = "everef-eve-online-deep-archive-00"
         scan = self.classify([obj("d/a.json", size=7)], {"d/a.json": torrent_id})
         self.assertEqual(scan.candidates, [])

@@ -34,6 +34,7 @@ from collections import defaultdict
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
+    refuse_to_run,
     DEEP_ARCHIVE_DIR,
     Workflow,
     data_remote,
@@ -191,4 +192,5 @@ def find_index_only_folders(fresh):
 
 
 if __name__ == "__main__":
+    refuse_to_run("check-delete")
     main()

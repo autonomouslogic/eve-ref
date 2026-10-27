@@ -344,6 +344,18 @@ def ok(message):
     print(f"✅ {message}")
 
 
+def refuse_to_run(step):
+    """
+    Stops the deletion-side steps (12 onwards) from running at all: they're untested and probably broken, and are
+    revisited once files are about to be deleted from the data site (NOTES.md "Steps 12 onwards"). Called from each
+    script's __main__ block, not main(), so the tests still import and call them.
+    """
+    fail(
+        f"{step_name(step)} is disabled: the steps from 12-check-before-delete onwards are untested and probably "
+        "broken, to be revisited when files are about to be deleted from the data site (NOTES.md \"Steps 12 onwards\")"
+    )
+
+
 # Settings in torrents.env that the environment already set to something else, filled in by load_env. Every step
 # names them (print_env_overrides), so a stale shell export doesn't silently override the file.
 ENV_OVERRIDES = []

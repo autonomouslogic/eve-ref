@@ -318,6 +318,20 @@ of every folder it selects a file from into a root file, `<ID>-index.tar.xz`, in
   category as the README and the checksum file, never a data file.
 - Covered by `<ID>.sha256`, so a copy obtained any other way can still be checked against the published signature.
 
+## Steps 12 onwards
+
+`12-check-before-delete`, `13-delete`, `14-check-delete` and `16-check-site` (and with them the manual steps 15 and 17)
+are **untested and probably broken**. They are disabled: each script calls `refuse_to_run` (lib/workflow.py) from its
+`__main__` block and exits with an error before doing anything. Remove that call to enable one.
+
+Revisit them when files are actually about to be deleted from the data site. That is deliberately much later than
+building torrents: the data stays on the site until other people are seeding it, and `01-find` skips what earlier
+torrents already hold. When revisiting:
+- They must not rely on anything in `SCRATCH_DIR` (`manifest.json`, `find/`, completion files and so on): it will
+  likely have been wiped by then. What survives is `SEED_DIR` (the merged tree, `.torrents/`, `<ID>.sha256`) and
+  what's published on the data site (`deep-archive/<ID>.txt`, the `.torrent`, the feed).
+- The README's description of these steps assumes the old flow, where the scratch directory is still there.
+
 ## Deletion
 
 On B2 a new upload always gets a new modification time, so size and time detect changes: no MD5/ETag matching
@@ -454,10 +468,6 @@ for this.
   piece hashing right after would catch corruption too, so a second full-content pass only cost time; the sample is
   a cheap extra smoke test, not the thing standing between a bad file and a published torrent. `08-check-seed`'s
   recheck only catches a change made after the torrent was made, not before it.
-- **`08-check-seed` isn't an outside test**: when NAT hairpinning gets in the way, use local peer discovery, or check
-  from another machine.
-- **`08-check-seed`'s aria2c download fetches only the README**: data files with unusual paths (long, non-ASCII, …)
-  go untested by it.
 - **The docs page's rules aren't checked.** `12-check-before-delete` checks the page lists the torrent, not that its
   rules match `lib/workflow.py`, or its links.
 - **The feed backup** in `$SCRATCH_DIR/feed-backup/` goes with the scratch directory. The feed can always be rebuilt

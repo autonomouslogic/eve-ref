@@ -12,9 +12,9 @@ and 15 August, the day after that month's rollup check, as a reminder to run a w
 
 ## Requirements
 
-- Python 3, rclone, the libtorrent Python bindings **2.x**, aria2c, sha256sum, and Docker (minisign runs through it):
+- Python 3, rclone, the libtorrent Python bindings **2.x**, sha256sum, and Docker (minisign runs through it):
   ```
-  sudo apt-get install python3 rclone python3-libtorrent aria2 coreutils docker.io
+  sudo apt-get install python3 rclone python3-libtorrent coreutils docker.io
   ```
 - A B2 key for the data bucket.
 - `SEED_DIR` on redundant storage (ZFS mirror, RAID), with room for one more torrent (`MAX_BYTES`). After deletion
@@ -40,26 +40,27 @@ run there.
 Run each step in order, from `scripts/deep-archive/`. The checks are what must hold before moving on; if one doesn't,
 or anything else looks wrong, stop.
 
-| Step                              | Run                                | Writes                                                                        | Bucket |
-|-----------------------------------|------------------------------------|-------------------------------------------------------------------------------|--------|
-| 00 Preflight                      | `./00-preflight.py`                |                                                                               | read   |
-| 01 Find                           | `./01-find.py`                     | `find/`                                                                       | read   |
-| 02 Review the selection           | manual                             |                                                                               |        |
-| 03 Load                           | `./03-load.py`                     | `$SEED_DIR/.staging/<ID>/`, `manifest.json`, `<ID>.sha256`                    | read   |
-| 04 Sign the checksum file         | `./04-sign-sha256.sh`              | `<ID>.sha256.minisig`                                                         |        |
-| 05 Make torrent                   | `./05-make-torrent.py`             | root files in `$SEED_DIR/.staging/<ID>/`, `<ID>.torrent`, `<ID>.txt`          |        |
-| 06 Sign the torrent file          | `./06-sign-torrent.sh`             | `<ID>.torrent.minisig`                                                        |        |
-| 07 Seed                           | `./07-seed.py`                     | `$SEED_DIR/.torrents/`, merges `.staging/<ID>/` into `$SEED_DIR`, qBittorrent |        |
-| 08 Check seed                     | `./08-check-seed.py`               |                                                                               |        |
-| 09 Publish                        | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
-| 10 Update docs                    | manual                             |                                                                               |        |
-| 11 Index deep-archive/            | manual                             | `deep-archive/` index files                                                   | write  |
-| 12 Check before delete (UNTESTED) | `./12-check-before-delete.py`      | `delete-set.json`                                                             | read   |
-| 13 Delete (UNTESTED)              | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl`                                  | write  |
-| 14 Check delete (UNTESTED)        | `./14-check-delete.py`             |                                                                               | read   |
-| 15 Full DataIndex                 | manual                             |                                                                               |        |
-| 16 Check site (UNTESTED)          | `./16-check-site.py`               |                                                                               |        |
-| 17 Delete the scratch directory   | manual                             |                                                                               |        |
+| Step                                    | Run                                | Writes                                                                        | Bucket |
+|-----------------------------------------|------------------------------------|-------------------------------------------------------------------------------|--------|
+| 00 Preflight                            | `./00-preflight.py`                |                                                                               | read   |
+| 01 Find                                 | `./01-find.py`                     | `find/`                                                                       | read   |
+| 02 Review the selection                 | manual                             |                                                                               |        |
+| 03 Load                                 | `./03-load.py`                     | `$SEED_DIR/.staging/<ID>/`, `manifest.json`, `<ID>.sha256`                    | read   |
+| 04 Sign the checksum file               | `./04-sign-sha256.sh`              | `<ID>.sha256.minisig`                                                         |        |
+| 05 Make torrent                         | `./05-make-torrent.py`             | root files in `$SEED_DIR/.staging/<ID>/`, `<ID>.torrent`, `<ID>.txt`          |        |
+| 06 Sign the torrent file                | `./06-sign-torrent.sh`             | `<ID>.torrent.minisig`                                                        |        |
+| 07 Seed                                 | `./07-seed.py`                     | `$SEED_DIR/.torrents/`, merges `.staging/<ID>/` into `$SEED_DIR`, qBittorrent |        |
+| 08 Check seed                           | `./08-check-seed.py`               |                                                                               |        |
+| 09 Publish                              | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
+| 10 Update docs                          | manual                             |                                                                               |        |
+| 11 Index deep-archive/                  | manual                             | `deep-archive/` index files                                                   | write  |
+| _Wait for files to be seeded by others_ |                                    |                                                                               |        |
+| 12 Check before delete (UNTESTED)       | `./12-check-before-delete.py`      | `delete-set.json`                                                             | read   |
+| 13 Delete (UNTESTED)                    | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl`                                  | write  |
+| 14 Check delete (UNTESTED)              | `./14-check-delete.py`             |                                                                               | read   |
+| 15 Full DataIndex                       | manual                             |                                                                               |        |
+| 16 Check site (UNTESTED)                | `./16-check-site.py`               |                                                                               |        |
+| 17 Delete the scratch directory         | manual                             |                                                                               |        |
 
 `check-seed-dir.py` isn't a numbered step: it's a standalone, read-only check of the whole `$SEED_DIR` tree against
 every signed torrent (00 and 08 both run its quick checks inline; Appendix C's monthly maintenance runs it with
@@ -74,12 +75,12 @@ fixed trackers' reachability, `LOCAL_COPY_DIR`, qBittorrent, and the merged `$SE
 torrents (`check-seed-dir.py`'s quick checks), and picks the next torrent ID. Reports every problem before aborting.
 
 ### 01: Find
-Selects the oldest files not archived yet, by date, up to the size limits (`01-find.py`'s docstring); `index.json`
+Selects the oldest files not archived yet (files an earlier torrent holds, published or only in `$SEED_DIR/.torrents/`, are
+skipped even though they're still on the site: data is deleted much later), by date, up to the size limits (`01-find.py`'s docstring); `index.json`
 files are never selected, only noted for 03-load to snapshot. Aborts if the oldest date alone is too big for one
 `.torrent`, if the selection is under `MIN_BYTES` (not enough data yet) -- unless the `.torrent` size limit stopped
 the selection early, which can happen well under `MIN_BYTES` with a lot of small files and isn't treated as a
-problem -- if a path a published `<ID>.txt` lists is still on the site (Appendix E), or if a selected path would
-collide with one already archived or already on `$SEED_DIR` once merged into one folder tree (NOTES.md "No path in
+problem -- or if a selected path would collide with one already archived or already on `$SEED_DIR` once merged into one folder tree (NOTES.md "No path in
 two torrents"). In each case nothing is written.
 
 ### 02: Review the selection (manual)
@@ -140,7 +141,6 @@ checking the torrent; running it again is fine.
 - No file still sits under a `<ID>/` root folder in qBittorrent: confirms the merge and NoSubfolder actually took.
 - The whole `$SEED_DIR` tree still matches every signed torrent (`check-seed-dir.py`'s quick checks), not just this
   one.
-- aria2c downloaded the README through the torrent, identical to the seed copy (now at `$SEED_DIR/<ID>-README.md`).
 
 ### 09: Publish
 Verifies the torrent's signature, uploads `<ID>.torrent`, `<ID>.txt` and `<ID>.torrent.minisig` to `deep-archive/`,
@@ -165,6 +165,8 @@ DATA_INDEX_PREFIX=/deep-archive/ DATA_INDEX_RECURSIVE=false ./gradlew dataIndex
 - https://data.everef.net/deep-archive/ lists the new torrent, its `.txt` and signature, and the feed.
 
 ### 12: Check before delete
+**Steps 12 onwards are disabled: untested and probably broken (NOTES.md "Steps 12 onwards").** Don't run them yet.
+
 Checks the docs page lists the torrent, the seeder is clean and the published `.torrent` matches, then builds the
 delete set from the torrent against a fresh listing (`12-check-before-delete.py`'s docstring).
 - Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
@@ -283,7 +285,6 @@ days). Then run a full `DataIndex` and check the files are served.
 ## Appendix E: If data changed
 
 If `12-check-before-delete` finds a file that changed after it was selected, that file isn't deleted; the rest is.
-There is no replacement torrent. The file stays on the site at a path the published `<ID>.txt`
-lists, so the next `01-find` stops with a hard error on it, as on any file check-before-delete leaves on the site.
-That isn't handled: resolve it by hand before running `01-find` again. Find out why it changed; if the dataset still
+There is no replacement torrent. The file stays on the site at a path an earlier torrent holds, which `01-find` skips
+like any other archived path, so the changed version is never archived. Find out why it changed; if the dataset still
 changes after the minimum age, add it to `TORRENT_EXCLUDE`.

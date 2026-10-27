@@ -13,7 +13,7 @@ Needs 00-preflight's completion file, and refuses to run twice (lib/workflow.py)
 
 How the cutoff is chosen:
 1. List the entire bucket, with each file's size and modification time (rclone's ModTime: on B2, the upload time).
-2. Drop what is never archived (see Skipped below), and files a published torrent already holds (see Published
+2. Drop what is never archived (see Skipped below), and files an earlier torrent already holds (see Earlier
    torrents below). Set index.json files aside: they're never selected (see index.json below), but every folder's is
    recorded for the index snapshot (NOTES.md "Index snapshot").
 3. Drop files dated after the newest allowed date (MIN_AGE_YEARS before today). The rest are candidates.
@@ -45,11 +45,10 @@ torrents" (NOTES.md "No path in two torrents"). Instead, the index.json of every
 selected file is written to find/indexes.jsonl, for 03-load to snapshot into the torrent's <ID>-index.tar.xz root
 file (NOTES.md "Index snapshot"). Only the folder's own index.json; parent folders' aren't added.
 
-Published torrents: a path listed in a published deep-archive/<ID>.txt is simply never a candidate again -- it's
-already archived. If it's still on the site and not skipped (see Skipped below), whatever its date, find aborts
-listing every such path, rather than guessing whether it changed and silently re-selecting it: its delete after an
-earlier torrent didn't happen, it reappeared, or 12-check-before-delete left it on the site because it changed
-(README Appendix E; not handled yet, resolved by hand if it ever happens).
+Earlier torrents: a path listed in a published deep-archive/<ID>.txt, or in a <ID>.torrent in SEED_DIR/.torrents/
+(made here, maybe not published yet), is never a candidate again -- it's already archived. Data stays on the site
+until much later, when others are seeding it, so such paths being still on the site is normal: they're skipped, and
+the first few are printed.
 
 Torrent ID: sequential (everef-eve-online-deep-archive-NN, two digits), chosen by 00-preflight (the
 completion file find needs) rather than from the cutoff date. The torrent holds everything not yet archived that
@@ -72,7 +71,7 @@ Skipped:
 - index.json and index.html files (index.json is snapshotted with its folder, see above);
 - folders in TORRENT_EXCLUDE (lib/workflow.py), *-latest.* files, hidden files, files at the root of the site;
 - with TORRENT_INCLUDE set (lib/workflow.py), files outside its folders;
-- files a published torrent already holds (see Published torrents above).
+- files an earlier torrent already holds (see Earlier torrents above).
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR
@@ -82,6 +81,7 @@ Needs rclone.
 """
 import argparse
 import datetime
+import glob
 import gzip
 import json
 import os
@@ -93,6 +93,7 @@ import urllib.parse
 from collections import defaultdict
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
+import seed_dir  # noqa: E402
 from torrent_size import TorrentSize  # noqa: E402
 from workflow import (  # noqa: E402
     DATA_BASE_URL,
@@ -106,6 +107,7 @@ from workflow import (  # noqa: E402
     TORRENT_ID_PREFIX,
     TORRENT_ID_RE,
     TORRENT_INCLUDE,
+    TORRENTS_DIR_NAME,
     Workflow,
     classify_path,
     data_remote,
@@ -220,17 +222,19 @@ def main():
     section("Published file lists")
     taken = load_published_lists(remote, listing)
 
+    section("Local torrents")
+    for path, torrent_id in load_local_torrents(os.path.join(workflow.seed_dir, TORRENTS_DIR_NAME)).items():
+        taken.setdefault(path, torrent_id)
+
     section("Selection")
     scan = classify_all(listing, excludes, taken, includes)
     if scan.already_archived:
-        error(f"{fmt_count(len(scan.already_archived))} paths already archived but still on the site, e.g.")
-        for path in scan.already_archived[:LOG_SAMPLE]:
-            error(f"  {path}")
-        fail(
-            f"{fmt_count(len(scan.already_archived))} paths a published torrent already holds are still on the "
-            "site: an earlier delete didn't happen, the path reappeared, or check-before-delete left it on the site "
-            "(README Appendix E). Resolve by hand before running find again"
+        print(
+            f"Skipped {fmt_count(len(scan.already_archived))} paths an earlier torrent already holds, still on the "
+            "site (data is deleted much later), e.g."
         )
+        for path in scan.already_archived[:LOG_SAMPLE]:
+            print(f"  {path}")
     cut = choose_cutoff(scan.candidates, newest_allowed)
     if cut.cutoff is None:
         fail(render_no_cutoff(cut, scan))
@@ -378,6 +382,22 @@ def existing_seed_paths(seed_dir):
             rel = f"{rel_dir}/{name}" if rel_dir != "." else name
             paths.append(rel.replace(os.sep, "/"))
     return paths
+
+
+def load_local_torrents(torrents_dir):
+    """
+    path -> torrent ID for every path in the <ID>.torrent files in SEED_DIR/.torrents/ (a later torrent wins): the
+    torrents already made here, whether or not they've been published yet. Signatures aren't checked: 00-preflight's
+    inventory of the same folder does that.
+    """
+    local = {}
+    torrents = sorted(glob.glob(os.path.join(torrents_dir, "*.torrent")))
+    for torrent_path in torrents:
+        torrent_id, files = seed_dir.read_torrent_entries(torrent_path)
+        for path in files:
+            local[path] = torrent_id
+    print(f"Loaded {fmt_count(len(local))} paths from {len(torrents)} local torrents in {torrents_dir}")
+    return local
 
 
 def load_published_lists(data_remote, listing):

@@ -188,6 +188,20 @@ class EndToEndTest(unittest.TestCase):
         self.assertTrue(v1_hash)
         self.assertEqual(len(v1_hash), 40)  # a SHA-1 hex digest
 
+    def test_root_files_come_first_with_the_readme_the_very_first(self):
+        order = make_torrent.torrent_file_order(self.TORRENT_ID, self.files, self.root_names)
+        self.assertEqual(order[0], f"{self.TORRENT_ID}-README.md")
+        self.assertEqual(set(order[: len(self.root_names)]), self.root_names)
+        self.assertEqual(order[len(self.root_names) :], sorted(self.files))
+
+    def test_the_built_torrent_lists_the_readme_first(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.build_and_check()
+        ti = make_torrent.load_torrent(lt, os.path.join(self.tmp.name, f"{self.TORRENT_ID}.torrent"))
+        paths = [ti.files().file_path(i) for i in range(ti.files().num_files())]
+        self.assertEqual(paths[0], f"{self.TORRENT_ID}/{self.TORRENT_ID}-README.md")
+        self.assertEqual(paths[len(self.root_names)], f"{self.TORRENT_ID}/a/one.csv.bz2")
+
     def test_a_file_changed_on_disk_after_the_manifest_is_caught(self):
         with contextlib.redirect_stdout(io.StringIO()):
             self.build_and_check()

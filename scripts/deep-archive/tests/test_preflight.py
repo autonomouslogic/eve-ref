@@ -43,7 +43,7 @@ class MainTest(unittest.TestCase):
 
     def test_missing_tool_aborts_before_later_checks(self):
         def check_tools(checks):
-            checks.fail("Missing required tool: aria2c")
+            checks.fail("Missing required tool: sha256sum")
 
         exit, mocks = self.run_main(check_tools)
         self.assertEqual(exit.code, 1)
@@ -120,6 +120,35 @@ class PrepareDirTest(unittest.TestCase):
             self.assertFalse(created)
             self.assertIn("does not exist", problem)
             self.assertFalse(os.path.exists(path))
+
+
+class AfterLocalTorrentsTest(unittest.TestCase):
+    """A torrent made here but not published yet doesn't show in the bucket: its ID must not be reused."""
+
+    ID = "everef-eve-online-deep-archive-%02d"
+
+    def after(self, local_sequences, next_sequence):
+        with tempfile.TemporaryDirectory() as seed:
+            os.makedirs(os.path.join(seed, ".torrents"))
+            for sequence in local_sequences:
+                with open(os.path.join(seed, ".torrents", f"{self.ID % sequence}.torrent"), "wb") as f:
+                    f.write(b"")
+            checks = preflight.Checks()
+            return preflight.after_local_torrents(checks, seed, self.ID % next_sequence), checks
+
+    def test_unpublished_local_torrent_moves_the_next_id_on(self):
+        self.assertEqual(self.after([0], 0)[0], self.ID % 1)
+
+    def test_newest_local_torrent_counts(self):
+        self.assertEqual(self.after([0, 2, 1], 0)[0], self.ID % 3)
+
+    def test_published_ahead_of_local_keeps_the_published_next_id(self):
+        self.assertEqual(self.after([0], 5)[0], self.ID % 5)
+
+    def test_no_local_torrents_or_folder(self):
+        self.assertEqual(self.after([], 3)[0], self.ID % 3)
+        checks = preflight.Checks()
+        self.assertEqual(preflight.after_local_torrents(checks, "/nonexistent", self.ID % 3), self.ID % 3)
 
 
 class CheckRemoteTest(unittest.TestCase):

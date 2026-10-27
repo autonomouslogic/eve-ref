@@ -33,6 +33,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 from workflow import (  # noqa: E402
+    refuse_to_run,
     DATA_BASE_URL,
     DEEP_ARCHIVE_DIR,
     Workflow,
@@ -161,4 +162,5 @@ def check_parent_listings(base, data_paths, rng):
 
 
 if __name__ == "__main__":
+    refuse_to_run("check-site")
     main()

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """
 check-seed: a step of the EVE Ref Deep Archive workflow. Checks qBittorrent's own state for the torrent, from
-scratch, never trusting 07-seed's own result, then downloads the torrent's README through BitTorrent with aria2c,
-as a separate client, to show the torrent can actually be downloaded.
+scratch, never trusting 07-seed's own result, and the whole merged SEED_DIR tree against its signed torrents.
 
-DRAFT. Read-only on qBittorrent. Writes only a throwaway folder, SCRATCH_DIR/test-download/, deleted at the end.
+DRAFT. Read-only on qBittorrent and SEED_DIR.
 
     08-check-seed.py
 
@@ -22,30 +21,13 @@ SEED_DIR (lib/seed_dir.py's quick_check, NOTES.md "Merged seed directory"): the 
 signed torrent in SEED_DIR/.torrents/, not just this one -- every file on disk owned by exactly one torrent, no
 collisions once merged.
 
-Test download (aria2c), only once qBittorrent checks out:
-- aria2c gets SCRATCH_DIR/<ID>.torrent (no magnet link) and downloads only <ID>-README.md into a fresh folder,
-  finding peers through the trackers and DHT. The torrent is v1 only (NOTES.md "Open issues"), which is also all
-  aria2c supports; the README's index is taken from aria2c --show-files.
-- aria2c checks the piece hashes itself; the downloaded README must also be byte-identical to SEED_DIR's copy.
-- Gives up after STALL_TIMEOUT seconds without download progress (aria2c --bt-stop-timeout).
-
-It runs on the workflow host, so it proves the torrent can be downloaded, not that the seeder is reachable from
-outside. If the seeder is on the same host, aria2c may have to reach qBittorrent through the host's own public address
-(NAT hairpinning), which some routers don't allow (NOTES.md "Known limitations").
-
 If qBittorrent is still checking the torrent, this fails with the current progress; run it again once it finishes.
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_API_KEY
-
-Needs aria2c.
 """
 
-import filecmp
 import os
-import re
-import shutil
-import subprocess
 import sys
 import time
 
@@ -70,8 +52,6 @@ STEP = "check-seed"
 SEEDING_STATES = {"uploading", "stalledUP", "queuedUP", "forcedUP"}
 CHECKING_STATES = {"checkingUP", "checkingDL", "checkingResumeData", "allocating", "queuedForChecking"}
 TRACKER_WORKING = 2  # qBittorrent's torrents/trackers status: 2 == "Working"
-STALL_TIMEOUT = 300  # seconds without download progress before aria2c gives up
-ARIA2C_SUMMARY_INTERVAL = 30  # seconds between aria2c's progress lines
 
 
 def main():
@@ -151,8 +131,6 @@ def main():
         fail(f"{fmt_count(len(inventory_problems))} problems in {workflow.seed_dir} (check-seed-dir.py for more)")
     print(f"{fmt_count(len(torrents))} torrents, {fmt_count(len(disk))} files, all owned, no collisions")
 
-    section("Test download")
-    readme_bytes = test_download(workflow, torrent_id)
 
     workflow.complete(
         STEP,
@@ -162,7 +140,6 @@ def main():
             "progress": info["progress"],
             "state": info["state"],
             "working_trackers": len(working),
-            "test_download_bytes": readme_bytes,
         },
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
@@ -181,94 +158,6 @@ def working_trackers(trackers):
     torrents/trackers also lists DHT, PeX and LSD as "** [DHT] **" etc., working whenever they're enabled.
     """
     return [t for t in trackers if t["url"].startswith(TRACKER_SCHEMES) and t.get("status") == TRACKER_WORKING]
-
-
-def test_download(workflow, torrent_id):
-    """
-    Downloads only the README through the torrent with aria2c, into a throwaway folder, and compares it with the seed
-    directory's copy. Returns its size.
-    """
-    torrent_path = os.path.join(workflow.scratch_dir, f"{torrent_id}.torrent")
-    readme_name = f"{torrent_id}-README.md"
-    # Merged, no subfolder (NOTES.md "Merged seed directory"): the README is directly under SEED_DIR, not
-    # SEED_DIR/<ID>/. The torrent's own internal layout is unaffected by qBittorrent's content layout, so aria2c
-    # (a separate client, downloading straight from the .torrent) still fetches it into download_dir/<ID>/<name>.
-    seed_copy = os.path.join(workflow.seed_dir, readme_name)
-    if not os.path.isfile(torrent_path):
-        fail(f"Torrent not found: {torrent_path}")
-    index = aria2c_file_index(torrent_path, f"{torrent_id}/{readme_name}")
-    print(f"aria2c file {index}: {readme_name}, from {torrent_path}")
-
-    download_dir = os.path.join(workflow.scratch_dir, "test-download")
-    if os.path.exists(download_dir):
-        shutil.rmtree(download_dir)
-    os.makedirs(download_dir)
-    download_started = time.monotonic()
-    try:
-        run_aria2c(
-            f"--dir={download_dir}",
-            f"--select-file={index}",
-            "--seed-time=0",
-            f"--bt-stop-timeout={STALL_TIMEOUT}",
-            "--file-allocation=none",
-            "--enable-color=false",
-            f"--summary-interval={ARIA2C_SUMMARY_INTERVAL}",
-            "--show-console-readout=false",
-            "--console-log-level=warn",
-            torrent_path,
-        )
-        downloaded = os.path.join(download_dir, torrent_id, readme_name)
-        if not os.path.isfile(downloaded):
-            fail(f"aria2c finished but {downloaded} isn't there")
-        if not filecmp.cmp(downloaded, seed_copy, shallow=False):
-            fail(f"Downloaded {readme_name} differs from {seed_copy}")
-        size = os.path.getsize(downloaded)
-    finally:
-        shutil.rmtree(download_dir, ignore_errors=True)
-    print(
-        f"Downloaded {readme_name} ({fmt_bytes(size)}) through the torrent in "
-        f"{fmt_duration(time.monotonic() - download_started)}, identical to the seed copy"
-    )
-    return size
-
-
-ARIA2C_FILE_RE = re.compile(r"^\s*(\d+)\|(.+)$")
-
-
-def aria2c_file_index(torrent_path, wanted):
-    """
-    aria2c's 1-based index of a file (path under the torrent's root folder) in its --show-files listing, the file
-    list --select-file counts against.
-    """
-    try:
-        result = subprocess.run(["aria2c", "--show-files", torrent_path], capture_output=True, text=True)
-    except FileNotFoundError:
-        fail("aria2c is not installed")
-    if result.returncode != 0:
-        lines = [line for line in (result.stderr + result.stdout).splitlines() if line.strip()]
-        fail(f"aria2c --show-files failed: {lines[-1] if lines else f'exit code {result.returncode}'}")
-    for line in result.stdout.splitlines():
-        match = ARIA2C_FILE_RE.match(line)
-        if match and match.group(2).strip().endswith("/" + wanted):
-            return int(match.group(1))
-    fail(f"{wanted} isn't in aria2c's file list for {torrent_path}")
-
-
-def run_aria2c(*args):
-    """Runs aria2c, printing its output as it comes. Fails with its last output line if it exits with an error."""
-    try:
-        process = subprocess.Popen(["aria2c", *args], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    except FileNotFoundError:
-        fail("aria2c is not installed")
-    last = None
-    for line in process.stdout:
-        line = line.rstrip("\n")
-        if line.strip():
-            print(f"aria2c: {line}", flush=True)
-            last = line
-    process.wait()
-    if process.returncode != 0:
-        fail(f"aria2c failed (exit code {process.returncode}): {last or 'no output'}")
 
 
 if __name__ == "__main__":

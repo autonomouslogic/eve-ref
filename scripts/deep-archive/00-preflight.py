@@ -27,7 +27,7 @@ Checks:
 - rclone is installed;
 - the data site's bucket is reachable (the site root's index.json), and deep-archive/ is listable; also picks the
   next torrent ID (one past the highest published one, or 00 if there are none), for 01-find to use;
-- the other required tools: libtorrent 2.x, aria2c, sha256sum (03-load uses it to verify the checksum file it just
+- the other required tools: libtorrent 2.x, sha256sum (03-load uses it to verify the checksum file it just
   wrote), Docker (04-sign-sha256 and 06-sign-torrent run minisign through it);
 - qBittorrent's Web API answers at QBITTORRENT_URL with QBITTORRENT_API_KEY, and runs libtorrent 2.x (a warning, not
   a failure, if it's older than 2.0.15: NOTES.md "libtorrent" lists the fixes since);
@@ -37,6 +37,7 @@ Checks:
   SCRATCH_DIR and SEED_DIR.
 """
 
+import glob
 import json
 import os
 import shutil
@@ -153,6 +154,8 @@ def main():
 
     section("Remote")
     next_torrent_id = check_remote(checks)
+    if next_torrent_id and seed:
+        next_torrent_id = after_local_torrents(checks, seed, next_torrent_id)
 
     if checks.failed:
         fail(f"Preflight found {checks.failed} problem{'s' if checks.failed != 1 else ''}, aborting")
@@ -316,11 +319,6 @@ def check_tools(checks):
             print(f"libtorrent {version}")
     except ImportError:
         checks.fail("Missing required tool: libtorrent Python bindings")
-    aria2c = subprocess.run(["aria2c", "--version"], capture_output=True, text=True) if shutil.which("aria2c") else None
-    if aria2c is None or aria2c.returncode != 0:
-        checks.fail("Missing required tool: aria2c")
-    else:
-        print(aria2c.stdout.splitlines()[0] if aria2c.stdout else "aria2c")
     if shutil.which("sha256sum") is None:
         checks.fail("Missing required tool: sha256sum")
     else:
@@ -354,6 +352,26 @@ def check_trackers(checks):
         )
     else:
         print(f"{working} of {len(GOOD_TRACKERS)} trackers answered (at least {MIN_WORKING_TRACKERS} needed)")
+
+
+def after_local_torrents(checks, seed, next_torrent_id):
+    """
+    next_torrent_id, or the ID after the newest <ID>.torrent in SEED_DIR/.torrents/ if that's later: a torrent made
+    here but not published yet (or not for good) doesn't show in the bucket, and its ID must not be reused.
+    """
+    torrents_dir = os.path.join(seed, TORRENTS_DIR_NAME)
+    names = glob.glob(os.path.join(torrents_dir, "*.torrent"))
+    sequences = [torrent_sequence(os.path.basename(n)[: -len(".torrent")]) for n in names]
+    sequences = [s for s in sequences if s is not None]
+    if not sequences or max(sequences) + 1 <= torrent_sequence(next_torrent_id):
+        return next_torrent_id
+    if max(sequences) + 1 > 99:
+        checks.fail("All double-digit torrent IDs (00-99) are used; the ID scheme needs widening")
+        return None
+    later = format_torrent_id(max(sequences) + 1)
+    newest = format_torrent_id(max(sequences))
+    print(f"{len(sequences)} local torrents in {torrents_dir}, newest {newest}: next torrent ID {later}")
+    return later
 
 
 def check_remote(checks):
