@@ -160,7 +160,10 @@ class EndToEndTest(unittest.TestCase):
         """Runs main()'s "Torrent" through "Check" steps on self.content_dir; returns check_torrent's v1 hash."""
         root_mtimes = {name: int(os.path.getmtime(os.path.join(self.content_dir, name))) for name in self.root_names}
         expected_mtimes = {**self.mtimes, **root_mtimes}
-        with patch.object(make_torrent, "PIECE_SIZE", self.PIECE_SIZE):
+        # TORRENT_INCLUDE is deployment config (lib/workflow.py); the fixture's paths aren't in it.
+        with patch.object(make_torrent, "PIECE_SIZE", self.PIECE_SIZE), patch.object(
+            make_torrent, "TORRENT_INCLUDE", None
+        ):
             # fs must stay referenced until generate(): create_torrent only keeps a reference to it, not a copy
             # (build_torrent's docstring).
             ct, fs, piece_size, num_pieces, _total_bytes = make_torrent.build_torrent(
