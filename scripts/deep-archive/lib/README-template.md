@@ -21,9 +21,8 @@ docker run --rm -v "$PWD:/data" jedisct1/minisign -Vm /data/{id}.sha256 -P RWTxr
 The public key is published at [everef.net/.well-known/minisign.pub](https://everef.net/.well-known/minisign.pub).
 
 ## Index snapshot
-`{id}-index.tar.xz` is a snapshot of `index.json` from every data.everef.net folder this torrent archives a file
-from, taken when the torrent was built. Those files describe some metadata about each file, such as size, upload
-times, file type, date, and sequence number).
+`{id}-index.tar.xz` is a snapshot of `index.json` files from every data.everef.net folder this torrent archives a file
+from. Those files describe some metadata about each file, such as size, file times, file type, date, and sequence number.
 
 ## Licence
 EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide.

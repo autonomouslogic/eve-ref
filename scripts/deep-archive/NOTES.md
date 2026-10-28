@@ -105,9 +105,14 @@ v1-only sizes from libtorrent itself:
 - Every file's **modification time** is included (`create_torrent.modification_time`): the manifest's for a data
   file, the file's own for a root file (README, checksum file, signature). Off by default in libtorrent, because a
   file re-created elsewhere with a different mtime would get a different info-hash -- not a risk here, since EVE Ref
-  is the only creator and a file's mtime is the site's original upload time, carried through `03-load`. Lets a
-  downloader see a file's original date without opening it; doesn't change what's checked (the piece hashes do that,
-  mtime or not).
+  is the only creator and a file's mtime is the site's original upload time, carried through `03-load`. Doesn't
+  change what's checked (the piece hashes do that, mtime or not). **Not a standard, and not useful to downloaders**
+  (2026-10-27): no accepted BEP (3, 47, 52) defines per-file times, and `mtime` is a libtorrent convention. A
+  test download with aria2c showed neither the field nor restored mtimes (other clients not tested), so a
+  downloaded file's mtime is its download time. Only a tool parsing the raw bencode sees the
+  dates, which people won't do. The practical source for a downloader is `last_modified` in the index tarball
+  ("Index snapshot"), plain JSON in a `tar.xz`, data files only: root files' dates exist only in the torrent. No
+  restore script is shipped; one reading the tarball and `touch`-ing each file would be easy to add if wanted.
 - **No web seed**: the files are deleted from data.everef.net and a torrent can't change, so it would be a dead URL.
 - The comment is outside the info dictionary and magnet-link users don't get it: the README inside the torrent carries
   the same link.
