@@ -1,12 +1,14 @@
 """
 Tests for 08-check-seed.py: which rows of qBittorrent's torrents/trackers count as a working tracker
 (working_trackers), and which of its torrents/files are still under a root folder (files_with_root_folder,
-NOTES.md "Merged seed directory").
+NOTES.md "Merged seed directory"), and waiting out qBittorrent's checking with progress (wait_while_checking).
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
 
+import contextlib
 import importlib.util
+import io
 import os
 import sys
 import unittest
@@ -69,6 +71,91 @@ class FilesWithRootFolderTest(unittest.TestCase):
     def test_a_different_torrents_prefix_is_not_a_false_positive(self):
         files = [{"name": "everef-eve-online-deep-archive-001-not-really-an-id/a.csv"}]
         self.assertEqual(check_seed.files_with_root_folder(files, self.TORRENT_ID), [])
+
+
+class FakeClock:
+    """A clock that only moves when the fake sleep is called."""
+
+    def __init__(self):
+        self.now = 0.0
+        self.sleeps = []
+
+    def monotonic(self):
+        return self.now
+
+    def sleep(self, seconds):
+        self.sleeps.append(seconds)
+        self.now += seconds
+
+
+class FakeClient:
+    """info() returns the next of the given infos, repeating the last."""
+
+    def __init__(self, infos):
+        self.infos = list(infos)
+        self.calls = 0
+
+    def info(self, _info_hash):
+        info = self.infos[min(self.calls, len(self.infos) - 1)]
+        self.calls += 1
+        return info
+
+
+GIB = 1024**3
+
+
+def info(state, progress, size=300 * GIB):
+    return {"state": state, "progress": progress, "size": size}
+
+
+class WaitWhileCheckingTest(unittest.TestCase):
+    def wait(self, infos, interval=10, report_interval=30):
+        clock = FakeClock()
+        client = FakeClient(infos)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            result = check_seed.wait_while_checking(
+                client, "hash", interval=interval, report_interval=report_interval, sleep=clock.sleep,
+                monotonic=clock.monotonic,
+            )
+        return result, client, clock, out.getvalue()
+
+    def test_not_checking_returns_at_once_without_waiting(self):
+        done = info("uploading", 1.0)
+        result, client, clock, out = self.wait([done])
+        self.assertEqual(result, done)
+        self.assertEqual(clock.sleeps, [])
+        self.assertEqual(out, "")
+
+    def test_waits_until_checking_finishes(self):
+        done = info("uploading", 1.0)
+        infos = [info("checkingUP", 0.1), info("checkingUP", 0.5), done]
+        result, client, clock, _out = self.wait(infos)
+        self.assertEqual(result, done)
+        self.assertEqual(clock.sleeps, [10, 10])
+
+    def test_prints_the_reported_state_and_progress(self):
+        infos = [info("checkingUP", 0.0), info("checkingUP", 0.25), info("checkingUP", 0.5), info("uploading", 1.0)]
+        _result, _client, _clock, out = self.wait(infos, interval=10, report_interval=10)
+        self.assertEqual(
+            out.splitlines(),
+            ["Checking: 0.00% (checkingUP)", "Checking: 25.00% (checkingUP)", "Checking: 50.00% (checkingUP)"],
+        )
+
+    def test_reports_no_more_often_than_the_report_interval(self):
+        infos = [info("checkingUP", p / 100) for p in range(1, 20)] + [info("uploading", 1.0)]
+        _result, _client, clock, out = self.wait(infos, interval=10, report_interval=60)
+        self.assertEqual(out.count("Checking:"), clock.now // 60 + 1)
+
+    def test_queued_for_checking_waits_too(self):
+        done = info("stalledUP", 1.0)
+        result, _client, clock, _out = self.wait([info("queuedForChecking", 0.0), done])
+        self.assertEqual(result, done)
+        self.assertEqual(len(clock.sleeps), 1)
+
+    def test_torrent_removed_while_checking_returns_none(self):
+        result, _client, _clock, _out = self.wait([info("checkingUP", 0.3), None])
+        self.assertIsNone(result)
 
 
 if __name__ == "__main__":

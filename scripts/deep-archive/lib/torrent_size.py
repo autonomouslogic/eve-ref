@@ -21,7 +21,7 @@ import math
 # the root files (README, checksum file, its signature; lib/workflow.py's root_file_names). GOOD_TRACKERS
 # (lib/trackers.py) is a handful of trackers, each about 50 bytes and 2 tokens; the one-line comment, under 100
 # bytes. The root files' own piece hashes are the only part that scales with the selection, through the checksum
-# file growing with the file count -- at PIECE_SIZE (32 MiB), even a multi-megabyte checksum file only adds a piece
+# file growing with the file count -- at PIECE_SIZE (8 MiB), even a multi-megabyte checksum file only adds a piece
 # or two, negligible against this allowance.
 FIXED_BYTES = 4096
 FIXED_TOKENS = 200

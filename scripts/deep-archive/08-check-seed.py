@@ -21,7 +21,9 @@ SEED_DIR (lib/seed_dir.py's quick_check, NOTES.md "Merged seed directory"): the 
 signed torrent in SEED_DIR/.torrents/, not just this one -- every file on disk owned by exactly one torrent, no
 collisions once merged.
 
-If qBittorrent is still checking the torrent, this fails with the current progress; run it again once it finishes.
+If qBittorrent is still checking the torrent (it re-checks the files it was just given, hundreds of GiB), this waits
+for it, printing the state and progress qBittorrent reports every CHECK_REPORT_INTERVAL seconds. Interrupt and rerun any time:
+the check carries on in qBittorrent.
 
 Environment (or torrents.env, see lib/workflow.py):
     SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_API_KEY
@@ -51,6 +53,8 @@ from workflow import (  # noqa: E402
 STEP = "check-seed"
 SEEDING_STATES = {"uploading", "stalledUP", "queuedUP", "forcedUP"}
 CHECKING_STATES = {"checkingUP", "checkingDL", "checkingResumeData", "allocating", "queuedForChecking"}
+CHECK_POLL_INTERVAL = 5  # seconds between asking qBittorrent while it checks
+CHECK_REPORT_INTERVAL = 60  # seconds between progress lines
 TRACKER_WORKING = 2  # qBittorrent's torrents/trackers status: 2 == "Working"
 
 
@@ -74,10 +78,15 @@ def main():
         fail(f"Torrent {qbittorrent_id} isn't in qBittorrent")
 
     problems = []
+    if info["state"] in CHECKING_STATES:
+        try:
+            info = wait_while_checking(client, qbittorrent_id)
+        except QbittorrentError as e:
+            fail(f"Lost qBittorrent while it was checking: {e}")
+        if info is None:
+            fail(f"Torrent {qbittorrent_id} disappeared from qBittorrent while it was checking")
     progress_pct = info["progress"] * 100
     print(f"State: {info['state']}, progress {progress_pct:.2f}%, downloaded {fmt_bytes(info['downloaded'])}")
-    if info["state"] in CHECKING_STATES:
-        fail(f"Still checking ({info['state']}): run this again once it finishes")
     if info["progress"] != 1.0:
         problems.append(f"progress is {progress_pct:.2f}%, not 100%")
     if info["downloaded"] != 0:
@@ -144,6 +153,31 @@ def main():
     )
     print(f"Done in {fmt_duration(time.monotonic() - started)}")
     ok(f"Check seed OK for {torrent_id}")
+
+
+def wait_while_checking(
+    client,
+    info_hash,
+    interval=CHECK_POLL_INTERVAL,
+    report_interval=CHECK_REPORT_INTERVAL,
+    sleep=time.sleep,
+    monotonic=time.monotonic,
+):
+    """
+    Polls qBittorrent until the torrent is out of every checking state, printing the state and progress it reports
+    (torrents/info's progress is the check's while it runs). Returns the final info, or None if the torrent is no
+    longer in qBittorrent.
+    """
+    last_report = None
+    while True:
+        info = client.info(info_hash)
+        if info is None or info["state"] not in CHECKING_STATES:
+            return info
+        now = monotonic()
+        if last_report is None or now - last_report >= report_interval:
+            print(f"Checking: {info['progress'] * 100:.2f}% ({info['state']})")
+            last_report = now
+        sleep(interval)
 
 
 def files_with_root_folder(files, torrent_id):

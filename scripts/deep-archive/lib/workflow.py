@@ -75,7 +75,7 @@ TORRENT_EXCLUDE = ["market-history", "killmails", "ccp", DEEP_ARCHIVE_DIR]
 # Optional allowlist: paths from the site root. None selects every folder not in TORRENT_EXCLUDE; a list selects only
 # files in these folders (TORRENT_EXCLUDE still applies within them). Used to give the first torrents only the biggest
 # datasets, to get them out of the way. Set it back to None once they're archived.
-TORRENT_INCLUDE = None
+TORRENT_INCLUDE = ["fuzzwork"]
 
 
 def in_folders(path, folders):
@@ -215,16 +215,16 @@ def fmt_size(n):
 
 # Size limits for one torrent (find chooses the selection by them; make-torrent uses PIECE_SIZE).
 
-# Piece size the limits are worked out for.
-PIECE_SIZE = 32 * MIB
+# Piece size the limits are worked out for. NOTES.md "Data per torrent" has the reasoning for this and the data limits.
+PIECE_SIZE = 8 * MIB
 
 # Data in one torrent, a soft limit: 01-find stops at the first date that reaches it, and takes that whole date, so a
 # torrent can be somewhat over. Roughly what the seeder holds per torrent and what a full download is.
-MAX_BYTES = 5 * GIB
+MAX_BYTES = 300 * GIB
 
 # Least data in one torrent: 01-find aborts if its selection is smaller, so no workflow makes a small torrent. Rerun
 # it once more data has passed MIN_AGE_YEARS.
-MIN_BYTES = 5 * GIB
+MIN_BYTES = 250 * GIB
 
 # Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
 # max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs up to about 12 KB high (its

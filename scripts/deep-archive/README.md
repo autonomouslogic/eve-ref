@@ -135,8 +135,9 @@ qBittorrent, with content layout **NoSubfolder** (not qBittorrent's Original def
 final paths), so it checks them where they now are. Does not turn on super seeding (NOTES.md "Super seeding").
 
 ### 08: Check seed
-Give the trackers a few minutes after seed first. It fails until a tracker reports working, and while qBittorrent is
-checking the torrent; running it again is fine.
+Give the trackers a few minutes after seed first. It fails until a tracker reports working; running it again is fine.
+While qBittorrent is still checking the torrent (hundreds of GiB), it waits, printing the state and progress
+qBittorrent reports once a minute.
 - 100% with **0 bytes downloaded** (any download means the files don't match: stop), seeding, a tracker working.
 - No file still sits under a `<ID>/` root folder in qBittorrent: confirms the merge and NoSubfolder actually took.
 - The whole `$SEED_DIR` tree still matches every signed torrent (`check-seed-dir.py`'s quick checks), not just this

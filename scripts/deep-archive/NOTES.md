@@ -52,7 +52,73 @@ selected at all ("Index snapshot").
 as intended, not a sign there isn't enough data yet. `cut.reason == "bytes"` never needs the exemption, since
 `MAX_BYTES >= MIN_BYTES` by definition.
 
+## Data per torrent
+
+**Decided (2026-10-28): 250 to 300 GiB of data per torrent (`MIN_BYTES`, `MAX_BYTES`), 8 MiB pieces (`PIECE_SIZE`).**
+Kept there: a torrent can never change once published, and mixed sizes make the archive harder to reason about. The
+archive was about 5.7 TB at the time, so roughly 20 torrents. Before this it was 5 GiB each, which was a placeholder
+from testing.
+
+The purpose is crowd-sourced long-term storage, so the size is chosen for volunteers, not for the protocol: any size
+from a few GiB to a few hundred GiB works technically. The research behind it is thin and mostly anecdotal. No
+study of the best torrent size for long-term seeding turned up.
+
+- **Bigger torrents** mean fewer torrents to build, sign, publish and list, and less tracker load. But fewer people
+  have room for a whole one, and seeding a torrent is all or nothing, so each torrent has a smaller pool of possible
+  seeders.
+- **Smaller torrents** can be held by anyone, spread the seeding load, and make under-seeded ones easy to spot and
+  repair. The cost is more torrents: more `.torrent` files and signatures, a longer list, more tracker announces, and
+  more workflow runs. Anna's Archive and the Internet Archive's BAK proposal both said that gets hard at around
+  100,000 torrents or more, not at hundreds.
+- **What others do:** archive.org recommends staying under 1 TB per torrent. Anna's Archive suggests 100 GB to 1 TB
+  per folder (it says that may change) and asks people to seed the torrents with the fewest seeders. The BAK proposal
+  used 500 GB chunks. One volunteer said they would give up 200 to 500 GB, that archives of 1.5 TB and up put people
+  off, that the oldest and largest torrents are the ones short of seeders, and that newer ones are being split to
+  300 GB or less. Jason Scott argues for one large torrent per collection, as the average torrent barely lasts two
+  months; that is about discoverability, and the trackers and DHT here cover it.
+- **Why 250 to 300 GiB:** under archive.org's limit, in the range volunteers say they will hold, and about 20
+  torrents is easy to run and list. `MIN_BYTES` is below `MAX_BYTES` so a batch doesn't end with a torrent that
+  `01-find` refuses for being a few GiB short. Torrents can end slightly over `MAX_BYTES` (it is a soft limit: the
+  whole last date is taken).
+- **Consequences at this size:** the `.torrent` is about 3 MB (v1 only, scaled from "Torrent size"'s 9.3 MB for
+  the old `MAX_BYTES`, plus the extra pieces), well under `MAX_TORRENT_BYTES`, so the file-count limit no longer decides where a
+  selection stops.
+  `SEED_DIR` needs 300 GiB free per run (00-preflight). Hashing is about 5 minutes at libtorrent's v1 speed. Only
+  data older than `MIN_AGE_YEARS` counts, so not all of the 5.7 TB is eligible yet.
+
+### Piece size
+
+8 MiB, down from 32 MiB. It is what libtorrent picks automatically for a torrent of 164 to 655 GiB (its table in
+`create_torrent`: 16 KiB shifted left once for each threshold below the total size, thresholds from 2.5 MiB, growing
+4x each, up to 8 MiB for totals up to 703,687,441,777 bytes and 16 MiB above that). A 300 GiB torrent is about 38,000
+pieces, fine for every client. The v1 `pieces` string is 20 bytes a piece, so about 0.4 MB more `.torrent` than at
+16 MiB.
+
+The reason to prefer smaller is partial downloads. Torrents are v1 only with no pad files, so files sit back to back
+and a piece can hold the end of one file and the start of the next. Someone who wants a few files fetches the whole
+pieces at each edge of the selection, including their neighbours' bytes. That overhead is *the cost of not padding*
+(see "Piece alignment"; a padded hybrid torrent has none, in a client that skips pad files). It only hits partial
+downloads, and only at the edges: a full download or a seeder pays nothing. Smaller pieces waste less at each edge
+(the table in "Piece alignment" is 1.97 for one market-orders file at 16 MiB against 2.94 at 32 MiB, and 1.0007 for
+a month of them; 8 MiB is lower still). Going lower than 8 MiB gains little and adds pieces to hash and track.
+
+### Seeder discovery
+
+Whatever the size, what keeps an archive alive is volunteers knowing which torrents need seeders. Anna's Archive
+publishes seeder counts per torrent and asks for the least-seeded ones. A per-torrent seeder health page, and a
+"needs seeds" list, would matter more than the choice of size. Not built yet.
+
+Sources: [archive.org BitTorrents](https://help.archive.org/help/archive-bittorrents/),
+[Anna's Archive](https://en.wikipedia.org/wiki/Anna%27s_Archive),
+[INTERNETARCHIVE.BAK/torrents implementation](https://wiki.archiveteam.org/index.php/INTERNETARCHIVE.BAK/torrents_implementation),
+[Jason Scott on one large torrent](https://ascii.textfiles.com/archives/1113),
+[a volunteer on seeding large torrents](https://lemmy.dbzer0.com/comment/9326553).
+
 ## Torrent size
+
+The numbers below were worked out for torrents of the old `MAX_BYTES` (990 GiB, the one place that figure is given) at
+32 MiB pieces, before "Data per torrent" set `MAX_BYTES` to 300 GiB and `PIECE_SIZE` to 8 MiB. "The old `MAX_BYTES`"
+elsewhere in this file means that. They show how the `.torrent` scales with the file count; the limit rarely binds at the new size.
 
 libtorrent's defaults also cap a torrent at 2,097,152 pieces, far off at `PIECE_SIZE`. qBittorrent raises some of its
 limits in its advanced settings (by default a 100 MiB `.torrent` and 10,000,000 bdecode tokens, against libtorrent's
@@ -72,7 +138,7 @@ Small files are the problem, not bytes. The small-snapshot datasets (`incursions
 until the roll-up merged them into a few large files.
 
 Worked out (2026-10-26, 32 MiB pieces) from file sizes sampled on data.everef.net: market-orders about 17.3 MB per
-file, fuzzwork ordersets 24.4 MB, public-contracts 5.2 MB, esi-scrape 76 MB. For 990 GiB laid out like those datasets
+file, fuzzwork ordersets 24.4 MB, public-contracts 5.2 MB, esi-scrape 76 MB. For the old `MAX_BYTES` laid out like those datasets
 (one file of each of the first three every 30 minutes, an esi-scrape file a day: 66,265 files), hybrid sizes from
 `lib/torrent_size.py` (checked against a real libtorrent hybrid of 580 of the files: 184,122 bytes, estimate 184,348),
 v1-only sizes from libtorrent itself:
@@ -127,7 +193,7 @@ From the source (RC_2_0 at 2.0.15, and 2.1; exact commits under "Sources"):
   and another info-hash). Pad files of the same size share a path.
 - The Python `set_piece_hashes` runs with default settings: one hashing thread (the default since 2.0.7), which Python
   can't change. Hybrid hashing measured 330 MB/s on an i5-10400 (no SHA-NI), data in the page cache, the same at 16 and
-  32 MiB: about 55 minutes per 990 GiB at best. v1 only measured 990 MB/s, about 18 minutes. Its callback gets a
+  32 MiB: about 55 minutes per old-`MAX_BYTES` torrent at best. v1 only measured 990 MB/s, about 18 minutes. Its callback gets a
   running count of hashed pieces, not a piece index.
 - The bindings have `set_hash` but not `set_hash2`, in 2.0 and 2.1: v2 hashes can't be supplied from Python, only
   checked.
@@ -204,7 +270,7 @@ What it's for:
   disk-I/O", and 0.15 added unbuffered I/O for aligned files.
 
 For these torrents, beyond hybrid needing it, only partial downloads are left: no path is in two torrents ("No path in
-two torrents"), a published torrent never changes, and there's no web seed. For "Torrent size"'s 990 GiB layout, the
+two torrents"), a published torrent never changes, and there's no web seed. For "Torrent size"'s layout of the old `MAX_BYTES`, the
 bytes downloaded per byte wanted (hybrid in a libtorrent client: always 1, as pad files are never fetched):
 
 | Selection              | v1 only, 16 MiB | v1 only, 32 MiB |
@@ -563,4 +629,4 @@ Data and measurements:
   against a real hybrid of 580 sparse files; v1-only sizes at 8, 16 and 32 MiB from `create_torrent` with `v1_only`
   and dummy `set_hash` values; the `hashlib` hashes against `hash_for_piece` and `files().root` for empty, one-byte,
   one-piece and multi-piece files; `transmission-show` 4.0.5 on a hybrid scaled down to 256 KiB pieces; partial
-  downloads from the pieces that each file's offset and size cover in the 990 GiB layout.
+  downloads from the pieces that each file's offset and size cover in the old `MAX_BYTES` layout.
