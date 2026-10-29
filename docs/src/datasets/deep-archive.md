@@ -95,4 +95,5 @@ Whenever a new archive has been prepared, it will be added to [everef-eve-online
 * Any `*-latest*` files
 
 ## Tools
+* [qBittorrent](https://www.qbittorrent.org/) - free bittorrent client
 * [webtor.io](https://webtor.io/) can be used to easily download individual files in the archives 
