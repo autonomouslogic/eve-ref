@@ -28,7 +28,10 @@ Needs 08-check-seed's completion file, and refuses to run twice (lib/workflow.py
 4. Check over HTTPS, never trusting the uploads' own result: <ID>.torrent, <ID>.txt and <ID>.torrent.minisig all
    return 200 with the right Content-Type and exactly the local bytes; everef-eve-online-deep-archive.xml is served as
    application/rss+xml, is valid XML and has an <item> with this torrent's v1 info-hash as its <guid>. Cloudflare
-   may serve the old feed for up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT.
+   may serve the old feed for up to FEED_CACHE_MAX_AGE_SECONDS, so the checks retry until CHECK_TIMEOUT. If the
+   feed check over HTTPS fails, either the fetch itself (DNS, connection, timeout) or the content (no <item> for
+   this torrent yet: Cloudflare still serving a stale cached copy), double-checks the feed straight from the bucket
+   with rclone; if that copy is correct, it's just Cloudflare's cache catching up and doesn't block the step.
 5. Print this torrent's URL, v1 info-hash (and v2, if it has one), data size and file count (the README, checksum
    file and its signature excluded), and full magnet link, for the next step (10, update-docs) to copy
    into the docs site's deep-archive.md page.
@@ -117,10 +120,11 @@ def main():
     deep_archive = join(remote, DEEP_ARCHIVE_DIR)
     make_torrent = workflow.read_done("make-torrent")["summary"]
     v1_hash = make_torrent["v1_info_hash"]
+    cutoff = workflow.read_done("find")["summary"]["cutoff"]
 
     uploaded = upload_torrent(workflow, torrent_id, deep_archive)
     torrents, feed_backup, own_entry = publish_feed(workflow, torrent_id, deep_archive)
-    check_published(workflow, torrent_id, v1_hash)
+    check_published(workflow, torrent_id, v1_hash, deep_archive)
 
     section("Torrent info - for the docs")
     magnet = build_magnet(
@@ -128,8 +132,9 @@ def main():
     )
     print(f"Torrent: [{torrent_id}.torrent]({torrent_url(torrent_id, 'torrent')})")
     print(f"Files: [{torrent_id}.txt]({torrent_url(torrent_id, 'txt')})")
+    print(f"Cutoff: {cutoff}")
     print(f"Size: {fmt_size(own_entry['bytes'])}")
-    print(f"Magnet: [Magnet link]({magnet})")
+    print(f"Magnet: [Magnet]({magnet})")
     print(f"v1 infohash: {own_entry['v1_info_hash']}")
     print(f"v2 infohash: {own_entry['v2_info_hash']}")
 
@@ -386,9 +391,12 @@ def upload_text(scratch_dir, deep_archive, name, text, content_type):
 # Check what data.everef.net serves.
 
 
-def check_published(workflow, torrent_id, v1_hash):
+def check_published(workflow, torrent_id, v1_hash, deep_archive):
     """Checks all published files over HTTPS, retrying until they pass or CHECK_TIMEOUT. Fails listing what's still
-    wrong."""
+    wrong. If the feed check over HTTPS fails -- the fetch itself (DNS, connection, timeout) or the content
+    (Cloudflare still serving a stale cached copy without this torrent's <item>) -- double-checks the feed straight
+    from the bucket with rclone: if that copy is correct, the feed was published fine and it's just Cloudflare's
+    cache catching up, so this doesn't block the step."""
     section("Checking what data.everef.net serves")
     base = DATA_BASE_URL.rstrip("/") + f"/{DEEP_ARCHIVE_DIR}"
     deadline = time.monotonic() + CHECK_TIMEOUT
@@ -397,10 +405,23 @@ def check_published(workflow, torrent_id, v1_hash):
         for name_fmt, content_type in UPLOADS:
             name = name_fmt.format(id=torrent_id)
             problems += check_file(f"{base}/{name}", source_path(workflow, name), content_type)
-        status, headers, body = fetch(f"{base}/everef-eve-online-deep-archive.xml")
-        problems += check_status(status, headers, body, "everef-eve-online-deep-archive.xml", "application/rss+xml")
-        if body:
-            problems += check_feed_item(body, torrent_id, v1_hash)
+        feed_url = f"{base}/everef-eve-online-deep-archive.xml"
+        try:
+            status, headers, body = fetch(feed_url)
+        except urllib.error.URLError as e:
+            feed_problems = [f"everef-eve-online-deep-archive.xml: {e.reason}"]
+        else:
+            feed_problems = check_status(status, headers, body, "everef-eve-online-deep-archive.xml", "application/rss+xml")
+            if body:
+                feed_problems += check_feed_item(body, torrent_id, v1_hash)
+        if feed_problems:
+            warning(f"{feed_url}: {feed_problems[0]}; checking the bucket directly instead")
+            bucket_body = fetch_from_bucket(join(deep_archive, "everef-eve-online-deep-archive.xml"))
+            bucket_problems = check_feed_item(bucket_body, torrent_id, v1_hash) if bucket_body else feed_problems
+            if bucket_problems:
+                problems += bucket_problems
+            else:
+                print("Feed is correct in the bucket; Cloudflare is still serving a stale cached copy")
         if not problems:
             print("All published files are served as published")
             return
@@ -413,14 +434,14 @@ def check_published(workflow, torrent_id, v1_hash):
 
 
 def fetch(url):
+    """GETs url. Raises urllib.error.URLError if the request itself fails (DNS, connection, timeout): the caller
+    decides whether that's fatal."""
     print(f"GET {url}")
     try:
         with urllib.request.urlopen(url, timeout=60) as response:
             return response.status, response.headers, response.read()
     except urllib.error.HTTPError as e:
         return e.code, e.headers, None
-    except urllib.error.URLError as e:
-        fail(f"{url}: {e.reason}")
 
 
 def check_status(status, headers, body, name, expected_content_type):
@@ -446,10 +467,27 @@ def media_type(content_type):
     return main.strip().lower(), parsed
 
 
+def fetch_from_bucket(remote_path):
+    """Reads a file's bytes straight from the bucket with `rclone cat`, bypassing Cloudflare entirely: the fallback
+    when the HTTPS fetch of the feed can't even reach Cloudflare. Fails with rclone's last error line."""
+    print(f"rclone cat {remote_path}")
+    try:
+        result = subprocess.run(["rclone", "cat", remote_path], capture_output=True)
+    except FileNotFoundError:
+        fail("rclone is not installed")
+    if result.returncode != 0:
+        lines = [line for line in result.stderr.decode(errors="replace").splitlines() if line.strip()]
+        fail(f"rclone cat {remote_path} failed: {lines[-1] if lines else f'exit code {result.returncode}'}")
+    return result.stdout
+
+
 def check_file(url, local_path, expected_content_type):
     with open(local_path, "rb") as f:
         local_bytes = f.read()
-    status, headers, body = fetch(url)
+    try:
+        status, headers, body = fetch(url)
+    except urllib.error.URLError as e:
+        fail(f"{url}: {e.reason}")
     name = url.rsplit("/", 1)[-1]
     problems = check_status(status, headers, body, name, expected_content_type)
     if body is not None and body != local_bytes:

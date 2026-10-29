@@ -52,7 +52,6 @@ or anything else looks wrong, stop.
 | 07 Seed                                               | `./07-seed.py`                     | `$SEED_DIR/.torrents/`, merges `.staging/<ID>/` into `$SEED_DIR`, qBittorrent |        |
 | 08 Check seed                                         | `./08-check-seed.py`               |                                                                               |        |
 | 09 Publish                                            | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
-| 09(a) Upload to [torrage.info](https://torrage.info/) | manual                             |                                                                               |        |
 | 10 Update docs                                        | manual                             |                                                                               |        |
 | 11 Index deep-archive/                                | manual                             | `deep-archive/` index files                                                   | write  |
 | _Wait for files to be seeded by others_               |                                    |                                                                               |        |
@@ -97,7 +96,7 @@ To change the selection: fix `TORRENT_EXCLUDE` (or `TORRENT_INCLUDE`) in `lib/wo
 `$SCRATCH_DIR/01-find.done`, and run `01-find` again.
 
 `TORRENT_INCLUDE` is optional (`None` by default). Set to a list of folders, only files in those folders are selected
-(`TORRENT_EXCLUDE` still applies), and the report lists the rest as "not included". Use it to give the first torrents
+(`TORRENT_EXCLUDE` still applies), and the rest are left out of the report. Use it to give the first torrents
 only the biggest datasets; set it back to `None` once they're archived.
 
 ### 03: Load

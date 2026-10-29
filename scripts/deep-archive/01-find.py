@@ -57,6 +57,8 @@ earlier torrent's cutoff. Writes, in SCRATCH_DIR:
 
     find/
       files.jsonl          the selection: one file per line: path, size, last_modified, date, dated_by, url
+      files.txt            the selection's paths only, sorted, one per line (same format as the published <ID>.txt):
+                            for reviewing the selection by eye, and 03-load's rclone --files-from-raw list
       indexes.jsonl        the index.json snapshot list, same fields, for 03-load
       listing.jsonl.gz     the full bucket listing the selection was made from
       report.txt           the printed report
@@ -296,6 +298,7 @@ def main():
         shutil.rmtree(tmp_dir)
     os.makedirs(tmp_dir)
     write_file_list(os.path.join(tmp_dir, "files.jsonl"), selected, DATA_BASE_URL)
+    write_plain_file_list(os.path.join(tmp_dir, "files.txt"), selected)
     write_file_list(os.path.join(tmp_dir, "indexes.jsonl"), indexes, DATA_BASE_URL)
     write_listing(os.path.join(tmp_dir, "listing.jsonl.gz"), listing)
     write_text(os.path.join(tmp_dir, "summary.json"), json.dumps(summary, indent=2, sort_keys=True) + "\n")
@@ -307,6 +310,7 @@ def main():
         shutil.rmtree(find_dir)
     os.rename(tmp_dir, find_dir)
     print(f"{fmt_count(len(selected))} files in {os.path.join(find_dir, 'files.jsonl')}")
+    print(f"Review the selected paths: {os.path.join(find_dir, 'files.txt')}")
     print(f"Listing, report, summary and details in {find_dir}")
     print(f"Staging folder, for load: {content_dir}")
 
@@ -445,8 +449,6 @@ class Scan:
         self.candidates = []  # [Obj], sorted by date, mtime, then path; no index.json
         self.indexes = {}  # folder -> its index.json Obj
         self.already_archived = []  # "path (<ID>)" for a non-index path a published torrent already holds
-        self.excluded = defaultdict(lambda: [0, 0])  # dataset -> [files, bytes]
-        self.not_included = defaultdict(lambda: [0, 0])  # top-level folder -> [files, bytes], with TORRENT_INCLUDE
         self.ignored = defaultdict(lambda: [0, 0])  # reason -> [files, bytes]
         self.root_files = []
         self.empty = []
@@ -458,10 +460,8 @@ def classify_all(listing, excludes, taken, includes=None):
         reason = skip_reason(o.path, excludes, includes)
         if reason is not None:
             kind, label = reason
-            if kind == "excluded":
-                add(scan.excluded[label], o.size)
-            elif kind == "not_included":
-                add(scan.not_included[label], o.size)
+            if kind in ("excluded", "not_included"):
+                pass  # outside TORRENT_EXCLUDE / TORRENT_INCLUDE: not reported
             elif kind == "root":
                 scan.root_files.append(o.path)
             else:
@@ -706,8 +706,6 @@ def build_summary(
         "date_months": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(months.items())},
         "flags": flags,
         "skipped": {
-            "excluded": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.excluded.items())},
-            "not_included": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.not_included.items())},
             "root_files": len(scan.root_files),
             "ignored": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.ignored.items())},
         },
@@ -734,6 +732,16 @@ def write_file_list(path, selected, base_url):
                 "url": base_url + urllib.parse.quote(o.path),
             }
             f.write(json.dumps(record) + "\n")
+
+
+def write_plain_file_list(path, selected):
+    """
+    The selection's paths, sorted, one per line: the same format as the published <ID>.txt (file_list_problems), for
+    reviewing the selection by eye before the rest of the workflow runs.
+    """
+    with open(path, "w", encoding="utf-8") as f:
+        for path_ in sorted(o.path for o in selected):
+            f.write(path_ + "\n")
 
 
 def write_listing(path, listing):
@@ -799,8 +807,6 @@ def render_report(summary):
 
     skipped = summary["skipped"]
     rows = []
-    rows += [(f"excluded {name}", s["files"], s["bytes"]) for name, s in skipped["excluded"].items()]
-    rows += [(f"not included {name}", s["files"], s["bytes"]) for name, s in skipped["not_included"].items()]
     if skipped["root_files"]:
         rows.append(("root-level files", skipped["root_files"], None))
     rows += [(name, s["files"], s["bytes"]) for name, s in skipped["ignored"].items()]

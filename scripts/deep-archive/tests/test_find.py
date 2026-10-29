@@ -293,15 +293,13 @@ class ClassifyAllTest(unittest.TestCase):
             ]
         )
         self.assertEqual([o.path for o in scan.candidates], ["d/a.json"])
-        self.assertEqual(scan.excluded["market-history"], [1, 10])
         self.assertEqual(scan.ignored["index.html files"], [1, 5])
         self.assertEqual(scan.root_files, ["robots.txt"])
 
-    def test_not_included_files_counted(self):
+    def test_not_included_files_dropped(self):
         listing = [obj("d/a.json", size=3), obj("e/f/a.json", size=4), obj("e/g/a.json", size=5)]
         scan = quietly(find.classify_all, listing, self.EXCLUDES, {}, ["d", "e/f"])
         self.assertEqual([o.path for o in scan.candidates], ["d/a.json", "e/f/a.json"])
-        self.assertEqual(scan.not_included, {"e": [1, 5]})
 
     def test_empty_files_are_candidates_and_flagged(self):
         scan = self.classify([obj("d/a.json", size=0)])

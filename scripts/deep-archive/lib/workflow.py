@@ -70,12 +70,19 @@ TORRENTS_DIR_NAME = ".torrents"
 # ccp (CCP's own data: SDE, MER, image collections, CSM results, ...) has to stay excluded for now: the docs link its
 # old files and folders directly (sde.md links ccp/sde/older/, the datasets index links ccp/ccp_quant/, ccp/iec/ and
 # ccp/csm/), and those links would break once a torrent took them. Revisit later, together with those docs.
-TORRENT_EXCLUDE = ["market-history", "killmails", "ccp", DEEP_ARCHIVE_DIR]
+TORRENT_EXCLUDE = [
+    "ccp/csm",
+    "ccp/mer",
+    "market-history",
+    "killmails",
+    "wars/history", # todo rollup
+    DEEP_ARCHIVE_DIR
+]
 
 # Optional allowlist: paths from the site root. None selects every folder not in TORRENT_EXCLUDE; a list selects only
 # files in these folders (TORRENT_EXCLUDE still applies within them). Used to give the first torrents only the biggest
 # datasets, to get them out of the way. Set it back to None once they're archived.
-TORRENT_INCLUDE = ["fuzzwork"]
+TORRENT_INCLUDE = None
 
 
 def in_folders(path, folders):

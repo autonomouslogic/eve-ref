@@ -27,9 +27,9 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
       If cp fails (another filesystem, no reflink support) it's a warning, and the next pass copies the data.
    b. rclone copy --files-from-raw of the same files: skips what the reflink copy already put there (same size and
       modification time), and copies the rest.
-5. rclone copy --files-from-raw the whole selection from the bucket into SEED_DIR/.staging/<ID>/: rclone compares
-   every file already there with the bucket by size and modification time, and downloads those that differ or are
-   missing, keeping the bucket's modification times.
+5. rclone copy --files-from-raw SCRATCH_DIR/find/files.txt (the whole selection, written by 01-find) from the
+   bucket into SEED_DIR/.staging/<ID>/: rclone compares every file already there with the bucket by size and
+   modification time, and downloads those that differ or are missing, keeping the bucket's modification times.
 6. Walk the staging folder again and check every listed file is on disk with the listed size and modification time,
    and nothing else is. Any problem aborts the step without a completion file; running it again carries on where it
    stopped.
@@ -59,7 +59,6 @@ Writes, in SCRATCH_DIR:
 
     load/
       local-files-from.txt  the paths copied from the local copy
-      files-from.txt        the whole selection, for the copy from the bucket
       index/                 the downloaded index.json snapshot, before it's tarred up
     manifest.json           the selection plus a SHA-256 for every file (torrent_id, generated_at, files)
     <ID>.sha256             the same hashes, standard sha256sum format, index tarball included
@@ -216,7 +215,7 @@ def main():
             print(f"rclone finished in {fmt_duration(time.monotonic() - copy_started)}")
 
     section("Bucket")
-    files_from = write_files_from(os.path.join(load_dir, "files-from.txt"), files)
+    files_from = os.path.join(find_dir, "files.txt")
     print(
         f"rclone copy {remote} -> {content_dir}: all {fmt_count(len(files))} files, "
         f"size and mtime, {TRANSFERS} transfers, list in {files_from}"
@@ -333,7 +332,7 @@ def main():
         print(f"Removed the earlier run's signature, sign again with 04-sign-sha256: {minisig_path}")
     tar_entry = {"path": tar_name, "sha256": sha256_of(tar_path)}
     write_sha256sums(sha256_path, manifest_files + [tar_entry])
-    print(f"{fmt_count(len(manifest_files) + 1)} files in {sha256_path} ({tar_name} included)")
+    print(f"{fmt_count(len(manifest_files) + 1)} files in {sha256_path}") # +1 because it includes the index tar
     verify_sha256sums(sha256_path, content_dir)
     print(f"sha256sum -c: all {fmt_count(len(manifest_files) + 1)} files OK")
 
