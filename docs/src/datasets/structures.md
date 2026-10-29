@@ -35,7 +35,9 @@ Several backfills were provided by [Sir SmashAlot](https://evewho.com/character/
 and [Ethan02](https://evewho.com/character/1056136399) of [Adam4Eve](https://www.adam4eve.eu/).
 Thank you.
 These have been fully incorporated into the first proper scrape here:
-[structures-2024-03-31_04-34-43.v2.json.bz2](https://data.everef.net/structures/history/2024/2024-03-31/structures-2024-03-31_04-34-43.v2.json.bz2).
+`structures-2024-03-31_04-34-43.v2.json.bz2`, now inside
+[`structures-2024.tar.xz`](https://data.everef.net/structures/history/structures-2024.tar.xz)
+(see [History Rollups](history-rollups.md)).
 Details are available on [this Github issue](https://github.com/autonomouslogic/eve-ref/issues/2).
 
 The v1 structure scrapes only included the `/universe/structures/` endpoint.
@@ -45,7 +47,8 @@ Many of the backfilled structures are no longer available to be queried and ther
 To show that they were once queryable, placeholder timestamps of `1970-01-01T00:00:00Z` were used.
 
 Ethan02 later extended their structure export to include more data, such as `first_seen`.
-This was first incorporate into this file: [structures-2024-05-06_05-03-39.v2.json.bz2](https://data.everef.net/structures/history/2024/2024-05-06/structures-2024-05-06_05-03-39.v2.json.bz2).
+This was first incorporated into this file: `structures-2024-05-06_05-03-39.v2.json.bz2`, also inside
+[`structures-2024.tar.xz`](https://data.everef.net/structures/history/structures-2024.tar.xz).
 
 ### Sovereignty structures
 

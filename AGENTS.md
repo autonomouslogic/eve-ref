@@ -11,6 +11,9 @@ EVE Ref (https://everef.net/) is a reference site for the game EVE Online. This 
 - A **Nuxt 3 frontend** (`ui/`) — the public website, consumes the API via generated OpenAPI clients.
 - **VuePress docs** (`docs/`) — published to docs.everef.net.
 - A **`database` Gradle subproject** — Flyway migrations + jOOQ code generation.
+- **`scripts/deep-archive/`** — a standalone, manually-run Python workflow (plus two bash signing steps; not part
+  of the Gradle build) that moves old data.everef.net data into BitTorrent archives, seeded from a local copy. See
+  `scripts/deep-archive/README.md` for the operator process and `NOTES.md` for design notes.
 
 ## Build & Test
 
@@ -22,6 +25,9 @@ Java build requires jOOQ classes to exist first. `make` targets that need them d
 generated jOOQ sources.
 
 - Full test suite: `make test` (Java + UI). Java only: `make test-java`. UI only: `make test-ui`.
+- Deep Archive scripts: `make test-deep-archive` runs the Python unit tests in `scripts/deep-archive/tests/`
+  (stdlib `unittest`, no packages needed) with the local `python3`, or in the `python:3.12-slim` image if there is
+  none. Not part of `make test`.
 - Single Java test: `./gradlew test --tests "com.autonomouslogic.everef.cli.SomeTest"`
   (run `make generate-database` first).
 - Format (required before committing): `make format` — runs `./gradlew spotlessApply` (palantir Java

@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+"""
+check-seed: a step of the EVE Ref Deep Archive workflow. Checks qBittorrent's own state for the torrent, from
+scratch, never trusting 07-seed's own result, and the whole merged SEED_DIR tree against its signed torrents.
+
+DRAFT. Read-only on qBittorrent and SEED_DIR.
+
+    08-check-seed.py
+
+Needs 07-seed's completion file, and refuses to run twice (lib/workflow.py).
+
+qBittorrent (Web API):
+- 100% progress with **0 bytes downloaded** (any download means the files on disk don't match the torrent: stop
+  and investigate, don't just rerun).
+- State is a seeding state (not still checking, not an error).
+- No file still sits under a <ID>/ root folder (torrents/files): confirms 07-seed's merge actually took and the
+  torrent is seeding with content layout NoSubfolder, not Original.
+- At least one tracker reports as working.
+
+SEED_DIR (lib/seed_dir.py's quick_check, NOTES.md "Merged seed directory"): the whole merged tree against every
+signed torrent in SEED_DIR/.torrents/, not just this one -- every file on disk owned by exactly one torrent, no
+collisions once merged.
+
+If qBittorrent is still checking the torrent (it re-checks the files it was just given, hundreds of GiB), this waits
+for it, printing the state and progress qBittorrent reports every CHECK_REPORT_INTERVAL seconds. Interrupt and rerun any time:
+the check carries on in qBittorrent.
+
+Environment (or torrents.env, see lib/workflow.py):
+    SCRATCH_DIR, SEED_DIR, QBITTORRENT_URL, QBITTORRENT_API_KEY
+"""
+
+import os
+import sys
+import time
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
+import seed_dir  # noqa: E402
+from qbittorrent import Client, QbittorrentError  # noqa: E402
+from trackers import TRACKER_SCHEMES  # noqa: E402
+from workflow import (  # noqa: E402
+    TORRENTS_DIR_NAME,
+    Workflow,
+    error,
+    fail,
+    fmt_bytes,
+    fmt_count,
+    fmt_duration,
+    ok,
+    qbittorrent_settings,
+    section,
+)
+
+STEP = "check-seed"
+SEEDING_STATES = {"uploading", "stalledUP", "queuedUP", "forcedUP"}
+CHECKING_STATES = {"checkingUP", "checkingDL", "checkingResumeData", "allocating", "queuedForChecking"}
+CHECK_POLL_INTERVAL = 5  # seconds between asking qBittorrent while it checks
+CHECK_REPORT_INTERVAL = 60  # seconds between progress lines
+TRACKER_WORKING = 2  # qBittorrent's torrents/trackers status: 2 == "Working"
+
+
+def main():
+    started = time.monotonic()
+    workflow = Workflow()
+    workflow.begin(STEP)
+    torrent_id = workflow.torrent_id()
+    seed_done = workflow.read_done("seed")
+    info_hash = seed_done["summary"]["info_hash"]
+    qbittorrent_id = seed_done["summary"]["qbittorrent_id"]
+
+    section("qBittorrent")
+    url, api_key = qbittorrent_settings()
+    client = Client(url, api_key)
+    try:
+        info = client.info(qbittorrent_id)
+    except QbittorrentError as e:
+        fail(f"Can't reach qBittorrent at {url}: {e}")
+    if info is None:
+        fail(f"Torrent {qbittorrent_id} isn't in qBittorrent")
+
+    problems = []
+    if info["state"] in CHECKING_STATES:
+        try:
+            info = wait_while_checking(client, qbittorrent_id)
+        except QbittorrentError as e:
+            fail(f"Lost qBittorrent while it was checking: {e}")
+        if info is None:
+            fail(f"Torrent {qbittorrent_id} disappeared from qBittorrent while it was checking")
+    progress_pct = info["progress"] * 100
+    print(f"State: {info['state']}, progress {progress_pct:.2f}%, downloaded {fmt_bytes(info['downloaded'])}")
+    if info["progress"] != 1.0:
+        problems.append(f"progress is {progress_pct:.2f}%, not 100%")
+    if info["downloaded"] != 0:
+        problems.append(
+            f"{fmt_bytes(info['downloaded'])} downloaded: the files on disk didn't match the torrent. "
+            "Investigate before re-seeding -- don't just add it again"
+        )
+    if info["state"] not in SEEDING_STATES:
+        problems.append(f"state is {info['state']!r}, not a seeding state ({sorted(SEEDING_STATES)})")
+    try:
+        files = client.files(qbittorrent_id)
+    except QbittorrentError as e:
+        fail(f"Can't read the torrent's files: {e}")
+    with_root_folder = files_with_root_folder(files, torrent_id)
+    if with_root_folder:
+        problems.append(
+            f"{len(with_root_folder)} file(s) still under a {torrent_id}/ root folder: not merged "
+            "(content layout isn't NoSubfolder, or this was re-added with Original by mistake)"
+        )
+    else:
+        print(f"{len(files)} files, none under a {torrent_id}/ root folder: merged, NoSubfolder confirmed")
+
+    section("Trackers")
+    try:
+        trackers = client.trackers(qbittorrent_id)
+    except QbittorrentError as e:
+        fail(f"Can't read trackers: {e}")
+    working = working_trackers(trackers)
+    for t in trackers:
+        if t["url"].startswith(TRACKER_SCHEMES):
+            print(f"  {t['url']}: status {t['status']} ({t.get('msg') or 'ok'}), {t.get('num_seeds', 0)} seeds")
+    if not working:
+        problems.append("no tracker reports as working yet (give it a few minutes and rerun)")
+    else:
+        print(f"{len(working)} tracker(s) working")
+
+    if problems:
+        for problem in problems:
+            error(f"  {problem}")
+        fail(f"{len(problems)} problems with the seed")
+
+    section("SEED_DIR inventory")
+    torrents_dir = os.path.join(workflow.seed_dir, TORRENTS_DIR_NAME)
+    try:
+        torrents, disk, inventory_problems = seed_dir.quick_check(workflow.seed_dir, torrents_dir)
+    except seed_dir.SeedDirError as e:
+        fail(str(e))
+    if inventory_problems:
+        for problem in inventory_problems[:20]:
+            error(f"  {problem}")
+        fail(f"{fmt_count(len(inventory_problems))} problems in {workflow.seed_dir} (check-seed-dir.py for more)")
+    print(f"{fmt_count(len(torrents))} torrents, {fmt_count(len(disk))} files, all owned, no collisions")
+
+
+    workflow.complete(
+        STEP,
+        torrent_id,
+        {
+            "info_hash": info_hash,
+            "progress": info["progress"],
+            "state": info["state"],
+            "working_trackers": len(working),
+        },
+    )
+    print(f"Done in {fmt_duration(time.monotonic() - started)}")
+    ok(f"Check seed OK for {torrent_id}")
+
+
+def wait_while_checking(
+    client,
+    info_hash,
+    interval=CHECK_POLL_INTERVAL,
+    report_interval=CHECK_REPORT_INTERVAL,
+    sleep=time.sleep,
+    monotonic=time.monotonic,
+):
+    """
+    Polls qBittorrent until the torrent is out of every checking state, printing the state and progress it reports
+    (torrents/info's progress is the check's while it runs). Returns the final info, or None if the torrent is no
+    longer in qBittorrent.
+    """
+    last_report = None
+    while True:
+        info = client.info(info_hash)
+        if info is None or info["state"] not in CHECKING_STATES:
+            return info
+        now = monotonic()
+        if last_report is None or now - last_report >= report_interval:
+            print(f"Checking: {info['progress'] * 100:.2f}% ({info['state']})")
+            last_report = now
+        sleep(interval)
+
+
+def files_with_root_folder(files, torrent_id):
+    """The names (torrents/files, backslash normalised) of any files still under a <ID>/ root folder: not merged."""
+    prefix = torrent_id + "/"
+    return [f["name"] for f in files if f["name"].replace("\\", "/").startswith(prefix)]
+
+
+def working_trackers(trackers):
+    """
+    The torrent's trackers that qBittorrent's torrents/trackers reports as working. Only real trackers count:
+    torrents/trackers also lists DHT, PeX and LSD as "** [DHT] **" etc., working whenever they're enabled.
+    """
+    return [t for t in trackers if t["url"].startswith(TRACKER_SCHEMES) and t.get("status") == TRACKER_WORKING]
+
+
+if __name__ == "__main__":
+    main()

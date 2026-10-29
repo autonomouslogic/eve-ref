@@ -6,6 +6,9 @@ See [Downloading Datasets](downloading-datasets.md) for instructions on how to d
 
 Finished years of some datasets are packed into one archive per year, see [History Rollups](history-rollups.md).
 
+Most data older than 2 years is moved off the site into BitTorrent archives over time, never `market-history/`,
+`killmails/` or `ccp/`; see [EVE Ref Deep Archive](deep-archive.md).
+
 | Path                                                                                                               | Dataset                                                                                                         |
 |--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
 | [`ccp/ccp_quant/`](https://data.everef.net/ccp/ccp_quant/)                                                         | Market data [published by CCP Quant](https://www.eveonline.com/news/view/monthly-economic-report-february-2018) |

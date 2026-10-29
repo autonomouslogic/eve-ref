@@ -132,7 +132,7 @@ public class SyncFuzzworkOrdersetsTest {
 	@Test
 	@SneakyThrows
 	void shouldNotRetryIdsBelowLowestExistingId() {
-		// IDs 1-99 were archived into a torrent and deleted from the main archive (PLAN 2.18): the lowest
+		// IDs 1-99 were archived into a torrent and deleted from the main archive: the lowest
 		// remaining ID is 100, and Fuzzwork's listing still has 50 from before it was archived. It must stay
 		// deleted, not be re-downloaded.
 		existingPaths.add("fuzzwork/ordersets/2026/2026-01-01/fuzzwork-orderset-100-2026-01-01_00-00-00.csv.gz");
