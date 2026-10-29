@@ -5,7 +5,9 @@ The [Deep Archive](https://data.everef.net/deep-archive/) moves old EVE Online d
 ## Published Torrents
 Below is a list of published torrents.
 
-ℹ️ **To help seed this historical EVE Online data**, add the [RSS feed](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml) to
+ℹ️ **To help seed this historical EVE Online data**, add the
+<svg xmlns="http://www.w3.org/2000/svg" id="RSSicon" viewBox="0 0 8 8" width="16" height="16"><style>.symbol{stroke:none;fill:#fff}</style><rect width="8" height="8" rx="1.5" style="stroke:none;fill:#fe6500"/><circle class="symbol" cx="2" cy="6" r="1"/><path class="symbol" d="M1 4a3 3 0 0 1 3 3h1a4 4 0 0 0-4-4z"/><path class="symbol" d="M1 2a5 5 0 0 1 5 5h1a6 6 0 0 0-6-6z"/></svg>
+[RSS feed](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml) to
 your torrent client and configure it for automatic downloads.
 
 | Torrent                                                                                                                     | Files                                                                                                               | Cutoff     | Size      | Magnet                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Published  |
@@ -30,6 +32,7 @@ be used to search for specific content.
 
 Alongside the torrent files are [minisign](https://jedisct1.github.io/minisign/) signatures of the torrent
 files themselves, named `everef-eve-online-deep-archive-NN.torrent.minisig`.
+See below for more on signatures.
 
 ### Downloading more than one archive into the same folder
 No file path is ever repeated across two of these torrents, and every torrent lays its files out exactly as they
@@ -50,7 +53,7 @@ the copy that doesn't change, and it's covered by the `.sha256` checksum file li
 
 ## Signature Verification
 There are two things to verify: the `.torrent` file itself and the individual files inside the torrent after downloading.
-Torrent files have their own hashes, which guards against corruption.
+Torrent files have their own internal hashes, which guards against corruption.
 The signatures can be used to verify that the data did indeed come from EVE Ref originally and has not been tampered with.
 
 The public key for both is published at
@@ -74,10 +77,6 @@ Once the torrent has downloaded, the SHA-256 checksum file `everef-eve-online-de
 `everef-eve-online-deep-archive-NN.sha256.minisig` can be used to double-check the content.
 See the readme at `everef-eve-online-deep-archive-NN-README.md` for instructions.
 
-If several Deep Archive torrents have been merged into one folder (above), `sha256sum -c
-everef-eve-online-deep-archive-NN.sha256` still works for each one individually, run from that merged folder: none
-of the paths it lists include a torrent's own root folder.
-
 ## What gets archived
 Files dated at least 2 years ago, oldest first.
 A file is dated by the earliest of its upload time and any date or year in its name.
@@ -88,7 +87,7 @@ Archiving is done on an ad-hoc basis without a set schedule.
 Whenever a new archive has been prepared, it will be added to [everef-eve-online-deep-archive.xml](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml).
 
 
-### What _never_ gets archived
+### What doesn't gets archived
 * [`market-history/`](market-history.md) and [`killmails/`](killmails.md), since these effectively function as databases where old files are updated in-place.
 * Some [`ccp/`](https://data.everef.net/ccp/) data, CCP's own data, `csm` and `mer` for now.
 * [`wars/history/`](https://data.everef.net/wars/history/) for now.

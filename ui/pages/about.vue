@@ -33,7 +33,7 @@ useHead({
 		<img src="~/assets/PartnerBadge2.webp" class="h-40" alt="EVE Online Partner Logo" />
 	</div>
 
-	<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+	<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
 		<span>
 			<h2>Financial Support</h2>
 			<p>
@@ -73,6 +73,12 @@ useHead({
 			<p>
 				Donations made to <ExternalLink :url="DATE_TOVIKOV_CHAR">Dato Tovikov</ExternalLink> or
 				<ExternalLink :url="DATE_TOVIKOV_CHAR">Tovikov Insterstellar</ExternalLink> will remain anonymous and will likely be for personal use.
+			</p>
+		</span>
+		<span>
+			<h2>Deep Archive</h2>
+			<p>
+				Become a torrent seeder for the <ExternalLink url="https://docs.everef.net/datasets/deep-archive.html">Deep Archive</ExternalLink>.
 			</p>
 		</span>
 	</div>
