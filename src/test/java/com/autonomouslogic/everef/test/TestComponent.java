@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.test;
 
+import com.autonomouslogic.everef.api.DeepArchiveSeedersHandlerTest;
 import com.autonomouslogic.everef.api.IndustryCostHandlerTest;
 import com.autonomouslogic.everef.api.SearchHandlerTest;
 import com.autonomouslogic.everef.cli.DataIndexTest;
@@ -140,6 +141,8 @@ public interface TestComponent {
 	void inject(SdeLoaderTest test);
 
 	void inject(SearchHandlerTest test);
+
+	void inject(DeepArchiveSeedersHandlerTest test);
 
 	void inject(SlackDecoratorTest test);
 

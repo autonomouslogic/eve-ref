@@ -16,6 +16,27 @@ externalDocs:
 servers:
 - url: https://api.everef.net
 paths:
+  /v1/deep-archive/seeders:
+    get:
+      description: "Number of seeders for each Deep Archive torrent, as reported by\
+        \ the tracker"
+      operationId: getDeepArchiveSeeders
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeepArchiveSeeders"
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Server error
+      summary: Get Deep Archive seeder counts
+      tags:
+      - deep-archive
   /v1/industry/cost:
     get:
       operationId: industryCost
@@ -139,6 +160,23 @@ components:
           description: The total amount of ISK required to start the job
         total_material_cost:
           type: number
+    DeepArchiveSeeders:
+      type: object
+      description: Seeder counts for the Deep Archive torrents.
+      properties:
+        scraped_at:
+          type: string
+          format: date-time
+          description: When the tracker was scraped.
+        seeders:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+            description: "Number of seeders reported by the tracker, keyed by lowercase\
+              \ hex v1 info-hash."
+          description: "Number of seeders reported by the tracker, keyed by lowercase\
+            \ hex v1 info-hash."
     IndustryCost:
       type: object
       properties:
