@@ -84,6 +84,7 @@ from workflow import (  # noqa: E402
     rclone,
     root_file_names,
     section,
+    torrent_sequence,
     verify_signature,
     warning,
 )
@@ -310,6 +311,11 @@ def torrent_url(torrent_id, name):
     return f"{DATA_BASE_URL.rstrip('/')}/{DEEP_ARCHIVE_DIR}/{torrent_id}.{name}"
 
 
+def feed_description(torrent_id):
+    """e.g. everef-eve-online-deep-archive-03 -> "EVE Ref EVE Online Deep Archive #03"."""
+    return f"EVE Ref EVE Online Deep Archive #{torrent_sequence(torrent_id):02d}"
+
+
 def build_feed(entries):
     items = []
     for e in sorted(entries, key=lambda e: e["pub_date"], reverse=True):
@@ -321,7 +327,7 @@ def build_feed(entries):
       <link>{torrent_link}</link>
       <guid isPermaLink="false">{e['v1_info_hash']}</guid>
       <pubDate>{e['pub_date'].strftime('%a, %d %b %Y %H:%M:%S GMT')}</pubDate>
-      <description>{xml_escape.escape(f"EVE Ref Deep Archive: {e['id']}")}</description>
+      <description>{xml_escape.escape(feed_description(e['id']))}</description>
       <enclosure url="{torrent_link}" length="{e['torrent_bytes']}"
                  type="application/x-bittorrent"/>
       <torrent:infoHash>{e['v1_info_hash']}</torrent:infoHash>

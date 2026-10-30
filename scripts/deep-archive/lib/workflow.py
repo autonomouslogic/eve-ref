@@ -67,9 +67,9 @@ TORRENTS_DIR_NAME = ".torrents"
 
 # Folders never archived (NOTES.md "Never archived"): paths from the site root. market-history and killmails work
 # as databases, with past files modified in place, which a torrent can't follow. deep-archive holds the torrents themselves.
-# ccp (CCP's own data: SDE, MER, image collections, CSM results, ...) has to stay excluded for now: the docs link its
-# old files and folders directly (sde.md links ccp/sde/older/, the datasets index links ccp/ccp_quant/, ccp/iec/ and
-# ccp/csm/), and those links would break once a torrent took them. Revisit later, together with those docs.
+# Only ccp/csm and ccp/mer are excluded from ccp (CCP's own data); the rest of ccp is archived like any other folder.
+# ccp/mer: SyncMer only checks from two months before its latest MER, so it wouldn't re-upload deleted files
+# (NOTES.md "Never archived").
 TORRENT_EXCLUDE = [
     "ccp/csm",
     "ccp/mer",
