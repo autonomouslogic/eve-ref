@@ -40,6 +40,11 @@ generated jOOQ sources.
 The UI and docs run in Docker via the Makefile so a local Node install isn't required:
 `make init-ui`, `make dev-ui` (serves on :3000), `make build-ui`, `make dev-docs`.
 `make specs` regenerates the OpenAPI/reference-data specs from Java and then the UI's API client.
+`spec/eve-ref-api.yaml` is generated but committed; CI (`specs.yml`) fails if it differs from `make specs` output.
+
+The docs site is VuePress 1. Custom JS goes in Vue components under `docs/src/.vuepress/components/`, which are
+registered globally by file name and usable directly in Markdown (e.g. `TorrentSeeders.vue` on the Deep Archive
+page). Fetch data in `mounted()`, since pages are pre-rendered at build time.
 
 ### Postgres
 

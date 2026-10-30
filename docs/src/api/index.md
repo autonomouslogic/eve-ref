@@ -5,6 +5,7 @@ Use [Swagger Codegen](https://swagger.io/tools/swagger-codegen/) to generate a c
 
 * [Search API](search.md)
 * [Industry Cost API](industry-cost.md)
+* Deep Archive seeders: `GET /v1/deep-archive/seeders`, used by the [Deep Archive](../datasets/deep-archive.md) page
 
 ## Running Locally
 The API can run locally on port 8080 without any special configuration or local dependencies:

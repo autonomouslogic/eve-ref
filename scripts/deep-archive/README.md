@@ -153,7 +153,9 @@ saved in `feed-backup/`.
 
 ### 10: Update docs (manual)
 Add the torrent to the "Published Torrents" table on `docs/src/datasets/deep-archive.md`, newest last: the `.torrent`
-and `.txt` links, the size and the magnet link, as publish prints them. If the rules in `lib/workflow.py` changed
+and `.txt` links, the size and the magnet link, as publish prints them, and a Seeders cell of
+`<TorrentSeeders hash="<v1 info-hash>"></TorrentSeeders>`. Live counts come from the API's
+`/v1/deep-archive/seeders`, which reads the feed, so the new torrent shows up there within its 4-hour cache. If the rules in `lib/workflow.py` changed
 (`TORRENT_EXCLUDE`, `MIN_AGE_YEARS`, size limits), update the page's rule text too: nothing checks it. Commit it and
 deploy the docs site.
 

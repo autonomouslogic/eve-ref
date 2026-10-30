@@ -199,6 +199,43 @@ public class Configs {
 			.build();
 
 	/**
+	 * The tracker scrape URL used for fetching seeder counts for the Deep Archive torrents.
+	 */
+	public static final Config<URI> DEEP_ARCHIVE_TRACKER_SCRAPE_URL = Config.<URI>builder()
+			.name("DEEP_ARCHIVE_TRACKER_SCRAPE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("http://tracker.opentrackr.org:1337/scrape"))
+			.build();
+
+	/**
+	 * How long to cache Deep Archive seeder counts in memory before fetching the feed and scraping the tracker again.
+	 * Nothing is fetched until a request needs it.
+	 */
+	public static final Config<Duration> DEEP_ARCHIVE_SEEDERS_CACHE_DURATION = Config.<Duration>builder()
+			.name("DEEP_ARCHIVE_SEEDERS_CACHE_DURATION")
+			.type(Duration.class)
+			.defaultValue(Duration.ofHours(4))
+			.build();
+
+	/**
+	 * The Cache-Control max-age for the Deep Archive seeders API endpoint.
+	 */
+	public static final Config<Duration> DEEP_ARCHIVE_SEEDERS_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("DEEP_ARCHIVE_SEEDERS_CACHE_CONTROL_MAX_AGE")
+			.type(Duration.class)
+			.defaultValue(Duration.ofHours(1))
+			.build();
+
+	/**
+	 * How long to wait before retrying a failed tracker scrape, while serving the last good seeder counts.
+	 */
+	public static final Config<Duration> DEEP_ARCHIVE_SEEDERS_RETRY_DURATION = Config.<Duration>builder()
+			.name("DEEP_ARCHIVE_SEEDERS_RETRY_DURATION")
+			.type(Duration.class)
+			.defaultValue(Duration.ofMinutes(1))
+			.build();
+
+	/**
 	 * The cache time to use for data index pages.
 	 */
 	public static final Config<Duration> DATA_INDEX_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()

@@ -4,6 +4,7 @@ import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.api.ApiUtil;
 import com.autonomouslogic.everef.api.ClientErrorHandler;
 import com.autonomouslogic.everef.api.ClientException;
+import com.autonomouslogic.everef.api.DeepArchiveSeedersHandler;
 import com.autonomouslogic.everef.api.ErrorHandler;
 import com.autonomouslogic.everef.api.IndustryCostHandler;
 import com.autonomouslogic.everef.api.SearchHandler;
@@ -31,6 +32,9 @@ public class ApiRunner implements Command {
 
 	@Inject
 	protected SearchHandler searchHandler;
+
+	@Inject
+	protected DeepArchiveSeedersHandler deepArchiveSeedersHandler;
 
 	@Inject
 	protected ErrorHandler errorHandler;
@@ -110,6 +114,7 @@ public class ApiRunner implements Command {
 	private HttpRouting.Builder routing(HttpRouting.Builder routing) {
 		routing = serviceRouting(routing, industryCostHandler);
 		routing = serviceRouting(routing, searchHandler);
+		routing = serviceRouting(routing, deepArchiveSeedersHandler);
 		routing = routing.error(ClientException.class, clientErrorHandler);
 		routing = routing.error(Exception.class, errorHandler);
 		return routing;
