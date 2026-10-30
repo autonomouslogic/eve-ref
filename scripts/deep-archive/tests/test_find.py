@@ -159,10 +159,12 @@ class SkipReasonTest(unittest.TestCase):
 
     def test_excluded_dataset(self):
         self.assertEqual(self.skip("market-history/2019/a.csv.bz2"), ("excluded", "market-history"))
-        self.assertEqual(self.skip("ccp/sde/sde-2019.zip"), ("excluded", "ccp"))
+        self.assertEqual(self.skip("ccp/csm/a.zip"), ("excluded", "ccp/csm"))
+        self.assertEqual(self.skip("ccp/mer/a.zip"), ("excluded", "ccp/mer"))
+        self.assertIsNone(self.skip("ccp/sde/sde-2019.zip"))
 
     def test_excluded_dataset_by_folder_not_prefix(self):
-        self.assertIsNone(self.skip("ccp-other/a.json"))
+        self.assertIsNone(self.skip("ccp/csm-other/a.json"))
         self.assertIsNone(self.skip("killmails-summary/2020/a.json"))
 
     def test_root_files(self):
@@ -185,7 +187,7 @@ class SkipReasonTest(unittest.TestCase):
         )
 
     def test_excludes_apply_within_includes(self):
-        self.assertEqual(find.skip_reason("ccp/sde/sde-2019.zip", self.EXCLUDES, ["ccp"]), ("excluded", "ccp"))
+        self.assertEqual(find.skip_reason("ccp/csm/a.zip", self.EXCLUDES, ["ccp"]), ("excluded", "ccp/csm"))
 
     def test_root_files_with_includes(self):
         self.assertEqual(find.skip_reason("robots.txt", self.EXCLUDES, ["market-orders"]), ("root", None))

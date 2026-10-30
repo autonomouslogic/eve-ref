@@ -38,6 +38,10 @@ SPEC = importlib.util.spec_from_file_location("publish", os.path.join(HERE, ".."
 publish = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publish)  # also needs libtorrent, already checked above
 
+ID = "everef-eve-online-deep-archive-03"
+ID_OLDER = "everef-eve-online-deep-archive-01"
+ID_NEWER = "everef-eve-online-deep-archive-02"
+
 
 def entry(id_, pub_date, v1_hash="a" * 40, v2_hash="b" * 64, files=2, size=1000):
     return {
@@ -93,36 +97,36 @@ class TorrentUrlTest(unittest.TestCase):
 
 class BuildFeedTest(unittest.TestCase):
     def test_round_trips_through_check_feed_item(self):
-        entries = [entry("id", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
+        entries = [entry(ID, datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
         body = publish.build_feed(entries).encode("utf-8")
-        problems = quietly(publish.check_feed_item, body, "id", entries[0]["v1_info_hash"])
+        problems = quietly(publish.check_feed_item, body, ID, entries[0]["v1_info_hash"])
         self.assertEqual(problems, [])
 
     def test_catches_a_missing_item(self):
-        entries = [entry("id", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
+        entries = [entry(ID, datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
         body = publish.build_feed(entries).encode("utf-8")
         problems = quietly(publish.check_feed_item, body, "other-id", "c" * 40)
         self.assertTrue(any("no <item>" in p for p in problems))
 
     def test_sorted_newest_first(self):
         entries = [
-            entry("older", datetime.datetime(2024, 1, 1, tzinfo=datetime.timezone.utc)),
-            entry("newer", datetime.datetime(2024, 6, 1, tzinfo=datetime.timezone.utc)),
+            entry(ID_OLDER, datetime.datetime(2024, 1, 1, tzinfo=datetime.timezone.utc)),
+            entry(ID_NEWER, datetime.datetime(2024, 6, 1, tzinfo=datetime.timezone.utc)),
         ]
         root = ET.fromstring(publish.build_feed(entries))
         titles = [item.findtext("title") for item in root.iter("item")]
-        self.assertEqual(titles, ["newer", "older"])
+        self.assertEqual(titles, [ID_NEWER, ID_OLDER])
 
     def test_adding_a_new_entry_keeps_the_existing_one(self):
         # build_feed always rebuilds the whole feed from every published torrent (never incrementally), so "adding
         # an entry" is: call it again with the new torrent's entry included, and check the existing one is still
         # there, unchanged, alongside the new one.
-        existing = entry("everef-eve-online-deep-archive-2024-01-01", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))
+        existing = entry("everef-eve-online-deep-archive-00", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))
         before = ET.fromstring(publish.build_feed([existing]))
         self.assertEqual([item.findtext("title") for item in before.iter("item")], [existing["id"]])
 
         new = entry(
-            "everef-eve-online-deep-archive-2024-06-01",
+            "everef-eve-online-deep-archive-01",
             datetime.datetime(2024, 6, 2, tzinfo=datetime.timezone.utc),
             v1_hash="c" * 40,
             v2_hash="d" * 64,
@@ -144,16 +148,21 @@ class BuildFeedTest(unittest.TestCase):
         self.assertEqual(quietly(publish.check_feed_item, body, existing["id"], existing["v1_info_hash"]), [])
         self.assertEqual(quietly(publish.check_feed_item, body, new["id"], new["v1_info_hash"]), [])
 
+    def test_description_is_human_readable(self):
+        entries = [entry(ID, datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
+        root = ET.fromstring(publish.build_feed(entries))
+        self.assertEqual(root.find(".//item/description").text, "EVE Ref EVE Online Deep Archive #03")
+
     def test_is_valid_rss(self):
-        entries = [entry("id", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
+        entries = [entry(ID, datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
         root = ET.fromstring(publish.build_feed(entries))
         self.assertEqual(root.tag, "rss")
         items = list(root.iter("item"))
         self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].findtext("title"), "id")
+        self.assertEqual(items[0].findtext("title"), ID)
 
     def test_magnet_uri_is_well_formed_in_cdata(self):
-        entries = [entry("id", datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
+        entries = [entry(ID, datetime.datetime(2024, 1, 2, tzinfo=datetime.timezone.utc))]
         feed = publish.build_feed(entries)
         root = ET.fromstring(feed)
         magnet = root.find(".//item/{http://xmlns.ezrss.it/0.1/}magnetURI").text
