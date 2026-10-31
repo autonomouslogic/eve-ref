@@ -1,5 +1,28 @@
 EVE Ref Changelog
 
+## [2.83.6](https://github.com/autonomouslogic/eve-ref/compare/2.83.5...2.83.6) (2026-10-30)
+
+
+### Bug Fixes
+
+* Added Deep Archive seeders API and docs component ([#1156](https://github.com/autonomouslogic/eve-ref/issues/1156)) ([f8e55cb](https://github.com/autonomouslogic/eve-ref/commit/f8e55cbaff3394e75bc7f65095d7a0c280df5aae))
+
+
+### Documentation
+
+* Deep archive ([7d6e3ab](https://github.com/autonomouslogic/eve-ref/commit/7d6e3ab4d960c8ae65c0686ed7f5e2fe93f0bcda))
+* Deep Archive [#04](https://github.com/autonomouslogic/eve-ref/issues/04) ([be05f2e](https://github.com/autonomouslogic/eve-ref/commit/be05f2e70cc556f133dddc638b4da00fb9216073))
+* Deep Archive [#04](https://github.com/autonomouslogic/eve-ref/issues/04) ([90601b6](https://github.com/autonomouslogic/eve-ref/commit/90601b690bafaaffc32baae14c546346785f860a))
+* Deep Archive docs ([85c7f9b](https://github.com/autonomouslogic/eve-ref/commit/85c7f9be4ad0e78cab17b645f0f681666a0adca8))
+* Remove note on seed source ([b9fd796](https://github.com/autonomouslogic/eve-ref/commit/b9fd796679a5d09edf423e89c8700c28a863cdc6))
+
+
+### Miscellaneous Chores
+
+* Deep archive ([8c9765e](https://github.com/autonomouslogic/eve-ref/commit/8c9765eaa395c5bba16ad0013f02b9630e1ca1e2))
+* Deep Archive Torrents ([#1135](https://github.com/autonomouslogic/eve-ref/issues/1135)) ([3dc5d4c](https://github.com/autonomouslogic/eve-ref/commit/3dc5d4cac93e13589bf9f9fc0a895a73441a012a))
+* Deep archive updates ([6a67076](https://github.com/autonomouslogic/eve-ref/commit/6a670767c941d5421eb5b7fffe164ed78da56756))
+
 ## [2.83.5](https://github.com/autonomouslogic/eve-ref/compare/2.83.4...2.83.5) (2026-10-26)
 
 
