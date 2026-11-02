@@ -29,10 +29,10 @@ from workflow import (  # noqa: E402
     classify_path,
     file_list_problems,
     format_torrent_id,
-    in_folders,
     index_tar_name,
     iso,
     load_env,
+    match_paths,
     merge_conflicts,
     parse_iso,
     previous_scripted_step,
@@ -42,6 +42,7 @@ from workflow import (  # noqa: E402
     root_file_names,
     site_path_problem,
     step_name,
+    torrent_excluded,
     torrent_sequence,
 )
 
@@ -86,16 +87,89 @@ class ClassifyPathTest(unittest.TestCase):
         self.assertEqual(classify_path("a/2020/b/2021/file.json"), (2020, "a"))
 
 
-class InFoldersTest(unittest.TestCase):
+class MatchPathsTest(unittest.TestCase):
     def test_the_folder_and_inside_it(self):
-        self.assertTrue(in_folders("ccp", ["ccp"]))
-        self.assertTrue(in_folders("ccp/sde/a.zip", ["killmails", "ccp"]))
+        self.assertEqual(match_paths("ccp", ["ccp"]), "ccp")
+        self.assertEqual(match_paths("ccp/sde/a.zip", ["killmails", "ccp"]), "ccp")
 
     def test_by_whole_folder_name_not_prefix(self):
-        self.assertFalse(in_folders("ccp-other/a.json", ["ccp"]))
+        self.assertIsNone(match_paths("ccp-other/a.json", ["ccp"]))
 
-    def test_no_folders(self):
-        self.assertFalse(in_folders("ccp/a.json", []))
+    def test_no_patterns(self):
+        self.assertIsNone(match_paths("ccp/a.json", []))
+
+    def test_first_matching_pattern(self):
+        self.assertEqual(match_paths("a/b/c.json", ["x", "a/*", "a"]), "a/*")
+
+    def test_star_stays_within_a_folder(self):
+        self.assertEqual(match_paths("a/history/2024/x.json", ["*/history"]), "*/history")
+        self.assertIsNone(match_paths("a/b/history/2024/x.json", ["*/history"]))
+        self.assertIsNone(match_paths("a/b.json", ["a*b.json"]))
+
+    def test_double_star_matches_any_number_of_folders(self):
+        self.assertEqual(match_paths("a/history/x.json", ["**/history"]), "**/history")
+        self.assertEqual(match_paths("a/b/c/history/x.json", ["**/history"]), "**/history")
+        self.assertEqual(match_paths("history/x.json", ["**/history"]), "**/history")
+        self.assertEqual(match_paths("a/b/c.json", ["a/**/c.json"]), "a/**/c.json")
+        self.assertIsNone(match_paths("a/b/d.json", ["a/**/c.json"]))
+
+    def test_character_classes_and_question_mark(self):
+        pattern = "*/history/[0-9][0-9][0-9][0-9]"
+        self.assertEqual(match_paths("a/history/2024/2024-01-01/x.json", [pattern]), pattern)
+        self.assertIsNone(match_paths("a/history/backfills/x.json", [pattern]))
+        self.assertIsNone(match_paths("a/history/a-2023.tar.xz", [pattern]))
+        self.assertEqual(match_paths("a/b1.json", ["a/b?.json"]), "a/b?.json")
+
+    def test_case_sensitive(self):
+        self.assertIsNone(match_paths("CCP/a.json", ["ccp"]))
+
+
+class TorrentExcludedTest(unittest.TestCase):
+    def test_excluded_unless_included(self):
+        self.assertEqual(torrent_excluded("a/history/2024/x.json", ["*/history"], []), "*/history")
+        self.assertIsNone(torrent_excluded("a/history/2024/x.json", ["*/history"], ["a/history"]))
+        self.assertEqual(torrent_excluded("b/history/2024/x.json", ["*/history"], ["a/history"]), "*/history")
+
+    def test_include_alone_adds_nothing(self):
+        self.assertIsNone(torrent_excluded("a/x.json", [], ["b"]))
+
+    def excluded(self, path):
+        return torrent_excluded(path) is not None
+
+    def test_config_rolled_up_history(self):
+        self.assertTrue(self.excluded("structures/history/2026/2026-01-01/structures-2026-01-01_00-00-00.v2.json.bz2"))
+        self.assertFalse(self.excluded("structures/history/structures-2023.tar.xz"))
+        # Too new to be rolled up yet: excluded until it is.
+        self.assertTrue(self.excluded("military-campaigns/history/2026/2026-01-01/a.json.bz2"))
+
+    def test_config_history_backfills(self):
+        self.assertFalse(self.excluded("incursions/history/backfills/a.json.bz2"))
+        self.assertFalse(self.excluded("public-contracts/history/backfills/a.tar.bz2"))
+
+    def test_config_never_rolled_up(self):
+        self.assertFalse(self.excluded("market-orders/history/2024/2024-01-01/market-orders-2024-01-01.v3.csv.bz2"))
+        self.assertFalse(self.excluded("public-contracts/history/2024/2024-01-01/a.v2.tar.bz2"))
+        self.assertFalse(self.excluded("esi-scrape/history/2024/eve-ref-esi-scrape-2024-01-01.tar.xz"))
+        self.assertFalse(self.excluded("reference-data/history/2024/reference-data-2024-01-01.tar.xz"))
+        self.assertFalse(self.excluded("hoboleaks-sde/history/2024/hoboleaks-sde-2024-01-01.tar.xz"))
+
+    def test_config_wars_history(self):
+        self.assertTrue(self.excluded("wars/history/2024/wars-2024-01-01.tar.bz2"))
+        self.assertTrue(self.excluded("wars/history/wars-2003.tar.bz2"))
+
+    def test_config_ccp(self):
+        self.assertFalse(self.excluded("ccp/csm/a.pdf"))
+        self.assertFalse(self.excluded("ccp/mer/2019/a.zip"))
+        self.assertFalse(self.excluded("ccp/sde/2019/sde-20190101-TRANQUILITY.zip"))
+
+    def test_config_current_files(self):
+        self.assertTrue(self.excluded("wars/wars-current.json"))
+        self.assertFalse(self.excluded("wars/current-thing.json"))
+
+    def test_config_databases_and_deep_archive(self):
+        self.assertTrue(self.excluded("market-history/2019/market-history-2019-01-01.csv.bz2"))
+        self.assertTrue(self.excluded("killmails/2019/killmails-2019-01-01.tar.bz2"))
+        self.assertTrue(self.excluded("deep-archive/everef-eve-online-deep-archive-00.txt"))
 
 
 class RenderCommentTest(unittest.TestCase):
