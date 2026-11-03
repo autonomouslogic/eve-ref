@@ -1,7 +1,6 @@
 # EVE Ref EVE Online Deep Archive
 The [Deep Archive](https://data.everef.net/deep-archive/) archives EVE Online data from
 [data.everef.net](https://data.everef.net/) into torrents.
-For now, archived files stay available on `data.everef.net` as well.
 
 ## Published Torrents
 Below is a list of published torrents.
@@ -85,7 +84,8 @@ See the readme at `everef-eve-online-deep-archive-NN-README.md` for instructions
 
 ## What gets archived
 Every file not yet archived, oldest first, once it's at least 2 days old.
-A file is dated by the earliest of its upload time and any date or year in its name.
+Once a torrent is published, those files will eventually be removed from `data.everef.net`.
+Once deleted, the torrent and its seeders become the only remaining source.
 Each file is only ever in one torrent.
 
 For datasets with [History Rollups](history-rollups.md), the yearly rollup archives are what gets archived,
