@@ -1,5 +1,30 @@
 EVE Ref Changelog
 
+## [2.83.7](https://github.com/autonomouslogic/eve-ref/compare/2.83.6...2.83.7) (2026-11-03)
+
+
+### Bug Fixes
+
+* **ui:** Updated package-lock.json ([544dc1f](https://github.com/autonomouslogic/eve-ref/commit/544dc1f26b025cfbefb87c97d1d03bc493e89532))
+
+
+### Documentation
+
+* Deep archive ([c680376](https://github.com/autonomouslogic/eve-ref/commit/c680376457a2aed45353e3ee4c892f9fda9b0be5))
+* Deep Archive ([0f3dc89](https://github.com/autonomouslogic/eve-ref/commit/0f3dc89fac28337dbbac307852c6e25fafc72b2c))
+* Deep Archive ([a954fcb](https://github.com/autonomouslogic/eve-ref/commit/a954fcbe55101ee95dc0e0adb7b958aac3dc1d8f))
+
+
+### Dependency Updates
+
+* **deps:** update dependency java-jdk to v25.0.5+8.0.lts ([#1160](https://github.com/autonomouslogic/eve-ref/issues/1160)) ([8a4dedd](https://github.com/autonomouslogic/eve-ref/commit/8a4deddc019a13bfd794033a04701c48ed3d0230))
+* **deps:** update plugin org.flywaydb.flyway to v13.12.0 ([#1157](https://github.com/autonomouslogic/eve-ref/issues/1157)) ([dd67fa3](https://github.com/autonomouslogic/eve-ref/commit/dd67fa3e5f12951e637ebb16e41d3451ec9e437c))
+
+
+### Tests
+
+* Updated test resources ([af02f4f](https://github.com/autonomouslogic/eve-ref/commit/af02f4f06f19217b19d332b1ec594daf4a2d444d))
+
 ## [2.83.6](https://github.com/autonomouslogic/eve-ref/compare/2.83.5...2.83.6) (2026-10-30)
 
 
