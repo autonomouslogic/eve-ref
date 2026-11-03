@@ -182,7 +182,7 @@
     "types" : {
       "30539" : {
         "2" : {
-          "bonus" : 5,
+          "bonus" : 5.0,
           "bonus_text" : {
             "de" : "Bonus auf die maximale Zielerfassungsreichweite",
             "en" : "bonus to max targeting range",
@@ -197,7 +197,7 @@
           "unit_id" : 105
         },
         "1" : {
-          "bonus" : 15,
+          "bonus" : 15.0,
           "bonus_text" : {
             "de" : "Bonus auf die Sensorstärke des Schiffs",
             "en" : "bonus to ship sensor strength",
@@ -212,7 +212,7 @@
           "unit_id" : 105
         },
         "3" : {
-          "bonus" : 15,
+          "bonus" : 15.0,
           "bonus_text" : {
             "de" : "Bonus auf die Scanauflösung",
             "en" : "bonus to scan resolution",

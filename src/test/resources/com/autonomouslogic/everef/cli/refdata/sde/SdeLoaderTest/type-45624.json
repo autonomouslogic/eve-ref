@@ -77,7 +77,7 @@
         "importance" : 4
       },
       "1" : {
-        "bonus" : 50,
+        "bonus" : 50.0,
         "bonus_text" : {
           "de" : "Reduktion des CPU- und Strombedarfs von <a href=showinfo:3423>Energie-Nosferatu-</a> und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen",
           "en" : "reduction in the PWG and CPU requirements for <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules",
@@ -95,7 +95,7 @@
     "types" : {
       "30539" : {
         "3" : {
-          "bonus" : 5,
+          "bonus" : 5.0,
           "bonus_text" : {
             "de" : "Verringerung des Modulschadens durch Überhitzung",
             "en" : "reduction in module damage from overheating",
@@ -110,7 +110,7 @@
           "unit_id" : 105
         },
         "1" : {
-          "bonus" : 10,
+          "bonus" : 10.0,
           "bonus_text" : {
             "de" : "Bonus auf die Transfermenge von <a href=showinfo:3423>Nosferatu-</a> und <a href=showinfo:3423>Energieneutralisierer</a>-Modulen",
             "en" : "bonus to <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> drain amount",
@@ -125,7 +125,7 @@
           "unit_id" : 105
         },
         "2" : {
-          "bonus" : 10,
+          "bonus" : 10.0,
           "bonus_text" : {
             "de" : "Bonus auf den Nutzen der Überhitzung von <a href=showinfo:3423>Energie-Nosferatu-</a> und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen",
             "en" : "bonus to the benefits of overheating <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules",

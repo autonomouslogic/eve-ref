@@ -743,7 +743,7 @@
     importance: 3
   types:
     "30539":
-    - bonus: 5
+    - bonus: 5.0
       bonusText:
         de: "Bonus auf die maximale Zielerfassungsreichweite"
         en: "bonus to max targeting range"
@@ -755,7 +755,7 @@
         zh: "最大锁定距离加成"
       importance: 2
       unitID: 105
-    - bonus: 15
+    - bonus: 15.0
       bonusText:
         de: "Bonus auf die Sensorstärke des Schiffs"
         en: "bonus to ship sensor strength"
@@ -767,7 +767,7 @@
         zh: "舰船感应强度加成"
       importance: 1
       unitID: 105
-    - bonus: 15
+    - bonus: 15.0
       bonusText:
         de: "Bonus auf die Scanauflösung"
         en: "bonus to scan resolution"
@@ -811,7 +811,7 @@
       ru: "+50 ГДж ёмкости накопителя"
       zh: "电容器电容量+50GJ"
     importance: 4
-  - bonus: 20
+  - bonus: 20.0
     bonusText:
       de: "Bonus auf die Stromleistung des Schiffes"
       en: "bonus to ship power output"
@@ -825,7 +825,7 @@
     unitID: 105
   types:
     "30539":
-    - bonus: 3
+    - bonus: 3.0
       bonusText:
         de: "Bonus auf die Resistenz gegen Energiekriegsführung"
         en: "bonus to energy warfare resistance"
@@ -838,7 +838,7 @@
         zh: "能量战抗性加成"
       importance: 2
       unitID: 105
-    - bonus: 5
+    - bonus: 5.0
       bonusText:
         de: "Bonus auf die Energiespeicherkapazität"
         en: "bonus to capacitor capacity"
@@ -882,7 +882,7 @@
       ru: "+50 ГДж ёмкости накопителя"
       zh: "电容器电容量+50GJ"
     importance: 4
-  - bonus: 50
+  - bonus: 50.0
     bonusText:
       de: "Reduktion des CPU- und Strombedarfs von <a href=showinfo:3423>Energie-Nosferatu-</a>\
         \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
@@ -905,7 +905,7 @@
     unitID: 105
   types:
     "30539":
-    - bonus: 5
+    - bonus: 5.0
       bonusText:
         de: "Verringerung des Modulschadens durch Überhitzung"
         en: "reduction in module damage from overheating"
@@ -917,7 +917,7 @@
         zh: "装备过载损伤降低"
       importance: 3
       unitID: 105
-    - bonus: 10
+    - bonus: 10.0
       bonusText:
         de: "Bonus auf die Transfermenge von <a href=showinfo:3423>Nosferatu-</a>\
           \ und <a href=showinfo:3423>Energieneutralisierer</a>-Modulen"
@@ -937,7 +937,7 @@
         zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>吸取量加成"
       importance: 1
       unitID: 105
-    - bonus: 10
+    - bonus: 10.0
       bonusText:
         de: "Bonus auf den Nutzen der Überhitzung von <a href=showinfo:3423>Energie-Nosferatu-</a>\
           \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
