@@ -6,8 +6,8 @@ See [Downloading Datasets](downloading-datasets.md) for instructions on how to d
 
 Finished years of some datasets are packed into one archive per year, see [History Rollups](history-rollups.md).
 
-Most data older than 2 years is moved off the site into BitTorrent archives over time, never `market-history/`,
-`killmails/` or `ccp/`; see [EVE Ref Deep Archive](deep-archive.md).
+Most data is also archived into BitTorrent archives over time.
+See [EVE Ref Deep Archive](deep-archive.md).
 
 | Path                                                                                                               | Dataset                                                                                                         |
 |--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|

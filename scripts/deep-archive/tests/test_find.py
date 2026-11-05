@@ -1,7 +1,7 @@
 """
-Tests for 01-find.py's selection logic: how a file is dated (file_date, Obj), what is skipped (skip_reason), how
-published torrents and index.json files are handled (classify_all, folder_indexes), how the cutoff is chosen
-(choose_cutoff), and the merged SEED_DIR tree (existing_seed_paths).
+Tests for 01-find.py's selection logic: how a file is dated (file_date, Obj), what is skipped (skip_reason), the
+history folder cross-check (history_folders), how published torrents and index.json files are handled (classify_all,
+folder_indexes), how the cutoff is chosen (choose_cutoff), and the merged SEED_DIR tree (existing_seed_paths).
 
 Run from scripts/deep-archive/: python3 -m unittest discover -s tests (or make test-deep-archive).
 """
@@ -134,9 +134,10 @@ class ObjTest(unittest.TestCase):
 
 class SkipReasonTest(unittest.TestCase):
     EXCLUDES = find.TORRENT_EXCLUDE
+    INCLUDES = find.TORRENT_INCLUDE
 
     def skip(self, path):
-        return find.skip_reason(path, self.EXCLUDES)
+        return find.skip_reason(path, self.EXCLUDES, self.INCLUDES)
 
     def test_data_file(self):
         self.assertIsNone(self.skip("market-orders/history/2023/2023-01-01/market-orders-2023-01-01.v3.csv.bz2"))
@@ -159,9 +160,15 @@ class SkipReasonTest(unittest.TestCase):
 
     def test_excluded_dataset(self):
         self.assertEqual(self.skip("market-history/2019/a.csv.bz2"), ("excluded", "market-history"))
-        self.assertEqual(self.skip("ccp/csm/a.zip"), ("excluded", "ccp/csm"))
-        self.assertEqual(self.skip("ccp/mer/a.zip"), ("excluded", "ccp/mer"))
+        self.assertIsNone(self.skip("ccp/csm/a.zip"))
+        self.assertIsNone(self.skip("ccp/mer/a.zip"))
         self.assertIsNone(self.skip("ccp/sde/sde-2019.zip"))
+
+    def test_rolled_up_daily_files_excluded_by_pattern(self):
+        pattern = "*/history/[0-9][0-9][0-9][0-9]"
+        self.assertEqual(self.skip("structures/history/2026/2026-01-01/a.json.bz2"), ("excluded", pattern))
+        self.assertIsNone(self.skip("structures/history/structures-2023.tar.xz"))
+        self.assertIsNone(self.skip("incursions/history/backfills/a.json.bz2"))
 
     def test_excluded_dataset_by_folder_not_prefix(self):
         self.assertIsNone(self.skip("ccp/csm-other/a.json"))
@@ -171,26 +178,17 @@ class SkipReasonTest(unittest.TestCase):
         self.assertEqual(self.skip("robots.txt"), ("root", None))
         self.assertEqual(self.skip("index.json"), ("root", None))
 
-    def test_no_includes_selects_everything(self):
-        self.assertIsNone(find.skip_reason("fuzzwork/ordersets/2020/a.csv.gz", self.EXCLUDES, None))
+    def test_includes_are_exceptions_to_excludes(self):
+        excludes = ["*/history"]
+        self.assertEqual(find.skip_reason("a/history/2020/x.json", excludes, []), ("excluded", "*/history"))
+        self.assertIsNone(find.skip_reason("a/history/2020/x.json", excludes, ["a/history"]))
+        self.assertIsNone(find.skip_reason("b/2020/x.json", excludes, ["a/history"]))
 
-    def test_not_included_by_top_folder(self):
-        includes = ["market-orders", "fuzzwork/ordersets"]
-        self.assertIsNone(find.skip_reason("market-orders/history/2020/a.csv.bz2", self.EXCLUDES, includes))
-        self.assertIsNone(find.skip_reason("fuzzwork/ordersets/2020/a.csv.gz", self.EXCLUDES, includes))
-        self.assertEqual(
-            find.skip_reason("fuzzwork/other/2020/a.csv.gz", self.EXCLUDES, includes), ("not_included", "fuzzwork")
-        )
-        self.assertEqual(
-            find.skip_reason("market-orders-x/2020/a.json", self.EXCLUDES, includes),
-            ("not_included", "market-orders-x"),
-        )
-
-    def test_excludes_apply_within_includes(self):
-        self.assertEqual(find.skip_reason("ccp/csm/a.zip", self.EXCLUDES, ["ccp"]), ("excluded", "ccp/csm"))
-
-    def test_root_files_with_includes(self):
-        self.assertEqual(find.skip_reason("robots.txt", self.EXCLUDES, ["market-orders"]), ("root", None))
+    def test_includes_dont_override_built_in_skips(self):
+        includes = ["**"]
+        self.assertEqual(find.skip_reason("robots.txt", [], includes), ("root", None))
+        self.assertEqual(find.skip_reason("d/index.html", [], includes), ("ignored", "index.html files"))
+        self.assertEqual(find.skip_reason("d/d-latest.json", [], includes), ("ignored", "latest files"))
 
 
 class TorrentIdTest(unittest.TestCase):
@@ -255,19 +253,11 @@ class LoadLocalTorrentsTest(unittest.TestCase):
         self.assertEqual(quietly(find.load_local_torrents, "/nonexistent/torrents"), {})
 
 
-class YearsBeforeTest(unittest.TestCase):
-    def test_years_before(self):
-        self.assertEqual(find.years_before(date(2026, 10, 12), 2), date(2024, 10, 12))
-
-    def test_leap_day(self):
-        self.assertEqual(find.years_before(date(2024, 2, 29), 2), date(2022, 2, 28))
-
-
 class ClassifyAllTest(unittest.TestCase):
     EXCLUDES = ["market-history"]
 
     def classify(self, listing, taken=None):
-        return quietly(find.classify_all, listing, self.EXCLUDES, taken or {})
+        return quietly(find.classify_all, listing, self.EXCLUDES, taken or {}, [])
 
     def test_candidates_sorted_by_date_then_modification_time_then_path(self):
         listing = [
@@ -298,9 +288,9 @@ class ClassifyAllTest(unittest.TestCase):
         self.assertEqual(scan.ignored["index.html files"], [1, 5])
         self.assertEqual(scan.root_files, ["robots.txt"])
 
-    def test_not_included_files_dropped(self):
+    def test_included_exceptions_kept(self):
         listing = [obj("d/a.json", size=3), obj("e/f/a.json", size=4), obj("e/g/a.json", size=5)]
-        scan = quietly(find.classify_all, listing, self.EXCLUDES, {}, ["d", "e/f"])
+        scan = quietly(find.classify_all, listing, ["e"], {}, ["e/f"])
         self.assertEqual([o.path for o in scan.candidates], ["d/a.json", "e/f/a.json"])
 
     def test_empty_files_are_candidates_and_flagged(self):
@@ -331,6 +321,36 @@ class FolderIndexesTest(unittest.TestCase):
         indexes = {"d": obj("d/index.json"), "e": obj("e/index.json"), "f": obj("f/index.json")}
         files = [obj("d/a.json"), obj("d/b.json"), obj("e/c.json"), obj("g/d.json")]
         self.assertEqual([o.path for o in find.folder_indexes(files, indexes)], ["d/index.json", "e/index.json"])
+
+
+class HistoryFoldersTest(unittest.TestCase):
+    EXCLUDES = ["*/history/[0-9][0-9][0-9][0-9]"]
+
+    def history(self, paths, includes=()):
+        return find.history_folders([obj(p) for p in paths], self.EXCLUDES, list(includes))
+
+    def test_rolled_up_and_excluded_is_fine(self):
+        history = self.history(["a/history/2026/2026-01-01/x.json", "a/history/a-2025.tar.xz", "a/history/index.json"])
+        self.assertEqual(history.included_with_rollups, [])
+        self.assertEqual(history.excluded_without_rollups, [])
+
+    def test_never_rolled_up_and_included_is_fine(self):
+        history = self.history(["a/history/2026/2026-01-01/x.json", "a/history/index.json"], ["a/history"])
+        self.assertEqual(history.included_with_rollups, [])
+        self.assertEqual(history.excluded_without_rollups, [])
+
+    def test_included_with_rollups_is_reported(self):
+        history = self.history(["a/history/2026/x.json", "a/history/a-2025.tar.xz"], ["a/history"])
+        self.assertEqual(history.included_with_rollups, ["a/history"])
+
+    def test_excluded_without_rollups_is_reported(self):
+        history = self.history(["a/history/2026/x.json", "a/history/index.json", "a/history/index.html"])
+        self.assertEqual(history.excluded_without_rollups, ["a/history"])
+
+    def test_only_year_folders_count(self):
+        history = self.history(["a/history/backfills/x.json", "b/c/history/2026/x.json", "d/2026/x.json"])
+        self.assertEqual(history.included_with_rollups, [])
+        self.assertEqual(history.excluded_without_rollups, [])
 
 
 class MinBytesReachedTest(unittest.TestCase):

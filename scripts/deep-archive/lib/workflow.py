@@ -30,6 +30,7 @@ The scripts reach the data bucket only through rclone (data_remote).
 """
 
 import datetime
+import fnmatch
 import json
 import os
 import random
@@ -65,29 +66,64 @@ DEEP_ARCHIVE_DIR = "deep-archive"
 STAGING_DIR_NAME = ".staging"
 TORRENTS_DIR_NAME = ".torrents"
 
-# Folders never archived (NOTES.md "Never archived"): paths from the site root. market-history and killmails work
-# as databases, with past files modified in place, which a torrent can't follow. deep-archive holds the torrents themselves.
-# Only ccp/csm and ccp/mer are excluded from ccp (CCP's own data); the rest of ccp is archived like any other folder.
-# ccp/mer: SyncMer only checks from two months before its latest MER, so it wouldn't re-upload deleted files
-# (NOTES.md "Never archived").
+# What is never archived (NOTES.md "Never archived"): glob patterns from the site root (match_paths). A file is
+# excluded if a TORRENT_EXCLUDE pattern matches it and no TORRENT_INCLUDE pattern does (torrent_excluded).
+# market-history and killmails work as databases, with past files modified in place, which a torrent can't follow.
+# Daily files in <dataset>/history/<year>/ are rolled up into yearly <dataset>/history/<dataset>-<year>.* files
+# (docs "History Rollups"): only the rollups are archived. Datasets too new to have been rolled up yet are excluded
+# the same way. *-current.* files (wars/wars-current.json) are rewritten in place, like the *-latest.* files 01-find
+# always skips. deep-archive holds the torrents themselves.
 TORRENT_EXCLUDE = [
-    "ccp/csm",
-    "ccp/mer",
     "market-history",
     "killmails",
-    "wars/history", # todo rollup
-    DEEP_ARCHIVE_DIR
+    "*/*-current.*",
+    "wars/history",  # todo rollup
+    "*/history/[0-9][0-9][0-9][0-9]",
+    DEEP_ARCHIVE_DIR,
 ]
 
-# Optional allowlist: paths from the site root. None selects every folder not in TORRENT_EXCLUDE; a list selects only
-# files in these folders (TORRENT_EXCLUDE still applies within them). Used to give the first torrents only the biggest
-# datasets, to get them out of the way. Set it back to None once they're archived.
-TORRENT_INCLUDE = None
+# Exceptions to TORRENT_EXCLUDE, glob patterns like it: datasets never rolled up, whose daily files are archived.
+TORRENT_INCLUDE = [
+    "market-orders/history",
+    "public-contracts/history",
+    "esi-scrape/history",
+    "reference-data/history",
+    "hoboleaks-sde/history",
+]
 
 
-def in_folders(path, folders):
-    """Whether the path is one of the folders or inside one, by whole folder name (ccp-other isn't in ccp)."""
-    return any(path == f or path.startswith(f + "/") for f in folders)
+def match_paths(path, patterns):
+    """
+    The first of the glob patterns matching the path or any of its parent folders, or None. Matched segment by
+    segment, split on "/": within one, *, ? and [...] work as in fnmatch (case-sensitive), so they never cross a "/";
+    a "**" segment matches zero or more whole segments. A plain folder matches by whole name: "ccp" matches
+    "ccp/sde/a.zip", not "ccp-other/a.json".
+    """
+    parts = path.split("/")
+    for pattern in patterns:
+        if _match_prefix(pattern.split("/"), parts):
+            return pattern
+    return None
+
+
+def _match_prefix(pattern, parts):
+    """Whether the pattern segments match the whole of parts or some leading part of it (a parent folder)."""
+    if not pattern:
+        return True
+    if pattern[0] == "**":
+        return any(_match_prefix(pattern[1:], parts[i:]) for i in range(len(parts) + 1))
+    return bool(parts) and fnmatch.fnmatchcase(parts[0], pattern[0]) and _match_prefix(pattern[1:], parts[1:])
+
+
+def torrent_excluded(path, excludes=None, includes=None):
+    """
+    The TORRENT_EXCLUDE pattern excluding the path, or None if it isn't excluded: no exclude pattern matches it, or
+    a TORRENT_INCLUDE pattern does. excludes and includes default to TORRENT_EXCLUDE and TORRENT_INCLUDE.
+    """
+    exclude = match_paths(path, TORRENT_EXCLUDE if excludes is None else excludes)
+    if exclude is None or match_paths(path, TORRENT_INCLUDE if includes is None else includes) is not None:
+        return None
+    return exclude
 
 # A path's year folder, for classify_path: the first 4-digit 19xx/20xx directory.
 YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
@@ -96,8 +132,9 @@ YEAR_DIR_RE = re.compile(r"^(19|20)\d{2}$")
 # (e.g. fuzzwork/ordersets/backfills) aren't their own datasets.
 DATASET_SUFFIXES = {"history", "backfills"}
 
-# Files modified less than this many years before today are never selected (01-find).
-MIN_AGE_YEARS = 2
+# Files dated less than this many days before today are never selected (01-find). Only a safety margin against
+# files still being uploaded: files are never re-uploaded, and torrents are built by hand (NOTES.md "Dating").
+MIN_AGE_DAYS = 2
 
 # Public URL of the data site.
 DATA_BASE_URL = "https://data.everef.net/"
@@ -230,8 +267,8 @@ PIECE_SIZE = 8 * MIB
 MAX_BYTES = 300 * GIB
 
 # Least data in one torrent: 01-find aborts if its selection is smaller, so no workflow makes a small torrent. Rerun
-# it once more data has passed MIN_AGE_YEARS.
-MIN_BYTES = 250 * GIB
+# it once more data has come in.
+MIN_BYTES = MAX_BYTES
 
 # Largest .torrent, as estimated from the selection's paths and sizes (lib/torrent_size.py): libtorrent's default
 # max_buffer_size, so any libtorrent client opens it unchanged. The estimate runs up to about 12 KB high (its
@@ -353,13 +390,14 @@ def ok(message):
 
 def refuse_to_run(step):
     """
-    Stops the deletion-side steps (12 onwards) from running at all: they're untested and probably broken, and are
-    revisited once files are about to be deleted from the data site (NOTES.md "Steps 12 onwards"). Called from each
-    script's __main__ block, not main(), so the tests still import and call them.
+    Stops the deletion-side steps (12 onwards) from running at all: deletion is to be rewritten as a separate
+    process, decoupled from building torrents, and these steps still assume what's archived is what's deleted
+    (NOTES.md "Steps 12 onwards"). Called from each script's __main__ block, not main(), so the tests still import
+    and call them.
     """
     fail(
-        f"{step_name(step)} is disabled: the steps from 12-check-before-delete onwards are untested and probably "
-        "broken, to be revisited when files are about to be deleted from the data site (NOTES.md \"Steps 12 onwards\")"
+        f"{step_name(step)} is disabled: the steps from 12-check-before-delete onwards are to be rewritten as a "
+        "separate deletion process, decoupled from building torrents (NOTES.md \"Steps 12 onwards\")"
     )
 
 

@@ -119,7 +119,7 @@ STATS_INTERVAL = "30s"
 
 # Hashing.
 CHUNK_SIZE = 4 * MIB
-HASH_WORKERS = os.cpu_count() or 4  # hashlib releases the GIL; NOTES.md "Torrent size" measured ~4.3x at 6 threads
+HASH_WORKERS = 2  # hashlib releases the GIL; kept low to leave CPU free (NOTES.md "Torrent size" measured ~4.3x at 6 threads)
 PROGRESS_INTERVAL = 30  # seconds
 
 # Files per cp call, to stay well under the argument length limit.

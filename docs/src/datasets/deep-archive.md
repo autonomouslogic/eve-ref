@@ -1,6 +1,6 @@
 # EVE Ref EVE Online Deep Archive
-The [Deep Archive](https://data.everef.net/deep-archive/) moves old EVE Online data off
-[data.everef.net](https://data.everef.net/) and into torrent archives.
+The [Deep Archive](https://data.everef.net/deep-archive/) archives EVE Online data from
+[data.everef.net](https://data.everef.net/) into torrents.
 
 ## Published Torrents
 Below is a list of published torrents.
@@ -24,6 +24,8 @@ your torrent client and configure it for automatic downloads.
 | [everef-eve-online-deep-archive-09.torrent](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-09.torrent) | <TorrentSeeders hash="a53aec951ed9d5b13c4f724962ac3cf00a1580a3"></TorrentSeeders> | [everef-eve-online-deep-archive-09.txt](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-09.txt) | 302.0 GiB | 2023-11-11 | [Magnet](magnet:?xt=urn:btih:a53aec951ed9d5b13c4f724962ac3cf00a1580a3&dn=everef-eve-online-deep-archive-09&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker-udp.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce) | 2026-11-03 |
 | [everef-eve-online-deep-archive-10.torrent](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-10.torrent) | <TorrentSeeders hash="d022cc48c84d8667167403e27448b9d718676c57"></TorrentSeeders> | [everef-eve-online-deep-archive-10.txt](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-10.txt) | 301.4 GiB | 2024-03-20 | [Magnet](magnet:?xt=urn:btih:d022cc48c84d8667167403e27448b9d718676c57&dn=everef-eve-online-deep-archive-10&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker-udp.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce) | 2026-11-04 |
 | [everef-eve-online-deep-archive-11.torrent](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-11.torrent) | <TorrentSeeders hash="95a9770965a76970eade77dde8422e4de5e53100"></TorrentSeeders> | [everef-eve-online-deep-archive-11.txt](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-11.txt) | 300.9 GiB | 2024-08-04 | [Magnet](magnet:?xt=urn:btih:95a9770965a76970eade77dde8422e4de5e53100&dn=everef-eve-online-deep-archive-11&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker-udp.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce) | 2026-11-04 |
+| [everef-eve-online-deep-archive-12.torrent](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-12.torrent) | <TorrentSeeders hash="432c75666185021ce2218470422587bcbce93a77"></TorrentSeeders> | [everef-eve-online-deep-archive-12.txt](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-12.txt) | 301.8 GiB | 2024-12-29 | [Magnet](magnet:?xt=urn:btih:432c75666185021ce2218470422587bcbce93a77&dn=everef-eve-online-deep-archive-12&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker-udp.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce) | 2026-11-04 |
+| [everef-eve-online-deep-archive-13.torrent](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-13.torrent) | <TorrentSeeders hash="633297a8ed88999db497f915bdbc5808888b25b8"></TorrentSeeders> | [everef-eve-online-deep-archive-13.txt](https://data.everef.net/deep-archive/everef-eve-online-deep-archive-13.txt) | 300.5 GiB | 2025-05-15 | [Magnet](magnet:?xt=urn:btih:633297a8ed88999db497f915bdbc5808888b25b8&dn=everef-eve-online-deep-archive-13&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker-udp.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce) | 2026-11-05 |
 
 ## Structure
 Each archive is one torrent file, named `everef-eve-online-deep-archive-NN.torrent`, where `NN` is a sequential number.
@@ -86,20 +88,27 @@ Once the torrent has downloaded, the SHA-256 checksum file `everef-eve-online-de
 See the readme at `everef-eve-online-deep-archive-NN-README.md` for instructions.
 
 ## What gets archived
-Files dated at least 2 years ago, oldest first.
-A file is dated by the earliest of its upload time and any date or year in its name.
-Once a torrent is published, those files are removed from `data.everef.net`.
-The torrent and its seeders become the only remaining source.
+Every file not yet archived, oldest first, once it's at least 2 days old.
+Once a torrent is published, those files will eventually be removed from `data.everef.net`.
+Once deleted, the torrent and its seeders become the only remaining source.
+Each file is only ever in one torrent.
+
+For datasets with [History Rollups](history-rollups.md), the yearly rollup archives are what gets archived,
+not the daily files they replace.
+The daily files of [`market-orders/`](market-orders.md), [`public-contracts/`](public-contracts.md),
+[`esi-scrape/`](https://data.everef.net/esi-scrape/), [`reference-data/`](https://data.everef.net/reference-data/)
+and [`hoboleaks-sde/`](https://data.everef.net/hoboleaks-sde/) are never rolled up, so they are archived as they are.
 
 Archiving is done on an ad-hoc basis without a set schedule.
 Whenever a new archive has been prepared, it will be added to [everef-eve-online-deep-archive.xml](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml).
 
 
-### What doesn't gets archived
+### What doesn't get archived
 * [`market-history/`](market-history.md) and [`killmails/`](killmails.md), since these effectively function as databases where old files are updated in-place.
-* Some [`ccp/`](https://data.everef.net/ccp/) data, CCP's own data, `csm` and `mer` for now.
+* Daily `history/<year>/` files of datasets that are rolled up, see [History Rollups](history-rollups.md).
+  Datasets that haven't been rolled up yet are only archived once they are.
 * [`wars/history/`](https://data.everef.net/wars/history/) for now.
-* Any `*-latest*` files
+* Any `*-latest*` or `*-current*` files, which are updated in-place.
 
 ## Tools
 * [qBittorrent](https://www.qbittorrent.org/) - free bittorrent client
