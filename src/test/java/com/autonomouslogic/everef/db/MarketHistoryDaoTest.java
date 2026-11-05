@@ -66,11 +66,12 @@ public class MarketHistoryDaoTest {
 				LocalDate.parse("2020-01-04"), 4,
 				LocalDate.parse("2020-01-05"), 5);
 		var entries = Flowable.fromIterable(insertedDailyPairs.entrySet())
-				.flatMap(day -> Flowable.range(0, day.getValue()).map(i -> entry.toBuilder()
-						.date(day.getKey())
-						.regionId(10000000 + i % 5)
-						.typeId(1 + i)
-						.build()))
+				.flatMap(day -> Flowable.range(0, day.getValue())
+						.map(i -> entry.toBuilder()
+								.date(day.getKey())
+								.regionId(10000000 + i % 5)
+								.typeId(1 + i)
+								.build()))
 				.toList()
 				.blockingGet();
 		marketHistoryDao.insert(entries);

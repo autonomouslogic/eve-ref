@@ -88,9 +88,10 @@ public class SyncFuzzworkOrdersets implements Command {
 		VirtualThreads.checkIsVirtual();
 		getFilesToSync()
 				.flatMapMaybe(
-						file -> downloadFile(file).flatMap(downloaded -> uploadFile(downloaded)
-								.flatMapMaybe(
-										archivePath -> deleteFile(downloaded).andThen(Maybe.just(archivePath)))),
+						file -> downloadFile(file)
+								.flatMap(downloaded -> uploadFile(downloaded)
+										.flatMapMaybe(archivePath ->
+												deleteFile(downloaded).andThen(Maybe.just(archivePath)))),
 						false,
 						CONCURRENCY)
 				.toList()

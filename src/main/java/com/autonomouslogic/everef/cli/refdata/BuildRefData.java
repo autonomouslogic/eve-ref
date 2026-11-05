@@ -507,11 +507,12 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<RefDataMeta> latestRefDataMeta() {
-		return latestRefData().flatMap(file -> Flowable.fromStream(CompressUtil.loadArchive(file))
-				.filter(e -> e.getKey().getName().equals("meta.json"))
-				.map(e -> jsonMapper.readValue(e.getValue(), RefDataMeta.class))
-				.first(RefDataMeta.builder().build())
-				.doOnSuccess(meta -> latestRefDataMeta = meta));
+		return latestRefData()
+				.flatMap(file -> Flowable.fromStream(CompressUtil.loadArchive(file))
+						.filter(e -> e.getKey().getName().equals("meta.json"))
+						.map(e -> jsonMapper.readValue(e.getValue(), RefDataMeta.class))
+						.first(RefDataMeta.builder().build())
+						.doOnSuccess(meta -> latestRefDataMeta = meta));
 	}
 
 	private Completable notifyDiscord() {

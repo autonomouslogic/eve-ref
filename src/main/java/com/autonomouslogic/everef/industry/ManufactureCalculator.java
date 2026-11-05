@@ -151,12 +151,11 @@ public class ManufactureCalculator {
 	}
 
 	public BigDecimal systemCostIndex(BigDecimal eiv) {
-		var index =
-				switch (activity) {
-					case "manufacturing" -> industryCostInput.getManufacturingCost();
-					case "reaction" -> industryCostInput.getReactionCost();
-					default -> throw new IllegalStateException(activity);
-				};
+		var index = switch (activity) {
+			case "manufacturing" -> industryCostInput.getManufacturingCost();
+			case "reaction" -> industryCostInput.getReactionCost();
+			default -> throw new IllegalStateException(activity);
+		};
 		return industryMath.systemCostIndex(eiv, index);
 	}
 
