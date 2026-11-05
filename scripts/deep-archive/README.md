@@ -1,8 +1,9 @@
 # EVE Ref Deep Archive for EVE Online
 
-Moves old data.everef.net data into torrents. One workflow makes one torrent, `everef-eve-online-deep-archive-NN`
+Archives data.everef.net data into torrents. One workflow makes one torrent, `everef-eve-online-deep-archive-NN`
 (sequential, from `00`): the oldest data not archived yet, as much as the size limits allow. It's signed, seeded,
-published, listed on the docs site, and then deleted from the site.
+published and listed on the docs site. Archiving doesn't remove anything from the site: deletion is to be rewritten
+as a separate process (NOTES.md "Steps 12 onwards").
 
 What each script does in detail: its own docstring. Design constraints and reference material for working on the
 scripts: [`NOTES.md`](NOTES.md).
@@ -17,17 +18,14 @@ and 15 August, the day after that month's rollup check, as a reminder to run a w
   sudo apt-get install python3 rclone python3-libtorrent coreutils docker.io
   ```
 - A B2 key for the data bucket.
-- `SEED_DIR` on redundant storage (ZFS mirror, RAID), with room for one more torrent (`MAX_BYTES`). After deletion
-  it's EVE Ref's only copy of the archived data (Appendix C).
+- `SEED_DIR` on redundant storage (ZFS mirror, RAID), with room for one more torrent (`MAX_BYTES`). Once data is
+  deleted from the site, it's EVE Ref's only copy of it (Appendix C).
 - qBittorrent-nox 5.2 or later, with its Web API reachable and an API key from its Web UI settings.
 - The minisign private key, kept outside this repo.
 
 ## Setup
 
 Copy `torrents.env.example` to `torrents.env` and fill it in (Appendix B).
-
-Before the first delete of `fuzzwork/` data, the `SyncFuzzworkOrdersets` ID cutoff (NOTES.md "Fuzzwork sync cutoff")
-must be deployed, or the sync re-uploads the deleted ordersets.
 
 ## Tests
 
@@ -54,13 +52,10 @@ or anything else looks wrong, stop.
 | 09 Publish                                            | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
 | 10 Update docs                                        | manual                             |                                                                               |        |
 | 11 Index deep-archive/                                | manual                             | `deep-archive/` index files                                                   | write  |
-| _Wait for files to be seeded by others_               |                                    |                                                                               |        |
-| 12 Check before delete (UNTESTED)                     | `./12-check-before-delete.py`      | `delete-set.json`                                                             | read   |
-| 13 Delete (UNTESTED)                                  | `./13-delete.py`, then `--execute` | **bucket data (permanent)**, `deleted.jsonl`                                  | write  |
-| 14 Check delete (UNTESTED)                            | `./14-check-delete.py`             |                                                                               | read   |
-| 15 Full DataIndex                                     | manual                             |                                                                               |        |
-| 16 Check site (UNTESTED)                              | `./16-check-site.py`               |                                                                               |        |
 | 17 Delete the scratch directory                       | manual                             |                                                                               |        |
+
+Steps 12 to 16 were deletion. They're removed from the workflow until deletion is rewritten as a separate process
+(NOTES.md "Steps 12 onwards"); their scripts are still here, but refuse to run.
 
 `check-seed-dir.py` isn't a numbered step: it's a standalone, read-only check of the whole `$SEED_DIR` tree against
 every signed torrent (00 and 08 both run its quick checks inline; Appendix C's monthly maintenance runs it with
@@ -76,7 +71,7 @@ torrents (`check-seed-dir.py`'s quick checks), and picks the next torrent ID. Re
 
 ### 01: Find
 Selects the oldest files not archived yet (files an earlier torrent holds, published or only in `$SEED_DIR/.torrents/`, are
-skipped even though they're still on the site: data is deleted much later), by date, up to the size limits (`01-find.py`'s docstring); `index.json`
+skipped even though they're still on the site: archiving doesn't delete), by date, up to the size limits (`01-find.py`'s docstring); `index.json`
 files are never selected, only noted for 03-load to snapshot. Aborts if the oldest date alone is too big for one
 `.torrent`, if the selection is under `MIN_BYTES` (not enough data yet) -- unless the `.torrent` size limit stopped
 the selection early, which can happen well under `MIN_BYTES` with a lot of small files and isn't treated as a
@@ -85,19 +80,24 @@ two torrents"). In each case nothing is written.
 
 ### 02: Review the selection (manual)
 Read `$SCRATCH_DIR/find/report.txt`:
-- No `market-history/`, `killmails/` or `ccp/` files.
-- Every flag looked at.
+- No `market-history/`, `killmails/` or `wars/history/` files.
+- No daily files under `<dataset>/history/<year>/`, except for the datasets in `TORRENT_INCLUDE`.
+- Every flag looked at, the history folders one especially. The "no rollups yet" list is expected for datasets too
+  new to be rolled up: nothing of theirs is archived until they are.
 - Every "(no year folder)" dataset is archive data, not a current file that just hasn't changed (a reference file
-  tools fetch by URL must stay: add it to `TORRENT_EXCLUDE`).
+  tools fetch by URL must stay: add it to `TORRENT_EXCLUDE`). Yearly rollups (`<dataset>/history/<dataset>-<year>.*`)
+  show up here; that's expected.
 - Files dated by a year in the name (`find.log`): the number is a year, not an ID.
 - If the limits weren't reached, a smaller torrent is worth making now.
 
-To change the selection: fix `TORRENT_EXCLUDE` (or `TORRENT_INCLUDE`) in `lib/workflow.py`, delete
+To change the selection: fix `TORRENT_EXCLUDE` or `TORRENT_INCLUDE` in `lib/workflow.py`, delete
 `$SCRATCH_DIR/01-find.done`, and run `01-find` again.
 
-`TORRENT_INCLUDE` is optional (`None` by default). Set to a list of folders, only files in those folders are selected
-(`TORRENT_EXCLUDE` still applies), and the rest are left out of the report. Use it to give the first torrents
-only the biggest datasets; set it back to `None` once they're archived.
+Both are lists of glob patterns from the site root. A file is excluded if a `TORRENT_EXCLUDE` pattern matches it and
+no `TORRENT_INCLUDE` pattern does: `TORRENT_INCLUDE` only holds exceptions to `TORRENT_EXCLUDE`, it never limits the
+selection. A pattern matches a path or any of its parent folders, segment by segment: `*`, `?` and `[...]` stay
+within one folder name, `**` matches any number of folders. So `killmails` covers everything under `killmails/`,
+and `*/history/[0-9][0-9][0-9][0-9]` every dataset's year folders under `history/`.
 
 ### 03: Load
 Copies the selection into `$SEED_DIR/.staging/<ID>/`: what `LOCAL_COPY_DIR` has first, unchecked (a `cp --reflink=always` pass for the files not yet there, which on
@@ -156,7 +156,7 @@ Add the torrent to the "Published Torrents" table on `docs/src/datasets/deep-arc
 and `.txt` links, the size and the magnet link, as publish prints them, and a Seeders cell of
 `<TorrentSeeders hash="<v1 info-hash>"></TorrentSeeders>`. Live counts come from the API's
 `/v1/deep-archive/seeders`, which reads the feed, so the new torrent shows up there within its 4-hour cache. If the rules in `lib/workflow.py` changed
-(`TORRENT_EXCLUDE`, `MIN_AGE_YEARS`, size limits), update the page's rule text too: nothing checks it. Commit it and
+(`TORRENT_EXCLUDE`, `TORRENT_INCLUDE`, `MIN_AGE_DAYS`, size limits), update the page's rule text too: nothing checks it. Commit it and
 deploy the docs site.
 
 Include the torrage.info link as a backup.
@@ -167,42 +167,6 @@ From a checkout with production settings in the environment:
 DATA_INDEX_PREFIX=/deep-archive/ DATA_INDEX_RECURSIVE=false ./gradlew dataIndex
 ```
 - https://data.everef.net/deep-archive/ lists the new torrent, its `.txt` and signature, and the feed.
-
-### 12: Check before delete
-**Steps 12 onwards are disabled: untested and probably broken (NOTES.md "Steps 12 onwards").** Don't run them yet.
-
-Checks the docs page lists the torrent, the seeder is clean and the published `.torrent` matches, then builds the
-delete set from the torrent against a fresh listing (`12-check-before-delete.py`'s docstring).
-- Files that fail are listed and stay on the site (Appendix E). Many failures mean a problem: look before going on.
-- Note the delete set: files, bytes, datasets.
-
-### 13: Delete
-```
-./13-delete.py              # dry run, as often as you like
-./13-delete.py --execute    # type the torrent ID to confirm
-```
-- The dry run shows exactly the delete set from check-before-delete, and rclone's dry run deleting exactly those files.
-
-`--execute` asks, re-checks against a fresh listing, and deletes exactly those files (soft deletes, never by prefix,
-each delete only after an rclone dry run of the same list matched it, and capped with `--max-delete`), then the index
-files of folders it left empty (NOTES.md "Stale index files"). Treat it as permanent. Until the full `DataIndex`, jobs that crawl the site
-(`sync-fuzzwork-ordersets`, the market history scrape) may fail on stale links; they recover on their next run after
-it.
-
-### 14: Check delete
-- Everything in the delete set is gone, no folder the delete touched holds only index files (others are a warning),
-  and every other path that was on the bucket when `01-find` ran is still there.
-
-### 15: Full DataIndex (manual)
-```
-docker run --rm --env-file <production env> <eve-ref image> data-index
-```
-Or `./gradlew dataIndex` from a checkout with production settings in the environment. Leave `DATA_INDEX_PREFIX` unset.
-
-### 16: Check site
-- Sampled deleted URLs return 404, or 200 from Cloudflare's cache (up to 30 days).
-- The listings no longer show the deleted files; `deep-archive/` lists the torrent, the `.txt`, the signature and the
-  feed.
 
 ### 17: Delete the scratch directory (manual)
 Delete `$SCRATCH_DIR`. The merged `$SEED_DIR` tree stays and keeps seeding.
@@ -218,8 +182,7 @@ Delete `$SCRATCH_DIR`. The merged `$SEED_DIR` tree stays and keeps seeding.
 - **Output**, like the roll-up scripts: `🚀` once, `🔵` sections, `🟡` warnings (the step carries on), `🔴`
   errors (the step stops), `✅` last on success. Everything is also
   logged to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
-- **Show, then ask** before deleting from the bucket (`13-delete`). Other writes (`07-seed`, `09-publish`) show
-  what they do and go ahead.
+- **Show, then go ahead.** The writes (`07-seed`, `09-publish`) show what they do, then do it without asking.
 - **Checks re-derive everything** from the bucket, disk, qBittorrent or site. Signatures are verified again before
   each use.
 - The two signing steps are bash (`lib/sign.sh`), with the same rules.
@@ -247,14 +210,15 @@ setting is ignored, and named); and the trackers, `lib/trackers.txt` (not a sett
 ```
 scripts/deep-archive/
   README.md, NOTES.md                  # this process; design notes for working on the scripts
-  00-preflight.py … 16-check-site.py   # the steps; 04 and 06 are .sh
+  00-preflight.py … 09-publish.py      # the steps; 04 and 06 are .sh
+  12-check-before-delete.py … 16-check-site.py   # deletion, out of the workflow: refuse to run
   check-seed-dir.py                    # standalone SEED_DIR inventory check, not a numbered step
   lib/                                 # shared code (workflow.py, merge.py, seed_dir.py, trackers.txt, sign.sh, …), the README and comment templates
   tests/
 
 $SCRATCH_DIR/                          # one workflow
   <NN>-<step>.done, NOTES.md (the operator's), log/
-  find/ (files.jsonl, indexes.jsonl, …), manifest.json, delete-set.json, deleted.jsonl, feed-backup/
+  find/ (files.jsonl, indexes.jsonl, …), manifest.json, feed-backup/
   <ID>.sha256, <ID>.sha256.minisig     # copied into the torrent, never published
   <ID>.torrent, <ID>.txt, <ID>.torrent.minisig   # published
   merge-plan.json                      # 07-seed's merge plan, for resuming
@@ -268,25 +232,11 @@ $SEED_DIR/
 
 ## Appendix C: Maintenance
 
-`$SEED_DIR` is EVE Ref's only copy of the archived data (no backup: NOTES.md "Durability"). Monthly:
+`$SEED_DIR` is EVE Ref's only copy of any archived data later deleted from the site (no backup: NOTES.md
+"Durability"). Monthly:
 
 - `./check-seed-dir.py --full`: every file on disk owned by exactly one torrent with no collisions, qBittorrent
   seeding each one cleanly, and `sha256sum -c` passing for every torrent from the `$SEED_DIR` root. If a problem
   turns up, it names which torrent and path; investigate before doing anything else.
 - Force a recheck of every torrent in qBittorrent: all at 100% with 0 bytes downloaded, and seeding. If one finds
   damage, qBittorrent can re-download it from other seeders; if there are none, those files are lost.
-
-## Appendix D: Rollback
-
-There is no script. Re-upload the deleted files from `$SEED_DIR` (or other seeders) with rclone, which keeps the
-modification times, using the published `<ID>.txt` as the list (its paths are already relative to `$SEED_DIR`, with
-no torrent root folder to strip): `rclone copy "$SEED_DIR" <remote> --files-from-raw <ID>.txt`. While B2 still holds
-the hidden versions, removing the hide markers in B2's web console is quicker (the bucket purges them after about 2
-days). Then run a full `DataIndex` and check the files are served.
-
-## Appendix E: If data changed
-
-If `12-check-before-delete` finds a file that changed after it was selected, that file isn't deleted; the rest is.
-There is no replacement torrent. The file stays on the site at a path an earlier torrent holds, which `01-find` skips
-like any other archived path, so the changed version is never archived. Find out why it changed; if the dataset still
-changes after the minimum age, add it to `TORRENT_EXCLUDE`.

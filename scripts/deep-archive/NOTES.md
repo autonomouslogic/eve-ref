@@ -19,21 +19,41 @@ to by name from the code (e.g. `NOTES.md "Deletion"`).
   the upload time (unchecked: "Known limitations").
 - Dates in the file name put backfills and re-uploads with their period.
 - Fuzzwork IDs never read as years (backfills 21000–59999, live from 90019); other datasets' IDs aren't checked.
-- The 2-year age is well clear of the market history scraper's 30-day snapshot lookback
-  (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`, read by `HistoricalOrdersRegionTypeSource`).
+- `MIN_AGE_DAYS` (2 days) is only a safety margin against files still being uploaded. Files are never re-uploaded,
+  torrents are built by hand, and archiving doesn't delete anything, so there's no other reason to wait. It used to be
+  2 years, when what was archived was then deleted ("Steps 12 onwards").
 
 ### Never archived
 
-`TORRENT_EXCLUDE` is a denylist, so new datasets are archived automatically once old enough.
+`TORRENT_EXCLUDE` is a denylist, so new datasets are archived automatically. `TORRENT_INCLUDE` holds exceptions to
+it, nothing else.
 
-- `market-history/` and `killmails/`: `ScrapeMarketHistory` also re-reads the last 450 days
-  (`ESI_MARKET_HISTORY_LOOKBACK`), and `import-market-history` needs the full history over HTTP.
-- `ccp/` is about 62 GiB, QENs included. The syncs wouldn't re-upload it: `SyncMer` only checks from two months before
-  its latest MER, `SyncStaticData` only the latest SDE.
+- `market-history/` and `killmails/` work as databases: past files are modified in place, which a torrent can't
+  follow.
+- `*-current.*` files (`wars/wars-current.json`) are rewritten in place, like the `*-latest.*` files `01-find`
+  always skips. The 2-year age used to keep it out without a rule of its own.
+- Daily history files, `<dataset>/history/<year>/`: most datasets' finished years are rolled up into one
+  `<dataset>/history/<dataset>-<year>.*` file next to them (docs `history-rollups.md`, `registerRollup` in
+  `ArchivePathFactories.java`), and the year folder is removed. Only the rollups are archived. Archiving the daily
+  files as well would put the same data in two torrents for good, since a torrent can never change.
+- Excluding every dataset's year folders by default, with exceptions in `TORRENT_INCLUDE`, fails safe. A new
+  dataset's daily files wait until someone decides they're never rolled up; the opposite mistake, archiving daily
+  files that later get rolled up, can't be undone. Datasets too new to be rolled up yet (military-campaigns,
+  skinr-*, universe-structures, warzone-leaderboard as of 2026-11) are excluded until they are; `01-find` lists them.
+- `TORRENT_INCLUDE`: market-orders, public-contracts, esi-scrape, reference-data and hoboleaks-sde are never rolled
+  up, so their daily files are archived. `01-find` flags an include whose history folder has rollups next to it.
+- `history/backfills/` folders aren't year folders, so they're archived.
+- `wars/history/` is excluded entirely for now, rollups included (todo).
+
+**`ccp/csm` and `ccp/mer` must never be deleted from the live site.** They're archived, but the syncs wouldn't
+re-upload them: `SyncMer` only checks from two months before its latest MER, and rescans everything from
+`MER_FIRST_MONTH` if there are none. The rest of `ccp/` (about 62 GiB, QENs included) is the same: `SyncStaticData`
+only checks the latest SDE.
 
 ### No path in two torrents
 
-Nothing relies on cutoffs being in order: `TORRENT_INCLUDE` can put older files in a later torrent. Telling a new
+Nothing relies on cutoffs being in order: a change to `TORRENT_EXCLUDE` or `TORRENT_INCLUDE` can put older files in a
+later torrent (as dropping the 2-year age and the `ccp/csm`/`ccp/mer` exclusions did after torrent 08). Telling a new
 version of a listed path apart would need its modification time in the `.txt`.
 
 Strict, not just exact: `01-find` also aborts on a selected path that's merely *close* to one already archived or
@@ -83,8 +103,8 @@ study of the best torrent size for long-term seeding turned up.
 - **Consequences at this size:** the `.torrent` is about 3 MB (v1 only, scaled from "Torrent size"'s 9.3 MB for
   the old `MAX_BYTES`, plus the extra pieces), well under `MAX_TORRENT_BYTES`, so the file-count limit no longer decides where a
   selection stops.
-  `SEED_DIR` needs 300 GiB free per run (00-preflight). Hashing is about 5 minutes at libtorrent's v1 speed. Only
-  data older than `MIN_AGE_YEARS` counts, so not all of the 5.7 TB is eligible yet.
+  `SEED_DIR` needs 300 GiB free per run (00-preflight). Hashing is about 5 minutes at libtorrent's v1 speed. At the
+  time only data older than 2 years counted, so not all of the 5.7 TB was eligible.
 
 ### Piece size
 
@@ -398,17 +418,20 @@ of every folder it selects a file from into a root file, `<ID>-index.tar.xz`, in
 
 ## Steps 12 onwards
 
-`12-check-before-delete`, `13-delete`, `14-check-delete` and `16-check-site` (and with them the manual steps 15 and 17)
-are **untested and probably broken**. They are disabled: each script calls `refuse_to_run` (lib/workflow.py) from its
-`__main__` block and exits with an error before doing anything. Remove that call to enable one.
+`12-check-before-delete`, `13-delete`, `14-check-delete` and `16-check-site` (and with them the manual step 15) are
+out of the workflow: the README no longer lists them, and each script calls `refuse_to_run` (lib/workflow.py) from its
+`__main__` block and exits with an error before doing anything. They were also untested and probably broken.
 
-Revisit them when files are actually about to be deleted from the data site. That is deliberately much later than
-building torrents: the data stays on the site until other people are seeding it, and `01-find` skips what earlier
-torrents already hold. When revisiting:
+Deletion is to be rewritten as a separate process. What's archived no longer decides what's deleted: torrents now
+take any data at least `MIN_AGE_DAYS` old, and these steps would delete everything a torrent holds, recent data
+included. When rewriting:
+- Deletion needs its own rules for what may go. `market-orders/` must keep at least the market history scraper's
+  30-day snapshot lookback (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`, read by `HistoricalOrdersRegionTypeSource`), and
+  `ccp/csm` and `ccp/mer` must never be deleted ("Never archived").
 - They must not rely on anything in `SCRATCH_DIR` (`manifest.json`, `find/`, completion files and so on): it will
   likely have been wiped by then. What survives is `SEED_DIR` (the merged tree, `.torrents/`, `<ID>.sha256`) and
   what's published on the data site (`deep-archive/<ID>.txt`, the `.torrent`, the feed).
-- The README's description of these steps assumes the old flow, where the scratch directory is still there.
+- The README's old description of these steps (in git history) assumed the scratch directory is still there.
 
 ## Deletion
 
@@ -416,7 +439,9 @@ On B2 a new upload always gets a new modification time, so size and time detect 
 anywhere, and SHA-256 covers integrity from load onwards.
 
 **Soft delete, treated as permanent.** The bucket's lifecycle rule purges hidden versions after about 2 days: too
-short to rely on, so rollback is a re-upload from `$SEED_DIR` (README Appendix D).
+short to rely on, so rollback is a re-upload from `$SEED_DIR` (or other seeders) with rclone, which keeps the
+modification times: `rclone copy "$SEED_DIR" <remote> --files-from-raw <ID>.txt` (the published `.txt`'s paths are
+already relative to `$SEED_DIR`), then a full `DataIndex`.
 
 ### Stale index files
 
@@ -436,7 +461,7 @@ deleted file can still be served from the cache for up to 30 days.
 |---|---|---|
 | `SyncFuzzworkOrdersets` | Syncs every orderset missing from the site, so would re-upload deleted ones. | ID cutoff ("Fuzzwork sync cutoff"). |
 | `DataCrawler` | Between the delete and the full `DataIndex`, parent indexes link removed folders; it fails on the missing index. | Accepted: crawling jobs (`sync-fuzzwork-ordersets`, market history scrape) fail and recover on their next run after `DataIndex`. |
-| `SyncMer` | Rescans from `MER_FIRST_MONTH` if no MER files exist. | `ccp/` excluded. Even archived, the latest MER is always too new, and it only checks from two months before it. |
+| `SyncMer` | Rescans from `MER_FIRST_MONTH` if no MER files exist. | `ccp/mer` is never deleted ("Never archived"). |
 | `ScrapeMarketHistory`, `import-market-history` | Read up to 450 days, or all, of `market-history/`. | Never archived. |
 | Users running `rclone sync` | Deletes their local copies of files deleted on the site. | The docs use `rclone copy`, and say why. |
 

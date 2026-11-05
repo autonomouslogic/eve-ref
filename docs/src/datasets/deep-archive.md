@@ -1,6 +1,6 @@
 # EVE Ref EVE Online Deep Archive
-The [Deep Archive](https://data.everef.net/deep-archive/) moves old EVE Online data off
-[data.everef.net](https://data.everef.net/) and into torrent archives.
+The [Deep Archive](https://data.everef.net/deep-archive/) archives EVE Online data from
+[data.everef.net](https://data.everef.net/) into torrents.
 
 ## Published Torrents
 Below is a list of published torrents.
@@ -88,20 +88,27 @@ Once the torrent has downloaded, the SHA-256 checksum file `everef-eve-online-de
 See the readme at `everef-eve-online-deep-archive-NN-README.md` for instructions.
 
 ## What gets archived
-Files dated at least 2 years ago, oldest first.
-A file is dated by the earliest of its upload time and any date or year in its name.
-Once a torrent is published, those files are removed from `data.everef.net`.
-The torrent and its seeders become the only remaining source.
+Every file not yet archived, oldest first, once it's at least 2 days old.
+Once a torrent is published, those files will eventually be removed from `data.everef.net`.
+Once deleted, the torrent and its seeders become the only remaining source.
+Each file is only ever in one torrent.
+
+For datasets with [History Rollups](history-rollups.md), the yearly rollup archives are what gets archived,
+not the daily files they replace.
+The daily files of [`market-orders/`](market-orders.md), [`public-contracts/`](public-contracts.md),
+[`esi-scrape/`](https://data.everef.net/esi-scrape/), [`reference-data/`](https://data.everef.net/reference-data/)
+and [`hoboleaks-sde/`](https://data.everef.net/hoboleaks-sde/) are never rolled up, so they are archived as they are.
 
 Archiving is done on an ad-hoc basis without a set schedule.
 Whenever a new archive has been prepared, it will be added to [everef-eve-online-deep-archive.xml](https://data.everef.net/deep-archive/everef-eve-online-deep-archive.xml).
 
 
-### What doesn't gets archived
+### What doesn't get archived
 * [`market-history/`](market-history.md) and [`killmails/`](killmails.md), since these effectively function as databases where old files are updated in-place.
-* Some [`ccp/`](https://data.everef.net/ccp/) data, CCP's own data, `csm` and `mer` for now.
+* Daily `history/<year>/` files of datasets that are rolled up, see [History Rollups](history-rollups.md).
+  Datasets that haven't been rolled up yet are only archived once they are.
 * [`wars/history/`](https://data.everef.net/wars/history/) for now.
-* Any `*-latest*` files
+* Any `*-latest*` or `*-current*` files, which are updated in-place.
 
 ## Tools
 * [qBittorrent](https://www.qbittorrent.org/) - free bittorrent client

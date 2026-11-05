@@ -16,7 +16,8 @@ How the cutoff is chosen:
 2. Drop what is never archived (see Skipped below), and files an earlier torrent already holds (see Earlier
    torrents below). Set index.json files aside: they're never selected (see index.json below), but every folder's is
    recorded for the index snapshot (NOTES.md "Index snapshot").
-3. Drop files dated after the newest allowed date (MIN_AGE_YEARS before today). The rest are candidates.
+3. Drop files dated after the newest allowed date (MIN_AGE_DAYS before today, only a safety margin against files
+   still being uploaded). The rest are candidates.
 4. Group the candidates by date and add them oldest first (lib/workflow.py has the limits):
    - MAX_TORRENT_BYTES is hard: the first date that takes the .torrent estimate (lib/torrent_size.py) over it is
      left out, and the cutoff is the day before.
@@ -46,9 +47,9 @@ selected file is written to find/indexes.jsonl, for 03-load to snapshot into the
 file (NOTES.md "Index snapshot"). Only the folder's own index.json; parent folders' aren't added.
 
 Earlier torrents: a path listed in a published deep-archive/<ID>.txt, or in a <ID>.torrent in SEED_DIR/.torrents/
-(made here, maybe not published yet), is never a candidate again -- it's already archived. Data stays on the site
-until much later, when others are seeding it, so such paths being still on the site is normal: they're skipped, and
-the first few are printed.
+(made here, maybe not published yet), is never a candidate again -- it's already archived. Archiving doesn't remove
+anything from the site (deletion is a separate process, NOTES.md "Steps 12 onwards"), so such paths being still on
+the site is normal: they're skipped, and the first few are printed.
 
 Torrent ID: sequential (everef-eve-online-deep-archive-NN, two digits), chosen by 00-preflight (the
 completion file find needs) rather than from the cutoff date. The torrent holds everything not yet archived that
@@ -71,8 +72,9 @@ already exist under SEED_DIR. find doesn't create the staging folder; load does.
 
 Skipped:
 - index.json and index.html files (index.json is snapshotted with its folder, see above);
-- folders in TORRENT_EXCLUDE (lib/workflow.py), *-latest.* files, hidden files, files at the root of the site;
-- with TORRENT_INCLUDE set (lib/workflow.py), files outside its folders;
+- paths matching a TORRENT_EXCLUDE pattern and no TORRENT_INCLUDE pattern (lib/workflow.py torrent_excluded), e.g.
+  the daily files of rolled-up datasets (<dataset>/history/<year>/);
+- *-latest.* files, hidden files, files at the root of the site;
 - files an earlier torrent already holds (see Earlier torrents above).
 
 Environment (or torrents.env, see lib/workflow.py):
@@ -102,9 +104,10 @@ from workflow import (  # noqa: E402
     DEEP_ARCHIVE_DIR,
     MAX_BYTES,
     MAX_TORRENT_BYTES,
-    MIN_AGE_YEARS,
+    MIN_AGE_DAYS,
     MIN_BYTES,
     PIECE_SIZE,
+    YEAR_DIR_RE,
     TORRENT_EXCLUDE,
     TORRENT_ID_PREFIX,
     TORRENT_ID_RE,
@@ -120,7 +123,6 @@ from workflow import (  # noqa: E402
     fmt_count,
     fmt_duration,
     fmt_size,
-    in_folders,
     iso,
     join,
     lsjson,
@@ -128,6 +130,7 @@ from workflow import (  # noqa: E402
     ok,
     rclone,
     section,
+    torrent_excluded,
 )
 
 STEP = "find"
@@ -204,13 +207,13 @@ def main():
     includes = TORRENT_INCLUDE
     remote = data_remote()
     today = datetime.datetime.now(datetime.timezone.utc).date()
-    newest_allowed = years_before(today, MIN_AGE_YEARS)
+    newest_allowed = today - datetime.timedelta(days=MIN_AGE_DAYS)
 
     section("Settings")
     print(f"Source: {remote}")
     print(f"Seed dir: {workflow.seed_dir}")
-    print(f"Excluded folders: {', '.join(excludes) or '(none)'}")
-    print(f"Included folders: {', '.join(includes) if includes is not None else '(all)'}")
+    print(f"Excluded: {', '.join(excludes) or '(none)'}")
+    print(f"Except:   {', '.join(includes) or '(none)'}")
     print(
         f"Limits: .torrent {fmt_size(MAX_TORRENT_BYTES)}, data {fmt_bytes(MIN_BYTES)} to {fmt_bytes(MAX_BYTES)}, "
         f"nothing dated after {newest_allowed}"
@@ -233,7 +236,7 @@ def main():
     if scan.already_archived:
         print(
             f"Skipped {fmt_count(len(scan.already_archived))} paths an earlier torrent already holds, still on the "
-            "site (data is deleted much later), e.g."
+            "site (archiving doesn't delete), e.g."
         )
         for path in scan.already_archived[:LOG_SAMPLE]:
             print(f"  {path}")
@@ -335,13 +338,6 @@ def parse_args():
         "--progress-seconds", type=float, default=10, help="log listing progress this often (0 to turn it off)"
     )
     return parser.parse_args()
-
-
-def years_before(date, years):
-    try:
-        return date.replace(year=date.year - years)
-    except ValueError:  # 29 February
-        return date.replace(year=date.year - years, day=28)
 
 
 def list_remote(data_remote, progress_seconds):
@@ -452,16 +448,17 @@ class Scan:
         self.ignored = defaultdict(lambda: [0, 0])  # reason -> [files, bytes]
         self.root_files = []
         self.empty = []
+        self.history = None  # HistoryFolders
 
 
-def classify_all(listing, excludes, taken, includes=None):
+def classify_all(listing, excludes, taken, includes):
     scan = Scan()
     for o in listing:
         reason = skip_reason(o.path, excludes, includes)
         if reason is not None:
             kind, label = reason
-            if kind in ("excluded", "not_included"):
-                pass  # outside TORRENT_EXCLUDE / TORRENT_INCLUDE: not reported
+            if kind == "excluded":
+                pass  # TORRENT_EXCLUDE: not reported
             elif kind == "root":
                 scan.root_files.append(o.path)
             else:
@@ -480,8 +477,48 @@ def classify_all(listing, excludes, taken, includes=None):
             scan.empty.append(o.path)
         scan.candidates.append(o)
     scan.candidates.sort(key=lambda o: (o.date, o.mtime, o.path))
+    scan.history = history_folders(listing, excludes, includes)
     print(f"{fmt_count(len(scan.candidates))} candidates, {fmt_count(len(scan.indexes))} index.json files")
     return scan
+
+
+class HistoryFolders:
+    def __init__(self):
+        # "<dataset>/history" folders whose year folders are archived, but with yearly rollups next to them: probably
+        # rolled up after all, and shouldn't be in TORRENT_INCLUDE. Flagged.
+        self.included_with_rollups = []
+        # "<dataset>/history" folders whose year folders are excluded, with no rollups yet: expected for a dataset too
+        # new to be rolled up, but nothing of it is archived until it is. Reported, not flagged.
+        self.excluded_without_rollups = []
+
+
+def history_folders(listing, excludes, includes):
+    """
+    Checks the exclude rules against what's actually in each <dataset>/history folder (NOTES.md "Never archived"):
+    its year folders (<dataset>/history/<YYYY>/) are either archived as daily files or excluded in favour of the
+    yearly rollups, the files directly in the history folder.
+    """
+    rollups = defaultdict(int)  # history folder -> rollup files
+    year_files = {}  # history folder -> whether any of its year folders' files is archived
+    for o in listing:
+        parts = o.path.split("/")
+        if len(parts) < 3 or parts[1] != "history":
+            continue
+        folder = "/".join(parts[:2])
+        name = parts[-1]
+        if len(parts) == 3:
+            if name != INDEX_JSON and name not in IGNORED_NAMES and not name.startswith("."):
+                rollups[folder] += 1
+        elif YEAR_DIR_RE.match(parts[2]):
+            archived = torrent_excluded(o.path, excludes, includes) is None
+            year_files[folder] = year_files.get(folder, False) or archived
+    history = HistoryFolders()
+    for folder, archived in sorted(year_files.items()):
+        if archived and rollups[folder]:
+            history.included_with_rollups.append(folder)
+        elif not archived and not rollups[folder]:
+            history.excluded_without_rollups.append(folder)
+    return history
 
 
 def is_torrent_id(name):
@@ -502,8 +539,11 @@ def folder_indexes(files, indexes):
     return [indexes[f] for f in sorted(folders) if f in indexes]
 
 
-def skip_reason(path, excludes, includes=None):
-    """(kind, label) if the path is never archived, or not in includes (when not None), else None."""
+def skip_reason(path, excludes, includes):
+    """
+    (kind, label) if the path is never archived, else None. ("excluded", pattern) for a path an excludes pattern
+    matches and no includes pattern does (torrent_excluded).
+    """
     parts = path.split("/")
     name = parts[-1]
     if name in IGNORED_NAMES:
@@ -512,14 +552,12 @@ def skip_reason(path, excludes, includes=None):
         return ("ignored", "latest files")
     if any(p.startswith(".") for p in parts):
         return ("ignored", "hidden files")
-    for exclude in excludes:
-        if in_folders(path, [exclude]):
-            return ("excluded", exclude)
+    exclude = torrent_excluded(path, excludes, includes)
+    if exclude is not None:
+        return ("excluded", exclude)
     if len(parts) == 1:
         # Root-level files are site files, not datasets.
         return ("root", None)
-    if includes is not None and not in_folders(path, includes):
-        return ("not_included", parts[0])
     return None
 
 
@@ -659,6 +697,11 @@ def build_summary(
         )
     if scan.empty:
         flags.append(f"empty files: {len(scan.empty)}")
+    if scan.history.included_with_rollups:
+        flags.append(
+            "history folders with their daily files archived, but yearly rollups next to them (in TORRENT_INCLUDE "
+            f"by mistake?): {', '.join(scan.history.included_with_rollups)}"
+        )
     if missing_index:
         flags.append(f"folders with selected files but no index.json: {len(missing_index)} (see find.log)")
     for limit_name, unit, limit in LIMITS:
@@ -679,7 +722,7 @@ def build_summary(
             "min_bytes": MIN_BYTES,
             "max_torrent_bytes": MAX_TORRENT_BYTES,
             "piece_size": PIECE_SIZE,
-            "min_age_years": MIN_AGE_YEARS,
+            "min_age_days": MIN_AGE_DAYS,
             "newest_allowed": newest_allowed.isoformat(),
         },
         "source": data_remote,
@@ -705,6 +748,10 @@ def build_summary(
         "path_years": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(years.items())},
         "date_months": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(months.items())},
         "flags": flags,
+        "history": {
+            "included_with_rollups": scan.history.included_with_rollups,
+            "excluded_without_rollups": scan.history.excluded_without_rollups,
+        },
         "skipped": {
             "root_files": len(scan.root_files),
             "ignored": {k: {"files": v[0], "bytes": v[1]} for k, v in sorted(scan.ignored.items())},
@@ -759,8 +806,7 @@ def render_report(summary):
     lines.append(f"Torrent ID: {summary['torrent_id']}")
     lines.append(f"Source:     {summary['source']}")
     lines.append(f"Exclude:    {', '.join(summary['exclude']) or '(none)'}")
-    if summary["include"] is not None:
-        lines.append(f"Include:    {', '.join(summary['include']) or '(none)'}")
+    lines.append(f"Except:     {', '.join(summary['include']) or '(none)'}")
     lines.append(
         f"Limits:     .torrent {fmt_size(limits['max_torrent_bytes'])}, data {fmt_bytes(limits['max_bytes'])}, "
         f"dated on or before {limits['newest_allowed']}"
@@ -803,6 +849,13 @@ def render_report(summary):
     lines.append("")
     if summary["flags"]:
         lines.extend(f"FLAG: {flag}" for flag in summary["flags"])
+        lines.append("")
+    not_rolled_up = summary["history"]["excluded_without_rollups"]
+    if not_rolled_up:
+        lines.append(
+            "History folders with their daily files excluded and no rollups yet (nothing archived until rolled up):"
+        )
+        lines.extend(f"  {folder}" for folder in not_rolled_up)
         lines.append("")
 
     skipped = summary["skipped"]

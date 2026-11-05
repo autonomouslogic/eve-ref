@@ -63,8 +63,6 @@ from trackers import GOOD_TRACKERS  # noqa: E402
 from workflow import (  # noqa: E402
     MAX_TORRENT_BYTES,
     PIECE_SIZE,
-    TORRENT_EXCLUDE,
-    TORRENT_INCLUDE,
     Workflow,
     error,
     fail,
@@ -72,7 +70,6 @@ from workflow import (  # noqa: E402
     fmt_bytes,
     fmt_count,
     fmt_duration,
-    in_folders,
     iso,
     ok,
     parse_iso,
@@ -80,6 +77,7 @@ from workflow import (  # noqa: E402
     root_file_names,
     sample_sha256sums,
     section,
+    torrent_excluded,
     torrent_sequence,
     verify_signature,
 )
@@ -394,13 +392,9 @@ def check_torrent(
     listed = set(text.splitlines())
     if listed != set(files):
         problems.append(f"{txt_path} doesn't match the manifest's paths")
-    excluded = sorted(p for p in listed if in_folders(p, TORRENT_EXCLUDE))
+    excluded = sorted(p for p in listed if torrent_excluded(p) is not None)
     if excluded:
         problems.append(f"{txt_path} has excluded paths: {excluded[:LOG_SAMPLE]}")
-    if TORRENT_INCLUDE is not None:
-        not_included = sorted(p for p in listed if not in_folders(p, TORRENT_INCLUDE))
-        if not_included:
-            problems.append(f"{txt_path} has paths outside TORRENT_INCLUDE: {not_included[:LOG_SAMPLE]}")
     print(f"{txt_path}: {fmt_count(len(listed))} lines")
 
     if problems:
