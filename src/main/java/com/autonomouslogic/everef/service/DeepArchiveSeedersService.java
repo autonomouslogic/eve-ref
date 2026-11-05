@@ -9,10 +9,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -23,9 +27,13 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Scrapes the tracker for seeder counts of every torrent listed in the Deep Archive RSS feed.
- * Nothing is fetched until a request needs it. Results are then cached in memory, so the feed and tracker are hit at
+ * Scrapes the trackers for seeder counts of every torrent listed in the Deep Archive RSS feed.
+ * Nothing is fetched until a request needs it. Results are then cached in memory, so the feed and trackers are hit at
  * most once per {@link Configs#DEEP_ARCHIVE_SEEDERS_CACHE_DURATION}.
+ * <p>
+ * Every configured tracker is scraped. A tracker that fails, or returns a failure reason, is skipped. For each torrent
+ * the lowest count reported by a responding tracker is used. A tracker that doesn't list a torrent doesn't count as
+ * zero for it. Torrents no responding tracker lists get zero.
  */
 @Singleton
 @Log4j2
@@ -40,7 +48,7 @@ public class DeepArchiveSeedersService {
 	protected OkHttpWrapper okHttpWrapper;
 
 	private final String feedUrl;
-	private final String scrapeUrl;
+	private final List<String> scrapeUrls;
 
 	private final Duration cacheDuration;
 
@@ -52,7 +60,11 @@ public class DeepArchiveSeedersService {
 	@Inject
 	protected DeepArchiveSeedersService() {
 		feedUrl = Configs.DATA_BASE_URL.getRequired().toString().replaceAll("/+$", "") + FEED_PATH;
-		scrapeUrl = Configs.DEEP_ARCHIVE_TRACKER_SCRAPE_URL.getRequired().toString();
+		scrapeUrls = Arrays.stream(
+						Configs.DEEP_ARCHIVE_TRACKER_SCRAPE_URLS.getRequired().split(","))
+				.map(String::trim)
+				.filter(url -> !url.isEmpty())
+				.toList();
 		cacheDuration = Configs.DEEP_ARCHIVE_SEEDERS_CACHE_DURATION.getRequired();
 		retryDuration = Configs.DEEP_ARCHIVE_SEEDERS_RETRY_DURATION.getRequired();
 	}
@@ -113,7 +125,6 @@ public class DeepArchiveSeedersService {
 	}
 
 	@SneakyThrows
-	@SuppressWarnings("unchecked")
 	private DeepArchiveSeeders scrape(List<String> hashes) {
 		var seeders = new LinkedHashMap<String, Integer>();
 		var scrapedAt = Instant.now();
@@ -123,6 +134,37 @@ public class DeepArchiveSeedersService {
 					.scrapedAt(scrapedAt)
 					.build();
 		}
+		var lowest = new HashMap<String, Integer>();
+		int responded = 0;
+		Exception lastError = null;
+		for (var scrapeUrl : scrapeUrls) {
+			try {
+				var counts = scrapeTracker(scrapeUrl, hashes);
+				responded++;
+				counts.forEach((hash, count) -> lowest.merge(hash, count, Math::min));
+			} catch (Exception e) {
+				log.warn("Failed to scrape Deep Archive tracker {}", scrapeUrl, e);
+				lastError = e;
+			}
+		}
+		if (responded == 0) {
+			throw new RuntimeException("No Deep Archive trackers responded", lastError);
+		}
+		for (var hash : hashes) {
+			seeders.put(hash, lowest.getOrDefault(hash, 0));
+		}
+		return DeepArchiveSeeders.builder()
+				.seeders(seeders)
+				.scrapedAt(scrapedAt)
+				.build();
+	}
+
+	/**
+	 * Scrapes a single tracker. Returns counts only for the requested hashes that the tracker lists.
+	 */
+	@SneakyThrows
+	@SuppressWarnings("unchecked")
+	private Map<String, Integer> scrapeTracker(String scrapeUrl, List<String> hashes) {
 		var url = new StringBuilder(scrapeUrl);
 		var separator = scrapeUrl.contains("?") ? '&' : '?';
 		for (var hash : hashes) {
@@ -144,18 +186,16 @@ public class DeepArchiveSeedersService {
 			throw new RuntimeException("Tracker scrape failed: " + new String(reason, StandardCharsets.UTF_8));
 		}
 		var files = (Map<String, Object>) decoded.getOrDefault("files", Map.of());
-		var counts = new LinkedHashMap<String, Integer>();
+		Set<String> requested = new HashSet<>(hashes);
+		var counts = new HashMap<String, Integer>();
 		for (var entry : files.entrySet()) {
 			var hash = HEX.formatHex(entry.getKey().getBytes(StandardCharsets.ISO_8859_1));
+			if (!requested.contains(hash)) {
+				continue;
+			}
 			var stats = (Map<String, Object>) entry.getValue();
 			counts.put(hash, ((Long) stats.getOrDefault("complete", 0L)).intValue());
 		}
-		for (var hash : hashes) {
-			seeders.put(hash, counts.getOrDefault(hash, 0));
-		}
-		return DeepArchiveSeeders.builder()
-				.seeders(seeders)
-				.scrapedAt(scrapedAt)
-				.build();
+		return counts;
 	}
 }

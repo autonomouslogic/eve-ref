@@ -199,12 +199,15 @@ public class Configs {
 			.build();
 
 	/**
-	 * The tracker scrape URL used for fetching seeder counts for the Deep Archive torrents.
+	 * Comma-separated tracker scrape URLs used for fetching seeder counts for the Deep Archive torrents.
+	 * Every tracker is scraped. Per torrent, the lowest count from the trackers that respond is used.
 	 */
-	public static final Config<URI> DEEP_ARCHIVE_TRACKER_SCRAPE_URL = Config.<URI>builder()
-			.name("DEEP_ARCHIVE_TRACKER_SCRAPE_URL")
-			.type(URI.class)
-			.defaultValue(URI.create("http://tracker.opentrackr.org:1337/scrape"))
+	public static final Config<String> DEEP_ARCHIVE_TRACKER_SCRAPE_URLS = Config.<String>builder()
+			.name("DEEP_ARCHIVE_TRACKER_SCRAPE_URLS")
+			.type(String.class)
+			.defaultValue("http://tracker.opentrackr.org:1337/scrape,"
+					+ "http://open.tracker.cl:1337/scrape,"
+					+ "http://tracker.dler.org:6969/scrape")
 			.build();
 
 	/**
