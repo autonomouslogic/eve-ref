@@ -1,5 +1,25 @@
 EVE Ref Changelog
 
+## [2.83.9](https://github.com/autonomouslogic/eve-ref/compare/2.83.8...2.83.9) (2026-11-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1126](https://github.com/autonomouslogic/eve-ref/issues/1126)) ([6bfeff3](https://github.com/autonomouslogic/eve-ref/commit/6bfeff35c8d056f4449ad78e8538baaffaf2c915))
+* Multiple trackers for deep archive seeds ([#1161](https://github.com/autonomouslogic/eve-ref/issues/1161)) ([e638012](https://github.com/autonomouslogic/eve-ref/commit/e638012435c227056f0a9c378f783892f88bff90))
+
+
+### Documentation
+
+* Deep Archive ([d824d8c](https://github.com/autonomouslogic/eve-ref/commit/d824d8c4bc3a696452c98264662820a9b0550a19))
+* Deep Archive ([ae0dd40](https://github.com/autonomouslogic/eve-ref/commit/ae0dd4051b5f115ecf46331020a5d7ba5fd2cb16))
+
+
+### Miscellaneous Chores
+
+* 2 threads for deep archive hashing ([3beaf4f](https://github.com/autonomouslogic/eve-ref/commit/3beaf4fae13bd903038081768c4f07b64150fa11))
+* Decouple Deep Archive selection from deletion, with glob TORRENT_EXCLUDE/TORRENT_INCLUDE and a 2-day minimum age ([#1159](https://github.com/autonomouslogic/eve-ref/issues/1159)) ([fddf24e](https://github.com/autonomouslogic/eve-ref/commit/fddf24e7b7cad5b3b53f5a70c209f4766d2c535f))
+
 ## [2.83.8](https://github.com/autonomouslogic/eve-ref/compare/2.83.7...2.83.8) (2026-11-04)
 
 
