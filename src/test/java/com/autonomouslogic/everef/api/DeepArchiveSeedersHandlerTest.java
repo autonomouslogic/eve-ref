@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.api;
 
 import static com.autonomouslogic.everef.api.DeepArchiveSeedersHandlerTest.API_TEST_PORT;
 import static com.autonomouslogic.everef.api.DeepArchiveSeedersHandlerTest.TRACKER_TEST_PORT;
+import static com.autonomouslogic.everef.api.DeepArchiveSeedersHandlerTest.TRACKER_TEST_PORT_2;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,14 +46,15 @@ import tools.jackson.databind.json.JsonMapper;
 
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 @SetEnvironmentVariable(
-		key = "DEEP_ARCHIVE_TRACKER_SCRAPE_URL",
-		value = "http://localhost:" + TRACKER_TEST_PORT + "/scrape")
+		key = "DEEP_ARCHIVE_TRACKER_SCRAPE_URLS",
+		value = "http://localhost:" + TRACKER_TEST_PORT + "/scrape,http://localhost:" + TRACKER_TEST_PORT_2 + "/scrape")
 @SetEnvironmentVariable(key = "HTTP_PORT", value = "" + API_TEST_PORT)
 @Log4j2
 @Timeout(60)
 public class DeepArchiveSeedersHandlerTest {
 	public static final int API_TEST_PORT = 29218;
 	public static final int TRACKER_TEST_PORT = 30160;
+	public static final int TRACKER_TEST_PORT_2 = 30161;
 
 	static final String FEED_PATH = "/deep-archive/everef-eve-online-deep-archive.xml";
 	static final String HASH_00 = "60a2240f3d29b71e679d9f1bc55cd474f567b346";
@@ -67,10 +69,12 @@ public class DeepArchiveSeedersHandlerTest {
 
 	MockWebServer dataServer;
 	MockWebServer trackerServer;
+	MockWebServer trackerServer2;
 	HttpClient httpClient;
 
 	volatile Supplier<MockResponse> feedResponse;
 	volatile Supplier<MockResponse> trackerResponse;
+	volatile Supplier<MockResponse> trackerResponse2;
 
 	@BeforeEach
 	@SneakyThrows
@@ -79,6 +83,8 @@ public class DeepArchiveSeedersHandlerTest {
 
 		feedResponse = () -> feed(HASH_02, HASH_01, HASH_00);
 		trackerResponse = () -> scrape(Map.of(HASH_00, 11, HASH_01, 1, HASH_02, 3));
+		// Second tracker is unreachable by default, so it doesn't affect single-tracker tests.
+		trackerResponse2 = () -> new MockResponse().setResponseCode(404);
 
 		dataServer = new MockWebServer();
 		dataServer.setDispatcher(new DataDispatcher());
@@ -87,6 +93,10 @@ public class DeepArchiveSeedersHandlerTest {
 		trackerServer = new MockWebServer();
 		trackerServer.setDispatcher(new TrackerDispatcher());
 		trackerServer.start(TRACKER_TEST_PORT);
+
+		trackerServer2 = new MockWebServer();
+		trackerServer2.setDispatcher(new Tracker2Dispatcher());
+		trackerServer2.start(TRACKER_TEST_PORT_2);
 
 		apiRunner.startServer();
 		httpClient = HttpClient.newHttpClient();
@@ -98,6 +108,7 @@ public class DeepArchiveSeedersHandlerTest {
 		apiRunner.stop();
 		dataServer.shutdown();
 		trackerServer.shutdown();
+		trackerServer2.shutdown();
 	}
 
 	@Test
@@ -154,6 +165,59 @@ public class DeepArchiveSeedersHandlerTest {
 		assertEquals("GET", request.getMethod());
 		assertEquals("/scrape", request.getRequestUrl().encodedPath());
 		assertEquals(List.of(HASH_02, HASH_01, HASH_00), infoHashes(request));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldUseLowestSeedersAcrossRespondingTrackers() {
+		trackerResponse2 = () -> scrape(Map.of(HASH_00, 5, HASH_01, 4, HASH_02, 9));
+		var json = jsonMapper.readTree(get().body());
+		assertEquals(Map.of(HASH_02, 3, HASH_01, 1, HASH_00, 5), seeders(json));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldContactEveryConfiguredTracker() {
+		trackerResponse2 = () -> scrape(Map.of(HASH_00, 5, HASH_01, 4, HASH_02, 9));
+		get();
+		assertEquals(1, trackerServer.getRequestCount());
+		assertEquals(1, trackerServer2.getRequestCount());
+		assertEquals(List.of(HASH_02, HASH_01, HASH_00), infoHashes(trackerServer2.takeRequest()));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldUseRespondingTrackerWhenOthersFail() {
+		trackerResponse = () -> new MockResponse().setResponseCode(500);
+		trackerResponse2 = () -> scrape(Map.of(HASH_00, 5, HASH_01, 4, HASH_02, 9));
+		var json = jsonMapper.readTree(get().body());
+		assertEquals(Map.of(HASH_02, 9, HASH_01, 4, HASH_00, 5), seeders(json));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldIgnoreTrackerFailureReasonWhenOtherTrackerResponds() {
+		trackerResponse2 = () -> new MockResponse()
+				.setResponseCode(200)
+				.setBody(new Buffer().write(bytes("d14:failure reason11:not allowede")));
+		var json = jsonMapper.readTree(get().body());
+		assertEquals(Map.of(HASH_02, 3, HASH_01, 1, HASH_00, 11), seeders(json));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotCountTrackerMissingHashAsZero() {
+		trackerResponse2 = () -> scrape(Map.of(HASH_00, 5));
+		var json = jsonMapper.readTree(get().body());
+		assertEquals(Map.of(HASH_02, 3, HASH_01, 1, HASH_00, 5), seeders(json));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldReturnErrorWhenAllTrackersFail() {
+		trackerResponse = () -> new MockResponse().setResponseCode(500);
+		trackerResponse2 = () -> new MockResponse().setResponseCode(500);
+		assertEquals(500, get().statusCode());
 	}
 
 	@Test
@@ -476,6 +540,17 @@ public class DeepArchiveSeedersHandlerTest {
 		public MockResponse dispatch(@NotNull RecordedRequest request) {
 			if (FEED_PATH.equals(request.getPath())) {
 				return feedResponse.get();
+			}
+			return new MockResponse().setResponseCode(404);
+		}
+	}
+
+	class Tracker2Dispatcher extends Dispatcher {
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest request) {
+			if ("/scrape".equals(request.getRequestUrl().encodedPath())) {
+				return trackerResponse2.get();
 			}
 			return new MockResponse().setResponseCode(404);
 		}
