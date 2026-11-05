@@ -75,8 +75,9 @@ public class ImportMarketHistory implements Command {
 				.sequential()
 				.parallel(insertConcurrency)
 				.runOn(Rx.VIRTUAL, 1)
-				.flatMap(file -> parseFile(file).flatMap(pair -> Completable.fromAction(() -> insertDayEntries(pair))
-						.toFlowable()))
+				.flatMap(file -> parseFile(file)
+						.flatMap(pair -> Completable.fromAction(() -> insertDayEntries(pair))
+								.toFlowable()))
 				.sequential()
 				.ignoreElements()
 				.blockingAwait();

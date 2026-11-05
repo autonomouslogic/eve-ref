@@ -29,7 +29,7 @@ public class CopyingCost extends ActivityCost {
 	BigDecimal totalCostPerRun;
 
 	public CopyingCost multiply(double mul) {
-		return ((CopyingCost.Builder<?, ?>) super.multiply(this.toBuilder(), mul))
+		return ((CopyingCostBuilder<?, ?>) super.multiply(this.toBuilder(), mul))
 				.jobCostBase(MathUtil.round(jobCostBase.multiply(BigDecimal.valueOf(mul)), 2))
 				.totalCostPerRun(MathUtil.round(totalCostPerRun.multiply(BigDecimal.valueOf(mul)), 2))
 				.build();

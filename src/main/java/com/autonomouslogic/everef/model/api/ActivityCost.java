@@ -84,7 +84,7 @@ public class ActivityCost {
 	@JsonProperty
 	BigDecimal totalCost;
 
-	protected ActivityCost.Builder<?, ?> multiply(ActivityCost.Builder<?, ?> builder, double mul) {
+	protected ActivityCostBuilder<?, ?> multiply(ActivityCostBuilder<?, ?> builder, double mul) {
 		builder = builder.runs(runs * mul)
 				.time(MathUtil.multiply(time, mul))
 				.clearMaterials()

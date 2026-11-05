@@ -108,7 +108,7 @@ public class EsiUrl {
 		return sb.toString();
 	}
 
-	public static EsiUrl.Builder modern() {
+	public static EsiUrlBuilder modern() {
 		return EsiUrl.builder().datasource(null).language(null).basePath(null);
 	}
 }

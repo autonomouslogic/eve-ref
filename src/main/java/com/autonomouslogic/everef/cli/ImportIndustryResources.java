@@ -311,7 +311,7 @@ public class ImportIndustryResources implements Command {
 		return builder.build();
 	}
 
-	private void handleRigCategories(IndustryModifierActivities categoryIds, IndustryRig.Builder builder) {
+	private void handleRigCategories(IndustryModifierActivities categoryIds, IndustryRig.IndustryRigBuilder builder) {
 		if (categoryIds == null) {
 			return;
 		}
@@ -324,7 +324,7 @@ public class ImportIndustryResources implements Command {
 		}
 	}
 
-	private void handleRigGroups(IndustryModifierActivities groupIds, IndustryRig.Builder builder) {
+	private void handleRigGroups(IndustryModifierActivities groupIds, IndustryRig.IndustryRigBuilder builder) {
 		if (groupIds == null) {
 			return;
 		}
@@ -337,7 +337,7 @@ public class ImportIndustryResources implements Command {
 		}
 	}
 
-	private void handleRigGlobal(List<String> activities, IndustryRig.Builder builder) {
+	private void handleRigGlobal(List<String> activities, IndustryRig.IndustryRigBuilder builder) {
 		if (activities == null) {
 			return;
 		}

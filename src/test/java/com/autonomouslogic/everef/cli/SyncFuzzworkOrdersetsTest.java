@@ -249,9 +249,10 @@ public class SyncFuzzworkOrdersetsTest {
 			}
 		}
 		var html = new StringBuilder("<html><body><table>");
-		dirs.values().forEach(href -> html.append("<tr class=\"data-dir\"><td><a href=\"")
-				.append(href)
-				.append("\">dir</a></td></tr>"));
+		dirs.values()
+				.forEach(href -> html.append("<tr class=\"data-dir\"><td><a href=\"")
+						.append(href)
+						.append("\">dir</a></td></tr>"));
 		files.forEach(href -> html.append("<tr class=\"data-file\"><td><a href=\"")
 				.append(href)
 				.append("\">file</a></td></tr>"));

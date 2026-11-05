@@ -79,7 +79,7 @@ public class InventionCost extends ActivityCost {
 	BigDecimal avgCostPerUnit;
 
 	public InventionCost multiply(double mul) {
-		return ((Builder<?, ?>) super.multiply(this.toBuilder(), mul))
+		return ((InventionCostBuilder<?, ?>) super.multiply(this.toBuilder(), mul))
 				.expectedCopies(MathUtil.round(expectedCopies * mul, 8))
 				.expectedRuns(MathUtil.round(expectedRuns * mul, 8))
 				.expectedUnits(MathUtil.round(expectedUnits * mul, 8))

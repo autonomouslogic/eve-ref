@@ -39,11 +39,12 @@ class TopTradedRegionTypeSource implements RegionTypeSource {
 					var regions = getRegions();
 					var typesPerRegion = getDesiredTypesPerRegion(regions.size());
 					var typeCaps = getTypeCaps();
-					return Flowable.fromIterable(regions).flatMap(region -> Flowable.fromIterable(typeCaps)
-							.map(Pair::getLeft)
-							.map(typeId -> new RegionTypePair(region, typeId))
-							.filter(pair -> !currentPairs.contains(pair))
-							.take(typesPerRegion));
+					return Flowable.fromIterable(regions)
+							.flatMap(region -> Flowable.fromIterable(typeCaps)
+									.map(Pair::getLeft)
+									.map(typeId -> new RegionTypePair(region, typeId))
+									.filter(pair -> !currentPairs.contains(pair))
+									.take(typesPerRegion));
 				})
 				.onErrorResumeNext(e -> {
 					log.warn("Failed handling top traded items, ignoring", e);

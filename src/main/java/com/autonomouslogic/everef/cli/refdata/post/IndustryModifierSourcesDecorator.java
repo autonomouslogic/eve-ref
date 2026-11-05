@@ -41,7 +41,7 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 			groups = storeHandler.getRefStore("groups");
 			types = storeHandler.getRefStore("types");
 
-			var typeActivites = new HashMap<Long, IndustryModifierActivities.Builder>();
+			var typeActivites = new HashMap<Long, IndustryModifierActivities.IndustryModifierActivitiesBuilder>();
 			types.forEach((rigTypeId, rigTypeJson) -> {
 				var rig = jsonMapper.convertValue(rigTypeJson, InventoryType.class);
 				var affectedCategories = Optional.ofNullable(rig.getEngineeringRigAffectedCategoryIds());
@@ -51,37 +51,37 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 						affectedCategories.map(c -> c.getResearchMaterial()),
 						affectedgroups.map(c -> c.getResearchMaterial()),
 						typeActivites,
-						IndustryModifierActivities.Builder::researchMaterial);
+						IndustryModifierActivities.IndustryModifierActivitiesBuilder::researchMaterial);
 				setRigOnTypes(
 						rig,
 						affectedCategories.map(c -> c.getResearchTime()),
 						affectedgroups.map(c -> c.getResearchTime()),
 						typeActivites,
-						IndustryModifierActivities.Builder::researchTime);
+						IndustryModifierActivities.IndustryModifierActivitiesBuilder::researchTime);
 				setRigOnTypes(
 						rig,
 						affectedCategories.map(c -> c.getManufacturing()),
 						affectedgroups.map(c -> c.getManufacturing()),
 						typeActivites,
-						IndustryModifierActivities.Builder::manufacturing);
+						IndustryModifierActivities.IndustryModifierActivitiesBuilder::manufacturing);
 				setRigOnTypes(
 						rig,
 						affectedCategories.map(c -> c.getReaction()),
 						affectedgroups.map(c -> c.getReaction()),
 						typeActivites,
-						IndustryModifierActivities.Builder::reaction);
+						IndustryModifierActivities.IndustryModifierActivitiesBuilder::reaction);
 				setRigOnTypes(
 						rig,
 						affectedCategories.map(c -> c.getInvention()),
 						affectedgroups.map(c -> c.getInvention()),
 						typeActivites,
-						IndustryModifierActivities.Builder::invention);
+						IndustryModifierActivities.IndustryModifierActivitiesBuilder::invention);
 				setRigOnTypes(
 						rig,
 						affectedCategories.map(c -> c.getCopying()),
 						affectedgroups.map(c -> c.getCopying()),
 						typeActivites,
-						IndustryModifierActivities.Builder::copying);
+						IndustryModifierActivities.IndustryModifierActivitiesBuilder::copying);
 			});
 			typeActivites.forEach((typeId, builder) -> {
 				var typeJson = types.get(typeId);
@@ -114,8 +114,8 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 			InventoryType rig,
 			Optional<List<Long>> categories,
 			Optional<List<Long>> groups,
-			Map<Long, IndustryModifierActivities.Builder> typeActivites,
-			BiConsumer<IndustryModifierActivities.Builder, Long> activitiesSetter) {
+			Map<Long, IndustryModifierActivities.IndustryModifierActivitiesBuilder> typeActivites,
+			BiConsumer<IndustryModifierActivities.IndustryModifierActivitiesBuilder, Long> activitiesSetter) {
 		var rigTypeId = rig.getTypeId();
 		var rigCategories = categories.stream().flatMap(Collection::stream);
 		var rigGroups = groups.stream().flatMap(Collection::stream);
