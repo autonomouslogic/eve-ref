@@ -69,7 +69,7 @@ public class IndustryCalculator {
 	@Setter
 	private List<IndustryRig> rigs;
 
-	private IndustryCost.Builder cost;
+	private IndustryCost.IndustryCostBuilder cost;
 
 	@Inject
 	protected IndustryCalculator() {}
