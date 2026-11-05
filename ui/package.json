@@ -30,7 +30,7 @@
     "nuxt": "3.21.11",
     "typescript": "5.9.3",
     "vitest": "3.2.7",
-    "vue-tsc": "3.3.14",
+    "vue-tsc": "3.3.11",
     "@nuxtjs/google-adsense": "3.0.3"
   },
   "overrides": {
