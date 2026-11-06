@@ -3,10 +3,11 @@ import {formatMoney} from "~/lib/money";
 
 const props = defineProps<{
 	value: number
+	decimals?: number
 }>();
 
 const formatted = computed(() => {
-	return formatMoney(props.value);
+	return formatMoney(props.value, props.decimals ?? 2);
 });
 </script>
 

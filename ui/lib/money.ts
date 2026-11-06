@@ -1,9 +1,8 @@
-const format = new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-});
-
-export function formatMoney(val: number): string  {
+export function formatMoney(val: number, decimals: number = 2): string  {
+    const format = new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    });
     let v = val;
     let s = "";
     if (v >= 1e12) {
