@@ -56,6 +56,7 @@ public class FetchDonationsTest {
 	private static final int TEST_DONOR_CORPORATION_ID_1 = 2000000001;
 	private static final int TEST_DONOR_CORPORATION_ID_2 = 2000000002;
 	private static final int TEST_DONOR_CORPORATION_ID_3 = 2000000003;
+	private static final int TEST_UNKNOWN_ID = 1500000000;
 
 	@Inject
 	FetchDonations fetchDonations;
@@ -602,6 +603,53 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
+	void shouldResolveCorporationDonorFromCharacterJournal() {
+		// Mirrors production: a corporation withdrawal appears in the character's journal, so the corporation ID is
+		// looked up as a character first, which ESI rejects with 422, then resolved as a corporation.
+		addCharacterTransaction(
+				1,
+				TEST_DONOR_CORPORATION_ID_2,
+				1000,
+				donationTime,
+				GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
+		assertDonationsFile(List.of(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CORPORATION_ID_2)
+				.corporationId(TEST_DONOR_CORPORATION_ID_2)
+				.donorName("Donor Corporation 2")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(1000.0)
+				.build()));
+		assertNotNull(discordCall);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipDonorsNotFoundAsCharacterOrCorporation() {
+		// ESI returns 422 for both character and corporation lookups of unknown IDs
+		addCharacterTransaction(1, TEST_UNKNOWN_ID, 500, donationTime);
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 100, donationTime);
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
+		assertDonationsFile(List.of(DonationEntry.builder()
+				.id(2)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(100.0)
+				.build()));
+		assertDiscordUpdate("**Donor Character 1** donated 100.00 ISK :moneybag:");
+	}
+
+	@Test
 	@Disabled
 	void shouldNotNotifyDiscordOfDonationsBelowMinimum() {}
 
@@ -761,6 +809,11 @@ public class FetchDonationsTest {
 
 				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/wallets/1/journal/")) {
 					return new MockResponse().setBody(jsonMapper.writeValueAsString(corporationJournal));
+				}
+
+				// ESI returns 422 for unknown or wrong-type IDs, e.g. a corporation ID on the characters endpoint
+				if (path.startsWith("/characters/") || path.startsWith("/corporations/")) {
+					return new MockResponse().setResponseCode(422);
 				}
 
 				if (path.equals("/discord")) {

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.CompletionException;
 import java.util.regex.Pattern;
@@ -184,9 +185,8 @@ public class FetchDonations implements Command {
 						getCorporationDonations(corporationId, accessToken).stream())
 				.filter(d -> d.getSecondPartyId() == characterId || d.getSecondPartyId() == corporationId)
 				.filter(d -> d.getFirstPartyId() != characterId && d.getFirstPartyId() != corporationId)
-				.map(d -> {
-					return resolveDonorName(d);
-				})
+				.map(this::resolveDonorName)
+				.filter(Objects::nonNull)
 				.sorted(Ordering.natural().onResultOf(DonationEntry::getDate))
 				.toList();
 	}
@@ -346,24 +346,31 @@ public class FetchDonations implements Command {
 					.characterId(id)
 					.build();
 		} catch (Exception e) {
-			var apiException = ExceptionUtils.throwableOfType(e, ApiException.class);
-			if (apiException == null || apiException.getCode() != 404) {
+			if (!isNotFound(e)) {
 				throw e;
 			}
-			try {
-				var corporation = getCorporation(id);
-				return entry.toBuilder()
-						.donorName(corporation.getName())
-						.corporationId(id)
-						.build();
-			} catch (ApiException e2) {
-				var apiException2 = ExceptionUtils.throwableOfType(e, ApiException.class);
-				if (apiException2 == null || apiException2.getCode() != 404) {
-					throw e;
-				}
+		}
+		try {
+			var corporation = getCorporation(id);
+			return entry.toBuilder()
+					.donorName(corporation.getName())
+					.corporationId(id)
+					.build();
+		} catch (Exception e) {
+			if (!isNotFound(e)) {
+				throw e;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * ESI returns 404 for unknown IDs, but 422 ("validation failed") for IDs that are not valid as the requested type,
+	 * e.g. a corporation ID passed to the characters endpoint.
+	 */
+	private static boolean isNotFound(Exception e) {
+		var apiException = ExceptionUtils.throwableOfType(e, ApiException.class);
+		return apiException != null && (apiException.getCode() == 404 || apiException.getCode() == 422);
 	}
 
 	private String emoji(SummaryEntry entry) {
