@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.83.10](https://github.com/autonomouslogic/eve-ref/compare/2.83.9...2.83.10) (2026-11-08)
+
+
+### Bug Fixes
+
+* Fixed FetchDonations ([b0ec261](https://github.com/autonomouslogic/eve-ref/commit/b0ec261a16ab2ba67a42eabbb3bddd4525768a5a))
+
+
+### Documentation
+
+* Deep Archive ([0e6117b](https://github.com/autonomouslogic/eve-ref/commit/0e6117b9443fe407fa519b816ddf79d64dd214b5))
+* Deep Archive ([6667cb9](https://github.com/autonomouslogic/eve-ref/commit/6667cb91a2fb9abeef2e8b510fbef928c456cdf3))
+
 ## [2.83.9](https://github.com/autonomouslogic/eve-ref/compare/2.83.8...2.83.9) (2026-11-05)
 
 
