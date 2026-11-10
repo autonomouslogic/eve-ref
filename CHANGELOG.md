@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.83.11](https://github.com/autonomouslogic/eve-ref/compare/2.83.10...2.83.11) (2026-11-10)
+
+
+### Bug Fixes
+
+* Imported industry resources ([ca72c00](https://github.com/autonomouslogic/eve-ref/commit/ca72c001b154379780c0400f136167c5a631f34f))
+
 ## [2.83.10](https://github.com/autonomouslogic/eve-ref/compare/2.83.9...2.83.10) (2026-11-08)
 
 
