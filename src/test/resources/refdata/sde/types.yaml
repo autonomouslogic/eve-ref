@@ -4547,7 +4547,7 @@
     ja: "メソン・エキゾチック・プラズマL設計図"
     ko: "메손 엑조틱 플라즈마 L 블루프린트"
     ru: "Meson Exotic Plasma L Blueprint"
-    zh: "介子异种等离子弹蓝图 L"
+    zh: "介子异种等离子弹 L 蓝图"
   packagedVolume: 0.01
   portionSize: 1
   published: true
@@ -4566,7 +4566,7 @@
     ja: "ミスティックL設計図"
     ko: "미스틱 L 블루프린트"
     ru: "Mystic L Blueprint"
-    zh: "奥秘蓝图 L"
+    zh: "奥秘 L 蓝图"
   packagedVolume: 0.01
   portionSize: 1
   published: true
@@ -5473,7 +5473,7 @@
     ja: "中型消耗品製造2のブループリント"
     ko: "중형 소모품 생산 II 블루프린트"
     ru: "Medium Consumable Manufacturing II Blueprint"
-    zh: "中型消费品制造蓝图 II"
+    zh: "屹立中型设备制造时间效率 II 蓝图"
   packagedVolume: 0.01
   portionSize: 1
   published: false
