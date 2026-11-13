@@ -27,6 +27,6 @@
       }
     }
   },
-  "blueprint_type_id" : 57490,
-  "max_production_limit" : 1000
+  "max_production_limit" : 1000,
+  "blueprint_type_id" : 57490
 }

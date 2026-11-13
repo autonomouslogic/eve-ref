@@ -99,6 +99,6 @@
       }
     }
   },
-  "blueprint_type_id" : 24536,
-  "max_production_limit" : 10
+  "max_production_limit" : 10,
+  "blueprint_type_id" : 24536
 }

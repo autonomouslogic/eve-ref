@@ -54,7 +54,6 @@
       time: 6300
     research_time:
       time: 6300
-  blueprintTypeID: 999
   maxProductionLimit: 10
 "22431":
   activities:
@@ -141,7 +140,6 @@
       - level: 5
         typeID: 3403
       time: 126000
-  blueprintTypeID: 22431
   maxProductionLimit: 1
 "42874":
   activities:
@@ -170,7 +168,6 @@
       time: 315
     research_time:
       time: 315
-  blueprintTypeID: 42874
   maxProductionLimit: 200
 "803":
   activities:
@@ -218,7 +215,6 @@
       time: 315
     research_time:
       time: 315
-  blueprintTypeID: 803
   maxProductionLimit: 200
 "24536":
   activities:
@@ -291,7 +287,6 @@
       - level: 1
         typeID: 11449
       time: 504
-  blueprintTypeID: 24536
   maxProductionLimit: 10
 "46158":
   activities:
@@ -312,7 +307,6 @@
       - level: 3
         typeID: 45746
       time: 10800
-  blueprintTypeID: 46158
   maxProductionLimit: 1000
 "33674":
   activities:
@@ -358,7 +352,6 @@
       time: 42000
     research_time:
       time: 42000
-  blueprintTypeID: 33674
   maxProductionLimit: 1
 "48109":
   activities:
@@ -401,7 +394,6 @@
       time: 315
     research_time:
       time: 315
-  blueprintTypeID: 48109
   maxProductionLimit: 200
 "48111":
   activities:
@@ -472,7 +464,6 @@
       - level: 5
         typeID: 3403
       time: 504
-  blueprintTypeID: 48111
   maxProductionLimit: 10
 "32308":
   activities:
@@ -511,7 +502,6 @@
       time: 6300
     research_time:
       time: 6300
-  blueprintTypeID: 32308
   maxProductionLimit: 10
 "57490":
   activities:
@@ -530,7 +520,6 @@
       - level: 1
         typeID: 45746
       time: 10800
-  blueprintTypeID: 57490
   maxProductionLimit: 1000
 "36966":
   activities:
@@ -565,7 +554,6 @@
       time: 41000
     research_time:
       time: 41000
-  blueprintTypeID: 36966
   maxProductionLimit: 2
 "33084":
   activities:
@@ -575,7 +563,6 @@
       time: 2100
     research_time:
       time: 2100
-  blueprintTypeID: 33084
   maxProductionLimit: 30
 "37315":
   activities:
@@ -629,7 +616,6 @@
       time: 1050
     research_time:
       time: 1050
-  blueprintTypeID: 37315
   maxProductionLimit: 60
 "37316":
   activities:
@@ -709,7 +695,6 @@
       - level: 5
         typeID: 3403
       time: 10500
-  blueprintTypeID: 37316
   maxProductionLimit: 1
 "37317":
   activities:
@@ -763,7 +748,6 @@
       time: 1050
     research_time:
       time: 1050
-  blueprintTypeID: 37317
   maxProductionLimit: 60
 "37318":
   activities:
@@ -843,7 +827,6 @@
       - level: 5
         typeID: 3403
       time: 10500
-  blueprintTypeID: 37318
   maxProductionLimit: 1
 "37325":
   activities:
@@ -897,7 +880,6 @@
       time: 1050
     research_time:
       time: 1050
-  blueprintTypeID: 37325
   maxProductionLimit: 60
 "37326":
   activities:
@@ -980,7 +962,6 @@
       - level: 5
         typeID: 3403
       time: 10500
-  blueprintTypeID: 37326
   maxProductionLimit: 1
 "37441":
   activities:
@@ -1037,7 +1018,6 @@
       time: 2100
     research_time:
       time: 2100
-  blueprintTypeID: 37441
   maxProductionLimit: 30
 "37442":
   activities:
@@ -1122,5 +1102,4 @@
       - level: 5
         typeID: 3403
       time: 21000
-  blueprintTypeID: 37442
   maxProductionLimit: 1

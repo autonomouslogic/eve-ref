@@ -56,6 +56,6 @@
       "time" : 41000
     }
   },
-  "blueprint_type_id" : 36966,
-  "max_production_limit" : 2
+  "max_production_limit" : 2,
+  "blueprint_type_id" : 36966
 }
