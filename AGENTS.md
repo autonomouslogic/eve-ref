@@ -111,8 +111,10 @@ reading env vars ad hoc.
   etc.). API spec is `spec/eve-ref-api.yaml`; models are generated via the OpenAPI generator into the
   `openapi` package.
 - Jackson is the serialization workhorse (JSON/YAML/CSV). Note the build pins **two** Jackson lines:
-  Jackson 3 (`tools.jackson.*`) as primary, and Jackson 2 (`com.fasterxml.jackson.*`) kept only for
-  swagger-core and the dynamo-mapper — keep imports on the right one.
+  Jackson 3 (`tools.jackson.*`) as primary, and Jackson 2 (`com.fasterxml.jackson.*`) kept only for the
+  dynamo-mapper and the OpenAPI-generated clients — keep imports on the right one. swagger-core 3 uses Jackson 3.
+  swagger-core, swagger-rest and the swagger Gradle plugin are upgraded together (Renovate group); the API
+  annotations are `jakarta.ws.rs`.
 
 ## Conventions
 

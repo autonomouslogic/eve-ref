@@ -2,11 +2,11 @@ package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.config.Configs;
 import io.helidon.webserver.http.ServerResponse;
+import jakarta.ws.rs.Path;
 import java.time.Duration;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.Path;
 
 @Singleton
 public class ApiUtil {
