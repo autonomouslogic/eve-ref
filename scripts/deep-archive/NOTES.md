@@ -21,7 +21,7 @@ to by name from the code (e.g. `NOTES.md "Deletion"`).
 - Fuzzwork IDs never read as years (backfills 21000–59999, live from 90019); other datasets' IDs aren't checked.
 - `MIN_AGE_DAYS` (2 days) is only a safety margin against files still being uploaded. Files are never re-uploaded,
   torrents are built by hand, and archiving doesn't delete anything, so there's no other reason to wait. It used to be
-  2 years, when what was archived was then deleted ("Steps 12 onwards").
+  2 years, when what was archived was then deleted ("Purging").
 
 ### Never archived
 
@@ -416,22 +416,39 @@ of every folder it selects a file from into a root file, `<ID>-index.tar.xz`, in
   category as the README and the checksum file, never a data file.
 - Covered by `<ID>.sha256`, so a copy obtained any other way can still be checked against the published signature.
 
-## Steps 12 onwards
+## Purging
 
-`12-check-before-delete`, `13-delete`, `14-check-delete` and `16-check-site` (and with them the manual step 15) are
-out of the workflow: the README no longer lists them, and each script calls `refuse_to_run` (lib/workflow.py) from its
-`__main__` block and exits with an error before doing anything. They were also untested and probably broken.
+`d00-preflight` to `d04-delete` (README "Purge"; `lib/purge.py`) delete archived data from the site, separately from
+making torrents. The old steps 12 to 16 deleted whatever a torrent held, which is no longer what archiving selects:
+torrents take any data at least `MIN_AGE_DAYS` old, recent data included.
 
-Deletion is to be rewritten as a separate process. What's archived no longer decides what's deleted: torrents now
-take any data at least `MIN_AGE_DAYS` old, and these steps would delete everything a torrent holds, recent data
-included. When rewriting:
-- Deletion needs its own rules for what may go. `market-orders/` must keep at least the market history scraper's
-  30-day snapshot lookback (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`, read by `HistoricalOrdersRegionTypeSource`), and
-  `ccp/csm` and `ccp/mer` must never be deleted ("Never archived").
-- They must not rely on anything in `SCRATCH_DIR` (`manifest.json`, `find/`, completion files and so on): it will
-  likely have been wiped by then. What survives is `SEED_DIR` (the merged tree, `.torrents/`, `<ID>.sha256`) and
-  what's published on the data site (`deep-archive/<ID>.txt`, the `.torrent`, the feed).
-- The README's old description of these steps (in git history) assumed the scratch directory is still there.
+- **What may go** is decided by `purge.blockers`, nothing else: a data file of a signed torrent, on the site as
+  archived (size and modification time as the torrent records them), not under `NEVER_PURGE`, dated before the start
+  of the previous year, copied in `SEED_DIR`. Dated by `lib/dating.py`, the code `01-find` selects by, from the
+  torrent's modification time: a file named for 2019 but uploaded in 2026 is dated 2019 (backfills, re-uploads) and
+  goes; a file's date is never later than its modification time. The rule is by calendar year, not age: this year's
+  and the previous year's files always stay.
+- **`NEVER_PURGE`** holds `ccp/csm` and `ccp/mer` ("Never archived": the syncs wouldn't upload them again), and,
+  though no torrent holds them, `market-history/`, `killmails/` and `deep-archive/`. `market-orders/` needs no rule of
+  its own: the market history scraper looks back 30 days (`ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK`), and the previous
+  year is always kept.
+- **Only files in a torrent are ever deleted**, so the index files `DataIndex` leaves in folders it no longer lists
+  ("Stale index files") are never removed by the scripts: `d04-delete` lists the folders left holding only index
+  files, and a `DataIndex` run is the manual step after it. The old `13-delete` deleted them itself.
+- **Nothing relies on the torrent workflow's `SCRATCH_DIR`**, which is wiped after every torrent. What the purge
+  reads is `SEED_DIR` (the signed torrents in `.torrents/`, the merged tree), the site (a fresh listing and
+  `deep-archive/`), and its own `PURGE_DIR`.
+- **Nothing is trusted from an earlier step.** `d01` writes the list, `d03` and `d04` check every path in it again
+  against fresh data, and `d04` does so a second time after the operator confirms. A path blocked at that point
+  fails the step instead of being dropped, except one already gone from the site (an earlier run that stopped part
+  way): a list that no longer matches the data is stale or wrong, and the answer is a new `d01`, not a repair.
+  The year turning between steps fails them: a list made for the previous rule would keep too few years.
+- **The list can be trimmed by hand, never extended** (`d02`): every path is checked again, so an added path that
+  isn't deletable only fails `d03`.
+- **rclone is the last check**: the delete is `--files-from-raw` of the list with `--max-delete` at its length, and
+  a dry run of the same arguments, read from rclone's own JSON log, must be exactly the list first.
+- **Not checked by a script:** the Fuzzwork floor being deployed (it is: `SyncFuzzworkOrdersets`), and what the site
+  serves afterwards (README "Purge": a sample of the deleted URLs, as the old `16-check-site` did).
 
 ## Deletion
 
@@ -478,8 +495,8 @@ Must be deployed before the first `fuzzwork/` delete.
 
 - Only rclone, never the AWS CLI or an S3 library, so other storage would only mean another rclone remote.
 - Listings go straight to the storage, so they're always fresh, unlike the site behind Cloudflare.
-- One key means any step could write. Only `09-publish` (to `deep-archive/`) and `13-delete` (an explicit list) do.
-- HTTPS against data.everef.net is only used to check what the site serves (`09-publish`, `16-check-site`).
+- One key means any step could write. Only `09-publish` (to `deep-archive/`) and `d04-delete` (an explicit list) do.
+- HTTPS against data.everef.net is only used to check what the site serves (`09-publish`).
 - Cost: a full listing is one class C transaction per 1,000 files, about 1,000 for the site's million files, and takes
   minutes. Loading a torrent is up to 1 TiB of B2 egress (free to Cloudflare, an allowance direct).
 
@@ -541,7 +558,7 @@ monthly check (`check-seed-dir.py`, README Appendix C) tests the exact guarantee
   site; a bug shared by an action and its own check isn't caught.
 - **Nothing removes or stops a torrent in qBittorrent.** `lib/qbittorrent.py` has no `torrents/delete` call, with or
   without `deleteFiles`, and no `torrents/stop` (`torrents/pause` before qBittorrent 5.0), and must never get either:
-  after `13-delete`, `$SEED_DIR` holds EVE Ref's only copy ("Durability"), and it has to keep seeding. Removing a
+  after `d04-delete`, `$SEED_DIR` holds EVE Ref's only copy ("Durability"), and it has to keep seeding. Removing a
   torrent (e.g. to redo `07-seed`) is done by hand.
 - Any script change that changes behaviour or output updates `README.md` in the same commit.
 
@@ -563,7 +580,7 @@ hand if ever needed.
   piece hashing right after would catch corruption too, so a second full-content pass only cost time; the sample is
   a cheap extra smoke test, not the thing standing between a bad file and a published torrent. `08-check-seed`'s
   recheck only catches a change made after the torrent was made, not before it.
-- **The docs page's rules aren't checked.** `12-check-before-delete` checks the page lists the torrent, not that its
+- **The docs page's rules aren't checked.** `d00-preflight` checks the page lists every torrent, not that its
   rules match `lib/workflow.py`, or its links.
 - **The feed backup** in `$SCRATCH_DIR/feed-backup/` goes with the scratch directory. The feed can always be rebuilt
   from the published `.torrent` files.

@@ -12,8 +12,9 @@ EVE Ref (https://everef.net/) is a reference site for the game EVE Online. This 
 - **VuePress docs** (`docs/`) — published to docs.everef.net.
 - A **`database` Gradle subproject** — Flyway migrations + jOOQ code generation.
 - **`scripts/deep-archive/`** — a standalone, manually-run Python workflow (plus two bash signing steps; not part
-  of the Gradle build) that archives data.everef.net data into BitTorrent archives, seeded from a local copy. See
-  `scripts/deep-archive/README.md` for the operator process and `NOTES.md` for design notes.
+  of the Gradle build) that archives data.everef.net data into BitTorrent archives, seeded from a local copy, and a separate purge
+  (`d00`–`d04`) that deletes archived data from the site. See `scripts/deep-archive/README.md` for the operator
+  process and `NOTES.md` for design notes.
 
 ## Build & Test
 

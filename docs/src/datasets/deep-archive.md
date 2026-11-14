@@ -94,6 +94,7 @@ See the readme at `everef-eve-online-deep-archive-NN-README.md` for instructions
 ## What gets archived
 Every file not yet archived, oldest first, once it's at least 2 days old.
 Once a torrent is published, those files will eventually be removed from `data.everef.net`.
+Files from the current and the previous year are always kept on the site.
 Once deleted, the torrent and its seeders become the only remaining source.
 Each file is only ever in one torrent.
 

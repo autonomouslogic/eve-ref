@@ -43,7 +43,7 @@ Needs 01-find's completion file, and refuses to run twice (lib/workflow.py).
    folder's <ID>-index.tar.xz (NOTES.md "Index snapshot"), each member named by its site path. A file the
    snapshot doesn't cover fails the step: run DataIndex for that prefix, then load again (resumable).
 9. Write SCRATCH_DIR/manifest.json: the selection plus a SHA-256 for every file, with each file's size and
-   modification time as on disk. 05-make-torrent and 12-check-before-delete use it. The index tarball isn't a data
+   modification time as on disk. 05-make-torrent uses it. The index tarball isn't a data
    file and isn't in the manifest.
 10. Write SCRATCH_DIR/<ID>.sha256 from the manifest plus the index tarball: standard `sha256sum` format
     ("<hex>  <path>", sorted by path, "\n" line endings), one line per file. Stays in SCRATCH_DIR for now;

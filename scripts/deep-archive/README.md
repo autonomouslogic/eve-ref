@@ -2,8 +2,8 @@
 
 Archives data.everef.net data into torrents. One workflow makes one torrent, `everef-eve-online-deep-archive-NN`
 (sequential, from `00`): the oldest data not archived yet, as much as the size limits allow. It's signed, seeded,
-published and listed on the docs site. Archiving doesn't remove anything from the site: deletion is to be rewritten
-as a separate process (NOTES.md "Steps 12 onwards").
+published and listed on the docs site. Archiving doesn't remove anything from the site: removing old, archived data is a
+separate process, the purge ([Purge](#purge)).
 
 What each script does in detail: its own docstring. Design constraints and reference material for working on the
 scripts: [`NOTES.md`](NOTES.md).
@@ -52,10 +52,7 @@ or anything else looks wrong, stop.
 | 09 Publish                                            | `./09-publish.py`                  | **`deep-archive/`**, `feed-backup/`                                           | write  |
 | 10 Update docs                                        | manual                             |                                                                               |        |
 | 11 Index deep-archive/                                | manual                             | `deep-archive/` index files                                                   | write  |
-| 17 Delete the scratch directory                       | manual                             |                                                                               |        |
-
-Steps 12 to 16 were deletion. They're removed from the workflow until deletion is rewritten as a separate process
-(NOTES.md "Steps 12 onwards"); their scripts are still here, but refuse to run.
+| 12 Delete the scratch directory                       | manual                             |                                                                               |        |
 
 `check-seed-dir.py` isn't a numbered step: it's a standalone, read-only check of the whole `$SEED_DIR` tree against
 every signed torrent (00 and 08 both run its quick checks inline; Appendix C's monthly maintenance runs it with
@@ -168,17 +165,109 @@ DATA_INDEX_PREFIX=/deep-archive/ DATA_INDEX_RECURSIVE=false ./gradlew dataIndex
 ```
 - https://data.everef.net/deep-archive/ lists the new torrent, its `.txt` and signature, and the feed.
 
-### 17: Delete the scratch directory (manual)
+### 12: Delete the scratch directory (manual)
 Delete `$SCRATCH_DIR`. The merged `$SEED_DIR` tree stays and keeps seeding.
+
+## Purge
+
+Deletes archived data from data.everef.net, keeping this year's and the previous year's: run in 2026, everything
+dated 2026 or 2025 stays. A separate process from making torrents, run whenever, from `scripts/deep-archive/`, with its
+own steps, numbered with a `d`, and its own work folder, `$PURGE_DIR`. The same rules as the torrent steps apply
+(Appendix A). **Once a file is deleted, `$SEED_DIR` and the other seeders are the only copy of it** (Appendix C), and
+B2's undo window is about 2 days (NOTES.md "Deletion"): the checks are what stands between a bug and lost data.
+
+Only files in a signed torrent are ever deleted, and every script re-derives what may go from fresh data
+(the torrents, a new listing of the site, `$SEED_DIR`) rather than trusting what an earlier one wrote. A file is
+deleted only if all of these hold (`lib/purge.py`, `blockers`):
+- it's a data file of a signed torrent in `$SEED_DIR/.torrents/`: never a root file, an `index.json`/`index.html`
+  or anything under `deep-archive/`, and in exactly one torrent;
+- the site has it with the size and modification time the torrent records: the archived version, not a newer
+  upload;
+- it isn't under `ccp/csm`, `ccp/mer`, `market-history/` or `killmails/` (`NEVER_PURGE`);
+- its date, worked out by the code `01-find` selects by (`lib/dating.py`: the earliest of the modification time and any
+  date or year in the file name) is before 1 January of the previous year;
+- `$SEED_DIR` holds a regular file at its path, with the torrent's size and modification time.
+
+Before the first purge, check the Fuzzwork sync's ID floor is deployed (NOTES.md "Fuzzwork sync cutoff"; the code is
+in `SyncFuzzworkOrdersets`), or the sync would upload deleted ordersets again.
+
+| Step                         | Run                       | Writes                                                      | Bucket |
+|------------------------------|---------------------------|-------------------------------------------------------------|--------|
+| d00 Preflight                | `./d00-preflight.py`      |                                                             | read   |
+| d01 Find                     | `./d01-find.py`           | `$PURGE_DIR/find/`                                          | read   |
+| d02 Review the list          | manual                    |                                                             |        |
+| d03 Dry run                  | `./d03-dryrun.py`         | `$PURGE_DIR/dryrun/`                                        | read   |
+| d04 Delete                   | `./d04-delete.py`         | `deleted.jsonl`                                             | **delete** |
+| d05 Index the site           | manual                    | the site's `index.json` and `index.html` files              | write  |
+
+A step refuses to start unless the one before it completed (d03 needs d01; d02 has no completion file), and
+refuses to run twice. Set `PURGE_DIR` in `torrents.env` (Appendix B) to a new, empty folder, apart from `$SEED_DIR` and
+`$SCRATCH_DIR`.
+
+### d00: Preflight
+Checks the settings, tools, `$PURGE_DIR` (created if missing, must be empty), that `$SEED_DIR` matches its signed
+torrents (every file there, with the size and modification time its torrent records), that qBittorrent seeds every
+torrent cleanly (100%, 0 bytes downloaded), that every torrent is published (its `.torrent` on the site is the signed
+one, its `.txt` is exactly its data files), and that the docs page lists every torrent. Reports every problem
+before aborting.
+
+Run `./d00-preflight.py --full` as well the first time, and before any big purge: it also runs `sha256sum -c` of every
+torrent from `$SEED_DIR`, reading every byte, which takes hours. Nothing is deleted without a good copy in `$SEED_DIR`.
+
+### d01: Find
+Lists the whole site and the contents of every signed torrent, and works out the files to delete by the rules above.
+Nothing is written to the bucket. Aborts, writing nothing, if `$SEED_DIR` doesn't match its torrents, a published torrent
+isn't the signed one, or an old file has no matching copy in `$SEED_DIR`. Writes `find/delete.txt`, the paths to delete,
+and `find/report.txt`.
+
+### d02: Review the list (manual)
+Read `$PURGE_DIR/find/report.txt` and `find/delete.txt`:
+- The dates run up to the end of the year before last, and no further. The newest date matches the rule.
+- The datasets are the ones expected. Nothing looks like a current file tools fetch by URL (add one to
+  `TORRENT_EXCLUDE`, or `NEVER_PURGE` in `lib/purge.py`, and run again).
+- "Not the archived version" (a file re-uploaded since it was archived) and anything else flagged under "staying"
+  has been looked at.
+- The total is what's expected.
+
+To delete less, remove lines from `find/delete.txt`. Adding a line only makes d03 fail: it checks every path again.
+
+### d03: Dry run
+Checks every path in the reviewed `delete.txt` from scratch against the signed torrents, a fresh listing of the site and
+`$SEED_DIR`, by the same rules. A path that's blocked now, or dated in a kept year (the year may have turned since d01),
+fails the step; one already gone is dropped. Then `rclone delete --dry-run --files-from-raw` of the rest, and compares
+rclone's own log of what it would delete with the list: exactly the same, none missing, nothing else. Writes
+`dryrun/verified.txt`, the list d04 deletes, and its SHA-256.
+
+### d04: Delete
+Checks `dryrun/verified.txt` is the file d03 wrote, verifies every path again, runs the dry run again, then asks
+for the number of files typed back. After that, it verifies a third time against a new listing (the answer can come
+much later), and deletes with `rclone delete --files-from-raw`, an explicit list, never a prefix or a pattern, with
+`--max-delete` set to its length so rclone itself refuses to delete more. Then lists the site once more: every deleted
+path must be gone and every other file that was there must still be.
+Running it again after a failure finishes the job: files already gone are skipped.
+- Folders left holding nothing but index files are listed in `index-only-folders.txt` and as warnings. They're not
+  deleted: only files in a torrent ever are.
+
+### d05: Index the site (manual)
+`DataIndex` doesn't remove a folder's old index files when it no longer lists it, and its parents still link the
+deleted files until it runs (NOTES.md "Stale index files"). From a checkout with production settings in the environment:
+```
+./gradlew dataIndex
+```
+Leave `DATA_INDEX_PREFIX` unset, so the whole site is indexed. Then check data.everef.net: a sample of the deleted URLs is a 404 or, for up to 30 days, still cached by Cloudflare
+(NOTES.md "Cloudflare cache"; no purge), the folders in `index-only-folders.txt` no longer list deleted files, and
+`deep-archive/` still lists every torrent. `crawling` jobs (`sync-fuzzwork-ordersets`, the market history scrape) may
+fail between the delete and the index run, and recover on their next run (NOTES.md "Code that depends on deleted
+data"). Then delete `$PURGE_DIR`.
 
 ---
 
 ## Appendix A: How the scripts work
 
-- **Completion files.** Each step writes `$SCRATCH_DIR/<NN>-<step>.done` as its last act, only on success. A step
+- **Completion files.** Each step writes `$SCRATCH_DIR/<NN>-<step>.done` (the purge's: `$PURGE_DIR/d<NN>-<step>.done`) as its last act, only on success. A step
   refuses to start if the previous scripted step's file is missing or its own exists. Manual steps have none.
 - **Redoing a step** is deliberate: delete its completion file and every later one by hand. A step that failed wrote no completion file and can simply be run again.
-- **One step at a time.** Every step holds `$SCRATCH_DIR/log/.lock` while it runs.
+- **One step at a time.** Every step holds `$SCRATCH_DIR/log/.lock` (the purge's: `$PURGE_DIR/log/.lock`) while it runs.
 - **Output**, like the roll-up scripts: `🚀` once, `🔵` sections, `🟡` warnings (the step carries on), `🔴`
   errors (the step stops), `✅` last on success. Everything is also
   logged to `$SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log`.
@@ -195,6 +284,7 @@ step names the settings the environment overrides.
 | Setting | What |
 |---|---|
 | `SCRATCH_DIR` | Work files for the current workflow. Empty when it starts; deleted by hand at the end. |
+| `PURGE_DIR` | Work files for a purge (`d00` to `d04`). Empty when it starts; deleted by hand at the end. Separate from `SEED_DIR`, and a different folder from `SCRATCH_DIR`. |
 | `SEED_DIR` | Every published torrent's files, merged into one tree matching data.everef.net (no torrent's own root folder), kept for seeding. Separate from `SCRATCH_DIR`. |
 | `DATA_BUCKET` | The data site's bucket on B2. Its root is the site root. |
 | `RCLONE_CONFIG_EVEREF_ACCOUNT`, `RCLONE_CONFIG_EVEREF_KEY` | The B2 key. |
@@ -211,9 +301,9 @@ setting is ignored, and named); and the trackers, `lib/trackers.txt` (not a sett
 scripts/deep-archive/
   README.md, NOTES.md                  # this process; design notes for working on the scripts
   00-preflight.py … 09-publish.py      # the steps; 04 and 06 are .sh
-  12-check-before-delete.py … 16-check-site.py   # deletion, out of the workflow: refuse to run
+  d00-preflight.py … d04-delete.py     # the purge steps (d02 is manual)
   check-seed-dir.py                    # standalone SEED_DIR inventory check, not a numbered step
-  lib/                                 # shared code (workflow.py, merge.py, seed_dir.py, trackers.txt, sign.sh, …), the README and comment templates
+  lib/                                 # shared code (workflow.py, purge.py, dating.py, merge.py, seed_dir.py, trackers.txt, sign.sh, …), the README and comment templates
   tests/
 
 $SCRATCH_DIR/                          # one workflow
@@ -222,6 +312,12 @@ $SCRATCH_DIR/                          # one workflow
   <ID>.sha256, <ID>.sha256.minisig     # copied into the torrent, never published
   <ID>.torrent, <ID>.txt, <ID>.torrent.minisig   # published
   merge-plan.json                      # 07-seed's merge plan, for resuming
+
+$PURGE_DIR/                            # one purge
+  d<NN>-<step>.done, log/
+  find/ (delete.txt, delete.jsonl, report.txt, summary.json, listing.jsonl.gz)
+  dryrun/ (verified.txt, verified.jsonl)
+  deleted.jsonl, index-only-folders.txt
 
 $SEED_DIR/
   <every torrent's files, merged, no root folder>   # laid out like data.everef.net
