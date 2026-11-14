@@ -206,8 +206,7 @@ public class Configs {
 			.name("DEEP_ARCHIVE_TRACKER_SCRAPE_URLS")
 			.type(String.class)
 			.defaultValue("http://tracker.opentrackr.org:1337/scrape,"
-					+ "http://open.tracker.cl:1337/scrape,"
-					+ "http://tracker.dler.org:6969/scrape")
+					+ "http://open.tracker.cl:1337/scrape")
 			.build();
 
 	/**
