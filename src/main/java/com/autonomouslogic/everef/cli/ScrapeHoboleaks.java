@@ -51,6 +51,9 @@ public class ScrapeHoboleaks implements Command {
 
 	@Inject
 	@Named("data")
+	protected OkHttpWrapper dataHttpWrapper;
+
+	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
@@ -99,7 +102,7 @@ public class ScrapeHoboleaks implements Command {
 		return Single.defer(() -> {
 			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
 			var url = dataUrl.resolve(HOBOLEAKS.createLatestPath()).toString();
-			try (var response = okHttpWrapper.download(url, file)) {
+			try (var response = dataHttpWrapper.download(url, file)) {
 				if (response.code() == 404) {
 					return Single.just(new byte[0]);
 				}
