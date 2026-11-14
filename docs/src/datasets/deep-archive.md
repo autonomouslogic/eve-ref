@@ -116,4 +116,4 @@ Whenever a new archive has been prepared, it will be added to [everef-eve-online
 
 ## Tools
 * [qBittorrent](https://www.qbittorrent.org/) - free bittorrent client
-* [webtor.io](https://webtor.io/) can be used to easily download individual files in the archives 
+* [webtor.io](https://webtor.io/) can be used to download individual files in the archives 
