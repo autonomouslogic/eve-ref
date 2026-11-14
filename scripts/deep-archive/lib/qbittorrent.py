@@ -1,9 +1,9 @@
 """
 qbittorrent: a tiny client for qBittorrent's Web API (https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API),
-stdlib only (urllib), for 00-preflight, 07-seed, 08-check-seed and 12-check-before-delete.
+stdlib only (urllib), for 00-preflight, 07-seed, 08-check-seed, and the purge scripts (d00-preflight).
 
 No delete or stop, on purpose, and never add either: nothing may remove a torrent from qBittorrent, with or without
-its files, or stop it seeding. After 13-delete, $SEED_DIR holds EVE Ref's only copy of the archived data (NOTES.md
+its files, or stop it seeding. After d04-delete, $SEED_DIR holds EVE Ref's only copy of the archived data (NOTES.md
 "Script principles").
 """
 
