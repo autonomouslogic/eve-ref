@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketType;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.RateLimiter;
+import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.type.MapType;
 
@@ -84,11 +86,24 @@ public class FuzzworkMarketService {
 			long station, @NonNull List<Long> typeIds) {
 		var url = basePath + "aggregates/?station=" + station + "&types="
 				+ typeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
-		var waitTime = rateLimiter.acquire();
-		log.debug(String.format("Fetching (waited %.1fs) %s", waitTime, url));
-		try (var response = httpWrapper.get(url)) {
-			try (var in = response.body().byteStream()) {
-				return jsonMapper.readValue(in, responseType);
+		var maxAttempts = Configs.FUZZWORK_MAX_ATTEMPTS.getRequired();
+		var retryDelay = Configs.FUZZWORK_RETRY_DELAY.getRequired();
+		for (var attempt = 1; ; attempt++) {
+			var waitTime = rateLimiter.acquire();
+			log.debug(String.format("Fetching (waited %.1fs, attempt %d) %s", waitTime, attempt, url));
+			try (var response = httpWrapper.get(url)) {
+				if (!response.isSuccessful()) {
+					throw new IOException(String.format("Fuzzwork returned HTTP %d for %s", response.code(), url));
+				}
+				try (var in = response.body().byteStream()) {
+					return jsonMapper.readValue(in, responseType);
+				}
+			} catch (IOException | StreamReadException e) {
+				if (attempt >= maxAttempts) {
+					throw e;
+				}
+				log.warn("Fuzzwork request failed on attempt {}/{}, retrying: {}", attempt, maxAttempts, e.toString());
+				Thread.sleep(retryDelay);
 			}
 		}
 	}

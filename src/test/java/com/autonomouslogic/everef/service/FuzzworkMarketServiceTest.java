@@ -116,6 +116,34 @@ public class FuzzworkMarketServiceTest {
 		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldRetryOnErrorResponse() {
+		server.enqueue(new MockResponse()
+				.setResponseCode(503)
+				.setHeader("Content-Type", "text/html")
+				.setBody("<html><body>Service Unavailable</body></html>"));
+		enqueueSuccess(34, new BigDecimal("6.6"));
+
+		var response = marketService.fetchAggregateStationPrices(1, List.of(34L));
+		assertEquals(new BigDecimal("6.6"), response.get("34").getSell().getWeightedAverage());
+
+		assertEquals(2, server.getRequestCount());
+		var expectedUrl = "http://localhost:30150/aggregates/?station=1&types=34";
+		assertEquals(
+				expectedUrl,
+				server.takeRequest(1, TimeUnit.MILLISECONDS)
+						.getRequestUrl()
+						.url()
+						.toString());
+		assertEquals(
+				expectedUrl,
+				server.takeRequest(1, TimeUnit.MILLISECONDS)
+						.getRequestUrl()
+						.url()
+						.toString());
+	}
+
 	private void enqueueSuccess(long typeId, BigDecimal sellAverage) {
 		server.enqueue(new MockResponse().setResponseCode(200).setBody(String.format("""
 			{
