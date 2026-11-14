@@ -887,6 +887,18 @@ public class Configs {
 	/**
 	 * Rate limit to apply for Fuzzwork requests.
 	 */
+	public static final Config<Integer> FUZZWORK_MAX_ATTEMPTS = Config.<Integer>builder()
+			.name("FUZZWORK_MAX_ATTEMPTS")
+			.type(Integer.class)
+			.defaultValue(3)
+			.build();
+
+	public static final Config<Duration> FUZZWORK_RETRY_DELAY = Config.<Duration>builder()
+			.name("FUZZWORK_RETRY_DELAY")
+			.type(Duration.class)
+			.defaultValue(Duration.ofMillis(500))
+			.build();
+
 	public static final Config<Double> FUZZWORK_RATE_LIMIT_PER_S = Config.<Double>builder()
 			.name("FUZZWORK_RATE_LIMIT_PER_S")
 			.type(Double.class)
