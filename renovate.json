@@ -12,6 +12,15 @@
         "org.flywaydb:flyway-core",
         "org.flywaydb:flyway-database-postgresql"
       ]
+    },
+    {
+      "groupName": "swagger-core monorepo",
+      "matchPackageNames": [
+        "io.swagger.core.v3:swagger-core",
+        "io.swagger.core.v3:swagger-rest",
+        "io.swagger.core.v3.swagger-gradle-plugin",
+        "io.swagger.core.v3:swagger-gradle-plugin"
+      ]
     }
   ]
 }
