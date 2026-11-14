@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketType;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.RateLimiter;
+import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -34,6 +35,10 @@ public class FuzzworkMarketService {
 
 	@Inject
 	protected JsonMapper jsonMapper;
+
+	private static final int MAX_ATTEMPTS = 3;
+
+	protected long retryDelayMs = 1000;
 
 	private final URI basePath = Configs.FUZZWORK_MARKET_BASE_PATH.getRequired();
 	private final RateLimiter rateLimiter = RateLimiter.create(Configs.FUZZWORK_RATE_LIMIT_PER_S.getRequired());
@@ -84,9 +89,28 @@ public class FuzzworkMarketService {
 			long station, @NonNull List<Long> typeIds) {
 		var url = basePath + "aggregates/?station=" + station + "&types="
 				+ typeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+		for (var attempt = 1; ; attempt++) {
+			try {
+				return fetchOnce(url);
+			} catch (RuntimeException | IOException e) {
+				if (attempt >= MAX_ATTEMPTS) {
+					throw e;
+				}
+				log.warn(String.format(
+						"Fuzzwork request failed (attempt %d/%d), retrying after %dms: %s - %s",
+						attempt, MAX_ATTEMPTS, retryDelayMs, url, e));
+				Thread.sleep(retryDelayMs);
+			}
+		}
+	}
+
+	private Map<String, FuzzworkAggregatedMarketType> fetchOnce(String url) throws IOException {
 		var waitTime = rateLimiter.acquire();
 		log.debug(String.format("Fetching (waited %.1fs) %s", waitTime, url));
 		try (var response = httpWrapper.get(url)) {
+			if (!response.isSuccessful()) {
+				throw new RuntimeException(String.format("Fuzzwork returned HTTP %d for %s", response.code(), url));
+			}
 			try (var in = response.body().byteStream()) {
 				return jsonMapper.readValue(in, responseType);
 			}
