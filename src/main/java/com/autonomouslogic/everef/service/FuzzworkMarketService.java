@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.type.MapType;
 
@@ -35,10 +36,6 @@ public class FuzzworkMarketService {
 
 	@Inject
 	protected JsonMapper jsonMapper;
-
-	private static final int MAX_ATTEMPTS = 3;
-
-	protected long retryDelayMs = 1000;
 
 	private final URI basePath = Configs.FUZZWORK_MARKET_BASE_PATH.getRequired();
 	private final RateLimiter rateLimiter = RateLimiter.create(Configs.FUZZWORK_RATE_LIMIT_PER_S.getRequired());
@@ -89,30 +86,28 @@ public class FuzzworkMarketService {
 			long station, @NonNull List<Long> typeIds) {
 		var url = basePath + "aggregates/?station=" + station + "&types="
 				+ typeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+		var maxAttempts = Configs.FUZZWORK_MAX_ATTEMPTS.getRequired();
+		var retryDelay = Configs.FUZZWORK_RETRY_DELAY.getRequired();
 		for (var attempt = 1; ; attempt++) {
-			try {
-				return fetchOnce(url);
-			} catch (RuntimeException | IOException e) {
-				if (attempt >= MAX_ATTEMPTS) {
+			var waitTime = rateLimiter.acquire();
+			log.debug(String.format("Fetching (waited %.1fs, attempt %d) %s", waitTime, attempt, url));
+			try (var response = httpWrapper.get(url)) {
+				if (!response.isSuccessful()) {
+					throw new IOException(String.format("Fuzzwork returned HTTP %d for %s", response.code(), url));
+				}
+				try (var in = response.body().byteStream()) {
+					return jsonMapper.readValue(in, responseType);
+				}
+			} catch (IOException | RuntimeException e) {
+				// OkHttpWrapper wraps network errors, such as dropped connections, in a RuntimeException.
+				var retryable = e instanceof IOException
+						|| e instanceof StreamReadException
+						|| e.getCause() instanceof IOException;
+				if (!retryable || attempt >= maxAttempts) {
 					throw e;
 				}
-				log.warn(String.format(
-						"Fuzzwork request failed (attempt %d/%d), retrying after %dms: %s - %s",
-						attempt, MAX_ATTEMPTS, retryDelayMs, url, e));
-				Thread.sleep(retryDelayMs);
-			}
-		}
-	}
-
-	private Map<String, FuzzworkAggregatedMarketType> fetchOnce(String url) throws IOException {
-		var waitTime = rateLimiter.acquire();
-		log.debug(String.format("Fetching (waited %.1fs) %s", waitTime, url));
-		try (var response = httpWrapper.get(url)) {
-			if (!response.isSuccessful()) {
-				throw new RuntimeException(String.format("Fuzzwork returned HTTP %d for %s", response.code(), url));
-			}
-			try (var in = response.body().byteStream()) {
-				return jsonMapper.readValue(in, responseType);
+				log.warn("Fuzzwork request failed on attempt {}/{}, retrying: {}", attempt, maxAttempts, e.toString());
+				Thread.sleep(retryDelay);
 			}
 		}
 	}

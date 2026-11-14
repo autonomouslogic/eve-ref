@@ -120,8 +120,35 @@ public class FuzzworkMarketServiceTest {
 
 	@Test
 	@SneakyThrows
+	void shouldRetryOnErrorResponse() {
+		server.enqueue(new MockResponse()
+				.setResponseCode(503)
+				.setHeader("Content-Type", "text/html")
+				.setBody("<html><body>Service Unavailable</body></html>"));
+		enqueueSuccess(34, new BigDecimal("6.6"));
+
+		var response = marketService.fetchAggregateStationPrices(1, List.of(34L));
+		assertEquals(new BigDecimal("6.6"), response.get("34").getSell().getWeightedAverage());
+
+		assertEquals(2, server.getRequestCount());
+		var expectedUrl = "http://localhost:30150/aggregates/?station=1&types=34";
+		assertEquals(
+				expectedUrl,
+				server.takeRequest(1, TimeUnit.MILLISECONDS)
+						.getRequestUrl()
+						.url()
+						.toString());
+		assertEquals(
+				expectedUrl,
+				server.takeRequest(1, TimeUnit.MILLISECONDS)
+						.getRequestUrl()
+						.url()
+						.toString());
+	}
+
+	@Test
+	@SneakyThrows
 	void shouldRetryWhenConnectionIsDropped() {
-		marketService.retryDelayMs = 1;
 		server.enqueue(new MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AT_START));
 		enqueueSuccess(34, new BigDecimal("6.6"));
 
@@ -132,21 +159,7 @@ public class FuzzworkMarketServiceTest {
 	}
 
 	@Test
-	@SneakyThrows
-	void shouldRetryOnServerError() {
-		marketService.retryDelayMs = 1;
-		server.enqueue(new MockResponse().setResponseCode(503));
-		enqueueSuccess(34, new BigDecimal("6.6"));
-
-		var response = marketService.fetchAggregateStationPrices(1, List.of(34L));
-		assertEquals(new BigDecimal("6.6"), response.get("34").getSell().getWeightedAverage());
-
-		assertEquals(2, server.getRequestCount());
-	}
-
-	@Test
 	void shouldGiveUpAfterMaxAttempts() {
-		marketService.retryDelayMs = 1;
 		for (int i = 0; i < 3; i++) {
 			server.enqueue(new MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AT_START));
 		}
