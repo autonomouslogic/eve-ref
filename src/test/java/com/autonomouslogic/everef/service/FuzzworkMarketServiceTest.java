@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.service;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.SocketPolicy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,6 +144,29 @@ public class FuzzworkMarketServiceTest {
 						.getRequestUrl()
 						.url()
 						.toString());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldRetryWhenConnectionIsDropped() {
+		server.enqueue(new MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AT_START));
+		enqueueSuccess(34, new BigDecimal("6.6"));
+
+		var response = marketService.fetchAggregateStationPrices(1, List.of(34L));
+		assertEquals(new BigDecimal("6.6"), response.get("34").getSell().getWeightedAverage());
+
+		assertEquals(2, server.getRequestCount());
+	}
+
+	@Test
+	void shouldGiveUpAfterMaxAttempts() {
+		for (int i = 0; i < 3; i++) {
+			server.enqueue(new MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AT_START));
+		}
+
+		assertThrows(RuntimeException.class, () -> marketService.fetchAggregateStationPrices(1, List.of(34L)));
+
+		assertEquals(3, server.getRequestCount());
 	}
 
 	private void enqueueSuccess(long typeId, BigDecimal sellAverage) {

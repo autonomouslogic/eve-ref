@@ -98,8 +98,12 @@ public class FuzzworkMarketService {
 				try (var in = response.body().byteStream()) {
 					return jsonMapper.readValue(in, responseType);
 				}
-			} catch (IOException | StreamReadException e) {
-				if (attempt >= maxAttempts) {
+			} catch (IOException | RuntimeException e) {
+				// OkHttpWrapper wraps network errors, such as dropped connections, in a RuntimeException.
+				var retryable = e instanceof IOException
+						|| e instanceof StreamReadException
+						|| e.getCause() instanceof IOException;
+				if (!retryable || attempt >= maxAttempts) {
 					throw e;
 				}
 				log.warn("Fuzzwork request failed on attempt {}/{}, retrying: {}", attempt, maxAttempts, e.toString());
