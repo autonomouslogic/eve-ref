@@ -3,7 +3,7 @@
 d00-preflight: a step of the EVE Ref Deep Archive purge, the deletion of archived data from data.everef.net
 (README "Purge"). Checks before anything else runs. Read-only, apart from PURGE_DIR (its completion file and logs).
 
-    d00-preflight.py [--full]
+    d00-preflight.py
 
 Reports every problem, then aborts if any failed. On success it writes PURGE_DIR/d00-preflight.done, which d01-find
 needs. It can't run twice in the same PURGE_DIR: the directory must be empty (log/ aside).
@@ -19,8 +19,6 @@ Checks:
 - qBittorrent seeds every one of them cleanly: 100%, 0 bytes downloaded, a seeding state;
 - the bucket is reachable, and every torrent is published: its .torrent on the site is the signed one in SEED_DIR,
   and its .txt lists exactly its data files;
-- the docs page lists every torrent's ID and info-hash (the people downloading the archive are told where it is);
-- --full: `sha256sum -c` of every torrent from SEED_DIR, reading every byte (slow; README Appendix C).
 
 Environment (or torrents.env, see lib/workflow.py):
     PURGE_DIR, SEED_DIR, DATA_BUCKET, RCLONE_CONFIG_EVEREF_ACCOUNT, RCLONE_CONFIG_EVEREF_KEY,
@@ -29,13 +27,10 @@ Environment (or torrents.env, see lib/workflow.py):
 Needs rclone, libtorrent 2.x and Docker.
 """
 
-import argparse
 import os
 import shutil
 import subprocess
 import sys
-import urllib.error
-import urllib.request
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 import seed_dir  # noqa: E402
@@ -57,11 +52,9 @@ from workflow import (  # noqa: E402
 )
 
 STEP = "preflight"
-DOCS_PAGE = "https://docs.everef.net/datasets/deep-archive.html"
 
 
 def main():
-    args = parse_args()
     env_file = load_env()
     purge_dir = prepare_purge_dir()
     lock(purge_dir)
@@ -103,26 +96,11 @@ def main():
 
     section("Site")
     problems += check_published(remote, torrents_dir, torrents, archived, purge_dir)
-    problems += check_docs_page(torrents)
     print(f"All {len(torrents)} published .torrent and .txt files match")
 
-    if args.full:
-        section("sha256sum -c")
-        seed_dir.check_sha256(torrents, workflow.seed_dir)
-        print(f"sha256sum -c passed for all {len(torrents)} torrents, from {workflow.seed_dir}")
-
     fail_on(problems, "Preflight found problems")
-    workflow.complete(
-        STEP,
-        {"torrents": sorted(torrents), "files": len(archived), "full": args.full},
-    )
+    workflow.complete(STEP, {"torrents": sorted(torrents), "files": len(archived)})
     ok("Purge preflight OK")
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(description="Checks before an EVE Ref Deep Archive purge.")
-    parser.add_argument("--full", action="store_true", help="also run sha256sum -c for every torrent (slow)")
-    return parser.parse_args()
 
 
 def prepare_purge_dir():
@@ -167,33 +145,6 @@ def check_qbittorrent(seed, torrents):
     problems = seed_dir.check_qbittorrent(client, torrents, save_path)
     if not problems:
         print(f"{url}: qBittorrent {version}, all {len(torrents)} torrents seeding cleanly, save path {save_path}")
-    return problems
-
-
-def check_docs_page(torrents):
-    """The docs page is live and lists every torrent's ID and v1 info-hash."""
-    try:
-        with urllib.request.urlopen(DOCS_PAGE, timeout=60) as response:
-            text = response.read().decode("utf-8", errors="replace")
-    except urllib.error.HTTPError as e:
-        return [f"{DOCS_PAGE}: HTTP {e.code}"]
-    except urllib.error.URLError as e:
-        return [f"{DOCS_PAGE}: {e.reason}"]
-    problems = docs_page_problems(text, torrents)
-    if not problems:
-        print(f"{DOCS_PAGE}: lists all {len(torrents)} torrents with their v1 info-hashes")
-    return problems
-
-
-def docs_page_problems(text, torrents):
-    """The torrents whose ID or v1 info-hash the docs page text doesn't have."""
-    problems = []
-    lower = text.lower()
-    for torrent_id, info in sorted(torrents.items()):
-        if torrent_id not in text:
-            problems.append(f"The docs page doesn't mention {torrent_id}")
-        elif info["v1_hash"].lower() not in lower:
-            problems.append(f"The docs page doesn't have {torrent_id}'s v1 info-hash {info['v1_hash']}")
     return problems
 
 

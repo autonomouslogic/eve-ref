@@ -580,8 +580,6 @@ hand if ever needed.
   piece hashing right after would catch corruption too, so a second full-content pass only cost time; the sample is
   a cheap extra smoke test, not the thing standing between a bad file and a published torrent. `08-check-seed`'s
   recheck only catches a change made after the torrent was made, not before it.
-- **The docs page's rules aren't checked.** `d00-preflight` checks the page lists every torrent, not that its
-  rules match `lib/workflow.py`, or its links.
 - **The feed backup** in `$SCRATCH_DIR/feed-backup/` goes with the scratch directory. The feed can always be rebuilt
   from the published `.torrent` files.
 

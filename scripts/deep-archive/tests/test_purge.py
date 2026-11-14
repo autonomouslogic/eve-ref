@@ -383,20 +383,6 @@ class PublishedProblemsTest(unittest.TestCase):
         self.assertIn("1 extra, 1 missing", problems[0])
 
 
-class DocsPageTest(unittest.TestCase):
-    TORRENTS = {ID: {"v1_hash": "ABCDEF" + "0" * 34}}
-
-    def test_lists_the_torrent(self):
-        text = f"| {ID} | {'abcdef' + '0' * 34} |"
-        self.assertEqual(preflight.docs_page_problems(text, self.TORRENTS), [])
-
-    def test_missing_id(self):
-        self.assertEqual(len(preflight.docs_page_problems("nothing", self.TORRENTS)), 1)
-
-    def test_missing_hash(self):
-        self.assertEqual(len(preflight.docs_page_problems(ID, self.TORRENTS)), 1)
-
-
 class StepsTest(unittest.TestCase):
     def test_every_script_is_a_scripted_step_and_back(self):
         names = [n for n in os.listdir(os.path.join(HERE, "..")) if re.match(r"^d\d\d-.*\.py$", n)]

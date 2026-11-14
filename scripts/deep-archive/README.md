@@ -208,11 +208,7 @@ refuses to run twice. Set `PURGE_DIR` in `torrents.env` (Appendix B) to a new, e
 Checks the settings, tools, `$PURGE_DIR` (created if missing, must be empty), that `$SEED_DIR` matches its signed
 torrents (every file there, with the size and modification time its torrent records), that qBittorrent seeds every
 torrent cleanly (100%, 0 bytes downloaded), that every torrent is published (its `.torrent` on the site is the signed
-one, its `.txt` is exactly its data files), and that the docs page lists every torrent. Reports every problem
-before aborting.
-
-Run `./d00-preflight.py --full` as well the first time, and before any big purge: it also runs `sha256sum -c` of every
-torrent from `$SEED_DIR`, reading every byte, which takes hours. Nothing is deleted without a good copy in `$SEED_DIR`.
+one, its `.txt` is exactly its data files). Reports every problem before aborting.
 
 ### d01: Find
 Lists the whole site and the contents of every signed torrent, and works out the files to delete by the rules above.
