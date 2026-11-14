@@ -1,5 +1,15 @@
 EVE Ref Changelog
 
+## <small>2.83.10 (2026-11-14)</small>
+
+* fix: Removed open.tracker.cl from tracker URLs ([de99aa0](https://github.com/autonomouslogic/eve-ref/commit/de99aa0))
+* fix: Retry failed Fuzzwork market requests (#1163) ([fe81ead](https://github.com/autonomouslogic/eve-ref/commit/fe81ead)), closes [#1163](https://github.com/autonomouslogic/eve-ref/issues/1163)
+* fix: Retry Fuzzwork requests on error responses (#1162) ([becf7d6](https://github.com/autonomouslogic/eve-ref/commit/becf7d6)), closes [#1162](https://github.com/autonomouslogic/eve-ref/issues/1162)
+* fix: Use unrestricted HTTP client for Hoboleaks requests (#1164) ([054489e](https://github.com/autonomouslogic/eve-ref/commit/054489e)), closes [#1164](https://github.com/autonomouslogic/eve-ref/issues/1164)
+* fix(deps): update dependency io.swagger.core.v3:swagger-core to v3 (#1155) ([6e0f415](https://github.com/autonomouslogic/eve-ref/commit/6e0f415)), closes [#1155](https://github.com/autonomouslogic/eve-ref/issues/1155)
+* docs: Deep Archive ([ac6f83c](https://github.com/autonomouslogic/eve-ref/commit/ac6f83c))
+* chore: AGENTS.md ([ca3e2f0](https://github.com/autonomouslogic/eve-ref/commit/ca3e2f0))
+
 ## [2.83.9](https://github.com/autonomouslogic/eve-ref/compare/2.83.8...2.83.9) (2026-11-14)
 
 
