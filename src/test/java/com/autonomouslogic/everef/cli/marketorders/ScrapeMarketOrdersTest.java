@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
@@ -29,6 +30,7 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -235,6 +237,27 @@ public class ScrapeMarketOrdersTest {
 		assertDataIndex();
 	}
 
+	// ############ Empty scrapes
+
+	/**
+	 * A scrape that returns no orders at all must fail without uploading anything.
+	 */
+	@Test
+	@SneakyThrows
+	void noOrdersFails() {
+		server.setDispatcher(dispatcher().withRegion(10000001).withRegionOrders(10000001, ordersJson()));
+
+		var e = assertThrows(
+				Exception.class,
+				() -> VirtualThreads.onVirtualThread(() -> scrapeMarketOrders
+						.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
+						.run()));
+
+		assertEquals("No market orders fetched", ExceptionUtils.getRootCause(e).getMessage());
+		assertEquals(List.of(), mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient));
+		Mockito.verifyNoInteractions(dataIndexHelper);
+	}
+
 	// ############ Structure orders
 
 	/**
@@ -331,13 +354,14 @@ public class ScrapeMarketOrdersTest {
 	@SneakyThrows
 	void nonMarketStructureNotScraped() {
 		var structureId = 1000000000002L;
+		var order = regionOrder(6001, 60000001, 34);
 		server.setDispatcher(dispatcher()
 				.withRegion(10000001)
-				.withRegionOrders(10000001, ordersJson())
+				.withRegionOrders(10000001, ordersJson(order))
 				.withStructures(structuresJson(nonMarketStructure(structureId, 30000001, 20000001, 10000010))));
 		run();
 
-		assertRecords(List.of());
+		assertRecords(expectedRegionOrders(10000001, List.of(order)));
 		assertLatestFileMatches();
 		assertAuth();
 		assertRequestPaths(
@@ -356,14 +380,15 @@ public class ScrapeMarketOrdersTest {
 	@SneakyThrows
 	void forbiddenStructureIgnored() {
 		var structureId = 1000000000003L;
+		var order = regionOrder(6001, 60000001, 34);
 		server.setDispatcher(dispatcher()
 				.withRegion(10000001)
-				.withRegionOrders(10000001, ordersJson())
+				.withRegionOrders(10000001, ordersJson(order))
 				.withStructures(structuresJson(marketStructure(structureId, 30000001, 20000001, 10000010)))
 				.withStructureOrderError(structureId, 403));
 		run();
 
-		assertRecords(List.of());
+		assertRecords(expectedRegionOrders(10000001, List.of(order)));
 		assertLatestFileMatches();
 		assertAuth();
 		assertRequestPaths(
