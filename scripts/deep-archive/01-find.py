@@ -48,7 +48,7 @@ file (NOTES.md "Index snapshot"). Only the folder's own index.json; parent folde
 
 Earlier torrents: a path listed in a published deep-archive/<ID>.txt, or in a <ID>.torrent in SEED_DIR/.torrents/
 (made here, maybe not published yet), is never a candidate again -- it's already archived. Archiving doesn't remove
-anything from the site (deletion is a separate process, NOTES.md "Steps 12 onwards"), so such paths being still on
+anything from the site (deletion is a separate process, NOTES.md "Purging"), so such paths being still on
 the site is normal: they're skipped, and the first few are printed.
 
 Torrent ID: sequential (everef-eve-online-deep-archive-NN, two digits), chosen by 00-preflight (the
@@ -98,6 +98,7 @@ from collections import defaultdict
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib"))
 import seed_dir  # noqa: E402
+from dating import file_date, file_name  # noqa: E402
 from torrent_size import TorrentSize  # noqa: E402
 from workflow import (  # noqa: E402
     DATA_BASE_URL,
@@ -138,10 +139,6 @@ STEP = "find"
 INDEX_JSON = "index.json"
 IGNORED_NAMES = {"index.html"}
 LATEST_RE = re.compile(r"-latest\.")
-NAME_DATE_RE = re.compile(r"(?<![0-9])([0-9]{4})-([0-9]{2})-([0-9]{2})(?![0-9])")
-NAME_YEAR_RE = re.compile(r"(?<![0-9])([0-9]{4})(?![0-9])")
-# Earlier numbers in a file name aren't years: EVE Online was released in 2003.
-FIRST_YEAR = 2003
 
 # Limits a .torrent should stay within (NOTES.md "Torrent size"), checked against the estimate: libtorrent's
 # defaults, from its documentation. qBittorrent's own defaults are higher.
@@ -175,27 +172,6 @@ class Obj:
     @property
     def modified(self):
         return datetime.datetime.fromtimestamp(self.mtime, datetime.timezone.utc).date()
-
-
-def file_date(path, modified):
-    """
-    (date, dated_by): the earliest of the modification date ("modified"), any ISO date in the file name ("name date"),
-    and 31 December of any year in the file name ("name year"). On a tie, the first of those.
-    """
-    name = file_name(path)
-    dates = [(modified, "modified")]
-    for match in NAME_DATE_RE.finditer(name):
-        try:
-            date = datetime.date(int(match[1]), int(match[2]), int(match[3]))
-        except ValueError:
-            continue
-        if date.year >= FIRST_YEAR:
-            dates.append((date, "name date"))
-    for match in NAME_YEAR_RE.finditer(name):
-        year = int(match[1])
-        if year >= FIRST_YEAR:
-            dates.append((datetime.date(year, 12, 31), "name year"))
-    return min(dates, key=lambda d: d[0])
 
 
 def main():
@@ -523,10 +499,6 @@ def history_folders(listing, excludes, includes):
 
 def is_torrent_id(name):
     return bool(TORRENT_ID_RE.match(name))
-
-
-def file_name(path):
-    return path.rsplit("/", 1)[-1]
 
 
 def folder_of(path):

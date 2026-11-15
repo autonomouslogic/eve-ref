@@ -1,7 +1,7 @@
 """
 workflow: settings and completion files shared by the EVE Ref Deep Archive step scripts.
 
-One workflow makes one torrent, from preflight to check-site, in SCRATCH_DIR. Every step writes a completion file,
+One workflow makes one torrent, from preflight to publish, in SCRATCH_DIR. Every step writes a completion file,
 SCRATCH_DIR/<NN>-<step>.done, as the last thing it does. A step refuses to start if its own completion file
 exists (no accidental double execution), or if the previous step's doesn't. To redo a step on purpose, delete its
 completion file, and every later one, by hand.
@@ -210,18 +210,12 @@ STEPS = [
     "publish",
     "update-docs",
     "index-deep-archive",
-    "check-before-delete",
-    "delete",
-    "check-delete",
-    "data-index",
-    "check-site",
     "delete-scratch",
 ]
 MANUAL_STEPS = {
     "review",
     "update-docs",
     "index-deep-archive",
-    "data-index",
     "delete-scratch",
 }
 
@@ -276,7 +270,7 @@ MIN_BYTES = MAX_BYTES
 # 01-find leaves out the date that would go over it.
 MAX_TORRENT_BYTES = 10_000_000
 
-# qBittorrent's Web API (00-preflight, 07-seed, 08-check-seed, 12-check-before-delete). Torrents are added with save path
+# qBittorrent's Web API (00-preflight, 07-seed, 08-check-seed). Torrents are added with save path
 # QBITTORRENT_SAVE_PATH (qbittorrent_save_path), SEED_DIR as qBittorrent sees it.
 def qbittorrent_settings():
     """(url, api_key) for qBittorrent's Web API (QBITTORRENT_* settings, environment or torrents.env)."""
@@ -344,16 +338,20 @@ class _Tee:
         return self.stream.isatty()
 
 
-def start_log(scratch_dir, step, subject=None):
-    """Tees stdout and stderr to SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log, and prints the step's header."""
+def start_log(scratch_dir, step, subject=None, label=None):
+    """
+    Tees stdout and stderr to SCRATCH_DIR/log/<NN>-<step>-<UTC time>.log, and prints the step's header. label is the
+    step's numbered name where STEPS doesn't know it (the purge scripts', lib/purge.py).
+    """
     log_dir = os.path.join(scratch_dir, "log")
     os.makedirs(log_dir, exist_ok=True)
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    path = os.path.join(log_dir, f"{step_name(step)}-{stamp}.log")
+    label = label or step_name(step)
+    path = os.path.join(log_dir, f"{label}-{stamp}.log")
     log_file = open(path, "a", encoding="utf-8", buffering=1)
     sys.stdout = _Tee(sys.stdout, log_file)
     sys.stderr = _Tee(sys.stderr, log_file)
-    print(f"🚀 {step_name(step)}{': ' + subject if subject else ''}")
+    print(f"🚀 {label}{': ' + subject if subject else ''}")
     return path
 
 
@@ -386,19 +384,6 @@ def fail(message):
 
 def ok(message):
     print(f"✅ {message}")
-
-
-def refuse_to_run(step):
-    """
-    Stops the deletion-side steps (12 onwards) from running at all: deletion is to be rewritten as a separate
-    process, decoupled from building torrents, and these steps still assume what's archived is what's deleted
-    (NOTES.md "Steps 12 onwards"). Called from each script's __main__ block, not main(), so the tests still import
-    and call them.
-    """
-    fail(
-        f"{step_name(step)} is disabled: the steps from 12-check-before-delete onwards are to be rewritten as a "
-        "separate deletion process, decoupled from building torrents (NOTES.md \"Steps 12 onwards\")"
-    )
 
 
 # Settings in torrents.env that the environment already set to something else, filled in by load_env. Every step
@@ -830,7 +815,7 @@ def classify_path(path):
     - dataset: the directories before that year folder, "/"-joined, with a trailing "history" or "backfills"
       (DATASET_SUFFIXES) removed; the first three directories if there's no year folder. "" at the site root (never
       reached: root-level files are skipped before classification) or directly under a year folder.
-    Used by 01-find's and 12-check-before-delete's dataset breakdowns.
+    Used by 01-find's and d01-find's dataset breakdowns.
     """
     dirs = path.split("/")[:-1]
     year_index = next((i for i, d in enumerate(dirs) if YEAR_DIR_RE.match(d)), None)
