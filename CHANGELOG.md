@@ -1,5 +1,9 @@
 EVE Ref Changelog
 
+## <small>2.83.11 (2026-11-15)</small>
+
+* fix: Fail market order scrape when no orders are fetched (#1167) ([c4ba117](https://github.com/autonomouslogic/eve-ref/commit/c4ba117)), closes [#1167](https://github.com/autonomouslogic/eve-ref/issues/1167)
+
 ## <small>2.83.10 (2026-11-14)</small>
 
 * fix: Removed open.tracker.cl from tracker URLs ([de99aa0](https://github.com/autonomouslogic/eve-ref/commit/de99aa0))
