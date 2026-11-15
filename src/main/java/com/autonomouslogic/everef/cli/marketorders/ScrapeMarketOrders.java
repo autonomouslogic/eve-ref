@@ -115,6 +115,9 @@ public class ScrapeMarketOrders implements Command {
 	private void fetchOrders() {
 		log.info("Fetching market orders");
 		marketOrderFetcher.fetchMarketOrders();
+		if (marketOrdersStore.isEmpty()) {
+			throw new IllegalStateException("No market orders fetched");
+		}
 	}
 
 	private File writeOrders() {
