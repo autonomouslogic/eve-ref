@@ -1,5 +1,9 @@
 EVE Ref Changelog
 
+## <small>2.83.12 (2026-11-22)</small>
+
+* fix(deps): Eclipse Temurin Java 25.0.5.1_2 ([29a23aa](https://github.com/autonomouslogic/eve-ref/commit/29a23aa))
+
 ## <small>2.83.11 (2026-11-15)</small>
 
 * fix: Fail market order scrape when no orders are fetched (#1167) ([c4ba117](https://github.com/autonomouslogic/eve-ref/commit/c4ba117)), closes [#1167](https://github.com/autonomouslogic/eve-ref/issues/1167)
