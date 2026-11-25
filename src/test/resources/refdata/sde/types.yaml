@@ -115,7 +115,7 @@
   basePrice: 7500000.0
   description:
     de: "Skill zur Bedienung von Gallente-Schlachtschiffen."
-    en: "Skill at operating Gallente battleships."
+    en: "Skill for the operation of Gallente battleships."
     es: "Habilidad en el manejo de acorazados gallentes."
     fr: "Compétence liée au pilotage des cuirassés gallente."
     ja: "ガレンテ戦艦を操作するスキル。"
@@ -176,7 +176,7 @@
   basePrice: 2500000.0
   description:
     de: "Skill zur Bedienung von Gallente-Schlachtkreuzern."
-    en: "Skill at operating Gallente battlecruisers."
+    en: "Skill for the operation of Gallente battlecruisers."
     es: "Habilidad en el manejo de cruceros de combate gallentes."
     fr: "Compétence liée au pilotage des croiseurs de bataille gallente. Formation\
       \ impossible sur les comptes d'évaluation."
@@ -206,7 +206,7 @@
   basePrice: 1000000.0
   description:
     de: "Fertigkeit, Kreuzer der Gallente zu bedienen."
-    en: "Skill at operating Gallente cruisers."
+    en: "Skill for the operation of Gallente cruisers."
     es: "Habilidad en el manejo de cruceros gallentes."
     fr: "Compétence liée au pilotage des croiseurs gallente."
     ja: "ガレンテ巡洋艦を操作するためのスキル。"
@@ -235,7 +235,7 @@
   basePrice: 100000.0
   description:
     de: "Fertigkeit, Zerstörer der Gallente zu bedienen."
-    en: "Skill at operating Gallente destroyers."
+    en: "Skill for the operation of Gallente destroyers."
     es: "Habilidad en el manejo de destructores gallentes."
     fr: "Compétence liée au pilotage des destroyers gallente."
     ja: "ガレンテ駆逐艦を操作するためのスキル。"
@@ -264,7 +264,7 @@
   basePrice: 50000.0
   description:
     de: "Fertigkeit, Fregatten der Gallente zu bedienen."
-    en: "Skill at operating Gallente frigates."
+    en: "Skill for the operation of Gallente frigates."
     es: "Habilidad en el manejo de fragatas gallentes."
     fr: "Compétence liée au pilotage des frégates gallente."
     ja: "ガレンテフリゲートを操作するためのスキル。"
